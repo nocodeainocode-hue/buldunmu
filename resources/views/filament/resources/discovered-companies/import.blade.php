@@ -1,18 +1,16 @@
 <x-filament-panels::page>
-    <x-filament-panels::form wire:submit="import">
-        {{ $this->form }}
+    {{ $this->form }}
 
-        <div class="flex justify-end gap-3 mt-6">
-            <x-filament::button
-                type="submit"
-                icon="heroicon-o-arrow-up-tray"
+    <div class="flex justify-end gap-3 mt-6">
+        <x-filament::button
+            wire:click="import"
+            icon="heroicon-o-arrow-up-tray"
                 color="success"
                 size="lg"
             >
                 İçe Aktar
             </x-filament::button>
         </div>
-    </x-filament-panels::form>
 
     @if ($this->hasImported)
         <div class="mt-8 rounded-xl border p-6" style="border-color: #d1fae5; background: #f0fdf4;">

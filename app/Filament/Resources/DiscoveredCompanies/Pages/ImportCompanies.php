@@ -6,6 +6,7 @@ use App\Filament\Resources\DiscoveredCompanies\DiscoveredCompanyResource;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Company;
+use Filament\Schemas\Schema;
 use Filament\Actions;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -49,10 +50,10 @@ class ImportCompanies extends Page
         ]);
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 \Filament\Schemas\Components\Section::make('CSV Dosyası Yükle')
                     ->description('Firma listesini içeren bir CSV dosyası yükleyin. CSV başlıkları: name, phone, email, website, address, description, category, city')
                     ->schema([
