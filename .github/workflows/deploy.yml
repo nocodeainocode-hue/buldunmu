@@ -13,14 +13,18 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASS }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
           script: |
             cd /var/www/firmarehberi
             git pull origin main
-            composer install --optimize-autoloader --no-dev
+            composer install --no-dev --optimize-autoloader
+            npm ci
+            npm run build
             php artisan migrate --force
             php artisan optimize:clear
             php artisan filament:optimize
+            php artisan storage:link
             chown -R www-data:www-data storage bootstrap/cache
             chmod -R 775 storage bootstrap/cache
-            rm -rf bootstrap/cache/*
+            rm -rf storage/framework/views/*
