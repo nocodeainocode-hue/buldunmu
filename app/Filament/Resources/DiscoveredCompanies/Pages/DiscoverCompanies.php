@@ -60,8 +60,8 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
 
     public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 \Filament\Schemas\Components\Section::make('Keşif Ayarları')
                     ->description('Firma keşfi için kaynak ve anahtar kelime girin.')
                     ->schema([
