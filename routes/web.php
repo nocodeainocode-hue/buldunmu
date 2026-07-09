@@ -48,7 +48,21 @@ Route::get('/kullanim-sartlari', [PageController::class, 'terms'])->name('pages.
 // SEO
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/robots.txt', function () {
-    return response("User-agent: *\nAllow: /\nSitemap: " . url('/sitemap.xml'))
+    $domain = request()->getHost();
+    $sitemapUrl = url('/sitemap.xml');
+
+    $lines = [
+        'User-agent: *',
+        'Allow: /',
+        '',
+        'Disallow: /admin/',
+        'Disallow: /livewire/',
+        '',
+        '# Sitemap',
+        'Sitemap: ' . $sitemapUrl,
+    ];
+
+    return response(implode("\n", $lines))
         ->header('Content-Type', 'text/plain');
 })->name('robots');
 
