@@ -12,7 +12,7 @@ class ThemeHelper
     
     const TEMPLATES = [
         // ── Layout 1: default.blade.php ──
-        'default' => ['name'=>'Klasik Rehber','hero'=>'gradient','card'=>'default','grid'=>'3','order'=>'categories,cities,premium,latest','width'=>'1280px','layout'=>'default','primary'=>'#6366f1','primary_hover'=>'#4f46e5','primary_light'=>'#eef2ff','secondary'=>'#8b5cf6','accent'=>'#f59e0b','bg'=>'#f9fafb','bg_card'=>'#ffffff','text'=>'#111827','text_muted'=>'#6b7280','border'=>'#f3f4f6','border_radius'=>'1rem','font_body'=>'Inter,sans-serif','font_heading'=>'Inter,sans-serif','hero_from'=>'#6366f1','hero_to'=>'#8b5cf6','card_shadow'=>'0 1px 3px rgba(0,0,0,0.08)'],
+        'default' => ['name'=>'Klasik Rehber','hero'=>'gradient','card'=>'default','grid'=>'3','order'=>'categories,cities,premium,latest','width'=>'1280px','layout'=>'default','primary'=>'#6366f1','primary_hover'=>'#4f46e5','primary_light'=>'#eef2ff','secondary'=>'#8b5cf6','accent'=>'#f59e0b','bg'=>'#f9fafb','bg_card'=>'#ffffff','text'=>'#111827','text_muted'=>'#6b7280','border'=>'#f3f4f6','border_radius'=>'1rem','font_body'=>'Inter,sans-serif','font_heading'=>'Poppins,sans-serif','hero_from'=>'#6366f1','hero_to'=>'#8b5cf6','card_shadow'=>'0 1px 3px rgba(0,0,0,0.08)'],
         'premium-showcase' => ['name'=>'Premium Vitrini','hero'=>'gradient','card'=>'visual','grid'=>'3','order'=>'premium,latest,categories,cities','width'=>'1280px','layout'=>'default','primary'=>'#7c3aed','primary_hover'=>'#6d28d9','primary_light'=>'#f5f3ff','secondary'=>'#a78bfa','accent'=>'#f59e0b','bg'=>'#faf5ff','bg_card'=>'#ffffff','text'=>'#1f2937','text_muted'=>'#6b7280','border'=>'#ede9fe','border_radius'=>'1.25rem','font_body'=>'Inter,sans-serif','font_heading'=>'Inter,sans-serif','hero_from'=>'#7c3aed','hero_to'=>'#c084fc','card_shadow'=>'0 4px 12px rgba(124,58,237,0.15)'],
         'corporate' => ['name'=>'Kurumsal Katalog','hero'=>'gradient','card'=>'default','grid'=>'4','order'=>'categories,premium,cities,latest','width'=>'1120px','layout'=>'default','primary'=>'#1e3a5f','primary_hover'=>'#15294a','primary_light'=>'#e8f0fe','secondary'=>'#334155','accent'=>'#c9a84c','bg'=>'#f8fafc','bg_card'=>'#ffffff','text'=>'#1e293b','text_muted'=>'#64748b','border'=>'#e2e8f0','border_radius'=>'0.5rem','font_body'=>'Inter,sans-serif','font_heading'=>'Inter,sans-serif','hero_from'=>'#1e3a5f','hero_to'=>'#2d5a8a','card_shadow'=>'0 1px 2px rgba(0,0,0,0.04)'],
         'landing' => ['name'=>'Landing+Rehber','hero'=>'gradient','card'=>'default','grid'=>'3','order'=>'premium,categories,latest,cities','width'=>'1280px','layout'=>'default','primary'=>'#059669','primary_hover'=>'#047857','primary_light'=>'#ecfdf5','secondary'=>'#10b981','accent'=>'#f59e0b','bg'=>'#f0fdf4','bg_card'=>'#ffffff','text'=>'#111827','text_muted'=>'#6b7280','border'=>'#d1fae5','border_radius'=>'0.75rem','font_body'=>'Inter,sans-serif','font_heading'=>'Inter,sans-serif','hero_from'=>'#059669','hero_to'=>'#06b6d4','card_shadow'=>'0 1px 3px rgba(0,0,0,0.06)'],
@@ -42,7 +42,20 @@ class ThemeHelper
         'map-first' => ['name'=>'Harita Odakli','hero'=>'gradient','card'=>'default','grid'=>'2','order'=>'premium,cities,latest,categories','width'=>'1280px','layout'=>'elegant','primary'=>'#0d9488','primary_hover'=>'#0f766e','primary_light'=>'#f0fdfa','secondary'=>'#5eead4','accent'=>'#fbbf24','bg'=>'#f8fafc','bg_card'=>'#ffffff','text'=>'#1e293b','text_muted'=>'#64748b','border'=>'#ccfbf1','border_radius'=>'0.5rem','font_body'=>'Inter,sans-serif','font_heading'=>'Inter,sans-serif','hero_from'=>'#0d9488','hero_to'=>'#14b8a6','card_shadow'=>'0 1px 3px rgba(0,0,0,0.06)'],
     ];
 
-    // ── Helpers ──
+    public static function googleFontsUrl(?Directory $directory = null): string
+    {
+        $font = self::get('font_body', $directory, 'Inter,sans-serif');
+        $heading = self::get('font_heading', $directory, 'Inter,sans-serif');
+
+        $fonts = collect([$font, $heading])
+            ->map(fn($f) => explode(',', $f)[0] ?? 'Inter')
+            ->unique()
+            ->filter(fn($f) => !in_array($f, ['sans-serif', 'serif', 'monospace', 'Georgia', 'Arial']))
+            ->map(fn($f) => 'family=' . urlencode(trim($f, "'\" ")))
+            ->implode('&');
+
+        return $fonts ? 'https://fonts.googleapis.com/css2?' . $fonts . '&display=swap' : '';
+    }
     public static function get(string $key, ?Directory $directory = null, string $default = ''): string
     {
         $template = $directory->template ?? 'default';

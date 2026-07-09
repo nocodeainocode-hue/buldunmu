@@ -21,6 +21,14 @@
         {!! \App\View\Helpers\ThemeHelper::cssVariables($directory ?? null) !!}
     </style>
 
+    {{-- Dynamic Google Fonts per template --}}
+    @php $fontsUrl = \App\View\Helpers\ThemeHelper::googleFontsUrl($directory ?? null); @endphp
+    @if($fontsUrl)
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="{{ $fontsUrl }}" rel="stylesheet">
+    @endif
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('head')
 </head>
