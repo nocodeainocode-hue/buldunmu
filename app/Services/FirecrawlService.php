@@ -10,7 +10,7 @@ class FirecrawlService
 {
     protected Client $client;
     protected string $apiKey;
-    protected string $baseUrl = 'https://api.firecrawl.dev/v1/';
+    protected string $baseUrl = 'https://api.firecrawl.dev/v2/';
 
     public function __construct()
     {
