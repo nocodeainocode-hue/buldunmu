@@ -6,9 +6,7 @@ use App\Filament\Resources\DiscoveredCompanies\DiscoveredCompanyResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Table;
-use Filament\Tables;
 use App\Models\DiscoveredCompany;
-use App\Models\Company;
 use Illuminate\Database\Eloquent\Builder;
 
 class ListDiscoveredCompanies extends ListRecords
@@ -30,8 +28,8 @@ class ListDiscoveredCompanies extends ListRecords
     {
         return parent::table($table)
             ->actions([
-                Tables\Actions\ActionGroup::make([
-                    Tables\Actions\Action::make('approve')
+                Actions\ActionGroup::make([
+                    Actions\Action::make('approve')
                         ->label('Onayla')
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
@@ -42,7 +40,7 @@ class ListDiscoveredCompanies extends ListRecords
                         ->requiresConfirmation()
                         ->modalHeading('Firmayı Onayla')
                         ->modalDescription(fn(DiscoveredCompany $record) => "{$record->name} firması onaylanıp firma listesine eklenecek. Onaylıyor musunuz?"),
-                    Tables\Actions\Action::make('reject')
+                    Actions\Action::make('reject')
                         ->label('Reddet')
                         ->icon('heroicon-o-x-circle')
                         ->color('danger')
@@ -53,7 +51,7 @@ class ListDiscoveredCompanies extends ListRecords
                         ->requiresConfirmation()
                         ->modalHeading('Firmayı Reddet')
                         ->modalDescription(fn(DiscoveredCompany $record) => "{$record->name} firması reddedilecek. Onaylıyor musunuz?"),
-                    Tables\Actions\EditAction::make('edit')
+                    Actions\EditAction::make('edit')
                         ->label('Düzenle')
                         ->icon('heroicon-o-pencil')
                         ->visible(fn(DiscoveredCompany $record) => $record->status === 'pending')
@@ -78,7 +76,7 @@ class ListDiscoveredCompanies extends ListRecords
                         ->action(function (DiscoveredCompany $record, array $data) {
                             $record->update($data);
                         }),
-                    Tables\Actions\Action::make('approve_with_edit')
+                    Actions\Action::make('approve_with_edit')
                         ->label('Düzenle ve Onayla')
                         ->icon('heroicon-o-pencil-square')
                         ->color('success')
@@ -108,25 +106,25 @@ class ListDiscoveredCompanies extends ListRecords
                                 ->default(fn(DiscoveredCompany $record) => $record->description),
                             \Filament\Forms\Components\Select::make('category_id')
                                 ->label('Kategori')
-                                ->relationship('directory.categories', 'name')
+                                ->options(\App\Models\Category::pluck('name', 'id'))
                                 ->searchable()
                                 ->preload(),
                             \Filament\Forms\Components\Select::make('city_id')
                                 ->label('Şehir')
-                                ->relationship('directory.cities', 'name')
+                                ->options(\App\Models\City::pluck('name', 'id'))
                                 ->searchable()
                                 ->preload(),
                         ])
                         ->action(function (DiscoveredCompany $record, array $data) {
                             $record->approve($data);
                         }),
-                    Tables\Actions\DeleteAction::make()
+                    Actions\DeleteAction::make()
                         ->label('Sil'),
                 ]),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\BulkAction::make('bulk_approve')
+                Actions\BulkActionGroup::make([
+                    Actions\BulkAction::make('bulk_approve')
                         ->label('Toplu Onayla')
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
@@ -144,7 +142,7 @@ class ListDiscoveredCompanies extends ListRecords
                         ->requiresConfirmation()
                         ->modalHeading('Seçili Firmaları Onayla')
                         ->modalDescription('Seçili tüm firmalar onaylanıp firma listesine eklenecek. Devam edilsin mi?'),
-                    Tables\Actions\BulkAction::make('bulk_reject')
+                    Actions\BulkAction::make('bulk_reject')
                         ->label('Toplu Reddet')
                         ->icon('heroicon-o-x-circle')
                         ->color('danger')
@@ -156,7 +154,7 @@ class ListDiscoveredCompanies extends ListRecords
                         ->requiresConfirmation()
                         ->modalHeading('Seçili Firmaları Reddet')
                         ->modalDescription('Seçili tüm firmalar reddedilecek. Devam edilsin mi?'),
-                    Tables\Actions\DeleteBulkAction::make()
+                    Actions\DeleteBulkAction::make()
                         ->label('Toplu Sil'),
                 ]),
             ]);
