@@ -178,9 +178,12 @@ class FirecrawlService
         $results = [];
         // v2 API: data is wrapped in source type key (web, images, etc.)
         $raw = $data['data'] ?? [];
-        $items = $raw['web'] ?? $raw['images'] ?? $raw;
-        // If it's an associative array with a single source key, extract it
-        if (isset($items[0]) || empty($items)) {
+        // Extract items from v2 nested format or use flat v1 format
+        if (isset($raw['web']) && is_array($raw['web'])) {
+            $items = $raw['web'];
+        } elseif (isset($raw['images']) && is_array($raw['images'])) {
+            $items = $raw['images'];
+        } else {
             $items = $raw;
         }
 
