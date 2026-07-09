@@ -44,13 +44,19 @@ class CompanyReviewsTable
                     ->color('success')
                     ->requiresConfirmation(false)
                     ->visible(fn(CompanyReview $r) => $r->status !== 'approved')
-                    ->action(fn(CompanyReview $r) => $r->update(['status' => 'approved', 'approved_at' => now()])),
+                    ->action(function (CompanyReview $r) {
+                        $r->update(['status' => 'approved', 'approved_at' => now()]);
+                        return redirect(request()->header('Referer'));
+                    }),
                 Action::make('reject')
                     ->icon('heroicon-o-x-circle')
                     ->color('danger')
                     ->requiresConfirmation(false)
                     ->visible(fn(CompanyReview $r) => $r->status !== 'rejected')
-                    ->action(fn(CompanyReview $r) => $r->update(['status' => 'rejected'])),
+                    ->action(function (CompanyReview $r) {
+                        $r->update(['status' => 'rejected']);
+                        return redirect(request()->header('Referer'));
+                    }),
             ]);
     }
 }
