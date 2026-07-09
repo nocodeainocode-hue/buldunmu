@@ -176,14 +176,19 @@ class FirecrawlService
     protected function parseSearchResults(array $data, string $keyword, string $city, string $source): array
     {
         $results = [];
-        $items = $data['data'] ?? [];
+        // v2 API: data is wrapped in source type key (web, images, etc.)
+        $raw = $data['data'] ?? [];
+        $items = $raw['web'] ?? $raw['images'] ?? $raw;
+        // If it's an associative array with a single source key, extract it
+        if (isset($items[0]) || empty($items)) {
+            $items = $raw;
+        }
 
         foreach ($items as $item) {
             $title = $item['title'] ?? '';
             $desc = $item['description'] ?? '';
             $url = $item['url'] ?? '';
 
-            // Try markdown first, fall back to title+description
             $markdown = $item['markdown'] ?? '';
             $text = $markdown ?: ($title . "\n\n" . $desc);
 
@@ -192,7 +197,6 @@ class FirecrawlService
                 $company['name'] = $title ?: 'Bilinmeyen Firma';
             }
 
-            // Deduplicate by name
             $key = mb_strtolower(trim($company['name']));
             if (!isset($results[$key]) && $company['name'] !== 'Bilinmeyen Firma') {
                 $results[$key] = $company;
