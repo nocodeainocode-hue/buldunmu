@@ -7,9 +7,9 @@ use Filament\Widgets\Widget;
 
 class SitemapLinks extends Widget
 {
-    protected static string $view = 'filament.widgets.sitemap-links';
+    protected string $view = 'filament.widgets.sitemap-links';
 
-    protected int|string|array $columnSpan = 'full';
+    protected int | string | array $columnSpan = 'full';
 
     protected function getViewData(): array
     {
