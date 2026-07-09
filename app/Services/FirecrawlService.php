@@ -48,29 +48,64 @@ class FirecrawlService
     }
 
     /**
-     * Search the web for companies matching keyword + city.
+     * Search the web for companies, then scrape each result for details.
      */
     protected function searchWeb(string $keyword, string $city): array
     {
         $query = "{$keyword} {$city} firma telefon adres website";
 
         try {
+            // Step 1: Search
             $response = $this->client->post('search', [
                 'json' => [
                     'query' => $query,
-                    'limit' => 20,
-                    'scrapeOptions' => [
-                        'formats' => ['markdown'],
-                    ],
+                    'limit' => 10,
+                    'sources' => ['web'],
                 ],
             ]);
 
-            $data = json_decode($response->getBody()->getContents(), true);
-            return $this->parseSearchResults($data, $keyword, $city, 'search');
+            $searchData = json_decode($response->getBody()->getContents(), true);
+            $urls = $this->extractUrls($searchData);
+
+            // Step 2: Scrape each URL for full details (max 5 to avoid rate limits)
+            $results = [];
+            $scrapeCount = 0;
+            foreach ($urls as $url) {
+                if ($scrapeCount >= 5) break;
+                try {
+                    $companies = $this->scrapeUrl($url);
+                    if (!empty($companies[0]) && $companies[0]['name'] !== 'Bilinmeyen Firma') {
+                        $results[] = $companies[0];
+                        $scrapeCount++;
+                    }
+                } catch (\Exception $e) {
+                    Log::warning("Firecrawl: Failed to scrape {$url}", ['error' => $e->getMessage()]);
+                }
+            }
+
+            return $results;
         } catch (GuzzleException $e) {
             Log::error('Firecrawl search failed', ['error' => $this->sanitizeError($e)]);
             throw new \RuntimeException('Firma keşfi başarısız: ' . $this->sanitizeError($e));
         }
+    }
+
+    /**
+     * Extract URLs from search results (v2 nested format).
+     */
+    protected function extractUrls(array $data): array
+    {
+        $raw = $data['data'] ?? [];
+        $items = [];
+        if (isset($raw['web']) && is_array($raw['web'])) {
+            $items = $raw['web'];
+        } elseif (isset($raw['images']) && is_array($raw['images'])) {
+            $items = $raw['images'];
+        } else {
+            $items = $raw;
+        }
+
+        return array_filter(array_map(fn($item) => $item['url'] ?? null, $items));
     }
 
     /**
