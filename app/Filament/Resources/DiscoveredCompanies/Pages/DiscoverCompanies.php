@@ -15,7 +15,7 @@ use Filament\Forms\Form;
 use Filament\Schemas\Schema;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Page;
-use Filament\Tables\Actions\BulkAction;
+use Filament\Actions\BulkAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -270,7 +270,7 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
             ])
             ->filters([])
             ->actions([
-                \Filament\Tables\Actions\Action::make('approve_single')
+                \Filament\Actions\Action::make('approve_single')
                     ->label('Onayla')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
@@ -282,7 +282,7 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
                     ->requiresConfirmation()
                     ->modalHeading('Firmayı Onayla')
                     ->modalDescription(fn(DiscoveredCompany $record) => "{$record->name} firması onaylanıp rehbere eklenecek."),
-                \Filament\Tables\Actions\Action::make('approve_with_details')
+                \Filament\Actions\Action::make('approve_with_details')
                     ->label('Detaylı Onayla')
                     ->icon('heroicon-o-pencil-square')
                     ->color('success')
@@ -314,14 +314,14 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
                         if ($cityId) $company->update(['city_id' => $cityId]);
                         Notification::make()->title('Firma detaylı onaylandı!')->success()->send();
                     }),
-                \Filament\Tables\Actions\Action::make('reject_single')
+                \Filament\Actions\Action::make('reject_single')
                     ->label('Reddet')
                     ->icon('heroicon-o-x-circle')
                     ->color('danger')
                     ->visible(fn(DiscoveredCompany $record) => $record->status === 'pending')
                     ->action(fn(DiscoveredCompany $record) => $record->update(['status' => 'rejected']))
                     ->requiresConfirmation(),
-                \Filament\Tables\Actions\DeleteAction::make(),
+                \Filament\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 BulkAction::make('bulk_approve')
@@ -351,7 +351,7 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
                         Notification::make()->title('Seçili firmalar reddedildi.')->success()->send();
                     })
                     ->requiresConfirmation(),
-                \Filament\Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\DeleteBulkAction::make(),
             ])
             ->emptyStateHeading('Keşif Sonucu Bekleniyor')
             ->emptyStateDescription('Yukarıdaki formu doldurup "Keşfet" butonuna tıklayarak firma araması yapabilirsiniz.')
