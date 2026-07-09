@@ -55,7 +55,7 @@ class FirecrawlService
         $query = "{$keyword} {$city} firma telefon adres website";
 
         try {
-            $response = $this->client->post('/search', [
+            $response = $this->client->post('search', [
                 'json' => [
                     'query' => $query,
                     'limit' => 20,
@@ -81,7 +81,7 @@ class FirecrawlService
         $query = "site:google.com/maps {$keyword} {$city}";
 
         try {
-            $response = $this->client->post('/search', [
+            $response = $this->client->post('search', [
                 'json' => [
                     'query' => $query,
                     'limit' => 20,
@@ -105,7 +105,7 @@ class FirecrawlService
     protected function scrapeUrl(string $url): array
     {
         try {
-            $response = $this->client->post('/scrape', [
+            $response = $this->client->post('scrape', [
                 'json' => [
                     'url' => $url,
                     'formats' => ['markdown', 'extract'],
