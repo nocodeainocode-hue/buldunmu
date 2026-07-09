@@ -4,12 +4,13 @@
 @section('content')
 <div class="mx-auto px-4 sm:px-6 lg:px-8 py-12" style="max-width: var(--page_width, 1280px);">
     <article class="max-w-3xl mx-auto">
+        <x-breadcrumb :items="[['label' => 'Blog', 'url' => route('blog.index')], ['label' => $post->title]]" />
         <div class="text-sm mb-4" style="color: var(--text_muted);">
-            <a href="{{ route('blog.index') }}" class="hover:underline">← Blog</a>
-            <span class="mx-2">·</span>
             {{ $post->published_at->format('d.m.Y') }}
-            <span class="mx-2">·</span>
-            {{ $post->directories->first()->name ?? '' }}
+            @if($post->directories->first())
+                <span class="mx-2">·</span>
+                {{ $post->directories->first()->name ?? '' }}
+            @endif
         </div>
         <h1 class="text-3xl sm:text-4xl font-bold mb-6" style="color: var(--text);">{{ $post->title }}</h1>
         <div class="prose max-w-none text-lg leading-relaxed" style="color: var(--text);">

@@ -1,5 +1,4 @@
-<section class="relative overflow-hidden py-16" style="background:linear-gradient(135deg,var(--accent),var(--primary));">
-    <div class="absolute inset-0 opacity-20" style="background:radial-gradient(circle at 20% 20%, #fff, transparent 22%), radial-gradient(circle at 80% 30%, #fff, transparent 18%);"></div>
+<section class="relative overflow-hidden py-16" style="background:var(--primary);">
     <div class="relative mx-auto px-4 text-center sm:px-6 lg:px-8" style="max-width:var(--page_width,1280px);">
         <div class="mx-auto max-w-3xl">
             <div class="mb-3 text-xs font-black uppercase tracking-widest" style="color:white;">Firma ekle</div>

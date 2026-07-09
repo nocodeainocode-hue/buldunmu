@@ -17,7 +17,7 @@
                     @if($post->image)
                         <img src="{{ asset('storage/'.$post->image) }}" alt="{{ $post->title }}" class="h-48 w-full object-cover">
                     @else
-                        <div class="flex h-48 w-full items-center justify-center text-5xl" style="background:linear-gradient(135deg,var(--primary),var(--secondary));color:white;">📝</div>
+                        <div class="flex h-48 w-full items-center justify-center text-5xl" style="background:var(--primary_light);color:var(--primary);">📝</div>
                     @endif
                 </a>
                 <div class="p-5">

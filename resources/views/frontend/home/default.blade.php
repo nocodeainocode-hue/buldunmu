@@ -94,19 +94,7 @@
     </div>
 </section>
 
-<section class="py-14" style="background:var(--bg_card);">
-    <div class="mx-auto grid gap-8 px-4 sm:px-6 lg:grid-cols-3 lg:px-8" style="max-width:var(--page_width,1280px);">
-        <div>
-            <div class="mb-2 text-xs font-black uppercase tracking-widest" style="color:var(--accent);">Yerel SEO</div>
-            <h2 class="text-2xl font-black tracking-tight" style="color:var(--text);">Guvenilir firma bilgisi, sade rehber deneyimi</h2>
-        </div>
-        <div class="lg:col-span-2">
-            <p class="text-sm leading-7" style="color:var(--text_muted);">
-                {{ $settings->site_name ?? 'Firma Rehberi' }}; kategori, şehir ve işletme bilgilerini tek yerde toplayarak kullanıcıların doğru firmaya daha hızlı ulaşmasını sağlar. Telefon, WhatsApp, web sitesi, adres ve firma açıklamalarıyla yerel arama niyetine uygun, okunabilir ve sade bir rehber yapısı sunar.
-            </p>
-        </div>
-    </div>
-</section>
+@include('partials.local-seo', ['type'=>'home', 'name'=>$settings->site_name ?? 'Firma Rehberi', 'companyCount'=>\App\Models\Company::count()])
 
 @include('partials.blog-section')
 

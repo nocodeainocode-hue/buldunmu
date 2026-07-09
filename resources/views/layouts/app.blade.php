@@ -33,7 +33,7 @@
                     @if($dirLogo)
                         <img src="{{ asset('storage/' . $dirLogo) }}" alt="{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}" class="h-10 w-auto">
                     @else
-                        <div class="flex h-10 w-10 items-center justify-center rounded-xl text-sm font-black text-white" style="background:linear-gradient(135deg,var(--primary),var(--secondary));">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-xl text-sm font-black text-white" style="background:var(--primary);">
                             {{ mb_substr($directory->name ?? $settings->site_name ?? 'F', 0, 1) }}
                         </div>
                     @endif
@@ -41,6 +41,14 @@
                 </a>
 
                 <nav class="hidden items-center gap-1 md:flex">
+                    <form action="{{ route('search') }}" method="GET" class="relative mr-3">
+                        <input type="text" name="q" value="{{ request('q') }}" placeholder="Firma, kategori veya şehir ara..."
+                            class="w-48 lg:w-64 rounded-xl border px-4 py-2 text-sm focus:outline-none focus:ring-2"
+                            style="border-color:var(--border);background:var(--bg);color:var(--text);">
+                        <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 p-1" style="color:var(--text_muted);" aria-label="Ara">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        </button>
+                    </form>
                     <a href="{{ route('companies.index') }}" class="rounded-lg px-4 py-2 text-sm font-bold transition hover:opacity-70" style="color:var(--text);">Firmalar</a>
                     <div class="group relative">
                         <button class="flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-bold transition hover:opacity-70" style="color:var(--text);">
@@ -82,6 +90,16 @@
             </div>
 
             <div id="mobile-menu" class="hidden border-t py-3 md:hidden" style="border-color:var(--border);">
+                <form action="{{ route('search') }}" method="GET" class="mb-3">
+                    <div class="relative">
+                        <input type="text" name="q" value="{{ request('q') }}" placeholder="Firma, kategori veya şehir ara..."
+                            class="w-full rounded-xl border px-4 py-2.5 text-sm focus:outline-none focus:ring-2"
+                            style="border-color:var(--border);background:var(--bg);color:var(--text);">
+                        <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2" style="color:var(--text_muted);" aria-label="Ara">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        </button>
+                    </div>
+                </form>
                 <nav class="flex flex-col gap-1">
                     <a href="{{ route('companies.index') }}" class="rounded-lg px-3 py-2 text-sm font-semibold" style="color:var(--text);">Firmalar</a>
                     <a href="{{ route('blog.index') }}" class="rounded-lg px-3 py-2 text-sm font-semibold" style="color:var(--text);">Blog</a>

@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\District;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 
@@ -48,6 +49,7 @@ class CompanyController extends Controller
         $companies = $query->paginate(12)->withQueryString();
         $categories = Category::active()->orderBy('name')->get();
         $cities = City::orderBy('name')->get();
+        $directory = app()->bound('currentDirectory') ? app('currentDirectory') : null;
 
         $metaTitle = 'Firmalar';
         if ($request->filled('category')) {
@@ -59,7 +61,7 @@ class CompanyController extends Controller
             if ($ct) $metaTitle .= ' - ' . $ct->name;
         }
 
-        return view('frontend.companies.index', compact('companies', 'categories', 'cities', 'metaTitle'));
+        return view('frontend.companies.index', compact('companies', 'categories', 'cities', 'metaTitle', 'directory'));
     }
     public function show(string $slug)
     {
@@ -69,6 +71,15 @@ class CompanyController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
+        $company->incrementViewCount();
+
+        $directory = $company->directory ?? (app()->bound('currentDirectory') ? app('currentDirectory') : null);
+        $template = $directory->template ?? 'default';
+
+        // Determine detail variant: seo_story for templates that benefit from rich content
+        $storyTemplates = ['elegant', 'city-focused', 'category-mega', 'corporate', 'bold', 'premium-showcase'];
+        $detailVariant = in_array($template, $storyTemplates) ? 'seo-story' : 'compact-local';
+
         $similarCompanies = Company::active()
             ->where('id', '!=', $company->id)
             ->where(function ($q) use ($company) {
@@ -77,7 +88,7 @@ class CompanyController extends Controller
             })
             ->with(['category', 'city'])
             ->latest()
-            ->take(4)
+            ->take(6)
             ->get();
 
         $sameCategoryCompanies = Company::active()
@@ -88,6 +99,26 @@ class CompanyController extends Controller
             ->take(4)
             ->get();
 
-        return view('frontend.companies.show', compact('company', 'similarCompanies', 'sameCategoryCompanies'));
+        // Nearby companies (same district or city)
+        $nearbyCompanies = Company::active()
+            ->where('id', '!=', $company->id)
+            ->when($company->district_id, fn($q) => $q->where('district_id', $company->district_id))
+            ->when(!$company->district_id, fn($q) => $q->where('city_id', $company->city_id))
+            ->with(['category', 'city'])
+            ->latest()
+            ->take(4)
+            ->get();
+
+        // Related posts for SEO
+        $relatedPosts = Post::published()
+            ->whereHas('directories', fn($q) => $q->where('directory_id', $directory->id ?? 0))
+            ->latest('published_at')
+            ->take(3)
+            ->get();
+
+        return view('frontend.companies.show', compact(
+            'company', 'similarCompanies', 'sameCategoryCompanies',
+            'nearbyCompanies', 'relatedPosts', 'directory', 'detailVariant'
+        ));
     }
 }

@@ -7,8 +7,8 @@
 @endphp
 
 <section class="relative overflow-hidden py-14 sm:py-20" style="background:var(--bg_card);">
-    <div class="absolute inset-0 opacity-80" style="background:radial-gradient(circle at 12% 18%, var(--primary_light), transparent 28%), linear-gradient(135deg, color-mix(in srgb, var(--hero_gradient_from) 10%, transparent), color-mix(in srgb, var(--hero_gradient_to) 8%, transparent));"></div>
-    <div class="absolute inset-y-0 right-0 hidden w-1/2 lg:block" style="background:linear-gradient(135deg,var(--hero_gradient_from),var(--hero_gradient_to));clip-path:polygon(18% 0,100% 0,100% 100%,0 100%);"></div>
+    <div class="absolute inset-0 opacity-10" style="background:var(--primary_light);"></div>
+    <div class="absolute inset-y-0 right-0 hidden w-1/2 lg:block" style="background:var(--primary);clip-path:polygon(18% 0,100% 0,100% 100%,0 100%);opacity:0.08;"></div>
 
     <div class="relative mx-auto px-4 sm:px-6 lg:px-8" style="max-width:var(--page_width,1280px);">
         <div class="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
@@ -58,11 +58,11 @@
                     <div class="grid grid-cols-2 gap-4">
                         @foreach($heroCompanies as $company)
                             <a href="{{ route('companies.show', $company->slug) }}" class="group min-h-40 overflow-hidden rounded-2xl border bg-white p-4 shadow-xl transition hover:-translate-y-1" style="border-color:rgba(255,255,255,.45);">
-                                <div class="mb-4 flex h-20 items-center justify-center rounded-xl" style="background:linear-gradient(135deg,var(--primary_light),#fff);">
+                                <div class="mb-4 flex h-20 items-center justify-center rounded-xl" style="background:var(--primary_light);">
                                     @if($company->logo)
                                         <img src="{{ asset('storage/' . $company->logo) }}" alt="{{ $company->name }}" class="max-h-14 max-w-full object-contain">
                                     @else
-                                        <span class="flex h-12 w-12 items-center justify-center rounded-xl text-xl font-black text-white" style="background:linear-gradient(135deg,var(--primary),var(--secondary));">{{ mb_substr($company->name, 0, 1) }}</span>
+                                        <span class="flex h-12 w-12 items-center justify-center rounded-xl text-xl font-black text-white" style="background:var(--primary);">{{ mb_substr($company->name, 0, 1) }}</span>
                                     @endif
                                 </div>
                                 <div class="truncate text-sm font-black" style="color:var(--text);">{{ $company->name }}</div>
@@ -75,7 +75,7 @@
                     </div>
                 @else
                     <div class="rounded-3xl bg-white p-8 text-center shadow-xl">
-                        <div class="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl text-3xl font-black text-white" style="background:linear-gradient(135deg,var(--primary),var(--secondary));">F</div>
+                        <div class="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl text-3xl font-black text-white" style="background:var(--primary);">F</div>
                         <h3 class="text-xl font-black" style="color:var(--text);">Firma vitrinin hazır</h3>
                         <p class="mt-2 text-sm" style="color:var(--text_muted);">İlk premium firmalar burada öne çıkar.</p>
                     </div>

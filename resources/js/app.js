@@ -1,1 +1,47 @@
 //
+// Fotoğraf Galerisi Lightbox
+//
+document.addEventListener('DOMContentLoaded', function () {
+    const items = document.querySelectorAll('.gallery-item');
+    const lightbox = document.getElementById('gallery-lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCounter = document.getElementById('lightbox-counter');
+
+    if (!items.length || !lightbox) return;
+
+    let currentIndex = 0;
+    const sources = Array.from(items).map(el => el.dataset.src);
+
+    function openLightbox(index) {
+        currentIndex = index;
+        lightboxImg.src = sources[currentIndex];
+        lightboxCounter.textContent = (currentIndex + 1) + ' / ' + sources.length;
+        lightbox.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    window.closeLightbox = function (event) {
+        if (event && event.target !== lightbox && event.target !== lightboxImg) return;
+        lightbox.classList.add('hidden');
+        document.body.style.overflow = '';
+    };
+
+    window.navigateLightbox = function (direction, event) {
+        if (event) event.stopPropagation();
+        currentIndex = (currentIndex + direction + sources.length) % sources.length;
+        lightboxImg.src = sources[currentIndex];
+        lightboxCounter.textContent = (currentIndex + 1) + ' / ' + sources.length;
+    };
+
+    items.forEach((item, index) => {
+        item.addEventListener('click', () => openLightbox(index));
+    });
+
+    // Klavye navigasyonu
+    document.addEventListener('keydown', function (e) {
+        if (lightbox.classList.contains('hidden')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') navigateLightbox(-1);
+        if (e.key === 'ArrowRight') navigateLightbox(1);
+    });
+});

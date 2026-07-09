@@ -8,6 +8,7 @@ use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -79,6 +80,16 @@ class CompanyForm
                         Textarea::make('address')
                             ->label('Adres')
                             ->columnSpanFull(),
+                        TextInput::make('google_maps_url')
+                            ->label('Google Maps Konum Linki')
+                            ->url()
+                            ->helperText('Google Maps paylaş URL\'sini yapıştırın (örn: https://www.google.com/maps/embed?pb=...)')
+                            ->columnSpanFull(),
+                        Textarea::make('opening_hours')
+                            ->label('Çalışma Saatleri')
+                            ->helperText('Her satıra bir gün: "Pazartesi: 09:00 - 18:00"')
+                            ->rows(4)
+                            ->columnSpanFull(),
                         Textarea::make('short_description')
                             ->label('Kısa Açıklama')
                             ->columnSpanFull(),
@@ -105,6 +116,42 @@ class CompanyForm
                             ->imageResizeMode('cover')
                             ->imageResizeTargetWidth('1200')
                             ->imageResizeTargetHeight('400'),
+                    ]),
+
+                Section::make('Fotoğraf Galerisi')
+                    ->description('Sürükle-bırak ile çoklu fotoğraf yükleyin ve sıralayın (max 20 adet, her biri max 5MB, jpg/png/webp)')
+                    ->collapsible()
+                    ->schema([
+                        Repeater::make('gallery_images')
+                            ->label('Galeri Fotoğrafları')
+                            ->relationship('images')
+                            ->schema([
+                                FileUpload::make('image_path')
+                                    ->label('Fotoğraf')
+                                    ->image()
+                                    ->disk('public')
+                                    ->directory('companies/gallery')
+                                    ->maxSize(5120)
+                                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                                    ->imageResizeMode('cover')
+                                    ->imageResizeTargetWidth('1200')
+                                    ->imageResizeTargetHeight('900')
+                                    ->imagePreviewHeight('200')
+                                    ->required(),
+                                TextInput::make('alt_text')
+                                    ->label('Alternatif Metin (SEO)')
+                                    ->helperText('Görsel için açıklayıcı kısa metin')
+                                    ->maxLength(255),
+                            ])
+                            ->maxItems(20)
+                            ->reorderable()
+                            ->reorderableWithDragAndDrop()
+                            ->orderColumn('sort_order')
+                            ->defaultItems(0)
+                            ->addActionLabel('Fotoğraf Ekle')
+                            ->collapsible()
+                            ->itemLabel(fn(array $state): ?string => !empty($state['image_path']) ? basename($state['image_path']) : 'Yeni Fotoğraf')
+                            ->grid(2),
                     ]),
 
                 Section::make('Premium & Durum')

@@ -1,85 +1,80 @@
 @extends('layouts.app')
 
+@php
+    $template = $directory->template ?? 'default';
+    $gridCols = \App\View\Helpers\ThemeHelper::gridCols($directory ?? null);
+    $cardPartial = \App\View\Helpers\ThemeHelper::cardPartial($directory ?? null);
+@endphp
+
 @section('title', $metaTitle ?? 'Firmalar')
 @section('meta_description', 'Tüm firmaları listeleyin, kategorilere ve şehirlere göre filtreleyin.')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Breadcrumb -->
-    <nav class="flex mb-6 text-sm text-gray-500">
-        <a href="{{ route('home') }}" class="hover:text-indigo-600">Ana Sayfa</a>
-        <span class="mx-2">/</span>
-        <span class="text-gray-900 font-medium">{{ $metaTitle ?? 'Firmalar' }}</span>
-    </nav>
+<div style="background:var(--bg);">
+    {{-- Hero --}}
+    <section class="py-12" style="background:var(--primary);">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width:var(--page_width,1280px);">
+            <nav class="mb-4 flex flex-wrap items-center gap-1.5 text-sm" style="color:rgba(255,255,255,0.7);">
+                <a href="{{ route('home') }}" class="hover:underline" style="color:rgba(255,255,255,0.7);">Ana Sayfa</a>
+                <span class="mx-1">/</span>
+                <span style="color:white;">{{ $metaTitle ?? 'Tüm Firmalar' }}</span>
+            </nav>
+            <h1 class="text-3xl font-black tracking-tight sm:text-4xl" style="color:white;">{{ $metaTitle ?? 'Tüm Firmalar' }}</h1>
+            <p class="mt-2 text-sm" style="color:rgba(255,255,255,0.8);">{{ $companies->total() }} firma bulundu</p>
+        </div>
+    </section>
 
-    <div class="flex flex-col lg:flex-row gap-8">
-        <!-- Sidebar Filters -->
-        <div class="lg:w-64 shrink-0">
-            <form action="{{ url()->current() }}" method="GET" class="bg-white rounded-2xl border border-gray-100 p-5 sticky top-24">
-                <h3 class="font-semibold text-gray-900 mb-4">Filtreler</h3>
+    {{-- Filter Bar --}}
+    <section class="border-b py-4" style="background:var(--bg_card);border-color:var(--border);">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width:var(--page_width,1280px);">
+            <form action="{{ url()->current() }}" method="GET" class="flex flex-wrap gap-3 items-center">
+                <input type="text" name="q" value="{{ request('q') }}" placeholder="Firma, kategori veya şehir ara..."
+                    class="rounded-xl border px-4 py-2 text-sm w-full sm:w-64" style="border-color:var(--border);background:var(--bg);color:var(--text);">
 
-                <!-- Search -->
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Arama</label>
-                    <input type="text" name="q" value="{{ request('q') }}" placeholder="Firma ara..."
-                        class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400">
-                </div>
+                <select name="category" class="rounded-xl border px-4 py-2 text-sm" style="border-color:var(--border);background:var(--bg);color:var(--text);">
+                    <option value="">Tüm Kategoriler</option>
+                    @foreach($categories as $cat)
+                        <option value="{{ $cat->slug }}" {{ request('category') == $cat->slug ? 'selected' : '' }}>{{ $cat->name }}</option>
+                    @endforeach
+                </select>
 
-                <!-- Category -->
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
-                    <select name="category" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400">
-                        <option value="">Tümü</option>
-                        @foreach($categories as $cat)
-                            <option value="{{ $cat->slug }}" {{ request('category') == $cat->slug ? 'selected' : '' }}>{{ $cat->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                <select name="city" class="rounded-xl border px-4 py-2 text-sm" style="border-color:var(--border);background:var(--bg);color:var(--text);">
+                    <option value="">Tüm Şehirler</option>
+                    @foreach($cities as $ct)
+                        <option value="{{ $ct->slug }}" {{ request('city') == $ct->slug ? 'selected' : '' }}>{{ $ct->name }}</option>
+                    @endforeach
+                </select>
 
-                <!-- City -->
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Şehir</label>
-                    <select name="city" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400">
-                        <option value="">Tümü</option>
-                        @foreach($cities as $ct)
-                            <option value="{{ $ct->slug }}" {{ request('city') == $ct->slug ? 'selected' : '' }}>{{ $ct->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <button type="submit" class="w-full px-4 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 transition">
-                    Filtrele
-                </button>
-                @if(request()->anyFilled(['q', 'category', 'city']))
-                    <a href="{{ url()->current() }}" class="block text-center mt-2 text-sm text-gray-500 hover:text-indigo-600">Filtreleri Temizle</a>
+                <button type="submit" class="rounded-xl px-5 py-2 text-sm font-bold text-white transition hover:opacity-90" style="background:var(--primary);">Filtrele</button>
+                @if(request()->anyFilled(['q', 'category', 'city', 'district']))
+                    <a href="{{ route('companies.index') }}" class="text-sm hover:underline" style="color:var(--text_muted);">Temizle</a>
                 @endif
             </form>
         </div>
+    </section>
 
-        <!-- Company List -->
-        <div class="flex-1">
-            <div class="flex items-center justify-between mb-6">
-                <h1 class="text-2xl font-bold text-gray-900">{{ $metaTitle ?? 'Tüm Firmalar' }}</h1>
-                <span class="text-sm text-gray-500">{{ $companies->total() }} firma bulundu</span>
-            </div>
-
+    {{-- Companies Grid --}}
+    <section class="py-10">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width:var(--page_width,1280px);">
             @if($companies->isNotEmpty())
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="grid {{ $gridCols }} gap-6">
                     @foreach($companies as $company)
-                        @include('components.company-card', ['company' => $company, 'premium' => $company->is_premium])
+                        @include('partials.cards.' . $cardPartial, ['company' => $company, 'premium' => $company->is_premium])
                     @endforeach
                 </div>
-                <div class="mt-8">
+                <div class="mt-10">
                     {{ $companies->links() }}
                 </div>
             @else
-                <div class="text-center py-16 bg-white rounded-2xl border border-gray-100">
+                <div class="rounded-3xl border p-16 text-center" style="border-color:var(--border);background:var(--bg_card);">
                     <div class="text-5xl mb-4">🔍</div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Firma Bulunamadı</h3>
-                    <p class="text-gray-500">Aramanızla eşleşen firma bulunamadı. Lütfen farklı kriterlerle tekrar deneyin.</p>
+                    <h3 class="text-lg font-bold" style="color:var(--text);">Firma Bulunamadı</h3>
+                    <p class="mt-2 text-sm" style="color:var(--text_muted);">Aramanızla eşleşen firma bulunamadı. Farklı kriterlerle tekrar deneyin.</p>
                 </div>
             @endif
         </div>
-    </div>
+    </section>
+
+    @include('partials.cta')
 </div>
 @endsection
