@@ -69,7 +69,7 @@ class FirecrawlService
             return $this->parseSearchResults($data, $keyword, $city, 'search');
         } catch (GuzzleException $e) {
             Log::error('Firecrawl search failed', ['error' => $this->sanitizeError($e)]);
-            throw new \RuntimeException('Firma keşfi sırasında bir hata oluştu.');
+            throw new \RuntimeException('Firma keşfi başarısız: ' . $this->sanitizeError($e));
         }
     }
 
@@ -95,7 +95,7 @@ class FirecrawlService
             return $this->parseSearchResults($data, $keyword, $city, 'google_maps');
         } catch (GuzzleException $e) {
             Log::error('Firecrawl Google Maps search failed', ['error' => $this->sanitizeError($e)]);
-            throw new \RuntimeException('Google Maps araması sırasında bir hata oluştu.');
+            throw new \RuntimeException('Google Maps araması başarısız: ' . $this->sanitizeError($e));
         }
     }
 
@@ -176,16 +176,21 @@ class FirecrawlService
     protected function parseSearchResults(array $data, string $keyword, string $city, string $source): array
     {
         $results = [];
-
         $items = $data['data'] ?? [];
 
         foreach ($items as $item) {
-            $markdown = $item['markdown'] ?? '';
-            $metadata = $item['metadata'] ?? [];
-            $url = $metadata['sourceURL'] ?? $item['url'] ?? '';
+            $title = $item['title'] ?? '';
+            $desc = $item['description'] ?? '';
+            $url = $item['url'] ?? '';
 
-            $company = $this->extractCompanyFromMarkdown($markdown, $url);
-            $company['name'] = $company['name'] ?: ($metadata['title'] ?? ($metadata['og:title'] ?? 'Bilinmeyen Firma'));
+            // Try markdown first, fall back to title+description
+            $markdown = $item['markdown'] ?? '';
+            $text = $markdown ?: ($title . "\n\n" . $desc);
+
+            $company = $this->extractCompanyFromMarkdown($text, $url);
+            if (!$company['name'] || $company['name'] === 'Bilinmeyen Firma') {
+                $company['name'] = $title ?: 'Bilinmeyen Firma';
+            }
 
             // Deduplicate by name
             $key = mb_strtolower(trim($company['name']));
