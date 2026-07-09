@@ -11,7 +11,7 @@
         <span class="text-gray-900 font-medium">{{ $category->name }}</span>
     </nav>
 
-    <div class="rounded-2xl p-8 mb-8 text-white" style="background: linear-gradient(135deg, var(--hero-gradient-from), var(--hero-gradient-to))">
+    <div class="rounded-2xl p-8 mb-8 text-white" style="background: linear-gradient(135deg, var(--hero_gradient_from), var(--hero_gradient_to))">
         <div class="flex items-center gap-4">
             <div class="text-5xl">{{ $category->icon ?? '📁' }}</div>
             <div>

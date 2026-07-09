@@ -11,12 +11,12 @@
         <span class="text-gray-900 font-medium">{{ $city->name }}</span>
     </nav>
 
-    <div class="rounded-2xl p-8 mb-8 text-white" style="background: linear-gradient(135deg, var(--hero-gradient-from), var(--hero-gradient-to))">
+    <div class="rounded-2xl p-8 mb-8 text-white" style="background: linear-gradient(135deg, var(--hero_gradient_from), var(--hero_gradient_to))">
         <h1 class="text-3xl font-bold">{{ $city->name }} Firmaları</h1>
         @if($city->plate_code)
-            <p class="mt-2 text-blue-200">Plaka: {{ $city->plate_code }}</p>
+            <p class="mt-2 opacity-80">Plaka: {{ $city->plate_code }}</p>
         @endif
-        <p class="mt-2 text-sm text-blue-300">{{ $companies->total() }} firma bulundu</p>
+        <p class="mt-2 text-sm opacity-70">{{ $companies->total() }} firma bulundu</p>
     </div>
 
     <div class="flex flex-col lg:flex-row gap-8">
