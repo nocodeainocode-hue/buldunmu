@@ -15,7 +15,7 @@
     <div class="flex flex-col lg:flex-row gap-8">
         <!-- Sidebar Filters -->
         <div class="lg:w-64 shrink-0">
-            <form action="{{ route('companies.index') }}" method="GET" class="bg-white rounded-2xl border border-gray-100 p-5 sticky top-24">
+            <form action="{{ url()->current() }}" method="GET" class="bg-white rounded-2xl border border-gray-100 p-5 sticky top-24">
                 <h3 class="font-semibold text-gray-900 mb-4">Filtreler</h3>
 
                 <!-- Search -->
@@ -51,7 +51,7 @@
                     Filtrele
                 </button>
                 @if(request()->anyFilled(['q', 'category', 'city']))
-                    <a href="{{ route('companies.index') }}" class="block text-center mt-2 text-sm text-gray-500 hover:text-indigo-600">Filtreleri Temizle</a>
+                    <a href="{{ url()->current() }}" class="block text-center mt-2 text-sm text-gray-500 hover:text-indigo-600">Filtreleri Temizle</a>
                 @endif
             </form>
         </div>
