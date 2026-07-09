@@ -130,7 +130,7 @@ class CompanyForm
                                     ->label('Fotoğraf')
                                     ->image()
                                     ->disk('public')
-                                    ->directory('companies/gallery')
+                                    ->directory('firmalar/galeri')
                                     ->maxSize(5120)
                                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                                     ->imageResizeMode('cover')
