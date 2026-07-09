@@ -1,12 +1,12 @@
 <article class="group overflow-hidden border bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-xl" style="background:var(--bg_card);border-color:var(--border);border-radius:var(--border_radius);box-shadow:var(--card_shadow);">
     <a href="{{ route('companies.show', $company->slug) }}" class="block">
         <div class="relative aspect-[4/3] overflow-hidden" style="background:linear-gradient(135deg,var(--primary_light),var(--bg));">
-            @if($company->cover_image)
-                <img src="{{ asset('storage/' . $company->cover_image) }}" alt="{{ $company->name }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
-            @elseif($company->logo)
+            @if($company->logo)
                 <div class="flex h-full items-center justify-center p-8">
                     <img src="{{ asset('storage/' . $company->logo) }}" alt="{{ $company->name }}" class="max-h-24 max-w-full object-contain">
                 </div>
+            @elseif($company->cover_image)
+                <img src="{{ asset('storage/' . $company->cover_image) }}" alt="{{ $company->name }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
             @else
                 <div class="flex h-full items-center justify-center">
                     <div class="flex h-20 w-20 items-center justify-center rounded-2xl text-4xl font-black text-white shadow-lg" style="background:linear-gradient(135deg,var(--primary),var(--secondary));">
