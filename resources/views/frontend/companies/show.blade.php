@@ -49,6 +49,21 @@
 
 @section('content')
 <div style="background:var(--bg);">
+    @if($company->cover_image)
+    <section class="relative h-48 sm:h-64 lg:h-80 overflow-hidden">
+        <img src="{{ asset('storage/' . $company->cover_image) }}" alt="{{ $company->name }}" class="h-full w-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-6">
+            <div class="mx-auto" style="max-width:var(--page_width,1280px);">
+                <h1 class="text-3xl font-black text-white sm:text-4xl">{{ $company->name }}</h1>
+                @if($company->short_description)
+                <p class="mt-2 text-sm text-white/80 max-w-2xl">{{ $company->short_description }}</p>
+                @endif
+            </div>
+        </div>
+    </section>
+    @endif
+
     <section class="border-b" style="background:linear-gradient(135deg,var(--primary_light),var(--bg_card));border-color:var(--border);">
         <div class="mx-auto px-4 py-8 sm:px-6 lg:px-8" style="max-width:var(--page_width,1280px);">
             <nav class="mb-6 flex flex-wrap gap-2 text-sm" style="color:var(--text_muted);">
