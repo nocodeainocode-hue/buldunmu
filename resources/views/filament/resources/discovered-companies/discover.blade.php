@@ -1,10 +1,9 @@
 <x-filament-panels::page>
-    <x-filament-panels::form wire:submit="discover">
-        {{ $this->form }}
+    {{ $this->form }}
 
-        <div class="flex justify-end gap-3 mt-6">
+    <div class="flex justify-end gap-3 mt-6">
             <x-filament::button
-                type="submit"
+                wire:click="discover"
                 icon="heroicon-o-magnifying-glass"
                 color="primary"
                 size="lg"
@@ -12,7 +11,6 @@
                 Keşfet
             </x-filament::button>
         </div>
-    </x-filament-panels::form>
 
     @if ($this->hasSearched)
         <div class="mt-8">
