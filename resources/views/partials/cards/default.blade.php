@@ -7,9 +7,9 @@
         <div class="flex items-start gap-4">
             <div class="shrink-0">
                 @if($company->logo)
-                    <img src="{{ asset('storage/' . $company->logo) }}" class="w-14 h-14 rounded-xl object-cover">
+                    <img src="{{ asset('storage/' . $company->logo) }}" class="w-16 h-16 rounded-xl object-contain" style="background:var(--bg);">
                 @else
-                    <div class="w-14 h-14 rounded-xl flex items-center justify-center text-white font-bold text-xl" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: var(--border_radius);">
+                    <div class="w-16 h-16 rounded-xl flex items-center justify-center text-white font-bold text-2xl" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: var(--border_radius);">
                         {{ mb_substr($company->name, 0, 1) }}
                     </div>
                 @endif

@@ -2,7 +2,7 @@
 <a href="{{ route('companies.show', $company->slug) }}" class="flex items-center gap-4 p-4 border rounded-lg transition-all duration-200 hover:shadow-md group" style="background-color: var(--bg_card); border-color: var(--border); box-shadow: var(--card_shadow); border-radius: var(--border_radius);">
     <div class="shrink-0">
         @if($company->logo)
-            <img src="{{ asset('storage/' . $company->logo) }}" class="w-16 h-16 object-cover" style="border-radius: var(--border_radius);">
+            <img src="{{ asset('storage/' . $company->logo) }}" class="w-16 h-16 object-contain" style="border-radius: var(--border_radius); background:var(--bg);">
         @else
             <div class="w-16 h-16 flex items-center justify-center text-white font-bold text-2xl" style="background-color: var(--primary); border-radius: var(--border_radius);">{{ mb_substr($company->name, 0, 1) }}</div>
         @endif
