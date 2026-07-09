@@ -18,10 +18,12 @@ class CompanyReviewsTable
                 TextColumn::make('name')->label('Yazan')->searchable(),
                 TextColumn::make('rating')->label('Puan')->badge()->sortable(),
                 TextColumn::make('status')->label('Durum')->badge()
-                    ->formatStateUsing(fn($s) => match ($s) {
-                        'approved' => 'Yayında',
-                        'rejected' => 'Reddedildi',
-                        default => 'Onay Bekliyor',
+                    ->formatStateUsing(function ($state, CompanyReview $record) {
+                        return match ($record->fresh()->status ?? $state) {
+                            'approved' => 'Yayında',
+                            'rejected' => 'Reddedildi',
+                            default => 'Onay Bekliyor',
+                        };
                     })
                     ->color(fn($s) => match ($s) {
                         'approved' => 'success',
@@ -46,8 +48,10 @@ class CompanyReviewsTable
                     ->visible(fn(CompanyReview $r) => $r->status !== 'approved')
                     ->action(function (CompanyReview $r, $livewire) {
                         $r->update(['status' => 'approved', 'approved_at' => now()]);
+                        $r->refresh();
                         $livewire->refresh();
-                    }),
+                    })
+                    ->after(fn($livewire) => $livewire->dispatch('$refresh')),
                 Action::make('reject')
                     ->icon('heroicon-o-x-circle')
                     ->color('danger')
@@ -55,8 +59,10 @@ class CompanyReviewsTable
                     ->visible(fn(CompanyReview $r) => $r->status !== 'rejected')
                     ->action(function (CompanyReview $r, $livewire) {
                         $r->update(['status' => 'rejected']);
+                        $r->refresh();
                         $livewire->refresh();
-                    }),
+                    })
+                    ->after(fn($livewire) => $livewire->dispatch('$refresh')),
             ]);
     }
 }
