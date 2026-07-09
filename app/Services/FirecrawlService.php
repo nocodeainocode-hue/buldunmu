@@ -68,8 +68,8 @@ class FirecrawlService
             $data = json_decode($response->getBody()->getContents(), true);
             return $this->parseSearchResults($data, $keyword, $city, 'search');
         } catch (GuzzleException $e) {
-            Log::error('Firecrawl search failed: ' . $e->getMessage());
-            throw new \RuntimeException('Firma keşfi sırasında bir hata oluştu: ' . $e->getMessage());
+            Log::error('Firecrawl search failed', ['error' => $this->sanitizeError($e)]);
+            throw new \RuntimeException('Firma keşfi sırasında bir hata oluştu.');
         }
     }
 
@@ -94,8 +94,8 @@ class FirecrawlService
             $data = json_decode($response->getBody()->getContents(), true);
             return $this->parseSearchResults($data, $keyword, $city, 'google_maps');
         } catch (GuzzleException $e) {
-            Log::error('Firecrawl Google Maps search failed: ' . $e->getMessage());
-            throw new \RuntimeException('Google Maps araması sırasında bir hata oluştu: ' . $e->getMessage());
+            Log::error('Firecrawl Google Maps search failed', ['error' => $this->sanitizeError($e)]);
+            throw new \RuntimeException('Google Maps araması sırasında bir hata oluştu.');
         }
     }
 
@@ -154,9 +154,20 @@ class FirecrawlService
             return $this->parseMarkdownForCompanies($markdown, $url);
 
         } catch (GuzzleException $e) {
-            Log::error('Firecrawl scrape failed: ' . $e->getMessage());
-            throw new \RuntimeException('URL kazıma sırasında bir hata oluştu: ' . $e->getMessage());
+            Log::error('Firecrawl scrape failed', ['error' => $this->sanitizeError($e)]);
+            throw new \RuntimeException('URL kazıma sırasında bir hata oluştu.');
         }
+    }
+
+    /**
+     * Sanitize Guzzle exception — strip Authorization header.
+     */
+    protected function sanitizeError(GuzzleException $e): string
+    {
+        $msg = $e->getMessage();
+        // Strip Bearer token from error message if present
+        $msg = preg_replace('/Bearer\s+\S+/', 'Bearer [REDACTED]', $msg);
+        return $msg;
     }
 
     /**
