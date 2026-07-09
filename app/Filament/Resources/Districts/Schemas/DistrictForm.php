@@ -15,7 +15,12 @@ class DistrictForm
             ->components([
                 Select::make('city_id')
                     ->label('Şehir')
-                    ->relationship('city', 'name')
+                    ->options(function () {
+                        $dirId = app()->bound('currentDirectory') ? app('currentDirectory')->id : null;
+                        return \App\Models\City::when($dirId, fn($q) => $q->where('directory_id', $dirId))
+                            ->orderBy('name')
+                            ->pluck('name', 'id');
+                    })
                     ->searchable()
                     ->preload()
                     ->required(),
