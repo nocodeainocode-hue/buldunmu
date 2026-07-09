@@ -5,6 +5,8 @@ namespace App\Filament\Resources\CompanyReviews\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Filament\Tables\Actions\Action;
+use App\Models\CompanyReview;
 
 class CompanyReviewsTable
 {
@@ -35,6 +37,20 @@ class CompanyReviewsTable
                     'approved' => 'Yayında',
                     'rejected' => 'Reddedildi',
                 ]),
+            ])
+            ->actions([
+                Action::make('approve')
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->requiresConfirmation(false)
+                    ->visible(fn(CompanyReview $r) => $r->status !== 'approved')
+                    ->action(fn(CompanyReview $r) => $r->update(['status' => 'approved', 'approved_at' => now()])),
+                Action::make('reject')
+                    ->icon('heroicon-o-x-circle')
+                    ->color('danger')
+                    ->requiresConfirmation(false)
+                    ->visible(fn(CompanyReview $r) => $r->status !== 'rejected')
+                    ->action(fn(CompanyReview $r) => $r->update(['status' => 'rejected'])),
             ]);
     }
 }
