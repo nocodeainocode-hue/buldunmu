@@ -94,8 +94,7 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
                             ->helperText('Kazınacak sayfanın tam URL\'si'),
                     ])
                     ->columns(2),
-            ])
-            ->statePath('data');
+            ]);
     }
 
     public function discover(): void
