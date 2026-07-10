@@ -219,16 +219,6 @@
                 </div>
             </section>
 
-            {{-- Opening Hours --}}
-            @if($company->opening_hours)
-            <section class="rounded-3xl border bg-white p-6" style="border-color:var(--border);box-shadow:var(--card_shadow);">
-                <h2 class="mb-5 text-2xl font-black" style="color:var(--text);">🕐 Çalışma Saatleri</h2>
-                <div class="prose max-w-none leading-7" style="color:var(--text_muted);">
-                    {!! nl2br(e($company->opening_hours)) !!}
-                </div>
-            </section>
-            @endif
-
             {{-- Services Grid --}}
             <section class="rounded-3xl border bg-white p-6" style="border-color:var(--border);box-shadow:var(--card_shadow);">
                 <h2 class="mb-5 text-2xl font-black" style="color:var(--text);">🔧 Hizmetler ve İletişim Kanalları</h2>
@@ -315,6 +305,16 @@
                         referrerpolicy="no-referrer-when-downgrade"
                         title="{{ $company->name }} - Google Maps Konumu">
                     </iframe>
+                </div>
+            </section>
+            @endif
+
+            {{-- Opening Hours --}}
+            @if($company->opening_hours)
+            <section class="rounded-3xl border bg-white p-6" style="border-color:var(--border);box-shadow:var(--card_shadow);">
+                <h2 class="mb-5 text-2xl font-black" style="color:var(--text);">🕐 Çalışma Saatleri</h2>
+                <div class="prose max-w-none leading-7" style="color:var(--text_muted);">
+                    {!! nl2br(e($company->opening_hours)) !!}
                 </div>
             </section>
             @endif
