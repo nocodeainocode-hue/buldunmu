@@ -27,8 +27,8 @@ class CompanyImage extends Model
             }
         });
 
-        // Rename uploaded images to SEO-friendly names after save
-        static::saved(function (self $image) {
+        // Rename uploaded images to SEO-friendly names only on create
+        static::created(function (self $image) {
             if (!$image->image_path || !Storage::disk('public')->exists($image->image_path)) {
                 return;
             }
@@ -43,8 +43,7 @@ class CompanyImage extends Model
             $newName = \Illuminate\Support\Str::slug($company->name) . '-' . $image->id . '.' . $ext;
             $newPath = 'firmalar/galeri/' . $newName;
 
-            // Only rename if path changed and new file doesn't exist
-            if ($oldPath !== $newPath && !Storage::disk('public')->exists($newPath)) {
+            if ($oldPath !== $newPath) {
                 Storage::disk('public')->move($oldPath, $newPath);
                 $image->updateQuietly(['image_path' => $newPath]);
             }
