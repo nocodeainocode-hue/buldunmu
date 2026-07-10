@@ -154,6 +154,49 @@ class CompanyForm
                             ->grid(2),
                     ]),
 
+                Section::make('Hizmetler ve İletişim Kanalları')
+                    ->description('Firma detay sayfasında gösterilecek hizmet maddeleri')
+                    ->collapsible()
+                    ->schema([
+                        Repeater::make('services')
+                            ->label('Hizmet Maddeleri')
+                            ->schema([
+                                TextInput::make('title')
+                                    ->label('Hizmet')
+                                    ->required()
+                                    ->placeholder('örn: Su Arıtma Cihazı Montajı'),
+                            ])
+                            ->defaultItems(3)
+                            ->addActionLabel('Hizmet Ekle')
+                            ->collapsible()
+                            ->itemLabel(fn(array $state): ?string => $state['title'] ?? 'Yeni Hizmet')
+                            ->grid(2),
+                    ]),
+
+                Section::make('Neden Bu Firma?')
+                    ->description('Firma detay sayfasında gösterilecek öne çıkan özellikler')
+                    ->collapsible()
+                    ->schema([
+                        Repeater::make('why_us_items')
+                            ->label('Öne Çıkan Özellikler')
+                            ->schema([
+                                TextInput::make('title')
+                                    ->label('Başlık')
+                                    ->required()
+                                    ->placeholder('örn: Kolay İletişim'),
+                                Textarea::make('description')
+                                    ->label('Açıklama')
+                                    ->required()
+                                    ->placeholder('Telefon, WhatsApp ve e-posta ile hızlı ulaşım.')
+                                    ->rows(2),
+                            ])
+                            ->defaultItems(3)
+                            ->addActionLabel('Özellik Ekle')
+                            ->collapsible()
+                            ->itemLabel(fn(array $state): ?string => $state['title'] ?? 'Yeni Özellik')
+                            ->grid(1),
+                    ]),
+
                 Section::make('Premium & Durum')
                     ->schema([
                         Grid::make(2)

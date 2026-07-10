@@ -31,7 +31,7 @@ class Company extends Model
     protected $fillable = [
         'name', 'slug', 'category_id', 'city_id', 'district_id',
         'phone', 'whatsapp', 'email', 'website', 'address', 'google_maps_url',
-        'opening_hours', 'short_description', 'description', 'logo', 'cover_image',
+        'opening_hours', 'short_description', 'description', 'services', 'why_us_items', 'logo', 'cover_image',
         'is_premium', 'premium_until', 'status', 'view_count',
         'meta_title', 'meta_description', 'directory_id',
     ];
@@ -39,6 +39,8 @@ class Company extends Model
     protected $casts = [
         'is_premium' => 'boolean',
         'premium_until' => 'datetime',
+        'services' => 'array',
+        'why_us_items' => 'array',
     ];
 
     public function category()

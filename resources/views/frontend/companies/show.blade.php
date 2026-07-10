@@ -219,6 +219,35 @@
                 </div>
             </section>
 
+            {{-- Services Grid (admin-managed) --}}
+            @if(!empty($company->services))
+            <section class="rounded-3xl border bg-white p-6" style="border-color:var(--border);box-shadow:var(--card_shadow);">
+                <h2 class="mb-5 text-2xl font-black" style="color:var(--text);">🔧 Hizmetler ve İletişim Kanalları</h2>
+                <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    @foreach($company->services as $service)
+                        <div class="rounded-2xl border p-4 transition hover:shadow-sm" style="border-color:var(--border);background:var(--bg);">
+                            <div class="font-bold" style="color:var(--text);">{{ $service['title'] }}</div>
+                        </div>
+                    @endforeach
+                </div>
+            </section>
+            @endif
+
+            {{-- Why Us (admin-managed) --}}
+            @if(!empty($company->why_us_items))
+            <section class="rounded-3xl border bg-white p-6" style="border-color:var(--border);box-shadow:var(--card_shadow);">
+                <h2 class="mb-5 text-2xl font-black" style="color:var(--text);">⭐ Neden {{ $company->name }}?</h2>
+                <div class="grid gap-4 sm:grid-cols-3">
+                    @foreach($company->why_us_items as $item)
+                        <div class="rounded-2xl p-5 text-center transition hover:-translate-y-0.5" style="background:var(--bg);">
+                            <div class="font-bold" style="color:var(--text);">{{ $item['title'] }}</div>
+                            <p class="mt-2 text-sm" style="color:var(--text_muted);">{{ $item['description'] }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            </section>
+            @endif
+
             {{-- SEO Story: Extended content (only for seo-story variant) --}}
             @if($isSeoStory && !$hasRichContent)
             <section class="rounded-3xl border bg-white p-6" style="border-color:var(--border);box-shadow:var(--card_shadow);">
