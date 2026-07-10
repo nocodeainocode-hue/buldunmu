@@ -12,7 +12,11 @@ trait BelongsToDirectory
         static::addGlobalScope('directory', function (Builder $builder) {
             $dir = app()->bound('currentDirectory') ? app('currentDirectory') : null;
             if ($dir) {
-                $builder->where($builder->getModel()->getTable() . '.directory_id', $dir->id);
+                $table = $builder->getModel()->getTable();
+                $builder->where(function ($q) use ($table, $dir) {
+                    $q->whereNull("{$table}.directory_id")
+                      ->orWhere("{$table}.directory_id", $dir->id);
+                });
             }
         });
     }
