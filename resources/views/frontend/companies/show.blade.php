@@ -337,6 +337,23 @@
                 </div>
             </section>
 
+            {{-- External Links (admin-managed) --}}
+            @if(!empty($company->external_links))
+            <section class="rounded-3xl border bg-white p-6" style="border-color:var(--border);box-shadow:var(--card_shadow);">
+                <h2 class="mb-5 text-2xl font-black" style="color:var(--text);">🔗 Dış Bağlantılar</h2>
+                <div class="grid gap-3 sm:grid-cols-2">
+                    @foreach($company->external_links as $link)
+                        <a href="{{ $link['url'] }}" target="_blank" rel="noopener noreferrer" class="block rounded-2xl border p-4 transition hover:-translate-y-0.5 hover:shadow-sm" style="border-color:var(--border);background:var(--bg);">
+                            <div class="font-bold" style="color:var(--text);">{{ $link['label'] }}</div>
+                            @if(!empty($link['description']))
+                                <p class="mt-1 text-xs" style="color:var(--text_muted);">{{ $link['description'] }}</p>
+                            @endif
+                        </a>
+                    @endforeach
+                </div>
+            </section>
+            @endif
+
             {{-- Reviews --}}
             <section class="rounded-3xl border bg-white p-6" id="yorumlar" style="border-color:var(--border);box-shadow:var(--card_shadow);">
                 <h2 class="mb-5 text-2xl font-black" style="color:var(--text);">

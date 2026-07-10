@@ -197,6 +197,35 @@ class CompanyForm
                             ->grid(1),
                     ]),
 
+                Section::make('Dış Bağlantılar')
+                    ->description('Firma detay sayfasında yorumların üstünde gösterilecek bağlantılar')
+                    ->collapsible()
+                    ->collapsed()
+                    ->schema([
+                        Repeater::make('external_links')
+                            ->label('Bağlantılar')
+                            ->schema([
+                                TextInput::make('label')
+                                    ->label('Bağlantı Metni')
+                                    ->required()
+                                    ->placeholder('örn: Google Haritalar'),
+                                TextInput::make('url')
+                                    ->label('URL')
+                                    ->required()
+                                    ->url()
+                                    ->placeholder('https://'),
+                                Textarea::make('description')
+                                    ->label('Açıklama (opsiyonel)')
+                                    ->placeholder('Firmanın Google Maps konumu...')
+                                    ->rows(2),
+                            ])
+                            ->defaultItems(0)
+                            ->addActionLabel('Bağlantı Ekle')
+                            ->collapsible()
+                            ->itemLabel(fn(array $state): ?string => $state['label'] ?? 'Yeni Bağlantı')
+                            ->grid(1),
+                    ]),
+
                 Section::make('Premium & Durum')
                     ->schema([
                         Grid::make(2)
