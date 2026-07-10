@@ -141,11 +141,12 @@
                     </ul>
                 </div>
                 <div>
-                    <h3 class="mb-4 text-xs font-black uppercase tracking-widest" style="color:white;">İletişim</h3>
+                    <h3 class="mb-4 text-xs font-black uppercase tracking-widest" style="color:white;">Kategoriler</h3>
                     <ul class="space-y-2 text-sm" style="color:#94a3b8;">
-                        @if($settings->phone ?? false)<li>Tel: {{ $settings->phone }}</li>@endif
-                        @if($settings->email ?? false)<li>E-posta: {{ $settings->email }}</li>@endif
-                        @if($settings->address ?? false)<li>Adres: {{ $settings->address }}</li>@endif
+                        @php $footerCategories = \App\Models\Category::active()->withCount('companies')->orderByDesc('companies_count')->take(5)->get(); @endphp
+                        @foreach($footerCategories as $cat)
+                            <li><a href="{{ route('categories.show', $cat->slug) }}" class="transition hover:text-white">{{ $cat->name }}</a></li>
+                        @endforeach
                     </ul>
                 </div>
                 <div>

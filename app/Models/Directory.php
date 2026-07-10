@@ -9,11 +9,12 @@ class Directory extends Model
     protected $fillable = [
         'name', 'slug', 'domain', 'logo', 'favicon', 'template', 'theme',
         'slug_pattern', 'plan', 'status', 'expires_at',
-        'meta_title', 'meta_description',
+        'meta_title', 'meta_description', 'page_contents',
     ];
 
     protected $casts = [
         'theme' => 'array',
+        'page_contents' => 'array',
         'expires_at' => 'datetime',
     ];
 

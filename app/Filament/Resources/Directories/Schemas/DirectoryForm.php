@@ -167,6 +167,25 @@ class DirectoryForm
                         TextInput::make('meta_title')->label('Meta Title'),
                         Textarea::make('meta_description')->label('Meta Description'),
                     ]),
+
+                Section::make('Özel Sayfa İçerikleri')
+                    ->description('Bu rehbere özel hakkımızda, iletişim, gizlilik ve kullanım şartları sayfalarının içerikleri. Boş bırakılırsa varsayılan içerik gösterilir.')
+                    ->collapsible()
+                    ->collapsed()
+                    ->schema([
+                        RichEditor::make('page_contents.about')
+                            ->label('Hakkımızda')
+                            ->placeholder('Bu rehber hakkında açıklama...'),
+                        RichEditor::make('page_contents.contact')
+                            ->label('İletişim')
+                            ->placeholder('İletişim bilgileri ve form açıklaması...'),
+                        RichEditor::make('page_contents.privacy')
+                            ->label('Gizlilik Politikası')
+                            ->placeholder('Gizlilik politikası metni...'),
+                        RichEditor::make('page_contents.terms')
+                            ->label('Kullanım Şartları')
+                            ->placeholder('Kullanım şartları metni...'),
+                    ]),
             ]);
     }
 }
