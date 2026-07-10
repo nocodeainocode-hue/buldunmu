@@ -8,7 +8,7 @@
 <section class="py-10" style="background:var(--bg_card);">
     <div class="mx-auto px-4" style="max-width: 900px;">
         <div class="flex justify-between items-center mb-6">
-            <h2 class="text-lg font-light uppercase tracking-wide" style="color:var(--text_muted);">⭐ One Cikanlar</h2>
+            <h2 class="text-lg font-light uppercase tracking-wide" style="color:var(--text_muted);">⭐ Öne Çıkanlar</h2>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             @foreach($premiumCompanies as $c)

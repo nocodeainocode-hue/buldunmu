@@ -8,7 +8,7 @@
 <section class="py-12" style="background:var(--bg);">
     <div class="mx-auto px-4" style="max-width:var(--page_width,1280px);">
         <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-bold" style="color:var(--text);">One Cikan Isletmeler</h2>
+            <h2 class="text-xl font-bold" style="color:var(--text);">Öne Çıkan İşletmeler</h2>
             <a href="{{ route('companies.index') }}" class="text-sm font-medium" style="color:var(--primary);">Tumunu Gor →</a>
         </div>
         <div class="space-y-3">

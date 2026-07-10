@@ -6,7 +6,7 @@
 @if($premiumCompanies->isNotEmpty())
 <section class="py-12" style="background:var(--bg);">
     <div style="max-width:1000px;margin:0 auto;padding:0 1rem;">
-        <h2 class="text-2xl font-black text-center mb-2 uppercase tracking-tight" style="color:var(--text);">⭐ One Cikanlar</h2>
+        <h2 class="text-2xl font-black text-center mb-2 uppercase tracking-tight" style="color:var(--text);">⭐ Öne Çıkanlar</h2>
         <p class="text-center mb-8" style="color:var(--text_muted);">Premium işletmeler</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             @foreach($premiumCompanies->take(6) as $c) @include('partials.cards.'.\App\View\Helpers\ThemeHelper::cardPartial($directory??null),['company'=>$c,'premium'=>true]) @endforeach

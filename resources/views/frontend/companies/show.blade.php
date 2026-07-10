@@ -219,48 +219,6 @@
                 </div>
             </section>
 
-            {{-- Services Grid --}}
-            <section class="rounded-3xl border bg-white p-6" style="border-color:var(--border);box-shadow:var(--card_shadow);">
-                <h2 class="mb-5 text-2xl font-black" style="color:var(--text);">🔧 Hizmetler ve İletişim Kanalları</h2>
-                <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                    @foreach([
-                        $categoryName . ' hizmeti',
-                        '📞 Telefon ile iletişim',
-                        '💬 WhatsApp destek',
-                        '🌐 Web sitesi üzerinden bilgi',
-                        '📍 Adres ve konum bilgisi',
-                        '✅ Güncel firma bilgileri',
-                    ] as $item)
-                        <div class="rounded-2xl border p-4 transition hover:shadow-sm" style="border-color:var(--border);background:var(--bg);">
-                            <div class="font-bold" style="color:var(--text);">{{ $item }}</div>
-                            <div class="mt-1 text-xs" style="color:var(--text_muted);">{{ $cityName }} bölgesinde güncel</div>
-                        </div>
-                    @endforeach
-                </div>
-            </section>
-
-            {{-- Why This Company --}}
-            <section class="rounded-3xl border bg-white p-6" style="border-color:var(--border);box-shadow:var(--card_shadow);">
-                <h2 class="mb-5 text-2xl font-black" style="color:var(--text);">⭐ Neden {{ $company->name }}?</h2>
-                <div class="grid gap-4 sm:grid-cols-3">
-                    <div class="rounded-2xl p-5 text-center transition hover:-translate-y-0.5" style="background:var(--bg);">
-                        <div class="text-2xl mb-2">📱</div>
-                        <div class="font-bold" style="color:var(--text);">Kolay İletişim</div>
-                        <p class="mt-2 text-sm" style="color:var(--text_muted);">Telefon, WhatsApp ve e-posta ile hızlı ulaşım.</p>
-                    </div>
-                    <div class="rounded-2xl p-5 text-center transition hover:-translate-y-0.5" style="background:var(--bg);">
-                        <div class="text-2xl mb-2">📍</div>
-                        <div class="font-bold" style="color:var(--text);">Yerel Hizmet</div>
-                        <p class="mt-2 text-sm" style="color:var(--text_muted);">{{ $cityName }}{{ $districtName ? ' / ' . $districtName : '' }} bölgesinde.</p>
-                    </div>
-                    <div class="rounded-2xl p-5 text-center transition hover:-translate-y-0.5" style="background:var(--bg);">
-                        <div class="text-2xl mb-2">🔄</div>
-                        <div class="font-bold" style="color:var(--text);">Güncel Bilgi</div>
-                        <p class="mt-2 text-sm" style="color:var(--text_muted);">Düzenli olarak güncellenen firma profili.</p>
-                    </div>
-                </div>
-            </section>
-
             {{-- SEO Story: Extended content (only for seo-story variant) --}}
             @if($isSeoStory && !$hasRichContent)
             <section class="rounded-3xl border bg-white p-6" style="border-color:var(--border);box-shadow:var(--card_shadow);">

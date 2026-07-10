@@ -16,7 +16,7 @@
 <section class="py-12" style="background:var(--bg);">
     <div class="mx-auto px-4" style="max-width:var(--page_width,1280px);">
         <div class="flex justify-between items-end mb-8">
-            <div><div class="text-xs uppercase tracking-widest mb-1" style="color:var(--accent);">Premium</div><h2 class="text-2xl font-serif font-bold" style="color:var(--text);">One Cikan Isletmeler</h2></div>
+            <div><div class="text-xs uppercase tracking-widest mb-1" style="color:var(--accent);">Premium</div><h2 class="text-2xl font-serif font-bold" style="color:var(--text);">Öne Çıkan İşletmeler</h2></div>
             <a href="{{ route('companies.index') }}" class="text-sm font-serif italic" style="color:var(--text_muted);">Tumunu gor →</a>
         </div>
         <div class="grid {{ \App\View\Helpers\ThemeHelper::gridCols($directory??null) }} gap-8">
