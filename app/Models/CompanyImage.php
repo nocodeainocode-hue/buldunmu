@@ -26,6 +26,29 @@ class CompanyImage extends Model
                 }
             }
         });
+
+        // Rename uploaded images to SEO-friendly names after save
+        static::saved(function (self $image) {
+            if (!$image->image_path || !Storage::disk('public')->exists($image->image_path)) {
+                return;
+            }
+
+            $company = $image->company;
+            if (!$company) return;
+
+            $ext = pathinfo($image->image_path, PATHINFO_EXTENSION);
+            $oldPath = $image->image_path;
+
+            // Generate SEO-friendly name: company-slug-id.ext
+            $newName = \Illuminate\Support\Str::slug($company->name) . '-' . $image->id . '.' . $ext;
+            $newPath = 'firmalar/galeri/' . $newName;
+
+            // Only rename if path changed and new file doesn't exist
+            if ($oldPath !== $newPath && !Storage::disk('public')->exists($newPath)) {
+                Storage::disk('public')->move($oldPath, $newPath);
+                $image->updateQuietly(['image_path' => $newPath]);
+            }
+        });
     }
 
     public function company()

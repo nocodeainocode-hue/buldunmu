@@ -13,18 +13,41 @@ class Company extends Model
     protected static function booted(): void
     {
         static::deleting(function (self $company) {
-            // Clean up gallery image files when company is deleted
             foreach ($company->images as $image) {
                 if ($image->image_path && Storage::disk('public')->exists($image->image_path)) {
                     Storage::disk('public')->delete($image->image_path);
                 }
             }
-            // Also clean up logo and cover
             if ($company->logo && Storage::disk('public')->exists($company->logo)) {
                 Storage::disk('public')->delete($company->logo);
             }
             if ($company->cover_image && Storage::disk('public')->exists($company->cover_image)) {
                 Storage::disk('public')->delete($company->cover_image);
+            }
+        });
+
+        // Rename logo and cover to SEO-friendly names after save
+        static::saved(function (self $company) {
+            $slug = \Illuminate\Support\Str::slug($company->name);
+
+            // Rename logo
+            if ($company->logo && Storage::disk('public')->exists($company->logo)) {
+                $ext = pathinfo($company->logo, PATHINFO_EXTENSION);
+                $newPath = 'companies/logos/' . $slug . '-logo.' . $ext;
+                if ($company->logo !== $newPath && !Storage::disk('public')->exists($newPath)) {
+                    Storage::disk('public')->move($company->logo, $newPath);
+                    $company->updateQuietly(['logo' => $newPath]);
+                }
+            }
+
+            // Rename cover
+            if ($company->cover_image && Storage::disk('public')->exists($company->cover_image)) {
+                $ext = pathinfo($company->cover_image, PATHINFO_EXTENSION);
+                $newPath = 'companies/covers/' . $slug . '-cover.' . $ext;
+                if ($company->cover_image !== $newPath && !Storage::disk('public')->exists($newPath)) {
+                    Storage::disk('public')->move($company->cover_image, $newPath);
+                    $company->updateQuietly(['cover_image' => $newPath]);
+                }
             }
         });
     }
