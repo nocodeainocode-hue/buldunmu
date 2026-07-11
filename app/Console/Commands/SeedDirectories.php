@@ -24,6 +24,10 @@ class SeedDirectories extends Command
             'izmirisletmeleri.com.tr' => 'İzmir İşletmeleri',
             'istanbulfirmarehberi.com.tr' => 'İstanbul Firma Rehberi',
             'ankarakobi.com.tr' => 'Ankara Kobi',
+            'esnafharita.com.tr' => 'Esnaf Harita',
+            'yakindafirma.com.tr' => 'Yakında Firma',
+            'hizmetyakinda.com.tr' => 'Hizmet Yakında',
+            'isletmepusulasi.com.tr' => 'İşletme Pusulası',
         ];
 
         foreach ($directories as $domain => $name) {
