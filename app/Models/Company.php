@@ -7,13 +7,26 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Carbon\CarbonInterface;
+use App\Services\CompanySlugService;
 
 class Company extends Model
 {
     use BelongsToDirectory;
 
+    private bool $slugChangeAllowed = false;
+
     protected static function booted(): void
     {
+        static::creating(function (self $company) {
+            $company->slug = app(CompanySlugService::class)->generate($company, $company->slug);
+        });
+
+        static::updating(function (self $company) {
+            if ($company->isDirty('slug') && !$company->slugChangeAllowed) {
+                $company->slug = $company->getOriginal('slug');
+            }
+        });
+
         static::saving(function (self $company) {
             if ($company->google_maps_url && (blank($company->latitude) || blank($company->longitude) || $company->isDirty('google_maps_url'))) {
                 $coordinates = self::coordinatesFromGoogleMapsInput($company->google_maps_url);
@@ -65,7 +78,7 @@ class Company extends Model
         });
     }
     protected $fillable = [
-        'name', 'slug', 'category_id', 'city_id', 'district_id',
+        'name', 'slug', 'external_id', 'import_batch_id', 'category_id', 'city_id', 'district_id',
         'phone', 'whatsapp', 'email', 'website', 'address', 'google_maps_url',
         'latitude', 'longitude', 'opening_hours', 'short_description', 'description', 'services', 'why_us_items', 'external_links', 'logo', 'cover_image',
         'is_premium', 'is_verified', 'premium_until', 'status', 'view_count',
@@ -169,6 +182,11 @@ class Company extends Model
         return $this->hasMany(CompanyReview::class)->approved()->latest();
     }
 
+    public function importBatch()
+    {
+        return $this->belongsTo(CompanyImportBatch::class, 'import_batch_id');
+    }
+
     public function scopeActive($query)
     {
         return $query->where('status', 'active');
@@ -191,6 +209,12 @@ class Company extends Model
     public function incrementViewCount(): void
     {
         $this->increment('view_count');
+    }
+
+    public function allowSlugChange(): self
+    {
+        $this->slugChangeAllowed = true;
+        return $this;
     }
 
     public function isOpenNow(?CarbonInterface $now = null): ?bool

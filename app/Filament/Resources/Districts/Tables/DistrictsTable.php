@@ -14,22 +14,32 @@ class DistrictsTable
     {
         return $table
             ->columns([
-                TextColumn::make('city_id')
-                    ->numeric()
+                TextColumn::make('city.name')
+                    ->label('Şehir')
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('name')
+                    ->label('İlçe')
                     ->searchable(),
                 TextColumn::make('slug')
-                    ->searchable(),
+                    ->label('Slug')
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('companies_count')
+                    ->label('Firma')
+                    ->counts('companies')
+                    ->sortable(),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Oluşturulma')
+                    ->dateTime('d.m.Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Güncelleme')
+                    ->dateTime('d.m.Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('name')
             ->filters([
                 //
             ])

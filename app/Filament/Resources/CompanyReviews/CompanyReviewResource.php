@@ -23,6 +23,21 @@ class CompanyReviewResource extends Resource
     protected static ?string $recordTitleAttribute = 'name';
 
     protected static ?string $navigationLabel = 'Yorumlar';
+    protected static ?string $modelLabel = 'Firma Yorumu';
+    protected static ?string $pluralModelLabel = 'Yorumlar';
+    protected static string|\UnitEnum|null $navigationGroup = 'Firma Yönetimi';
+    protected static ?int $navigationSort = 4;
+
+    public static function getNavigationBadge(): ?string
+    {
+        $count = static::getModel()::where('status', 'pending')->count();
+        return $count ? (string) $count : null;
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return 'warning';
+    }
 
     public static function form(Schema $schema): Schema
     {

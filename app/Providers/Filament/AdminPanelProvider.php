@@ -3,9 +3,10 @@
 namespace App\Providers\Filament;
 
 use App\Http\Middleware\SetCurrentDirectory;
+use App\Http\Middleware\SetAdminLocale;
 use App\Models\Directory;
-use App\Filament\Widgets\SitemapLinks;
 use App\Filament\Widgets\StatsOverview;
+use App\Filament\Widgets\QuickActions;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -13,7 +14,9 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Navigation\NavigationGroup;
 use Filament\Support\Colors\Color;
+use Filament\Support\Enums\Width;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -32,10 +35,22 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->brandName('Firma Rehberi')
+            ->brandName('Rehber Yönetimi')
             ->colors([
                 'primary' => Color::Indigo,
             ])
+            ->navigationGroups([
+                NavigationGroup::make('Firma Yönetimi'),
+                NavigationGroup::make('İçerik ve Konum'),
+                NavigationGroup::make('İletişim'),
+                NavigationGroup::make('Sistem')->collapsed(),
+            ])
+            ->sidebarWidth('18rem')
+            ->sidebarCollapsibleOnDesktop()
+            ->collapsibleNavigationGroups()
+            ->maxContentWidth(Width::Full)
+            ->unsavedChangesAlerts()
+            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
@@ -44,12 +59,13 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 StatsOverview::class,
-                SitemapLinks::class,
+                QuickActions::class,
             ])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
+                SetAdminLocale::class,
                 SetCurrentDirectory::class,
                 AuthenticateSession::class,
                 ShareErrorsFromSession::class,

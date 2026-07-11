@@ -18,7 +18,12 @@ class SiteSettingResource extends Resource
 {
     protected static ?string $model = SiteSetting::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedAdjustmentsHorizontal;
+    protected static ?string $navigationLabel = 'Site Ayarları';
+    protected static ?string $modelLabel = 'Site Ayarı';
+    protected static ?string $pluralModelLabel = 'Site Ayarları';
+    protected static string|\UnitEnum|null $navigationGroup = 'Sistem';
+    protected static ?int $navigationSort = 2;
 
     protected static ?string $recordTitleAttribute = 'site_name';
 

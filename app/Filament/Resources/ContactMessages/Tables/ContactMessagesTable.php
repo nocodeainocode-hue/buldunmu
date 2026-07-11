@@ -15,25 +15,34 @@ class ContactMessagesTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('Gönderen')
                     ->searchable(),
                 TextColumn::make('email')
-                    ->label('Email address')
+                    ->label('E-posta')
                     ->searchable(),
                 TextColumn::make('phone')
+                    ->label('Telefon')
                     ->searchable(),
                 TextColumn::make('subject')
+                    ->label('Konu')
                     ->searchable(),
                 TextColumn::make('status')
-                    ->searchable(),
+                    ->label('Durum')
+                    ->badge()
+                    ->formatStateUsing(fn($state) => match($state) {'new'=>'Yeni','read'=>'Okundu','replied'=>'Yanıtlandı',default=>$state})
+                    ->color(fn($state) => match($state) {'new'=>'danger','read'=>'info','replied'=>'success',default=>'gray'}),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Tarih')
+                    ->dateTime('d.m.Y H:i')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(),
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Güncelleme')
+                    ->dateTime('d.m.Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

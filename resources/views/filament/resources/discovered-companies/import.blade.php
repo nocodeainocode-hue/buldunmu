@@ -1,75 +1,45 @@
 <x-filament-panels::page>
     {{ $this->form }}
 
-    <div class="flex justify-end gap-3 mt-6">
-        <x-filament::button
-            wire:click="import"
-            icon="heroicon-o-arrow-up-tray"
-                color="success"
-                size="lg"
-            >
-                İçe Aktar
-            </x-filament::button>
-        </div>
+    <div class="flex flex-wrap justify-end gap-3">
+        <x-filament::button wire:click="preview" color="gray" icon="heroicon-o-eye">Ön İzleme</x-filament::button>
+        <x-filament::button wire:click="startImport" color="success" icon="heroicon-o-play">İçe Aktarmayı Başlat</x-filament::button>
+    </div>
 
-    @if ($this->hasImported)
-        <div class="mt-8 rounded-xl border p-6" style="border-color: #d1fae5; background: #f0fdf4;">
-            <h3 class="text-lg font-bold text-green-800 mb-3">✅ İçe Aktarma Sonucu</h3>
-            <div class="grid grid-cols-2 gap-4 text-sm">
-                <div class="rounded-lg bg-white p-4 border border-green-200">
-                    <div class="text-2xl font-black text-green-600">{{ $this->importedCount }}</div>
-                    <div class="text-green-700 font-medium">Başarıyla eklendi</div>
-                </div>
-                <div class="rounded-lg bg-white p-4 border border-amber-200">
-                    <div class="text-2xl font-black text-amber-600">{{ $this->skippedCount }}</div>
-                    <div class="text-amber-700 font-medium">Atlandı</div>
-                </div>
+    @if($previewRows)
+        <x-filament::section heading="İlk 15 Satır Ön İzleme" description="Başlatmadan önce hedef rehber ve eşleşmeleri kontrol edin.">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead><tr class="border-b text-left"><th class="p-2">Satır</th><th class="p-2">Firma</th><th class="p-2">Kategori</th><th class="p-2">Şehir</th><th class="p-2">Hedefler</th><th class="p-2">Durum</th></tr></thead>
+                    <tbody>
+                    @foreach($previewRows as $row)
+                        <tr class="border-b"><td class="p-2">{{ $row['row'] }}</td><td class="p-2 font-semibold">{{ $row['name'] }}</td><td class="p-2">{{ $row['category'] }}</td><td class="p-2">{{ $row['city'] }}</td><td class="p-2">{{ $row['directories'] }}</td><td class="p-2 {{ $row['valid'] ? 'text-green-600' : 'text-red-600' }}">{{ $row['status'] }}</td></tr>
+                    @endforeach
+                    </tbody>
+                </table>
             </div>
-
-            @if (!empty($this->errors))
-                <div class="mt-4">
-                    <h4 class="font-bold text-red-700 mb-2">Hatalar:</h4>
-                    <ul class="text-sm text-red-600 space-y-1 max-h-48 overflow-y-auto">
-                        @foreach ($this->errors as $error)
-                            <li>• {{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-        </div>
+        </x-filament::section>
     @endif
 
-    <div class="mt-8 rounded-xl border bg-gray-50 p-6">
-        <h3 class="text-lg font-bold text-gray-800 mb-3">📋 CSV Formatı</h3>
-        <p class="text-sm text-gray-600 mb-3">CSV dosyanız aşağıdaki başlıkları içermelidir. İlk satır başlık olarak kullanılır.</p>
+    <x-filament::section heading="Yükleme Geçmişi" description="Kuyruk çalışırken sayfayı yenileyerek durumu takip edebilirsiniz.">
         <div class="overflow-x-auto">
-            <table class="w-full text-sm border-collapse">
-                <thead>
-                    <tr class="bg-gray-100">
-                        <th class="border px-3 py-2 text-left font-bold">Başlık</th>
-                        <th class="border px-3 py-2 text-left font-bold">Açıklama</th>
-                        <th class="border px-3 py-2 text-left font-bold">Zorunlu</th>
-                    </tr>
-                </thead>
+            <table class="w-full text-sm">
+                <thead><tr class="border-b text-left"><th class="p-2">Batch</th><th class="p-2">Dosya</th><th class="p-2">Durum</th><th class="p-2">Sonuç</th><th class="p-2">Tarih</th><th class="p-2"></th></tr></thead>
                 <tbody>
-                    <tr><td class="border px-3 py-2 font-mono">name</td><td class="border px-3 py-2">Firma adı</td><td class="border px-3 py-2 text-green-600 font-bold">Evet</td></tr>
-                    <tr><td class="border px-3 py-2 font-mono">phone</td><td class="border px-3 py-2">Telefon numarası</td><td class="border px-3 py-2">Hayır</td></tr>
-                    <tr><td class="border px-3 py-2 font-mono">email</td><td class="border px-3 py-2">E-posta adresi</td><td class="border px-3 py-2">Hayır</td></tr>
-                    <tr><td class="border px-3 py-2 font-mono">website</td><td class="border px-3 py-2">Web sitesi URL'si</td><td class="border px-3 py-2">Hayır</td></tr>
-                    <tr><td class="border px-3 py-2 font-mono">address</td><td class="border px-3 py-2">Fiziksel adres</td><td class="border px-3 py-2">Hayır</td></tr>
-                    <tr><td class="border px-3 py-2 font-mono">description</td><td class="border px-3 py-2">Firma açıklaması</td><td class="border px-3 py-2">Hayır</td></tr>
-                    <tr><td class="border px-3 py-2 font-mono">category</td><td class="border px-3 py-2">Kategori adı (eşleşirse)</td><td class="border px-3 py-2">Hayır</td></tr>
-                    <tr><td class="border px-3 py-2 font-mono">city</td><td class="border px-3 py-2">Şehir adı (eşleşirse)</td><td class="border px-3 py-2">Hayır</td></tr>
+                @forelse($batches as $batch)
+                    @php($stats = $batch->stats ?? [])
+                    <tr class="border-b"><td class="p-2 font-mono">#{{ $batch->id }}</td><td class="p-2">{{ $batch->filename }}</td><td class="p-2 font-semibold">{{ $batch->status }}</td><td class="p-2">Eklenen: {{ $stats['created'] ?? 0 }} · Güncellenen: {{ $stats['updated'] ?? 0 }} · Atlanan: {{ $stats['skipped'] ?? 0 }} · Hata: {{ $stats['failed'] ?? 0 }}</td><td class="p-2">{{ $batch->created_at->format('d.m.Y H:i') }}</td><td class="p-2 text-right"><div class="flex justify-end gap-2">@if($batch->errors)<x-filament::button size="xs" color="gray" wire:click="downloadErrors({{ $batch->id }})">Hata CSV</x-filament::button>@endif @if($batch->status === 'completed')<x-filament::button size="xs" color="danger" wire:click="rollbackBatch({{ $batch->id }})" wire:confirm="Bu batch tarafından oluşturulan firmalar silinecek, güncellenen kayıtlar eski haline dönecek. Devam edilsin mi?">Geri Al</x-filament::button>@endif</div></td></tr>
+                    @if($batch->errors)<tr><td colspan="6" class="px-2 pb-3 text-xs text-red-600">{{ implode(' | ', array_slice($batch->errors, 0, 5)) }}</td></tr>@endif
+                @empty
+                    <tr><td colspan="6" class="p-6 text-center text-gray-500">Henüz toplu yükleme yapılmadı.</td></tr>
+                @endforelse
                 </tbody>
             </table>
         </div>
-        <div class="mt-4 p-3 bg-gray-100 rounded-lg">
-            <p class="text-xs font-mono text-gray-700">
-                <strong>Örnek CSV:</strong><br>
-                name,phone,email,website,address,description,category,city<br>
-                Örnek Firma A,0212 555 0101,info@ornek.com,https://ornek.com,İstanbul/Kadıköy,"Açıklama metni",Restoran,İstanbul<br>
-                Örnek Firma B,0312 555 0202,,https://ornekb.com,Ankara/Çankaya,,Avukat,Ankara
-            </p>
-        </div>
-    </div>
+    </x-filament::section>
+
+    <x-filament::section heading="Dosya Sütunları" collapsed collapsible>
+        <p class="text-sm text-gray-600">external_id, directory, name, category, city, district, phone, whatsapp, email, website, address, google_maps, opening_hours, short_description, description, logo_url, status</p>
+        <p class="mt-2 text-xs text-gray-500">directory alanında virgülle birden fazla domain kullanılabilir. Boşsa üstte seçilen rehberler kullanılır. ALL değeri seçilen tüm rehberlere dağıtır.</p>
+    </x-filament::section>
 </x-filament-panels::page>

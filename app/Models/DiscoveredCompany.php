@@ -68,14 +68,6 @@ class DiscoveredCompany extends Model
         $data['category_id'] = $categoryId ?: $this->findOrCreateDefaultCategory($directoryId);
         $data['city_id'] = $cityId ?: $this->findOrCreateDefaultCity($directoryId);
 
-        // Auto-generate slug
-        $data['slug'] = \Illuminate\Support\Str::slug($data['name']);
-        $baseSlug = $data['slug'];
-        $counter = 1;
-        while (Company::where('slug', $data['slug'])->exists()) {
-            $data['slug'] = $baseSlug . '-' . $counter++;
-        }
-
         // Download logo if available
         if (!empty($this->logo_url) && empty($overrides['logo'])) {
             try {

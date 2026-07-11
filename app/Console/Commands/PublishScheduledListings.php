@@ -80,7 +80,7 @@ class PublishScheduledListings extends Command
                     }
 
                     $targetCompany = Company::firstOrCreate(
-                        ['slug' => $item->slug, 'directory_id' => $directoryId],
+                        ['external_id' => 'campaign-company-' . $source->id, 'directory_id' => $directoryId],
                         [
                             'name' => $source->name,
                             'category_id' => $categoryId ?? 1,
@@ -100,6 +100,7 @@ class PublishScheduledListings extends Command
                             'status' => 'active',
                         ]
                     );
+                    $item->update(['slug' => $targetCompany->slug]);
 
                     // Copy logo
                     if ($source->logo && !$targetCompany->logo) {

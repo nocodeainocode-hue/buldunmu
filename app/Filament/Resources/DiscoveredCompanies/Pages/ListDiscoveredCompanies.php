@@ -16,6 +16,11 @@ class ListDiscoveredCompanies extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make('import')
+                ->label('Toplu Firma Merkezi')
+                ->icon('heroicon-o-arrow-up-tray')
+                ->color('success')
+                ->url(fn() => static::getResource()::getUrl('import')),
             Actions\Action::make('discover')
                 ->label('Yeni Keşif')
                 ->icon('heroicon-o-magnifying-glass')

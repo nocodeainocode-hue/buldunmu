@@ -18,7 +18,7 @@ class DirectoryResource extends Resource
 {
     protected static ?string $model = Directory::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedGlobeAlt;
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -27,6 +27,8 @@ class DirectoryResource extends Resource
     protected static ?string $pluralModelLabel = 'Rehberler';
 
     protected static ?string $modelLabel = 'Rehber';
+    protected static string|\UnitEnum|null $navigationGroup = 'Sistem';
+    protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {

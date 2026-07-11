@@ -18,7 +18,23 @@ class ContactMessageResource extends Resource
 {
     protected static ?string $model = ContactMessage::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChatBubbleLeftEllipsis;
+    protected static ?string $navigationLabel = 'İletişim Mesajları';
+    protected static ?string $modelLabel = 'İletişim Mesajı';
+    protected static ?string $pluralModelLabel = 'İletişim Mesajları';
+    protected static string|\UnitEnum|null $navigationGroup = 'İletişim';
+    protected static ?int $navigationSort = 1;
+
+    public static function getNavigationBadge(): ?string
+    {
+        $count = static::getModel()::where('status', 'new')->count();
+        return $count ? (string) $count : null;
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return 'danger';
+    }
 
     protected static ?string $recordTitleAttribute = 'name';
 

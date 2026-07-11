@@ -15,26 +15,42 @@ class CategoriesTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('Kategori')
                     ->searchable(),
                 TextColumn::make('slug')
-                    ->searchable(),
+                    ->label('Slug')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('icon')
+                    ->label('İkon')
                     ->searchable(),
+                TextColumn::make('companies_count')
+                    ->label('Firma')
+                    ->counts('companies')
+                    ->sortable(),
                 TextColumn::make('meta_title')
-                    ->searchable(),
+                    ->label('Meta Başlık')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('meta_description')
-                    ->searchable(),
+                    ->label('Meta Açıklama')
+                    ->limit(50)
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('status')
-                    ->searchable(),
+                    ->label('Durum')
+                    ->badge()
+                    ->formatStateUsing(fn($state) => $state === 'active' ? 'Aktif' : 'Pasif')
+                    ->color(fn($state) => $state === 'active' ? 'success' : 'gray'),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Oluşturulma')
+                    ->dateTime('d.m.Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Güncelleme')
+                    ->dateTime('d.m.Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('name')
             ->filters([
                 //
             ])

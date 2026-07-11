@@ -18,7 +18,12 @@ class CampaignResource extends Resource
 {
     protected static ?string $model = Campaign::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMegaphone;
+    protected static ?string $navigationLabel = 'Kampanyalar';
+    protected static ?string $modelLabel = 'Kampanya';
+    protected static ?string $pluralModelLabel = 'Kampanyalar';
+    protected static string|\UnitEnum|null $navigationGroup = 'Firma Yönetimi';
+    protected static ?int $navigationSort = 5;
 
     protected static ?string $recordTitleAttribute = 'name';
 

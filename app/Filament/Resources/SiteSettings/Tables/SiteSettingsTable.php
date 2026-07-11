@@ -15,32 +15,44 @@ class SiteSettingsTable
         return $table
             ->columns([
                 TextColumn::make('site_name')
+                    ->label('Site Adı')
                     ->searchable(),
                 TextColumn::make('logo')
-                    ->searchable(),
+                    ->label('Logo')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('favicon')
-                    ->searchable(),
+                    ->label('Favicon')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('phone')
+                    ->label('Telefon')
                     ->searchable(),
                 TextColumn::make('whatsapp')
+                    ->label('WhatsApp')
                     ->searchable(),
                 TextColumn::make('email')
-                    ->label('Email address')
+                    ->label('E-posta')
                     ->searchable(),
                 TextColumn::make('homepage_title')
-                    ->searchable(),
+                    ->label('Ana Sayfa Başlığı')
+                    ->limit(40),
                 TextColumn::make('homepage_subtitle')
-                    ->searchable(),
+                    ->label('Alt Başlık')
+                    ->limit(40)
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('meta_title')
-                    ->searchable(),
+                    ->label('Meta Başlık')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('meta_description')
-                    ->searchable(),
+                    ->label('Meta Açıklama')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Oluşturulma')
+                    ->dateTime('d.m.Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Güncelleme')
+                    ->dateTime('d.m.Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

@@ -15,13 +15,13 @@ class PostsTable
     {
         return $table
             ->columns([
-                ImageColumn::make('image')->label('Gorsel')->circular()->disk('public'),
-                TextColumn::make('title')->label('Baslik')->searchable()->sortable(),
+                ImageColumn::make('image')->label('Görsel')->circular()->disk('public'),
+                TextColumn::make('title')->label('Başlık')->searchable()->sortable(),
                 TextColumn::make('directories.name')->label('Rehberler')->badge()->separator(','),
                 TextColumn::make('status')->label('Durum')->badge()
                     ->formatStateUsing(function ($state, Post $record) {
                         return match ($record->fresh()->status ?? $state) {
-                            'published' => 'Yayinda',
+                            'published' => 'Yayında',
                             default => 'Taslak',
                         };
                     })
@@ -31,7 +31,7 @@ class PostsTable
             ->defaultSort('published_at', 'desc')
             ->filters([
                 SelectFilter::make('directories')->label('Rehber')->relationship('directories','name'),
-                SelectFilter::make('status')->label('Durum')->options(['draft'=>'Taslak','published'=>'Yayinda']),
+                SelectFilter::make('status')->label('Durum')->options(['draft'=>'Taslak','published'=>'Yayında']),
             ])
             ->actions([
                 Action::make('publish')

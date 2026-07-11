@@ -47,7 +47,8 @@ class CompanyForm
                                 TextInput::make('slug')
                                     ->label('Slug')
                                     ->required()
-                                    ->unique(ignoreRecord: true),
+                                    ->disabledOn('edit')
+                                    ->helperText('Yeni kayıtta rehberin slug desenine göre son hali otomatik üretilir. Düzenlemede URL korunur.'),
                             ]),
                         Grid::make(3)
                             ->schema([

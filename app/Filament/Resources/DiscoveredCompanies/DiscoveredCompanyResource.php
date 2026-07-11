@@ -18,7 +18,7 @@ class DiscoveredCompanyResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMagnifyingGlass;
 
-    protected static ?string $navigationLabel = 'Toplu Firma Keşfi';
+    protected static ?string $navigationLabel = 'Firma Keşfi ve Aktarım';
 
     protected static ?string $modelLabel = 'Keşfedilen Firma';
 
@@ -26,7 +26,7 @@ class DiscoveredCompanyResource extends Resource
 
     protected static string|\UnitEnum|null $navigationGroup = 'Firma Yönetimi';
 
-    protected static ?int $navigationSort = 20;
+    protected static ?int $navigationSort = 2;
 
     public static function getNavigationBadge(): ?string
     {

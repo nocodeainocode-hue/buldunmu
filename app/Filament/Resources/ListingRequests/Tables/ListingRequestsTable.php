@@ -84,7 +84,7 @@ class ListingRequestsTable
 
                         $company = \App\Models\Company::create([
                             'name' => $record->company_name,
-                            'slug' => Str::slug($record->company_name),
+                            'directory_id' => $record->directory_id,
                             'category_id' => $record->category_id,
                             'city_id' => $record->city_id,
                             'district_id' => $record->district_id,

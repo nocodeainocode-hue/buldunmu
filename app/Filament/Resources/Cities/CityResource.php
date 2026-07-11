@@ -18,7 +18,12 @@ class CityResource extends Resource
 {
     protected static ?string $model = City::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMap;
+    protected static ?string $navigationLabel = 'Şehirler';
+    protected static ?string $modelLabel = 'Şehir';
+    protected static ?string $pluralModelLabel = 'Şehirler';
+    protected static string|\UnitEnum|null $navigationGroup = 'İçerik ve Konum';
+    protected static ?int $navigationSort = 2;
 
     protected static ?string $recordTitleAttribute = 'name';
 

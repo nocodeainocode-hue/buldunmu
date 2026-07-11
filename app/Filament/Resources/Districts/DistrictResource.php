@@ -18,7 +18,12 @@ class DistrictResource extends Resource
 {
     protected static ?string $model = District::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMapPin;
+    protected static ?string $navigationLabel = 'İlçeler';
+    protected static ?string $modelLabel = 'İlçe';
+    protected static ?string $pluralModelLabel = 'İlçeler';
+    protected static string|\UnitEnum|null $navigationGroup = 'İçerik ve Konum';
+    protected static ?int $navigationSort = 3;
 
     protected static ?string $recordTitleAttribute = 'name';
 

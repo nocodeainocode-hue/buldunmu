@@ -14,6 +14,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\RichEditor;
 use Illuminate\Support\Str;
+use App\Services\CompanySlugService;
 
 class DirectoryForm
 {
@@ -66,9 +67,11 @@ class DirectoryForm
                             ->default('default')
                             ->live()
                             ->helperText('Seçtiğin temaya göre site tasarımı tamamen değişir'),
-                        TextInput::make('slug_pattern')
+                        Select::make('slug_pattern')
                             ->label('Slug Deseni')
-                            ->helperText('Değişkenler: {name}, {city}, {category}, {district}')
+                            ->options(CompanySlugService::selectOptions())
+                            ->searchable()
+                            ->helperText('Yalnızca yeni firmalarda uygulanır; mevcut firma URL’lerini değiştirmez.')
                             ->default('{name}-{city}'),
                     ]),
 

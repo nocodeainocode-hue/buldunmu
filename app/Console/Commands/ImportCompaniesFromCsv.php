@@ -57,13 +57,6 @@ class ImportCompaniesFromCsv extends Command
                     continue;
                 }
 
-                $slug = Str::slug($name);
-                $baseSlug = $slug;
-                $counter = 1;
-                while (Company::where('slug', $slug)->exists()) {
-                    $slug = $baseSlug . '-' . $counter++;
-                }
-
                 // Resolve category
                 $categoryId = $defaultCategoryId;
                 if (!empty($row['category'] ?? '')) {
@@ -94,7 +87,6 @@ class ImportCompaniesFromCsv extends Command
 
                 Company::create([
                     'name' => $name,
-                    'slug' => $slug,
                     'category_id' => $categoryId,
                     'city_id' => $cityId,
                     'phone' => trim($row['phone'] ?? '') ?: null,
