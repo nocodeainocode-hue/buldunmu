@@ -21,6 +21,13 @@ class HomeController extends Controller
         $cities = City::withCount('companies')->orderByDesc('companies_count')->take(12)->get();
         $premiumCompanies = Company::active()->premium()->with(['category', 'city'])->latest()->take(6)->get();
         $latestCompanies = Company::active()->with(['category', 'city'])->latest()->take(9)->get();
+        $mapCompanies = Company::active()
+            ->whereNotNull('latitude')
+            ->whereNotNull('longitude')
+            ->with(['category', 'city', 'district'])
+            ->latest()
+            ->take(60)
+            ->get();
         $postsQuery = Post::published()->with('directories');
         if ($directory) {
             $postsQuery->whereHas('directories', fn($q) => $q->where('directory_id', $directory->id));
@@ -31,7 +38,7 @@ class HomeController extends Controller
         $viewName = 'frontend.home.' . (view()->exists('frontend.home.' . $layout) ? $layout : 'default');
 
         return view($viewName, compact(
-            'settings', 'categories', 'cities', 'premiumCompanies', 'latestCompanies', 'posts', 'directory'
+            'settings', 'categories', 'cities', 'premiumCompanies', 'latestCompanies', 'mapCompanies', 'posts', 'directory'
         ));
     }
 }

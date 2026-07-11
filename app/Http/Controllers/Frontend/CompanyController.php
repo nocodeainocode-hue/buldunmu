@@ -46,6 +46,11 @@ class CompanyController extends Controller
             $query->whereHas('district', fn($d) => $d->where('slug', $request->district));
         }
 
+        $mapCompanies = (clone $query)
+            ->whereNotNull('latitude')
+            ->whereNotNull('longitude')
+            ->take(80)
+            ->get();
         $companies = $query->paginate(12)->withQueryString();
         $categories = Category::active()->orderBy('name')->get();
         $cities = City::orderBy('name')->get();
@@ -61,7 +66,7 @@ class CompanyController extends Controller
             if ($ct) $metaTitle .= ' - ' . $ct->name;
         }
 
-        return view('frontend.companies.index', compact('companies', 'categories', 'cities', 'metaTitle', 'directory'));
+        return view('frontend.companies.index', compact('companies', 'mapCompanies', 'categories', 'cities', 'metaTitle', 'directory'));
     }
     public function show(string $slug)
     {
@@ -77,7 +82,7 @@ class CompanyController extends Controller
         $template = $directory->template ?? 'default';
 
         // Determine detail variant: seo_story for templates that benefit from rich content
-        $storyTemplates = ['elegant', 'city-focused', 'category-mega', 'corporate', 'bold', 'premium-showcase'];
+        $storyTemplates = ['elegant', 'city-focused', 'category-mega', 'corporate', 'bold', 'premium-showcase', 'map-directory', 'local-map-landing', 'map-first'];
         $detailVariant = in_array($template, $storyTemplates) ? 'seo-story' : 'compact-local';
 
         $similarCompanies = Company::active()

@@ -4,6 +4,7 @@
     $template = $directory->template ?? 'default';
     $gridCols = \App\View\Helpers\ThemeHelper::gridCols($directory ?? null);
     $cardPartial = \App\View\Helpers\ThemeHelper::cardPartial($directory ?? null);
+    $usesMapLayout = in_array($template, ['map-directory', 'local-map-landing', 'map-first'], true);
 @endphp
 
 @section('title', $metaTitle ?? 'Firmalar')
@@ -57,11 +58,24 @@
     <section class="py-10">
         <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width:var(--page_width,1280px);">
             @if($companies->isNotEmpty())
-                <div class="grid {{ $gridCols }} gap-6">
-                    @foreach($companies as $company)
-                        @include('partials.cards.' . $cardPartial, ['company' => $company, 'premium' => $company->is_premium])
-                    @endforeach
-                </div>
+                @if($usesMapLayout)
+                    <div class="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+                        <div class="space-y-4">
+                            @foreach($companies as $company)
+                                @include('partials.cards.horizontal', ['company' => $company, 'premium' => $company->is_premium])
+                            @endforeach
+                        </div>
+                        <aside class="lg:sticky lg:top-24 lg:self-start">
+                            @include('partials.maps.company-map', ['companies' => $mapCompanies, 'mapId' => 'companies-index-map', 'height' => '620px'])
+                        </aside>
+                    </div>
+                @else
+                    <div class="grid {{ $gridCols }} gap-6">
+                        @foreach($companies as $company)
+                            @include('partials.cards.' . $cardPartial, ['company' => $company, 'premium' => $company->is_premium])
+                        @endforeach
+                    </div>
+                @endif
                 <div class="mt-10">
                     {{ $companies->links() }}
                 </div>
