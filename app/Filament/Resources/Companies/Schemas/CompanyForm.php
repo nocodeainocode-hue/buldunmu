@@ -14,10 +14,20 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\RichEditor;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
 class CompanyForm
 {
+    /** Admin panelinde seçili rehbere ait şehir/kategori/ilçeleri filtrele — çoklu kaydı engeller */
+    protected static function scopeByDirectory(Builder $query): Builder
+    {
+        $dir = app()->bound('currentDirectory') ? app('currentDirectory') : null;
+
+        return $dir
+            ? $query->where('directory_id', $dir->id)
+            : $query->whereNull('directory_id');
+    }
     public static function configure(Schema $schema): Schema
     {
         return $schema
@@ -43,20 +53,20 @@ class CompanyForm
                             ->schema([
                                 Select::make('category_id')
                                     ->label('Kategori')
-                                    ->relationship('category', 'name')
+                                    ->relationship('category', 'name', fn($query) => static::scopeByDirectory($query))
                                     ->required()
                                     ->searchable()
                                     ->preload(),
                                 Select::make('city_id')
                                     ->label('Şehir')
-                                    ->relationship('city', 'name')
+                                    ->relationship('city', 'name', fn($query) => static::scopeByDirectory($query))
                                     ->required()
                                     ->searchable()
                                     ->preload()
                                     ->live(),
                                 Select::make('district_id')
                                     ->label('İlçe')
-                                    ->relationship('district', 'name')
+                                    ->relationship('district', 'name', fn($query) => static::scopeByDirectory($query))
                                     ->searchable()
                                     ->preload(),
                             ]),
