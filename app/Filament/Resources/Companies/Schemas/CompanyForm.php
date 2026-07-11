@@ -80,11 +80,22 @@ class CompanyForm
                         Textarea::make('address')
                             ->label('Adres')
                             ->columnSpanFull(),
-                        TextInput::make('google_maps_url')
-                            ->label('Google Maps Konum Linki')
-                            ->url()
-                            ->helperText('Google Maps paylaş URL\'sini yapıştırın (örn: https://www.google.com/maps/embed?pb=...)')
+                        Textarea::make('google_maps_url')
+                            ->label('Google Maps iframe kodu veya konum linki')
+                            ->helperText('Google Maps embed iframe kodunu ya da maps URL\'sini yapıştırın. Kaydedince enlem/boylam otomatik çıkarılır.')
+                            ->rows(4)
                             ->columnSpanFull(),
+                        Grid::make(2)
+                            ->schema([
+                                TextInput::make('latitude')
+                                    ->label('Enlem (Latitude)')
+                                    ->numeric()
+                                    ->helperText('Google Maps iframe kodundan otomatik doldurulur.'),
+                                TextInput::make('longitude')
+                                    ->label('Boylam (Longitude)')
+                                    ->numeric()
+                                    ->helperText('Google Maps iframe kodundan otomatik doldurulur.'),
+                            ]),
                         Textarea::make('opening_hours')
                             ->label('Çalışma Saatleri')
                             ->helperText('Her satıra bir gün: "Pazartesi: 09:00 - 18:00"')

@@ -11,6 +11,7 @@
     $whatsappClean = $company->whatsapp ? preg_replace('/[^0-9]/', '', $company->whatsapp) : null;
     $isSeoStory = ($detailVariant ?? 'compact-local') === 'seo-story';
     $hasRichContent = !empty($company->description) && strlen(strip_tags($company->description)) > 200;
+    $googleMapsEmbedSrc = $company->googleMapsEmbedSrc();
 @endphp
 
 @section('title', $company->meta_title ?: $company->name . ' - ' . $cityName . ' - Firma Rehberi')
@@ -43,8 +44,14 @@
         "streetAddress": @json($company->address),
         "addressLocality": @json($cityName),
         "addressCountry": "TR"
-    },
-    "geo": @json($company->google_maps_url ? new stdClass() : null)
+    }
+    @if($company->latitude && $company->longitude)
+    ,"geo": {
+        "@@type": "GeoCoordinates",
+        "latitude": "{{ $company->latitude }}",
+        "longitude": "{{ $company->longitude }}"
+    }
+    @endif
     @if($ratingAvg)
     ,"aggregateRating": {
         "@@type": "AggregateRating",
@@ -280,12 +287,12 @@
             @endif
 
             {{-- Google Maps Embed --}}
-            @if($company->google_maps_url)
+            @if($googleMapsEmbedSrc)
             <section class="rounded-3xl border bg-white p-6" style="border-color:var(--border);box-shadow:var(--card_shadow);">
                 <h2 class="mb-5 text-2xl font-black" style="color:var(--text);">🗺️ Konum</h2>
                 <div class="relative w-full overflow-hidden rounded-2xl" style="padding-top:56.25%;">
                     <iframe
-                        src="{{ $company->google_maps_url }}"
+                        src="{{ $googleMapsEmbedSrc }}"
                         class="absolute inset-0 h-full w-full border-0"
                         allowfullscreen=""
                         loading="lazy"
