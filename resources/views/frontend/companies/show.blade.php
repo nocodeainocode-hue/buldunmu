@@ -28,68 +28,7 @@
 <meta property="og:image" content="{{ asset('storage/' . $company->logo) }}">
 @endif
 
-{{-- Structured Data — LocalBusiness --}}
-<script type="application/ld+json">
-{
-    "@@context": "https://schema.org",
-    "@@type": "LocalBusiness",
-    "name": @json($company->name),
-    "description": @json($company->short_description ?: strip_tags($company->description ?? $company->name)),
-    "image": @json($company->logo ? asset('storage/' . $company->logo) : ($company->cover_image ? asset('storage/' . $company->cover_image) : null)),
-    "telephone": @json($company->phone),
-    "email": @json($company->email),
-    "url": @json($company->website ?: route('companies.show', $company->slug)),
-    "address": {
-        "@@type": "PostalAddress",
-        "streetAddress": @json($company->address),
-        "addressLocality": @json($cityName),
-        "addressCountry": "TR"
-    }
-    @if($company->latitude && $company->longitude)
-    ,"geo": {
-        "@@type": "GeoCoordinates",
-        "latitude": "{{ $company->latitude }}",
-        "longitude": "{{ $company->longitude }}"
-    }
-    @endif
-    @if($ratingAvg)
-    ,"aggregateRating": {
-        "@@type": "AggregateRating",
-        "ratingValue": "{{ $ratingAvg }}",
-        "reviewCount": "{{ $reviewCount }}",
-        "bestRating": "5"
-    }
-    @endif
-    @if($company->opening_hours)
-    ,"openingHours": @json($company->opening_hours)
-    @endif
-}
-</script>
-
-{{-- FAQ Structured Data --}}
-<script type="application/ld+json">
-{
-    "@@context": "https://schema.org",
-    "@@type": "FAQPage",
-    "mainEntity": [
-        {
-            "@@type": "Question",
-            "name": @json($company->name . ' nasıl iletişime geçebilirim?'),
-            "acceptedAnswer": { "@@type": "Answer", "text": @json('Telefon: ' . ($company->phone ?? '-') . ', WhatsApp, web sitesi veya e-posta ile iletişime geçebilirsiniz.') }
-        },
-        {
-            "@@type": "Question",
-            "name": @json($company->name . ' hangi bölgede hizmet veriyor?'),
-            "acceptedAnswer": { "@@type": "Answer", "text": @json($cityName . ($districtName ? ' / ' . $districtName : '') . ' bölgesinde hizmet vermektedir.') }
-        },
-        {
-            "@@type": "Question",
-            "name": @json($company->name . ' çalışma saatleri nedir?'),
-            "acceptedAnswer": { "@@type": "Answer", "text": @json($company->opening_hours ?: 'Çalışma saatleri için firmayla iletişime geçiniz.') }
-        }
-    ]
-}
-</script>
+@include('partials.seo.json-ld', ['schema' => \App\Support\SeoSchema::company($company)])
 @endpush
 
 @section('content')

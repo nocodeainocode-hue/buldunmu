@@ -8,6 +8,17 @@
 
 @section('title', $category->meta_title ?: $category->name . ' Firmaları')
 @section('meta_description', $category->meta_description ?: $category->name . ' kategorisindeki en iyi firmalar. Telefon, adres, yorumlar ve iletişim bilgileriyle ' . $category->name . ' firmalarını keşfedin.')
+@section('canonical', route('categories.show', $category->slug))
+
+@push('head')
+@include('partials.seo.json-ld', ['schema' => \App\Support\SeoSchema::listing(
+    $category->name . ' Firmaları',
+    $category->meta_description ?: $category->description ?: $category->name . ' kategorisindeki firmalar.',
+    route('categories.show', $category->slug),
+    $companies->getCollection(),
+    [['name'=>'Ana Sayfa','url'=>route('home')], ['name'=>$category->name,'url'=>route('categories.show',$category->slug)]]
+)])
+@endpush
 
 @section('content')
 <div style="background:var(--bg);">

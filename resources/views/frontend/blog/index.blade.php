@@ -1,5 +1,9 @@
 @extends('layouts.app')
 @section('title', 'Blog')
+@section('canonical', route('blog.index'))
+@push('head')
+@include('partials.seo.json-ld', ['schema' => \App\Support\SeoSchema::blogListing($posts->getCollection())])
+@endpush
 @section('content')
 <div class="mx-auto px-4 sm:px-6 lg:px-8 py-12" style="max-width: var(--page_width, 1280px);">
     <x-breadcrumb :items="[['label' => 'Blog']]" />

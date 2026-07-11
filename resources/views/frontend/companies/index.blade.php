@@ -9,6 +9,22 @@
 
 @section('title', $metaTitle ?? 'Firmalar')
 @section('meta_description', 'Tüm firmaları listeleyin, kategorilere ve şehirlere göre filtreleyin.')
+@section('canonical', route('companies.index'))
+@if(request()->routeIs('search') || request()->anyFilled(['q', 'category', 'city', 'district']))
+    @section('robots', 'noindex,follow,max-image-preview:large')
+@endif
+
+@if($companies instanceof \Illuminate\Contracts\Pagination\Paginator)
+@push('head')
+@include('partials.seo.json-ld', ['schema' => \App\Support\SeoSchema::listing(
+    $metaTitle ?? 'Firmalar',
+    'Kategorilere ve şehirlere göre güncel firma listesi.',
+    route('companies.index'),
+    $companies->getCollection(),
+    [['name'=>'Ana Sayfa','url'=>route('home')], ['name'=>'Firmalar','url'=>route('companies.index')]]
+)])
+@endpush
+@endif
 
 @section('content')
 <div style="background:var(--bg);">

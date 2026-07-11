@@ -7,6 +7,8 @@
 
     <title>@yield('title', $settings->site_name ?? 'Firma Rehberi')</title>
     <meta name="description" content="@yield('meta_description', $settings->meta_description ?? '')">
+    <meta name="robots" content="@yield('robots', 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1')">
+    <meta property="og:site_name" content="{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}">
 
     @hasSection('canonical')
         <link rel="canonical" href="@yield('canonical')">
@@ -27,6 +29,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="{{ $fontsUrl }}" rel="stylesheet">
+    @endif
+
+    @if(request()->routeIs('home'))
+        @include('partials.seo.json-ld', ['schema' => \App\Support\SeoSchema::home($settings ?? null, $directory ?? null)])
     @endif
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])

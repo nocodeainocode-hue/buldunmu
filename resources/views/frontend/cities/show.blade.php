@@ -8,6 +8,17 @@
 
 @section('title', $city->meta_title ?: $city->name . ' Firmaları - Firma Rehberi')
 @section('meta_description', $city->meta_description ?: $city->name . ' ilinde faaliyet gösteren tüm firmalar. Kategorilere göre filtreleyin, iletişim bilgilerini ve kullanıcı yorumlarını inceleyin.')
+@section('canonical', route('cities.show', $city->slug))
+
+@push('head')
+@include('partials.seo.json-ld', ['schema' => \App\Support\SeoSchema::listing(
+    $city->name . ' Firmaları',
+    $city->meta_description ?: $city->name . ' ilinde faaliyet gösteren firmalar.',
+    route('cities.show', $city->slug),
+    $companies->getCollection(),
+    [['name'=>'Ana Sayfa','url'=>route('home')], ['name'=>$city->name,'url'=>route('cities.show',$city->slug)]]
+)])
+@endpush
 
 @section('content')
 <div style="background:var(--bg);">

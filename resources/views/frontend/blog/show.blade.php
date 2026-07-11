@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('title', $post->title)
 @section('meta_description', $post->excerpt)
+@section('canonical', route('blog.show', $post->slug))
+@push('head')
+@include('partials.seo.json-ld', ['schema' => \App\Support\SeoSchema::blogPost($post, $directory ?? null, $settings ?? null)])
+@endpush
 @section('content')
 <div class="mx-auto px-4 sm:px-6 lg:px-8 py-12" style="max-width: var(--page_width, 1280px);">
     <article class="max-w-3xl mx-auto">
