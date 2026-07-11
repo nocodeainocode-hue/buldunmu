@@ -19,8 +19,19 @@ class HomeController extends Controller
         $directory = app()->bound('currentDirectory') ? app('currentDirectory') : null;
         $categories = Category::active()->withCount('companies')->orderByDesc('companies_count')->take(12)->get();
         $cities = City::withCount('companies')->orderByDesc('companies_count')->take(12)->get();
-        $premiumCompanies = Company::active()->premium()->with(['category', 'city', 'district'])->latest()->take(6)->get();
-        $latestCompanies = Company::active()->with(['category', 'city', 'district'])->latest()->take(9)->get();
+        $companyIncludes = ['category', 'city', 'district'];
+        $premiumCompanies = Company::active()->premium()->with($companyIncludes)
+            ->withCount('approvedReviews')->withAvg(['approvedReviews as reviews_avg_rating'], 'rating')
+            ->latest()->take(6)->get();
+        $latestCompanies = Company::active()->with($companyIncludes)
+            ->withCount('approvedReviews')->withAvg(['approvedReviews as reviews_avg_rating'], 'rating')
+            ->latest()->take(9)->get();
+        $openCompanies = Company::active()->whereNotNull('opening_hours')->with($companyIncludes)
+            ->withCount('approvedReviews')->withAvg(['approvedReviews as reviews_avg_rating'], 'rating')
+            ->latest()->take(40)->get()->filter(fn(Company $company) => $company->isOpenNow() === true)->take(8);
+        $trustedCompanies = Company::active()->where('is_verified', true)->with($companyIncludes)
+            ->withCount('approvedReviews')->withAvg(['approvedReviews as reviews_avg_rating'], 'rating')
+            ->orderByDesc('reviews_avg_rating')->latest()->take(8)->get();
         $mapCompanies = Company::active()
             ->whereNotNull('latitude')
             ->whereNotNull('longitude')
@@ -38,7 +49,8 @@ class HomeController extends Controller
         $viewName = 'frontend.home.' . (view()->exists('frontend.home.' . $layout) ? $layout : 'default');
 
         return view($viewName, compact(
-            'settings', 'categories', 'cities', 'premiumCompanies', 'latestCompanies', 'mapCompanies', 'posts', 'directory'
+            'settings', 'categories', 'cities', 'premiumCompanies', 'latestCompanies', 'openCompanies', 'trustedCompanies',
+            'mapCompanies', 'posts', 'directory'
         ));
     }
 }

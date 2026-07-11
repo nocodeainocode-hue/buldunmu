@@ -244,6 +244,9 @@ class CompanyForm
                                 Toggle::make('is_premium')
                                     ->label('Premium Firma')
                                     ->helperText('Premium firmalar öne çıkarılır'),
+                                Toggle::make('is_verified')
+                                    ->label('Doğrulanmış Firma')
+                                    ->helperText('İletişim ve firma bilgileri kontrol edildiyse işaretleyin'),
                                 DateTimePicker::make('premium_until')
                                     ->label('Premium Bitiş Tarihi')
                                     ->helperText('Boş bırakılırsa süresiz premium'),

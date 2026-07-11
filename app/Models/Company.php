@@ -6,6 +6,7 @@ use App\Models\Concerns\BelongsToDirectory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Carbon\CarbonInterface;
 
 class Company extends Model
 {
@@ -67,12 +68,13 @@ class Company extends Model
         'name', 'slug', 'category_id', 'city_id', 'district_id',
         'phone', 'whatsapp', 'email', 'website', 'address', 'google_maps_url',
         'latitude', 'longitude', 'opening_hours', 'short_description', 'description', 'services', 'why_us_items', 'external_links', 'logo', 'cover_image',
-        'is_premium', 'premium_until', 'status', 'view_count',
+        'is_premium', 'is_verified', 'premium_until', 'status', 'view_count',
         'meta_title', 'meta_description', 'directory_id',
     ];
 
     protected $casts = [
         'is_premium' => 'boolean',
+        'is_verified' => 'boolean',
         'premium_until' => 'datetime',
         'services' => 'array',
         'why_us_items' => 'array',
@@ -189,5 +191,94 @@ class Company extends Model
     public function incrementViewCount(): void
     {
         $this->increment('view_count');
+    }
+
+    public function isOpenNow(?CarbonInterface $now = null): ?bool
+    {
+        if (blank($this->opening_hours)) {
+            return null;
+        }
+
+        $now ??= now();
+        $text = Str::lower($this->opening_hours);
+
+        if (preg_match('/\b(7\s*\/\s*24|24\s*saat)\b/u', $text)) {
+            return true;
+        }
+
+        $dayNames = [
+            1 => ['pazartesi', 'monday'],
+            2 => ['salı', 'sali', 'tuesday'],
+            3 => ['çarşamba', 'carsamba', 'wednesday'],
+            4 => ['perşembe', 'persembe', 'thursday'],
+            5 => ['cuma', 'friday'],
+            6 => ['cumartesi', 'saturday'],
+            7 => ['pazar', 'sunday'],
+        ];
+
+        $schedule = [];
+        foreach (preg_split('/\R/u', $text) as $line) {
+            foreach ($dayNames as $day => $names) {
+                if (collect($names)->contains(fn(string $name) => Str::contains($line, $name))) {
+                    $schedule[$day] = $line;
+                    break;
+                }
+            }
+        }
+
+        $parseRange = static function (?string $line): ?array {
+            if (!$line || Str::contains($line, ['kapalı', 'kapali', 'closed'])) {
+                return null;
+            }
+
+            preg_match_all('/\b([01]?\d|2[0-3])[:.]([0-5]\d)\b/', $line, $matches, PREG_SET_ORDER);
+            if (count($matches) < 2) {
+                return null;
+            }
+
+            return [
+                ((int) $matches[0][1] * 60) + (int) $matches[0][2],
+                ((int) $matches[1][1] * 60) + (int) $matches[1][2],
+            ];
+        };
+
+        $currentMinutes = ($now->hour * 60) + $now->minute;
+        $today = $now->dayOfWeekIso;
+        $todayLine = $schedule[$today] ?? null;
+
+        if ($todayLine && Str::contains($todayLine, ['kapalı', 'kapali', 'closed'])) {
+            return false;
+        }
+
+        if ($range = $parseRange($todayLine)) {
+            [$opens, $closes] = $range;
+            if ($opens <= $closes) {
+                return $currentMinutes >= $opens && $currentMinutes <= $closes;
+            }
+            if ($currentMinutes >= $opens || $currentMinutes <= $closes) {
+                return true;
+            }
+        }
+
+        $previousDay = $today === 1 ? 7 : $today - 1;
+        if ($previousRange = $parseRange($schedule[$previousDay] ?? null)) {
+            [$opens, $closes] = $previousRange;
+            if ($opens > $closes && $currentMinutes <= $closes) {
+                return true;
+            }
+        }
+
+        return $todayLine !== null ? false : null;
+    }
+
+    public function profileCompletionScore(): int
+    {
+        $fields = [
+            $this->logo, $this->cover_image, $this->phone, $this->email ?: $this->whatsapp,
+            $this->website, $this->address, $this->latitude && $this->longitude,
+            $this->opening_hours, $this->short_description, $this->description, filled($this->services),
+        ];
+
+        return (int) round((collect($fields)->filter(fn($value) => filled($value))->count() / count($fields)) * 100);
     }
 }
