@@ -6,7 +6,7 @@
 {{-- Feature stats --}}
 <section class="py-8" style="background:var(--bg_card);">
     <div class="mx-auto px-4 flex justify-center gap-12 text-center" style="max-width:var(--page_width,1280px);">
-        <div><div class="text-3xl font-bold" style="color:var(--primary);">{{ \App\Models\Directory::count() }}</div><div class="text-xs mt-1" style="color:var(--text_muted);">Rehber</div></div>
+        <div><div class="text-3xl font-bold" style="color:var(--primary);">{{ \App\Models\City::count() }}</div><div class="text-xs mt-1" style="color:var(--text_muted);">Şehir</div></div>
         <div><div class="text-3xl font-bold" style="color:var(--primary);">{{ \App\Models\Company::count() }}</div><div class="text-xs mt-1" style="color:var(--text_muted);">Firma</div></div>
         <div><div class="text-3xl font-bold" style="color:var(--primary);">{{ \App\Models\Category::count() }}</div><div class="text-xs mt-1" style="color:var(--text_muted);">Kategori</div></div>
     </div>
