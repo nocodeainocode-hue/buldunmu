@@ -19,8 +19,8 @@ class HomeController extends Controller
         $directory = app()->bound('currentDirectory') ? app('currentDirectory') : null;
         $categories = Category::active()->withCount('companies')->orderByDesc('companies_count')->take(12)->get();
         $cities = City::withCount('companies')->orderByDesc('companies_count')->take(12)->get();
-        $premiumCompanies = Company::active()->premium()->with(['category', 'city'])->latest()->take(6)->get();
-        $latestCompanies = Company::active()->with(['category', 'city'])->latest()->take(9)->get();
+        $premiumCompanies = Company::active()->premium()->with(['category', 'city', 'district'])->latest()->take(6)->get();
+        $latestCompanies = Company::active()->with(['category', 'city', 'district'])->latest()->take(9)->get();
         $mapCompanies = Company::active()
             ->whereNotNull('latitude')
             ->whereNotNull('longitude')
