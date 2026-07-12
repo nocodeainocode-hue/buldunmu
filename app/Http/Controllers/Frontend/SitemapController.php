@@ -23,6 +23,7 @@ class SitemapController extends Controller
             ->get();
 
         $cities = City::when($directory, fn($q) => $q->where('directory_id', $directory->id))
+            ->whereHas('companies', fn($q) => $q->active())
             ->get();
 
         $posts = Post::published()

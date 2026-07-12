@@ -8,15 +8,16 @@
 
 @section('title', $city->meta_title ?: $city->name . ' Firmaları - Firma Rehberi')
 @section('meta_description', $city->meta_description ?: $city->name . ' ilinde faaliyet gösteren tüm firmalar. Kategorilere göre filtreleyin, iletişim bilgilerini ve kullanıcı yorumlarını inceleyin.')
-@section('canonical', route('cities.show', $city->slug))
+@section('robots', $totalInCity > 0 ? 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1' : 'noindex,follow,max-image-preview:large')
+@section('canonical', ($isOtherCities ?? false) ? route('cities.other') : route('cities.show', $city->slug))
 
 @push('head')
 @include('partials.seo.json-ld', ['schema' => \App\Support\SeoSchema::listing(
     $city->name . ' Firmaları',
     $city->meta_description ?: $city->name . ' ilinde faaliyet gösteren firmalar.',
-    route('cities.show', $city->slug),
+    ($isOtherCities ?? false) ? route('cities.other') : route('cities.show', $city->slug),
     $companies->getCollection(),
-    [['name'=>'Ana Sayfa','url'=>route('home')], ['name'=>$city->name,'url'=>route('cities.show',$city->slug)]]
+    [['name'=>'Ana Sayfa','url'=>route('home')], ['name'=>$city->name,'url'=>($isOtherCities ?? false) ? route('cities.other') : route('cities.show',$city->slug)]]
 )])
 @endpush
 

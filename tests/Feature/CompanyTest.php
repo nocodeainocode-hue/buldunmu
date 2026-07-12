@@ -107,4 +107,34 @@ class CompanyTest extends TestCase
         $response->assertStatus(200);
         $response->assertDontSee('google.com/maps/embed');
     }
+
+    public function test_empty_city_is_noindex_and_excluded_from_sitemap(): void
+    {
+        $this->get('/sehir/istanbul')
+            ->assertStatus(200)
+            ->assertSee('content="noindex,follow,max-image-preview:large"', false);
+
+        $this->get('/sitemap.xml')
+            ->assertStatus(200)
+            ->assertDontSee('/sehir/istanbul');
+    }
+
+    public function test_city_with_active_company_is_indexable_and_included_in_sitemap(): void
+    {
+        Company::create([
+            'name' => 'Aktif Firma',
+            'category_id' => $this->category->id,
+            'city_id' => $this->city->id,
+            'status' => 'active',
+            'directory_id' => $this->dir->id,
+        ]);
+
+        $this->get('/sehir/istanbul')
+            ->assertStatus(200)
+            ->assertSee('content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"', false);
+
+        $this->get('/sitemap.xml')
+            ->assertStatus(200)
+            ->assertSee('/sehir/istanbul');
+    }
 }

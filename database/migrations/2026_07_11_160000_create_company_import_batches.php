@@ -87,7 +87,7 @@ return new class extends Migration
 
         $indexes = collect(Schema::getIndexes($table))->pluck('name');
         if ($indexes->contains($oldIndex)) {
-            Schema::table($table, fn(Blueprint $blueprint) => $blueprint->dropUnique('slug'));
+            Schema::table($table, fn(Blueprint $blueprint) => $blueprint->dropUnique($oldIndex));
         }
         if (!$indexes->contains($newIndex)) {
             Schema::table($table, fn(Blueprint $blueprint) => $blueprint->unique(['directory_id', 'slug']));

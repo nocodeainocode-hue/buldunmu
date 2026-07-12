@@ -22,7 +22,11 @@ class DirectoryObserver
 
         // Copy cities from default directory (skip if slug already exists)
         $defaultCities = City::where('directory_id', 1)->get();
+        $visibleCitySlugs = $directory->visibleCitySlugs();
         foreach ($defaultCities as $city) {
+            if ($directory->geography_mode !== 'national' && !in_array($city->slug, $visibleCitySlugs, true)) {
+                continue;
+            }
             City::firstOrCreate(
                 ['slug' => $city->slug, 'directory_id' => $directory->id],
                 $city->replicate()->fill(['directory_id' => $directory->id])->toArray()

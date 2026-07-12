@@ -12,6 +12,43 @@ use Illuminate\Http\Request;
 
 class CityController extends Controller
 {
+    public function other(Request $request)
+    {
+        $directory = app()->bound('currentDirectory') ? app('currentDirectory') : null;
+        abort_unless($directory && $directory->geography_mode !== 'national' && $directory->group_other_cities, 404);
+
+        $visibleSlugs = $directory->visibleCitySlugs();
+        $outsideVisibleCities = fn($query) => $query->whereHas(
+            'city',
+            fn($city) => $city->whereNotIn('slug', $visibleSlugs)
+        );
+
+        $query = Company::active()
+            ->where($outsideVisibleCities)
+            ->with(['category', 'city', 'district']);
+
+        if ($request->filled('category')) {
+            $query->whereHas('category', fn($category) => $category->where('slug', $request->category));
+        }
+
+        $companies = $query->orderByDesc('is_premium')->orderByDesc('created_at')->paginate(12);
+        $popularCategories = Category::active()
+            ->whereHas('companies', $outsideVisibleCities)
+            ->withCount(['companies' => $outsideVisibleCities])
+            ->orderByDesc('companies_count')
+            ->take(8)
+            ->get();
+
+        $city = new City(['name' => 'Diğer İller', 'slug' => 'diger-iller']);
+        $districts = collect();
+        $totalInCity = $companies->total();
+        $isOtherCities = true;
+
+        return view('frontend.cities.show', compact(
+            'city', 'companies', 'districts', 'directory', 'popularCategories', 'totalInCity', 'isOtherCities'
+        ));
+    }
+
     public function show(string $slug, Request $request)
     {
         $city = City::where('slug', $slug)->firstOrFail();

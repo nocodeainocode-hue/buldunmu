@@ -31,8 +31,12 @@ class SeedCitiesToDirectories extends Command
         $count = 0;
 
         foreach ($directories as $dir) {
+            $visibleSlugs = $dir->visibleCitySlugs();
             foreach ($cities as $cityName) {
                 $slug = Str::slug($cityName);
+                if ($dir->geography_mode !== 'national' && !in_array($slug, $visibleSlugs, true)) {
+                    continue;
+                }
                 if (!City::where('directory_id', $dir->id)->where('slug', $slug)->exists()) {
                     City::create([
                         'name' => $cityName,

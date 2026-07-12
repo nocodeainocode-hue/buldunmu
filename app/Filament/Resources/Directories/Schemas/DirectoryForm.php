@@ -13,8 +13,10 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Toggle;
 use Illuminate\Support\Str;
 use App\Services\CompanySlugService;
+use App\Support\TurkeyCities;
 
 class DirectoryForm
 {
@@ -73,6 +75,33 @@ class DirectoryForm
                             ->searchable()
                             ->helperText('Yalnızca yeni firmalarda uygulanır; mevcut firma URL’lerini değiştirmez.')
                             ->default('{name}-{city}'),
+                        Select::make('geography_mode')
+                            ->label('Coğrafi Kapsam')
+                            ->options([
+                                'national' => 'Türkiye Geneli (81 İl)',
+                                'local' => 'Tek Şehir Odaklı',
+                                'custom' => 'Seçili Şehirler',
+                            ])
+                            ->default('national')
+                            ->required()
+                            ->live(),
+                        Select::make('primary_city_slug')
+                            ->label('Ana Şehir')
+                            ->options(TurkeyCities::options())
+                            ->searchable()
+                            ->visible(fn($get) => $get('geography_mode') === 'local')
+                            ->required(fn($get) => $get('geography_mode') === 'local'),
+                        Select::make('featured_city_slugs')
+                            ->label('Gösterilecek Şehirler')
+                            ->options(TurkeyCities::options())
+                            ->multiple()
+                            ->searchable()
+                            ->visible(fn($get) => $get('geography_mode') === 'custom')
+                            ->required(fn($get) => $get('geography_mode') === 'custom'),
+                        Toggle::make('group_other_cities')
+                            ->label('Kalan şehirleri "Diğer İller" altında göster')
+                            ->default(true)
+                            ->visible(fn($get) => in_array($get('geography_mode'), ['local', 'custom'], true)),
                     ]),
 
                 Section::make('Tema Özelleştirme')

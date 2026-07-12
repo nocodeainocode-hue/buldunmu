@@ -28,9 +28,13 @@ class ThemeHelperTest extends TestCase
         $this->assertEquals('fallback', ThemeHelper::get('nonexistent', null, 'fallback'));
     }
 
-    public function test_template_has_20_variants(): void
+    public function test_new_layout_templates_are_registered(): void
     {
-        $this->assertCount(20, ThemeHelper::TEMPLATES);
+        foreach (['pocket-directory', 'service-console', 'decision-desk'] as $template) {
+            $this->assertArrayHasKey($template, ThemeHelper::TEMPLATES);
+            $this->assertSame($template, ThemeHelper::TEMPLATES[$template]['layout']);
+            $this->assertFileExists(resource_path('views/frontend/home/' . $template . '.blade.php'));
+        }
     }
 
     public function test_css_variables_contain_key_properties(): void

@@ -18,7 +18,7 @@ class HomeController extends Controller
         $settings = SiteSetting::getSettings();
         $directory = app()->bound('currentDirectory') ? app('currentDirectory') : null;
         $categories = Category::active()->withCount('companies')->orderByDesc('companies_count')->take(12)->get();
-        $cities = City::withCount('companies')->orderByDesc('companies_count')->take(12)->get();
+        $cities = $this->navigationCities($directory);
         $companyIncludes = ['category', 'city', 'district'];
         $premiumCompanies = Company::active()->premium()->with($companyIncludes)
             ->withCount('approvedReviews')->withAvg(['approvedReviews as reviews_avg_rating'], 'rating')
@@ -52,5 +52,33 @@ class HomeController extends Controller
             'settings', 'categories', 'cities', 'premiumCompanies', 'latestCompanies', 'openCompanies', 'trustedCompanies',
             'mapCompanies', 'posts', 'directory'
         ));
+    }
+
+    private function navigationCities($directory)
+    {
+        if (!$directory || $directory->geography_mode === 'national') {
+            return City::whereHas('companies', fn($query) => $query->active())
+                ->withCount(['companies' => fn($query) => $query->active()])
+                ->orderByDesc('companies_count')
+                ->take(12)
+                ->get();
+        }
+
+        $visibleSlugs = $directory->visibleCitySlugs();
+        $cities = City::whereIn('slug', $visibleSlugs)
+            ->withCount('companies')
+            ->get()
+            ->sortBy(fn(City $city) => array_search($city->slug, $visibleSlugs, true))
+            ->values();
+
+        if ($directory->group_other_cities) {
+            $other = new City(['name' => 'Diğer İller', 'slug' => 'diger-iller']);
+            $other->setAttribute('companies_count', Company::active()
+                ->whereHas('city', fn($query) => $query->whereNotIn('slug', $visibleSlugs))
+                ->count());
+            $cities->push($other);
+        }
+
+        return $cities;
     }
 }

@@ -27,6 +27,7 @@ Route::post('/firma/{company:slug}/yorum', [CompanyReviewController::class, 'sto
 Route::get('/kategori/{slug}', [CategoryController::class, 'show'])->name('categories.show');
 
 // Şehir detay
+Route::get('/sehir/diger-iller', [CityController::class, 'other'])->name('cities.other');
 Route::get('/sehir/{slug}', [CityController::class, 'show'])->name('cities.show');
 
 // Firma ekleme talebi
