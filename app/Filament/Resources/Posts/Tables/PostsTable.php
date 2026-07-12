@@ -8,6 +8,8 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Filament\Actions\Action;
 use App\Models\Post;
+use App\Models\Directory;
+use Illuminate\Database\Eloquent\Builder;
 
 class PostsTable
 {
@@ -43,7 +45,24 @@ class PostsTable
             ])
             ->defaultSort('published_at', 'desc')
             ->filters([
-                SelectFilter::make('directories')->label('Rehber')->relationship('directories','name'),
+                SelectFilter::make('directory_id')
+                    ->label('Rehber')
+                    ->options(fn() => Directory::query()
+                        ->orderBy('name')
+                        ->pluck('name', 'id')
+                        ->all())
+                    ->searchable()
+                    ->query(function (Builder $query, array $data): Builder {
+                        $directoryId = $data['value'] ?? null;
+
+                        return $query->when(
+                            filled($directoryId),
+                            fn(Builder $query) => $query->whereHas(
+                                'directories',
+                                fn(Builder $directoryQuery) => $directoryQuery->whereKey($directoryId)
+                            )
+                        );
+                    }),
                 SelectFilter::make('content_type')->label('İçerik Türü')->options([
                     'guide'=>'Rehber','comparison'=>'Karşılaştırma','alternatives'=>'Alternatifler',
                     'local'=>'Yerel','answers'=>'Soru - Cevap','data'=>'Veri',
