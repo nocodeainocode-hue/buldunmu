@@ -17,6 +17,7 @@ use Filament\Forms\Components\Toggle;
 use Illuminate\Support\Str;
 use App\Services\CompanySlugService;
 use App\Support\TurkeyCities;
+use App\Support\BlogLayout;
 
 class DirectoryForm
 {
@@ -102,6 +103,15 @@ class DirectoryForm
                             ->label('Kalan şehirleri "Diğer İller" altında göster')
                             ->default(true)
                             ->visible(fn($get) => in_array($get('geography_mode'), ['local', 'custom'], true)),
+                        Select::make('blog_layout')
+                            ->label('Blog Görünümü')
+                            ->options(BlogLayout::OPTIONS)
+                            ->default('editorial')
+                            ->required(),
+                        Textarea::make('editorial_voice')
+                            ->label('Yayın Dili ve Editoryal Kimlik')
+                            ->rows(3)
+                            ->helperText('Örn: Tekirdağ odaklı, sade, yerel işletme sahibine hitap eden yayın dili.'),
                     ]),
 
                 Section::make('Tema Özelleştirme')

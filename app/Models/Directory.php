@@ -11,6 +11,7 @@ class Directory extends Model
         'slug_pattern', 'plan', 'status', 'expires_at',
         'meta_title', 'meta_description', 'page_contents', 'geography_mode',
         'primary_city_slug', 'featured_city_slugs', 'group_other_cities',
+        'blog_layout', 'editorial_voice',
     ];
 
     protected $casts = [

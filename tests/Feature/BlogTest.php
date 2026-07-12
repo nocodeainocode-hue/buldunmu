@@ -84,4 +84,30 @@ class BlogTest extends TestCase
         $response->assertSee('sitemap.xml');
         $response->assertSee('Disallow: /admin/');
     }
+
+    public function test_noindex_post_is_excluded_from_sitemap(): void
+    {
+        $post = Post::create([
+            'title' => 'Dahili Rehber',
+            'slug' => 'dahili-rehber',
+            'content' => 'İçerik',
+            'status' => 'published',
+            'published_at' => now(),
+            'is_indexable' => false,
+            'directory_id' => $this->directory->id,
+        ]);
+        $post->directories()->attach($this->directory->id);
+
+        $this->get('/sitemap.xml')->assertDontSee('dahili-rehber');
+    }
+
+    public function test_directory_blog_layout_changes_listing_structure(): void
+    {
+        $this->directory->update(['blog_layout' => 'comparison']);
+        app()->instance('currentDirectory', $this->directory->fresh());
+
+        $this->get('/blog')
+            ->assertOk()
+            ->assertSee('Karar Masası');
+    }
 }

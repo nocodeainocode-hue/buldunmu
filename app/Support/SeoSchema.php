@@ -164,7 +164,7 @@ class SeoSchema
 
     public static function blogPost(Post $post, ?Directory $directory, ?SiteSetting $settings): array
     {
-        $url = route('blog.show', $post->slug);
+        $url = $post->canonical_url ?: route('blog.show', $post->slug);
         $publisherName = $directory?->name ?: $settings?->site_name ?: config('app.name');
         $logoPath = $directory?->logo ?: $settings?->logo;
 
@@ -179,7 +179,9 @@ class SeoSchema
                 'datePublished' => $post->published_at?->toIso8601String(),
                 'dateModified' => $post->updated_at?->toIso8601String(),
                 'inLanguage' => 'tr-TR',
-                'author' => ['@type' => 'Organization', 'name' => $publisherName, 'url' => route('home')],
+                'author' => $post->author_name
+                    ? ['@type' => 'Person', 'name' => $post->author_name]
+                    : ['@type' => 'Organization', 'name' => $publisherName, 'url' => route('home')],
                 'publisher' => [
                     '@type' => 'Organization',
                     'name' => $publisherName,

@@ -27,6 +27,8 @@ class SitemapController extends Controller
             ->get();
 
         $posts = Post::published()
+            ->where('is_indexable', true)
+            ->whereNull('canonical_url')
             ->when($directory, fn($q) => $q->whereHas('directories', fn($q) => $q->where('directory_id', $directory->id)))
             ->latest('published_at')
             ->get();

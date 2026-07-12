@@ -18,6 +18,19 @@ class PostsTable
                 ImageColumn::make('image')->label('Görsel')->circular()->disk('public'),
                 TextColumn::make('title')->label('Başlık')->searchable()->sortable(),
                 TextColumn::make('directories.name')->label('Rehberler')->badge()->separator(','),
+                TextColumn::make('content_type')->label('Tür')->badge()
+                    ->formatStateUsing(fn($state) => match ($state) {
+                        'comparison' => 'Karşılaştırma',
+                        'alternatives' => 'Alternatifler',
+                        'local' => 'Yerel',
+                        'answers' => 'Soru - Cevap',
+                        'data' => 'Veri',
+                        default => 'Rehber',
+                    }),
+                TextColumn::make('primary_query')->label('Ana Sorgu')->searchable()->limit(32),
+                TextColumn::make('is_indexable')->label('Index')->badge()
+                    ->formatStateUsing(fn($state) => $state ? 'Index' : 'Noindex')
+                    ->color(fn($state) => $state ? 'success' : 'warning'),
                 TextColumn::make('status')->label('Durum')->badge()
                     ->formatStateUsing(function ($state, Post $record) {
                         return match ($record->fresh()->status ?? $state) {
@@ -31,6 +44,10 @@ class PostsTable
             ->defaultSort('published_at', 'desc')
             ->filters([
                 SelectFilter::make('directories')->label('Rehber')->relationship('directories','name'),
+                SelectFilter::make('content_type')->label('İçerik Türü')->options([
+                    'guide'=>'Rehber','comparison'=>'Karşılaştırma','alternatives'=>'Alternatifler',
+                    'local'=>'Yerel','answers'=>'Soru - Cevap','data'=>'Veri',
+                ]),
                 SelectFilter::make('status')->label('Durum')->options(['draft'=>'Taslak','published'=>'Yayında']),
             ])
             ->actions([

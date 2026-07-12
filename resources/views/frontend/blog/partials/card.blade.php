@@ -1,0 +1,4 @@
+<article class="overflow-hidden rounded-lg border" style="background:var(--bg_card);border-color:var(--border);">
+    @if($post->image)<img src="{{ asset('storage/'.$post->image) }}" alt="{{ $post->title }}" class="h-44 w-full object-cover">@else<div class="flex h-28 items-center justify-center text-sm font-black uppercase" style="background:var(--primary_light);color:var(--primary);">{{ $post->content_type ?? 'Rehber' }}</div>@endif
+    <div class="p-5"><div class="text-xs font-bold" style="color:var(--primary);">{{ $post->published_at->format('d.m.Y') }}</div><h2 class="mt-2 text-lg font-black" style="color:var(--text);"><a href="{{ route('blog.show',$post->slug) }}">{{ $post->title }}</a></h2><p class="mt-2 line-clamp-3 text-sm leading-6" style="color:var(--text_muted);">{{ $post->excerpt }}</p></div>
+</article>
