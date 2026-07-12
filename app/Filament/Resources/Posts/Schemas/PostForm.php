@@ -15,6 +15,7 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Toggle;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Builder;
 
 class PostForm
 {
@@ -26,7 +27,14 @@ class PostForm
                     ->schema([
                         Select::make('directories')
                             ->label('Birincil Rehber')
-                            ->relationship('directories', 'name')
+                            ->relationship(
+                                'directories',
+                                'name',
+                                modifyQueryUsing: fn(Builder $query) => $query->select([
+                                    'directories.id',
+                                    'directories.name',
+                                ])
+                            )
                             ->multiple()
                             ->maxItems(1)
                             ->searchable()
