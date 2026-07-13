@@ -34,6 +34,11 @@ class DiscoveredCompaniesTable
                     ->label('Web Sitesi')
                     ->url(fn($record) => $record->website, true)
                     ->toggleable(),
+                TextColumn::make('source_url')
+                    ->label('Kaynak Kaydı')
+                    ->url(fn($record) => $record->source_url, true)
+                    ->formatStateUsing(fn(?string $state): string => $state ? 'Aç' : '-')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('email')
                     ->label('E-posta')
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -42,12 +47,14 @@ class DiscoveredCompaniesTable
                     ->badge()
                     ->formatStateUsing(fn(string $state): string => match ($state) {
                         'google_maps' => 'Google Maps',
+                        'openstreetmap' => 'OpenStreetMap',
                         'search' => 'Web Arama',
                         'custom_url' => 'Özel URL',
                         default => $state,
                     })
                     ->color(fn(string $state): string => match ($state) {
                         'google_maps' => 'success',
+                        'openstreetmap' => 'info',
                         'search' => 'info',
                         'custom_url' => 'warning',
                         default => 'gray',
@@ -91,6 +98,7 @@ class DiscoveredCompaniesTable
                     ->label('Kaynak')
                     ->options([
                         'google_maps' => 'Google Maps',
+                        'openstreetmap' => 'OpenStreetMap',
                         'search' => 'Web Arama',
                         'custom_url' => 'Özel URL',
                     ]),

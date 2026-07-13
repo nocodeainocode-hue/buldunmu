@@ -510,6 +510,14 @@
 <div class="h-16 lg:hidden"></div>
 
 {{-- ═══ GALLERY LIGHTBOX ═══ --}}
+@if(str_starts_with((string) $company->external_id, 'osm:'))
+    <div class="container mx-auto px-4 pb-4 text-xs" style="color:var(--text_muted);">
+        Konum verileri
+        <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="nofollow noopener" class="underline">&copy; OpenStreetMap katkıda bulunanlar</a>
+        tarafından sağlanmıştır.
+    </div>
+@endif
+
 @if($company->images && $company->images->isNotEmpty())
 <div id="gallery-lightbox" class="fixed inset-0 z-[9999] hidden bg-black/95 flex items-center justify-center" onclick="closeLightbox(event)">
     <button class="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition text-2xl leading-none" onclick="closeLightbox()" aria-label="Kapat">&times;</button>

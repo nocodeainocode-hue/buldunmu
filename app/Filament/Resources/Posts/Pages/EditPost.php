@@ -17,8 +17,4 @@ class EditPost extends EditRecord
         ];
     }
 
-    protected function afterSave(): void
-    {
-        $this->record->directories()->sync($this->data['directories'] ?? []);
-    }
 }

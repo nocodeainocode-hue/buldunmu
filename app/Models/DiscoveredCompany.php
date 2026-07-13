@@ -10,14 +10,17 @@ class DiscoveredCompany extends Model
     use BelongsToDirectory;
 
     protected $fillable = [
-        'name', 'phone', 'address', 'website', 'logo_url', 'email',
-        'description', 'source', 'search_keyword', 'search_city',
+        'name', 'external_id', 'phone', 'address', 'latitude', 'longitude',
+        'opening_hours', 'website', 'logo_url', 'email', 'description',
+        'source', 'source_url', 'search_keyword', 'search_city',
         'raw_data', 'status', 'approved_company_id', 'admin_notes',
         'directory_id',
     ];
 
     protected $casts = [
         'raw_data' => 'array',
+        'latitude' => 'decimal:7',
+        'longitude' => 'decimal:7',
     ];
 
     public function approvedCompany()
@@ -54,6 +57,15 @@ class DiscoveredCompany extends Model
             'website' => $overrides['website'] ?? $this->website,
             'email' => $overrides['email'] ?? $this->email,
             'description' => $overrides['description'] ?? $this->description,
+            'external_id' => $overrides['external_id'] ?? $this->external_id,
+            'latitude' => $overrides['latitude'] ?? $this->latitude,
+            'longitude' => $overrides['longitude'] ?? $this->longitude,
+            'opening_hours' => $overrides['opening_hours'] ?? $this->opening_hours,
+            'google_maps_url' => $overrides['google_maps_url']
+                ?? data_get($this->raw_data, 'google_maps_url')
+                ?? ($this->latitude && $this->longitude
+                    ? "https://www.google.com/maps/search/?api=1&query={$this->latitude},{$this->longitude}"
+                    : null),
             'status' => 'active',
             'directory_id' => $this->directory_id,
         ];

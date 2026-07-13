@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\DiscoveredCompany;
 use App\Services\FirecrawlService;
+use App\Services\OpenStreetMapService;
 use Filament\Notifications\Notification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -54,7 +55,7 @@ class DiscoverCompaniesJob implements ShouldQueue, ShouldBeUnique
     /**
      * Execute the job.
      */
-    public function handle(FirecrawlService $service): void
+    public function handle(FirecrawlService $firecrawl, OpenStreetMapService $openStreetMap): void
     {
         $keyword = $this->data['keyword'] ?? '';
         $city = $this->data['city'] ?? '';
@@ -68,12 +69,14 @@ class DiscoverCompaniesJob implements ShouldQueue, ShouldBeUnique
             'user_id' => $this->userId,
         ]);
 
-        $results = $service->discoverCompanies(
-            keyword: $keyword,
-            city: $city,
-            source: $source,
-            customUrl: $customUrl,
-        );
+        $results = $source === 'openstreetmap'
+            ? $openStreetMap->discoverCompanies($keyword, $city, (int) ($this->data['limit'] ?? 50))
+            : $firecrawl->discoverCompanies(
+                keyword: $keyword,
+                city: $city,
+                source: $source,
+                customUrl: $customUrl,
+            );
 
         $saved = 0;
         $skipped = 0;
@@ -83,9 +86,17 @@ class DiscoverCompaniesJob implements ShouldQueue, ShouldBeUnique
                 continue;
             }
 
-            $exists = DiscoveredCompany::where('name', $company['name'])
-                ->where('search_keyword', $keyword)
-                ->where('search_city', $city)
+            $exists = DiscoveredCompany::query()
+                ->where('source', $source)
+                ->where(function ($query) use ($company, $keyword, $city) {
+                    if (filled($company['external_id'] ?? null)) {
+                        $query->where('external_id', $company['external_id']);
+                    } else {
+                        $query->where('name', $company['name'])
+                            ->where('search_keyword', $keyword)
+                            ->where('search_city', $city);
+                    }
+                })
                 ->exists();
 
             if ($exists) {
@@ -95,16 +106,21 @@ class DiscoverCompaniesJob implements ShouldQueue, ShouldBeUnique
 
             DiscoveredCompany::create([
                 'name' => $company['name'],
+                'external_id' => $company['external_id'] ?? null,
                 'phone' => $company['phone'] ?? null,
                 'address' => $company['address'] ?? null,
+                'latitude' => $company['latitude'] ?? null,
+                'longitude' => $company['longitude'] ?? null,
+                'opening_hours' => $company['opening_hours'] ?? null,
                 'website' => $company['website'] ?? null,
                 'logo_url' => $company['logo_url'] ?? null,
                 'email' => $company['email'] ?? null,
                 'description' => $company['description'] ?? null,
                 'source' => $source,
+                'source_url' => $company['source_url'] ?? null,
                 'search_keyword' => $keyword,
                 'search_city' => $city,
-                'raw_data' => $company,
+                'raw_data' => array_merge($company['raw_data'] ?? [], $company),
                 'status' => 'pending',
                 'directory_id' => $this->directoryId,
             ]);

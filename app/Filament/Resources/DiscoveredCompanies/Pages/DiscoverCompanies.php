@@ -45,6 +45,7 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
     public ?string $city = '';
     public ?string $source = 'google_maps';
     public ?string $customUrl = '';
+    public int $limit = 50;
     public bool $hasSearched = false;
     public bool $isSearching = false;
 
@@ -55,6 +56,7 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
             'city' => '',
             'source' => 'google_maps',
             'customUrl' => '',
+            'limit' => 50,
         ]);
     }
 
@@ -69,6 +71,7 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
                             ->label('Kaynak')
                             ->options([
                                 'google_maps' => 'Google Maps',
+                                'openstreetmap' => 'OpenStreetMap',
                                 'search' => 'Web Arama',
                                 'custom_url' => 'Özel URL',
                             ])
@@ -92,6 +95,13 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
                             ->visible(fn($get) => $get('source') === 'custom_url')
                             ->requiredIf('source', 'custom_url')
                             ->helperText('Kazınacak sayfanın tam URL\'si'),
+                        TextInput::make('limit')
+                            ->label('Sonuç Limiti')
+                            ->numeric()
+                            ->minValue(1)
+                            ->maxValue(100)
+                            ->default(50)
+                            ->visible(fn($get) => $get('source') === 'openstreetmap'),
                     ])
                     ->columns(2),
             ]);
@@ -114,6 +124,7 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
                 'city' => $data['city'] ?? '',
                 'source' => $data['source'],
                 'customUrl' => $data['customUrl'] ?? null,
+                'limit' => (int) ($data['limit'] ?? 50),
             ],
             userId: $userId,
             directoryId: $directoryId,
@@ -123,6 +134,7 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
         $this->city = $data['city'] ?? '';
         $this->source = $data['source'] ?? 'google_maps';
         $this->customUrl = $data['customUrl'] ?? '';
+        $this->limit = (int) ($data['limit'] ?? 50);
         $this->hasSearched = true;
 
         $label = $data['source'] === 'custom_url'
@@ -144,6 +156,7 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
         $pending = DiscoveredCompany::pending()
             ->where('search_keyword', $this->keyword)
             ->where('search_city', $this->city)
+            ->where('source', $this->source)
             ->get();
 
         $approved = 0;
@@ -175,6 +188,7 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
         $pending = DiscoveredCompany::pending()
             ->where('search_keyword', $this->keyword)
             ->where('search_city', $this->city)
+            ->where('source', $this->source)
             ->get();
 
         $categoryId = $this->bulkCategoryId;
@@ -222,7 +236,8 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
                 DiscoveredCompany::query()
                     ->when($this->hasSearched, function ($query) {
                         $query->where('search_keyword', $this->keyword)
-                              ->where('search_city', $this->city);
+                              ->where('search_city', $this->city)
+                              ->where('source', $this->source);
                     })
                     ->when(!$this->hasSearched, fn($q) => $q->whereRaw('1=0'))
                     ->latest()

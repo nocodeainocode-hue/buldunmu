@@ -39,4 +39,8 @@ return [
         'key' => env('FIRECRAWL_API_KEY'),
     ],
 
+    'openstreetmap' => [
+        'contact' => env('OPENSTREETMAP_CONTACT_EMAIL', env('MAIL_FROM_ADDRESS')),
+    ],
+
 ];
