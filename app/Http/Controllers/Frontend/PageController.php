@@ -23,9 +23,14 @@ class PageController extends Controller
     }
     public function contact()
     {
+        // Matematik CAPTCHA
+        $a = rand(1, 10);
+        $b = rand(1, 10);
+        session(['captcha_result' => $a + $b]);
+
         $settings = SiteSetting::getSettings();
         $content = $this->getPageContent('contact');
-        return view('frontend.pages.contact', compact('settings', 'content'));
+        return view('frontend.pages.contact', compact('settings', 'content', 'a', 'b'));
     }
     public function privacy()
     {

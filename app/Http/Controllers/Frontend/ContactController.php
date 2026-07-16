@@ -17,7 +17,18 @@ class ContactController extends Controller
             'phone' => 'nullable|string|max:30',
             'subject' => 'nullable|string|max:255',
             'message' => 'required|string|max:5000',
+            'captcha' => 'required|integer',
         ]);
+
+        // Matematik CAPTCHA doğrulaması
+        $captchaResult = session('captcha_result');
+        if ((int) $validated['captcha'] !== $captchaResult) {
+            session()->forget('captcha_result');
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Güvenlik sorusu yanlış. Lütfen tekrar deneyin.');
+        }
+        session()->forget('captcha_result');
 
         $validated['status'] = 'new';
 

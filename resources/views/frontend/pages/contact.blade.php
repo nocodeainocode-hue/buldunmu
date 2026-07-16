@@ -22,25 +22,34 @@
             <div class="mt-4 p-4 bg-green-50 border border-green-200 text-green-800 rounded-xl text-sm">{{ session('success') }}</div>
         @endif
 
+        @if(session('error'))
+            <div class="mt-4 p-4 bg-red-50 border border-red-200 text-red-800 rounded-xl text-sm">{{ session('error') }}</div>
+        @endif
+
         <form action="{{ route('contact.store') }}" method="POST" class="space-y-4 mt-6">
             @csrf
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Adınız *</label>
-                    <input type="text" name="name" required class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200">
+                    <input type="text" name="name" required value="{{ old('name') }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">E-posta</label>
-                    <input type="email" name="email" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200">
+                    <input type="email" name="email" value="{{ old('email') }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200">
                 </div>
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Konu</label>
-                <input type="text" name="subject" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200">
+                <input type="text" name="subject" value="{{ old('subject') }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200">
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Mesajınız *</label>
-                <textarea name="message" rows="5" required class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200"></textarea>
+                <textarea name="message" rows="5" required class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200">{{ old('message') }}</textarea>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">{{ $a }} + {{ $b }} = ? *</label>
+                <input type="text" name="captcha" required class="w-32 px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200" placeholder="?">
+                <p class="text-xs text-gray-400 mt-1">Spam koruması için lütfen işlemi cevaplayın.</p>
             </div>
             <button type="submit" class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition">Gönder</button>
         </form>
