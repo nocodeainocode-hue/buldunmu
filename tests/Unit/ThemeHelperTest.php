@@ -30,7 +30,10 @@ class ThemeHelperTest extends TestCase
 
     public function test_new_layout_templates_are_registered(): void
     {
-        foreach (['pocket-directory', 'service-console', 'decision-desk'] as $template) {
+        foreach ([
+            'pocket-directory', 'service-console', 'decision-desk',
+            'city-board', 'craft-market', 'quick-quote', 'district-showcase', 'sector-exchange',
+        ] as $template) {
             $this->assertArrayHasKey($template, ThemeHelper::TEMPLATES);
             $this->assertSame($template, ThemeHelper::TEMPLATES[$template]['layout']);
             $this->assertFileExists(resource_path('views/frontend/home/' . $template . '.blade.php'));
