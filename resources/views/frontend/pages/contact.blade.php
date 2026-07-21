@@ -1,14 +1,21 @@
 @extends('layouts.app')
 @section('title', 'İletişim')
 @section('meta_description', $settings->meta_description ?? 'Bizimle iletişime geçin.')
+@section('canonical', route('pages.contact'))
+
+@push('head')
+@include('partials.seo.json-ld', ['schema' => \App\Support\SeoSchema::staticPage(
+    'İletişim',
+    $settings->meta_description ?? 'Bizimle iletişime geçin.',
+    route('pages.contact'),
+    'İletişim'
+)])
+@endpush
+
 @section('content')
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <nav class="flex mb-6 text-sm text-gray-500">
-        <a href="{{ route('home') }}" class="hover:text-indigo-600">Ana Sayfa</a>
-        <span class="mx-2">/</span>
-        <span class="text-gray-900 font-medium">İletişim</span>
-    </nav>
-    <div class="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8">
+    <x-breadcrumb :items="[['label' => 'İletişim']]" />
+    <div class="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 mt-6">
         <h1 class="text-2xl font-bold text-gray-900 mb-6">İletişim</h1>
         <div class="prose max-w-none text-gray-700">
             @if($content)
@@ -40,7 +47,13 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Konu</label>
-                <input type="text" name="subject" value="{{ old('subject') }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200">
+                <select name="subject" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200 bg-white">
+                    <option value="">Seçiniz...</option>
+                    <option value="Üyelik Paketleri" @selected(old('subject', request('subject') === 'uyelik' ? 'Üyelik Paketleri' : ''))>Üyelik Paketleri</option>
+                    <option value="Reklam ve Sponsorluk" @selected(old('subject') === 'Reklam ve Sponsorluk')>Reklam ve Sponsorluk</option>
+                    <option value="Firma Ekleme" @selected(old('subject') === 'Firma Ekleme')>Firma Ekleme</option>
+                    <option value="Diğer" @selected(old('subject') === 'Diğer')>Diğer</option>
+                </select>
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Mesajınız *</label>

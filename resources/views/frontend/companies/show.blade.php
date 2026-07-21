@@ -12,6 +12,34 @@
     $isSeoStory = ($detailVariant ?? 'compact-local') === 'seo-story';
     $hasRichContent = !empty($company->description) && strlen(strip_tags($company->description)) > 200;
     $googleMapsEmbedSrc = $company->googleMapsEmbedSrc();
+
+    // FAQ items for JSON-LD schema
+    $faqItems = [
+        [
+            'question' => $company->name . ' ile nasıl iletişime geçebilirim?',
+            'answer' => implode(' ', array_filter([
+                $company->phone ? 'Telefon: ' . $company->phone : null,
+                $company->whatsapp ? 'WhatsApp üzerinden mesaj gönderebilirsiniz.' : null,
+                $company->website ? 'Web sitesi: ' . $company->website : null,
+                $company->email ? 'E-posta: ' . $company->email : null,
+                'Tüm iletişim kanalları sayfanın üst kısmındaki bilgi kartında listelenmiştir.',
+            ])),
+        ],
+        [
+            'question' => 'Firma hangi bölgede hizmet veriyor?',
+            'answer' => $company->name . ', ' . $cityName . ($districtName ? ' / ' . $districtName : '') . ' bölgesinde hizmet vermektedir' . ($company->address ? '. Adres: ' . $company->address : '') . '.',
+        ],
+        [
+            'question' => 'Firma bilgileri güncel mi?',
+            'answer' => 'Evet, firma bilgileri site yönetimi tarafından düzenli olarak kontrol edilmekte ve güncellenmektedir. Herhangi bir değişiklik durumunda firma yetkilileri bilgilerini güncelleyebilir.',
+        ],
+    ];
+    if ($isSeoStory) {
+        $faqItems[] = [
+            'question' => $cityName . '\'de ' . $categoryName . ' firması nasıl seçilir?',
+            'answer' => $cityName . ' bölgesinde ' . $categoryName . ' firması seçerken; müşteri yorumları, puanlamalar, iletişim kolaylığı ve konum gibi kriterleri değerlendirmenizi öneririz. ' . $company->name . ' sayfasında bu bilgilerin tamamını bulabilirsiniz.',
+        ];
+    }
 @endphp
 
 @section('title', $company->meta_title ?: $company->name . ' - ' . $cityName . ' - Firma Rehberi')
@@ -29,6 +57,7 @@
 @endif
 
 @include('partials.seo.json-ld', ['schema' => \App\Support\SeoSchema::company($company)])
+@include('partials.seo.json-ld', ['schema' => \App\Support\SeoSchema::faqPage(route('companies.show', $company->slug), $faqItems)])
 @endpush
 
 @section('content')
@@ -37,7 +66,7 @@
     {{-- ═══ COVER IMAGE HERO ═══ --}}
     @if($company->cover_image)
     <section class="relative h-48 sm:h-64 lg:h-80 overflow-hidden">
-        <img src="{{ asset('storage/' . $company->cover_image) }}" alt="{{ $company->name }} kapak görseli" class="h-full w-full object-cover" loading="eager">
+        <img src="{{ asset('storage/' . $company->cover_image) }}" alt="{{ $company->name }} kapak görseli" width="1280" height="512" class="h-full w-full object-cover" loading="eager">
         <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
         <div class="absolute bottom-0 left-0 right-0 p-6">
             <div class="mx-auto" style="max-width:var(--page_width,1280px);">
@@ -75,7 +104,7 @@
                     {{-- Logo / Initial --}}
                     <div class="shrink-0">
                         @if($company->logo)
-                            <img src="{{ asset('storage/' . $company->logo) }}" alt="{{ $company->name }} logosu" class="h-24 w-24 rounded-2xl object-contain bg-white border p-2" style="border-color:var(--border);" loading="eager">
+                            <img src="{{ asset('storage/' . $company->logo) }}" alt="{{ $company->name }} logosu" width="96" height="96" class="h-24 w-24 rounded-2xl object-contain bg-white border p-2" style="border-color:var(--border);" loading="eager">
                         @else
                             <div class="flex h-24 w-24 items-center justify-center rounded-2xl text-4xl font-black text-white shadow-md" style="background:var(--primary);">{{ mb_substr($company->name, 0, 1) }}</div>
                         @endif
@@ -215,7 +244,7 @@
                 <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
                     @foreach($company->images as $index => $image)
                         <div class="gallery-item aspect-square overflow-hidden rounded-2xl cursor-pointer relative group border" style="border-color:var(--border);" data-index="{{ $index }}" data-src="{{ asset('storage/' . $image->image_path) }}">
-                            <img src="{{ asset('storage/' . $image->image_path) }}" alt="{{ $image->alt_text ?: $company->name . ' - Fotoğraf ' . ($index + 1) }}" class="h-full w-full object-cover transition duration-300 group-hover:scale-110" loading="lazy">
+                            <img src="{{ asset('storage/' . $image->image_path) }}" alt="{{ $image->alt_text ?: $company->name . ' - Fotoğraf ' . ($index + 1) }}" width="400" height="400" class="h-full w-full object-cover transition duration-300 group-hover:scale-110" loading="lazy">
                             <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center">
                                 <svg class="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/></svg>
                             </div>
@@ -527,73 +556,5 @@
     <div id="lightbox-counter" class="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/70 text-sm font-medium"></div>
 </div>
 @endif
-
-@push('scripts')
-<script>
-    // Lightbox functionality
-    let lightboxImages = [];
-    let lightboxIndex = 0;
-
-    document.querySelectorAll('.gallery-item').forEach((item) => {
-        item.addEventListener('click', (e) => {
-            e.preventDefault();
-            lightboxImages = Array.from(document.querySelectorAll('.gallery-item')).map(el => el.dataset.src);
-            lightboxIndex = parseInt(item.dataset.index);
-            openLightbox(lightboxIndex);
-        });
-    });
-
-    function openLightbox(index) {
-        lightboxIndex = index;
-        const img = document.getElementById('lightbox-img');
-        const counter = document.getElementById('lightbox-counter');
-        if (!img || !counter) return;
-        img.src = lightboxImages[lightboxIndex];
-        counter.textContent = (lightboxIndex + 1) + ' / ' + lightboxImages.length;
-        document.getElementById('gallery-lightbox')?.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeLightbox(event) {
-        if (event && event.target !== document.getElementById('gallery-lightbox')) return;
-        document.getElementById('gallery-lightbox')?.classList.add('hidden');
-        document.body.style.overflow = '';
-        lightboxImages = [];
-        lightboxIndex = 0;
-    }
-
-    function navigateLightbox(direction, event) {
-        if (event) event.stopPropagation();
-        lightboxIndex = (lightboxIndex + direction + lightboxImages.length) % lightboxImages.length;
-        openLightbox(lightboxIndex);
-    }
-
-    // Keyboard navigation
-    document.addEventListener('keydown', function(e) {
-        const lb = document.getElementById('gallery-lightbox');
-        if (!lb || lb.classList.contains('hidden')) return;
-        if (e.key === 'Escape') closeLightbox();
-        if (e.key === 'ArrowLeft') navigateLightbox(-1);
-        if (e.key === 'ArrowRight') navigateLightbox(1);
-    });
-
-    // Touch swipe support
-    let touchStartX = 0;
-    let touchEndX = 0;
-    const lightbox = document.getElementById('gallery-lightbox');
-    if (lightbox) {
-        lightbox.addEventListener('touchstart', function(e) {
-            touchStartX = e.changedTouches[0].screenX;
-        }, {passive: true});
-        lightbox.addEventListener('touchend', function(e) {
-            touchEndX = e.changedTouches[0].screenX;
-            const diff = touchStartX - touchEndX;
-            if (Math.abs(diff) > 50) {
-                navigateLightbox(diff > 0 ? 1 : -1);
-            }
-        }, {passive: true});
-    }
-</script>
-@endpush
 
 @endsection

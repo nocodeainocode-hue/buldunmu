@@ -44,4 +44,10 @@ class PageController extends Controller
         $content = $this->getPageContent('terms');
         return view('frontend.pages.terms', compact('settings', 'content'));
     }
+
+    public function offline()
+    {
+        $settings = SiteSetting::getSettings();
+        return view('frontend.pages.offline', ['settings' => $settings]);
+    }
 }

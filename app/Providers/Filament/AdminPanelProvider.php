@@ -41,7 +41,9 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 NavigationGroup::make('Firma Yönetimi'),
+                NavigationGroup::make('Üyelik'),
                 NavigationGroup::make('İçerik ve Konum'),
+                NavigationGroup::make('Site Yönetimi'),
                 NavigationGroup::make('İletişim'),
                 NavigationGroup::make('Sistem')->collapsed(),
             ])

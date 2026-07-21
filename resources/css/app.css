@@ -18,6 +18,12 @@
     }
 }
 
+/* CLS prevention — explicit dimensions on all images */
+img {
+    height: auto;
+    max-width: 100%;
+}
+
 @layer utilities {
     /* ── YAZI RENKLERİ ── */
     .text-white { color: var(--bg_card) !important; }

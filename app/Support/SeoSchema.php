@@ -228,6 +228,51 @@ class SeoSchema
         ]);
     }
 
+    /**
+     * Generate schema for static pages (about, contact, terms, privacy).
+     */
+    public static function staticPage(string $title, string $description, string $url, string $breadcrumbLabel): array
+    {
+        return self::graph([
+            [
+                '@type' => 'WebPage',
+                '@id' => $url . '#webpage',
+                'url' => $url,
+                'name' => $title,
+                'description' => $description,
+                'inLanguage' => 'tr-TR',
+            ],
+            self::breadcrumb([
+                ['name' => 'Ana Sayfa', 'url' => route('home')],
+                ['name' => $breadcrumbLabel, 'url' => $url],
+            ], $url),
+        ]);
+    }
+
+    /**
+     * Generate FAQPage schema for company detail pages.
+     *
+     * @param array<array{question: string, answer: string}> $faqItems
+     */
+    public static function faqPage(string $pageUrl, array $faqItems): array
+    {
+        $mainEntity = collect($faqItems)->map(fn(array $faq) => [
+            '@type' => 'Question',
+            'name' => $faq['question'],
+            'acceptedAnswer' => [
+                '@type' => 'Answer',
+                'text' => $faq['answer'],
+            ],
+        ])->all();
+
+        return self::clean([
+            '@context' => 'https://schema.org',
+            '@type' => 'FAQPage',
+            '@id' => $pageUrl . '#faq',
+            'mainEntity' => $mainEntity,
+        ]);
+    }
+
     public static function breadcrumb(array $items, string $pageUrl): array
     {
         $items = array_values(array_filter($items));

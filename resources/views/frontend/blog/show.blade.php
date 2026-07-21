@@ -25,7 +25,7 @@
             @if($post->author_name || $post->reviewer_name)<div class="mt-5 flex flex-wrap gap-5 text-sm" style="color:var(--text_muted);">@if($post->author_name)<span><strong style="color:var(--text);">Yazar:</strong> {{ $post->author_name }}</span>@endif @if($post->reviewer_name)<span><strong style="color:var(--text);">Kontrol:</strong> {{ $post->reviewer_name }}</span>@endif</div>@endif
         </header>
 
-        @if($post->image)<img src="{{ asset('storage/'.$post->image) }}" alt="{{ $post->title }}" class="mt-8 max-h-[520px] w-full rounded-lg object-cover">@endif
+        @if($post->image)<img src="{{ asset('storage/'.$post->image) }}" alt="{{ $post->title }}" width="920" height="520" class="mt-8 max-h-[520px] w-full rounded-lg object-cover">@endif
 
         @if($blogLayout === 'comparison' && (!empty($post->pros) || !empty($post->cons)))
             <div class="mt-8 grid gap-4 sm:grid-cols-2"><div class="rounded-lg border p-5" style="border-color:#bfe6d2;background:#f2fbf6;"><h2 class="font-black" style="color:#16633f;">Artılar</h2><ul class="mt-3 space-y-2 text-sm">@foreach($post->pros ?? [] as $item)<li>+ {{ $item }}</li>@endforeach</ul></div><div class="rounded-lg border p-5" style="border-color:#f0c9c9;background:#fff7f7;"><h2 class="font-black" style="color:#9b2c2c;">Eksiler</h2><ul class="mt-3 space-y-2 text-sm">@foreach($post->cons ?? [] as $item)<li>− {{ $item }}</li>@endforeach</ul></div></div>

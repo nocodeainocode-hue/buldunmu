@@ -1,14 +1,21 @@
 @extends('layouts.app')
 @section('title', 'Hakkımızda')
 @section('meta_description', $settings->meta_description ?? 'Firma rehberimiz hakkında bilgi edinin.')
+@section('canonical', route('pages.about'))
+
+@push('head')
+@include('partials.seo.json-ld', ['schema' => \App\Support\SeoSchema::staticPage(
+    'Hakkımızda',
+    $settings->meta_description ?? 'Firma rehberimiz hakkında bilgi edinin.',
+    route('pages.about'),
+    'Hakkımızda'
+)])
+@endpush
+
 @section('content')
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <nav class="flex mb-6 text-sm text-gray-500">
-        <a href="{{ route('home') }}" class="hover:text-indigo-600">Ana Sayfa</a>
-        <span class="mx-2">/</span>
-        <span class="text-gray-900 font-medium">Hakkımızda</span>
-    </nav>
-    <div class="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8">
+    <x-breadcrumb :items="[['label' => 'Hakkımızda']]" />
+    <div class="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 mt-6">
         <h1 class="text-2xl font-bold text-gray-900 mb-6">Hakkımızda</h1>
         <div class="prose max-w-none text-gray-700">
             @if($content)

@@ -9,6 +9,8 @@ use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\ListingRequestController;
 use App\Http\Controllers\Frontend\BlogController;
 use App\Http\Controllers\Frontend\ContactController;
+use App\Http\Controllers\Frontend\PaketController;
+use App\Http\Controllers\Frontend\PwaController;
 use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\SitemapController;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +39,9 @@ Route::post('/firma-ekle', [ListingRequestController::class, 'store'])->name('li
 // İletişim
 Route::post('/iletisim', [ContactController::class, 'store'])->name('contact.store');
 
+// Üyelik Paketleri
+Route::get('/paketler', [PaketController::class, 'index'])->name('packages.index');
+
 // Arama
 Route::get('/ara', [SearchController::class, 'index'])->name('search');
 
@@ -45,6 +50,12 @@ Route::get('/hakkimizda', [PageController::class, 'about'])->name('pages.about')
 Route::get('/iletisim', [PageController::class, 'contact'])->name('pages.contact');
 Route::get('/gizlilik-politikasi', [PageController::class, 'privacy'])->name('pages.privacy');
 Route::get('/kullanim-sartlari', [PageController::class, 'terms'])->name('pages.terms');
+
+// PWA
+Route::get('/manifest.json', [PwaController::class, 'manifest'])->name('pwa.manifest');
+Route::get('/site.webmanifest', [PwaController::class, 'manifest'])->name('pwa.webmanifest');
+
+Route::view('/offline', 'frontend.pages.offline')->name('offline');
 
 // SEO
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');

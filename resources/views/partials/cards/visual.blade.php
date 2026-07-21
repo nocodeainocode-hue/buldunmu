@@ -2,9 +2,9 @@
     <a href="{{ route('companies.show', $company->slug) }}" class="block">
         <div class="relative aspect-[4/3] overflow-hidden" style="background:var(--primary_light);">
             @if($company->logo)
-                <img src="{{ asset('storage/' . $company->logo) }}" alt="{{ $company->name }}" class="h-full w-full object-contain p-4">
+                <img src="{{ asset('storage/' . $company->logo) }}" alt="{{ $company->name }}" width="400" height="300" class="h-full w-full object-contain p-4">
             @elseif($company->cover_image)
-                <img src="{{ asset('storage/' . $company->cover_image) }}" alt="{{ $company->name }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                <img src="{{ asset('storage/' . $company->cover_image) }}" alt="{{ $company->name }}" width="400" height="300" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
             @else
                 <div class="flex h-full items-center justify-center">
                     <div class="flex h-20 w-20 items-center justify-center rounded-2xl text-4xl font-black text-white shadow-lg" style="background:var(--primary);">

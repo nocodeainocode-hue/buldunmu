@@ -187,6 +187,11 @@ class Company extends Model
         return $this->belongsTo(CompanyImportBatch::class, 'import_batch_id');
     }
 
+    public function pageViews()
+    {
+        return $this->hasMany(PageView::class);
+    }
+
     public function scopeActive($query)
     {
         return $query->where('status', 'active');

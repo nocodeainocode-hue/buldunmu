@@ -44,4 +44,16 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.key === 'ArrowLeft') navigateLightbox(-1);
         if (e.key === 'ArrowRight') navigateLightbox(1);
     });
+
+    // Dokunmatik swipe desteği
+    let touchStartX = 0;
+    lightbox.addEventListener('touchstart', function (e) {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    lightbox.addEventListener('touchend', function (e) {
+        const diff = touchStartX - e.changedTouches[0].screenX;
+        if (Math.abs(diff) > 50) {
+            navigateLightbox(diff > 0 ? 1 : -1);
+        }
+    }, { passive: true });
 });

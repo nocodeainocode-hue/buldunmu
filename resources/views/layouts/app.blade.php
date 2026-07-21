@@ -19,6 +19,21 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $dirFavicon) }}">
     @endif
 
+    {{-- Apple touch icon (iOS home screen) --}}
+    @php $dirLogo = ($directory->logo ?? null) ?: ($settings->logo ?? null); @endphp
+    @if($dirLogo)
+        <link rel="apple-touch-icon" href="{{ asset('storage/' . $dirLogo) }}">
+        <link rel="apple-touch-startup-image" href="{{ asset('storage/' . $dirLogo) }}">
+    @endif
+
+    {{-- PWA manifest — directory-aware, served via route --}}
+    <link rel="manifest" href="{{ route('pwa.manifest') }}">
+    <meta name="theme-color" content="{{ \App\View\Helpers\ThemeHelper::get('primary', $directory ?? null, '#4f46e5') }}">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}">
+
     <style>
         {!! \App\View\Helpers\ThemeHelper::cssVariables($directory ?? null) !!}
     </style>
@@ -39,13 +54,27 @@
     @stack('head')
 </head>
 <body class="min-h-screen flex flex-col" style="background-color:var(--bg);color:var(--text);font-family:var(--font_body);">
+    {{-- PWA Install Banner --}}
+    <div id="pwa-install-banner" class="fixed inset-x-0 bottom-0 z-50 hidden translate-y-full border-t px-4 py-3 shadow-2xl transition-transform duration-300" style="background:var(--bg_card);border-color:var(--border);">
+        <div class="mx-auto flex max-w-2xl items-center gap-3">
+            <button id="pwa-install-dismiss" class="shrink-0 rounded-full p-1 transition hover:opacity-70" style="color:var(--text_muted);" aria-label="Kapat">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <div class="flex-1 text-left">
+                <div class="text-sm font-black" style="color:var(--text);">Uygulamayı yükle</div>
+                <div class="text-xs" style="color:var(--text_muted);">Ana ekrana ekleyerek hızlı erişim sağlayın.</div>
+            </div>
+            <button id="pwa-install-btn" class="shrink-0 rounded-xl px-5 py-2 text-sm font-black text-white shadow-sm transition hover:opacity-90" style="background:var(--primary);">Yükle</button>
+        </div>
+    </div>
+
     <header class="sticky top-0 z-50 border-b backdrop-blur" style="background-color:color-mix(in srgb,var(--bg_card) 92%,transparent);border-color:var(--border);box-shadow:var(--card_shadow);">
         <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width:var(--page_width,1280px);">
             <div class="flex h-16 items-center justify-between">
                 <a href="{{ route('home') }}" class="flex shrink-0 items-center gap-2">
                     @php $dirLogo = ($directory->logo ?? null) ?: ($settings->logo ?? null); @endphp
                     @if($dirLogo)
-                        <img src="{{ asset('storage/' . $dirLogo) }}" alt="{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}" class="h-10 w-auto">
+                        <img src="{{ asset('storage/' . $dirLogo) }}" alt="{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}" width="40" height="40" class="h-10 w-auto">
                     @else
                         <div class="flex h-10 w-10 items-center justify-center rounded-xl text-sm font-black text-white" style="background:var(--primary);">
                             {{ mb_substr($directory->name ?? $settings->site_name ?? 'F', 0, 1) }}
@@ -126,6 +155,22 @@
     </header>
 
     <main class="flex-1">
+        {{-- PWA Install Banner --}}
+        <div id="pwa-install-banner" class="hidden fixed bottom-4 left-4 right-4 z-[9999] translate-y-full transition-transform duration-300">
+            <div class="mx-auto flex max-w-md items-center gap-3 rounded-2xl border bg-white p-4 shadow-2xl" style="max-width:var(--page_width,1280px);border-color:var(--border);">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-lg font-black text-white" style="background:var(--primary);">
+                    {{ mb_substr($directory->name ?? $settings->site_name ?? 'F', 0, 1) }}
+                </div>
+                <div class="min-w-0 flex-1">
+                    <div class="truncate text-sm font-bold" style="color:var(--text);">{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}</div>
+                    <div class="text-xs" style="color:var(--text_muted);">Uygulamayı ana ekrana ekle</div>
+                </div>
+                <button id="pwa-install-btn" class="shrink-0 rounded-xl px-4 py-2 text-sm font-bold text-white" style="background:var(--primary);">Yükle</button>
+                <button id="pwa-install-dismiss" class="shrink-0 p-1" style="color:var(--text_muted);" aria-label="Kapat">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+        </div>
         @yield('content')
     </main>
 
@@ -142,6 +187,7 @@
                         <li><a href="{{ route('companies.index') }}" class="transition hover:text-white">Firmalar</a></li>
                         <li><a href="{{ route('blog.index') }}" class="transition hover:text-white">Blog</a></li>
                         <li><a href="{{ route('listing.create') }}" class="transition hover:text-white">Firma Ekle</a></li>
+                        <li><a href="{{ route('packages.index') }}" class="transition hover:text-white">Üyelik Paketleri</a></li>
                         <li><a href="{{ route('pages.about') }}" class="transition hover:text-white">Hakkımızda</a></li>
                         <li><a href="{{ route('pages.contact') }}" class="transition hover:text-white">İletişim</a></li>
                     </ul>
@@ -167,9 +213,71 @@
     </footer>
 
     <script>
-        document.getElementById('mobile-menu-btn')?.addEventListener('click', function() {
-            document.getElementById('mobile-menu')?.classList.toggle('hidden');
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('mobile-menu-btn')?.addEventListener('click', function() {
+                document.getElementById('mobile-menu')?.classList.toggle('hidden');
+            });
         });
+
+        // PWA Service Worker registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js', { scope: '/' })
+                    .then((reg) => console.log('[PWA] SW registered:', reg.scope))
+                    .catch((err) => console.warn('[PWA] SW registration failed:', err));
+            });
+        }
+
+        // PWA Install Prompt (beforeinstallprompt)
+        (function () {
+            let deferredPrompt = null;
+            const banner  = document.getElementById('pwa-install-banner');
+            const install = document.getElementById('pwa-install-btn');
+            const dismiss = document.getElementById('pwa-install-dismiss');
+
+            if (!banner || !install || !dismiss) return;
+
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+
+                // Don't show if already in standalone mode
+                if (window.matchMedia('(display-mode: standalone)').matches) return;
+                if (navigator.standalone) return;
+
+                banner.classList.remove('hidden');
+                requestAnimationFrame(() => {
+                    banner.classList.remove('translate-y-full');
+                });
+            });
+
+            install.addEventListener('click', async () => {
+                if (!deferredPrompt) return;
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log('[PWA] Install outcome:', outcome);
+                deferredPrompt = null;
+                hideBanner();
+            });
+
+            dismiss.addEventListener('click', () => {
+                deferredPrompt = null;
+                hideBanner();
+            });
+
+            function hideBanner() {
+                banner.classList.add('translate-y-full');
+                banner.addEventListener('transitionend', () => {
+                    banner.classList.add('hidden');
+                }, { once: true });
+            }
+
+            // Hide banner if app was installed elsewhere
+            window.addEventListener('appinstalled', () => {
+                deferredPrompt = null;
+                hideBanner();
+            });
+        })();
     </script>
     @stack('scripts')
 </body>

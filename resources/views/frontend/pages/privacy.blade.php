@@ -1,14 +1,21 @@
 @extends('layouts.app')
 @section('title', 'Gizlilik Politikası')
 @section('meta_description', $settings->meta_description ?? 'Gizlilik politikamız.')
+@section('canonical', route('pages.privacy'))
+
+@push('head')
+@include('partials.seo.json-ld', ['schema' => \App\Support\SeoSchema::staticPage(
+    'Gizlilik Politikası',
+    $settings->meta_description ?? 'Gizlilik politikamız.',
+    route('pages.privacy'),
+    'Gizlilik Politikası'
+)])
+@endpush
+
 @section('content')
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <nav class="flex mb-6 text-sm text-gray-500">
-        <a href="{{ route('home') }}" class="hover:text-indigo-600">Ana Sayfa</a>
-        <span class="mx-2">/</span>
-        <span class="text-gray-900 font-medium">Gizlilik Politikası</span>
-    </nav>
-    <div class="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8">
+    <x-breadcrumb :items="[['label' => 'Gizlilik Politikası']]" />
+    <div class="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 mt-6">
         <h1 class="text-2xl font-bold text-gray-900 mb-6">Gizlilik Politikası</h1>
         <div class="prose max-w-none text-gray-700">
             @if($content)

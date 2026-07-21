@@ -32,7 +32,7 @@ class FirecrawlServiceTest extends TestCase
         $prop = $ref->getProperty('baseUrl');
         $prop->setAccessible(true);
 
-        $this->assertEquals('https://api.firecrawl.dev/v1', $prop->getValue($service));
+        $this->assertEquals('https://api.firecrawl.dev/v2/', $prop->getValue($service));
     }
 
     public function test_error_sanitizer_redacts_auth_header(): void

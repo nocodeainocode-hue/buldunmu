@@ -116,17 +116,107 @@
         'companyCount' => $totalInCity,
     ])
 
+    {{-- Rich SEO Description --}}
+    @if(!empty($seoContent))
+    <section class="py-12" style="background:var(--bg);">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width:var(--page_width,1280px);">
+            <div class="prose max-w-none text-sm leading-7" style="color:var(--text_muted);">
+                @foreach(explode("\n\n", $seoContent) as $paragraph)
+                    <p class="mb-4">{{ $paragraph }}</p>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
+
     {{-- Popular Categories in this City --}}
     @if($popularCategories->isNotEmpty())
     <section class="py-12" style="background:var(--bg_card);">
         <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width:var(--page_width,1280px);">
             <h2 class="text-xl font-black mb-6 text-center" style="color:var(--text);">{{ $city->name }} Popüler Kategoriler</h2>
-            <div class="flex flex-wrap gap-2 justify-center">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                 @foreach($popularCategories as $pcat)
-                    <a href="{{ route('categories.show', $pcat->slug) }}" class="px-4 py-2 rounded-full border text-sm font-medium transition hover:-translate-y-0.5 hover:shadow-sm" style="border-color:var(--border);color:var(--text);background:var(--bg);">
-                        🏷️ {{ $pcat->name }} <span style="color:var(--text_muted);">({{ $pcat->companies_count }})</span>
+                    <a href="{{ route('categories.show', $pcat->slug) }}"
+                       class="flex flex-col items-center gap-2 rounded-xl border p-4 text-center transition hover:-translate-y-1 hover:shadow-md"
+                       style="border-color:var(--border);color:var(--text);background:var(--bg);"
+                       title="{{ $city->name }} {{ $pcat->name }} Firmaları">
+                        <span class="text-2xl">{{ $pcat->icon ?? '🏷️' }}</span>
+                        <span class="text-sm font-bold">{{ $pcat->name }}</span>
+                        <span class="text-xs font-medium px-2 py-0.5 rounded-full" style="background:var(--primary_light);color:var(--primary);">{{ $pcat->companies_count }} firma</span>
                     </a>
                 @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
+
+    {{-- Nearby Cities --}}
+    @if(($nearbyCities ?? collect())->isNotEmpty())
+    <section class="py-12" style="background:var(--bg);">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width:var(--page_width,1280px);">
+            <h2 class="text-xl font-black mb-6 text-center" style="color:var(--text);">Diğer Şehirler</h2>
+            <div class="flex flex-wrap gap-3 justify-center">
+                @foreach($nearbyCities as $nearby)
+                    <a href="{{ route('cities.show', $nearby->slug) }}"
+                       class="flex items-center gap-2 rounded-xl border px-5 py-3 text-sm font-medium transition hover:-translate-y-1 hover:shadow-md"
+                       style="border-color:var(--border);color:var(--text);background:var(--bg_card);">
+                        <span>📍</span>
+                        <span>{{ $nearby->name }}</span>
+                        @if($nearby->companies_count)
+                            <span class="text-xs px-2 py-0.5 rounded-full" style="background:var(--primary_light);color:var(--primary);">{{ $nearby->companies_count }}</span>
+                        @endif
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
+
+    {{-- Blog Posts Section --}}
+    @if(($posts ?? collect())->isNotEmpty())
+    <section class="py-12" style="background:var(--bg_card);">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width:var(--page_width,1280px);">
+            <h2 class="text-xl font-black mb-6 text-center" style="color:var(--text);">Blog Yazıları</h2>
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                @foreach($posts as $post)
+                    <a href="{{ route('blog.show', $post->slug) }}"
+                       class="group flex flex-col overflow-hidden rounded-2xl border transition hover:-translate-y-1 hover:shadow-lg"
+                       style="border-color:var(--border);background:var(--bg);">
+                        @if($post->image)
+                            <div class="aspect-[16/9] overflow-hidden">
+                                <img src="{{ asset('storage/' . $post->image) }}"
+                                     alt="{{ $post->title }}"
+                                     class="h-full w-full object-cover transition group-hover:scale-105"
+                                     loading="lazy">
+                            </div>
+                        @endif
+                        <div class="flex flex-1 flex-col gap-2 p-5">
+                            <h3 class="text-base font-bold leading-snug group-hover:underline" style="color:var(--text);">
+                                {{ $post->title }}
+                            </h3>
+                            @if($post->excerpt)
+                                <p class="text-sm line-clamp-3" style="color:var(--text_muted);">{{ $post->excerpt }}</p>
+                            @endif
+                            <div class="mt-auto pt-2 flex items-center gap-2 text-xs" style="color:var(--text_muted);">
+                                @if($post->published_at)
+                                    <span>{{ $post->published_at->translatedFormat('d F Y') }}</span>
+                                @endif
+                                @if($post->author_name)
+                                    <span>·</span>
+                                    <span>{{ $post->author_name }}</span>
+                                @endif
+                            </div>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+            <div class="mt-8 text-center">
+                <a href="{{ route('blog.index') }}"
+                   class="inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold transition hover:opacity-90"
+                   style="background:var(--primary);color:white;">
+                    Tüm Blog Yazıları
+                    <span aria-hidden="true">→</span>
+                </a>
             </div>
         </div>
     </section>
