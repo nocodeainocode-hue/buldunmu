@@ -23,7 +23,8 @@
             <p class="mt-5 text-lg leading-8" style="color:#94a3b8;">{{ $subtitle }}</p>
 
             <form action="{{ route('search') }}" method="GET" class="mt-8 flex max-w-xl overflow-hidden rounded-2xl border-2 shadow-2xl" style="border-color:var(--secondary);background:var(--bg_card);">
-                <input type="text" name="q" placeholder="Firma, kategori veya şehir ara..."
+                <label for="metro-search" class="sr-only">Firma, kategori veya şehir ara</label>
+                <input id="metro-search" type="search" name="q" autocomplete="off" placeholder="Firma, kategori veya şehir ara..."
                     class="min-w-0 flex-1 px-5 py-4 text-base outline-none" style="background:transparent;color:#f1f5f9;">
                 <button type="submit" class="px-6 text-sm font-black uppercase tracking-wider transition hover:opacity-90" style="background:var(--secondary);color:#0f172a;">
                     Ara

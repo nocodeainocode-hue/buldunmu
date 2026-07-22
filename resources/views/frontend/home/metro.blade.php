@@ -13,12 +13,12 @@
 
 {{-- Şehir Grid (Metro haritası estetiği) --}}
 @if($cities->isNotEmpty())
-<section class="py-12" style="background:var(--bg);">
+<section aria-labelledby="metro-cities-heading" class="py-12" style="background:var(--bg);">
     <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width:var(--page_width,1280px);">
         <div class="mb-8 flex items-end justify-between">
             <div>
                 <div class="mb-2 text-xs font-black uppercase tracking-[0.25em]" style="color:var(--accent);">Şehirler</div>
-                <h2 class="text-2xl font-black sm:text-3xl" style="color:var(--text);">Hangi şehirde arıyorsun?</h2>
+                <h2 id="metro-cities-heading" class="text-2xl font-black sm:text-3xl" style="color:var(--text);">Hangi şehirde arıyorsun?</h2>
             </div>
             <a href="{{ route('companies.index') }}" class="text-sm font-bold" style="color:var(--secondary);">Tümünü listele →</a>
         </div>

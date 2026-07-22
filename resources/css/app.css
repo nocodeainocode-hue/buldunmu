@@ -18,6 +18,14 @@
     }
 }
 
+/* Blueprint grid texture for technical directory themes */
+.theme-blueprint-directory {
+ background-image: linear-gradient(rgba(34, 211, 238, .08) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 211, 238, .08) 1px, transparent 1px);
+ background-size: 24px 24px;
+}
+.theme-blueprint-directory main > section { position: relative; }
+.theme-blueprint-directory main > section::before { content: ''; position: absolute; inset: 0; pointer-events: none; border-top: 1px solid rgba(34, 211, 238, .18); }
+
 /* CLS prevention — explicit dimensions on all images */
 img {
     height: auto;
