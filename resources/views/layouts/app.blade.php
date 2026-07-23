@@ -99,7 +99,7 @@
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </button>
                         <div class="invisible absolute left-0 top-full z-50 mt-2 w-60 rounded-2xl border p-2 opacity-0 shadow-xl transition-all group-hover:visible group-hover:opacity-100" style="background:var(--bg_card);border-color:var(--border);">
-                            @php $headerCategories = \App\Models\Category::active()->withCount('companies')->orderByDesc('companies_count')->take(8)->get(); @endphp
+                            @php $headerCategories = \App\Models\Category::active()->visibleForDirectory($directory ?? null)->withCount('companies')->orderByDesc('companies_count')->take(8)->get(); @endphp
                             @foreach($headerCategories as $cat)
                                 <a href="{{ route('categories.show', $cat->slug) }}" class="block rounded-xl px-3 py-2 text-sm font-semibold transition hover:opacity-70" style="color:var(--text);">
                                     {{ $cat->name }}
@@ -206,7 +206,7 @@
                 <div>
                     <h3 class="mb-4 text-xs font-black uppercase tracking-widest" style="color:white;">Kategoriler</h3>
                     <ul class="space-y-2 text-sm" style="color:#94a3b8;">
-                        @php $footerCategories = \App\Models\Category::active()->withCount('companies')->orderByDesc('companies_count')->take(5)->get(); @endphp
+                        @php $footerCategories = \App\Models\Category::active()->visibleForDirectory($directory ?? null)->withCount('companies')->orderByDesc('companies_count')->take(5)->get(); @endphp
                         @foreach($footerCategories as $cat)
                             <li><a href="{{ route('categories.show', $cat->slug) }}" class="transition hover:text-white">{{ $cat->name }}</a></li>
                         @endforeach

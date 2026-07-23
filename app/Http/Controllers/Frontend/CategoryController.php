@@ -13,7 +13,7 @@ class CategoryController extends Controller
 {
     public function show(string $slug)
     {
-        $category = Category::where('slug', $slug)->firstOrFail();
+        $category = Category::active()->where('slug', $slug)->firstOrFail();
         $directory = $category->directory ?? (app()->bound('currentDirectory') ? app('currentDirectory') : null);
 
         $companies = Company::active()

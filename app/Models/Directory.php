@@ -27,6 +27,11 @@ class Directory extends Model
         return $this->hasMany(Company::class);
     }
 
+    public function categorySettings()
+    {
+        return $this->hasMany(CategoryDirectorySetting::class);
+    }
+
     public function categories()
     {
         return $this->hasMany(Category::class);
