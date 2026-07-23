@@ -178,8 +178,19 @@
         <div class="mx-auto px-4 py-12 sm:px-6 lg:px-8" style="max-width:var(--page_width,1280px);">
             <div class="grid grid-cols-1 gap-8 md:grid-cols-4">
                 <div>
-                    <span class="text-xl font-black" style="color:white;">{{ $settings->site_name ?? 'Firma Rehberi' }}</span>
-                    <p class="mt-3 max-w-xs text-sm leading-6" style="color:#94a3b8;">Türkiye genelinde firma, kategori ve şehir araması için sade rehber deneyimi.</p>
+                    @php
+                        $footerName = $directory->name ?? $settings->site_name ?? 'Firma Rehberi';
+                        $footerLogo = ($directory->logo ?? null) ?: ($settings->logo ?? null);
+                    @endphp
+                    <a href="{{ route('home') }}" class="inline-flex items-center gap-3" aria-label="{{ $footerName }} ana sayfa">
+                        @if($footerLogo)
+                            <img src="{{ asset('storage/' . $footerLogo) }}" alt="{{ $footerName }}" width="40" height="40" class="h-10 w-auto rounded-lg object-contain">
+                        @else
+                            <span class="flex h-10 w-10 items-center justify-center rounded-lg text-sm font-black" style="background:var(--primary);color:white;">{{ mb_substr($footerName, 0, 1) }}</span>
+                        @endif
+                        <span class="text-xl font-black" style="color:white;">{{ $footerName }}</span>
+                    </a>
+                    <p class="mt-3 max-w-xs text-sm leading-6" style="color:#94a3b8;">{{ $directory->meta_description ?? $settings->meta_description ?? 'Türkiye genelinde firma, kategori ve şehir araması için sade rehber deneyimi.' }}</p>
                 </div>
                 <div>
                     <h3 class="mb-4 text-xs font-black uppercase tracking-widest" style="color:white;">Linkler</h3>
