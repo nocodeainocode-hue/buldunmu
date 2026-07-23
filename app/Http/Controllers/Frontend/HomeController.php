@@ -57,7 +57,9 @@ class HomeController extends Controller
     private function navigationCities($directory)
     {
         if (!$directory || $directory->geography_mode === 'national') {
-            return City::whereHas('companies', fn($query) => $query->active())
+            return City::withoutGlobalScope('directory')
+                ->whereNull('directory_id')
+                ->whereHas('companies', fn($query) => $query->active())
                 ->withCount(['companies' => fn($query) => $query->active()])
                 ->orderByDesc('companies_count')
                 ->take(12)
@@ -65,7 +67,9 @@ class HomeController extends Controller
         }
 
         $visibleSlugs = $directory->visibleCitySlugs();
-        $cities = City::whereIn('slug', $visibleSlugs)
+        $cities = City::withoutGlobalScope('directory')
+            ->whereNull('directory_id')
+            ->whereIn('slug', $visibleSlugs)
             ->withCount('companies')
             ->get()
             ->sortBy(fn(City $city) => array_search($city->slug, $visibleSlugs, true))

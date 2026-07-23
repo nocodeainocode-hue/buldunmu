@@ -68,7 +68,9 @@ class CityController extends Controller
 
     public function show(string $slug, Request $request)
     {
-        $city = City::where('slug', $slug)
+        $city = City::withoutGlobalScope('directory')
+            ->whereNull('directory_id')
+            ->where('slug', $slug)
             ->when(app()->bound('currentDirectory') && app('currentDirectory')->geography_mode !== 'national', function ($query) {
                 $directory = app('currentDirectory');
                 $visibleSlugs = $directory->visibleCitySlugs();
