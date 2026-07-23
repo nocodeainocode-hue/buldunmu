@@ -98,14 +98,20 @@
                             Kategoriler
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </button>
-                        <div class="invisible absolute left-0 top-full z-50 mt-2 w-60 rounded-2xl border p-2 opacity-0 shadow-xl transition-all group-hover:visible group-hover:opacity-100" style="background:var(--bg_card);border-color:var(--border);">
-                            @php $headerCategories = \App\Models\Category::active()->visibleForDirectory($directory ?? null)->withCount('companies')->orderByDesc('companies_count')->take(8)->get(); @endphp
-                            @foreach($headerCategories as $cat)
-                                <a href="{{ route('categories.show', $cat->slug) }}" class="block rounded-xl px-3 py-2 text-sm font-semibold transition hover:opacity-70" style="color:var(--text);">
-                                    {{ $cat->name }}
-                                    <span class="ml-1 text-xs" style="color:var(--text_muted);">({{ $cat->companies_count }})</span>
-                                </a>
-                            @endforeach
+                        <div class="invisible absolute left-1/2 top-full z-50 mt-2 w-[min(92vw,54rem)] -translate-x-1/2 rounded-2xl border p-4 opacity-0 shadow-xl transition-all group-hover:visible group-hover:opacity-100" style="background:var(--bg_card);border-color:var(--border);">
+                            @php $headerCategories = \App\Models\Category::active()->visibleForDirectory($directory ?? null)->withCount('companies')->orderBy('name')->take(35)->get(); @endphp
+                            <div class="mb-3 flex items-center justify-between border-b pb-3" style="border-color:var(--border);">
+                                <span class="text-xs font-black uppercase tracking-widest" style="color:var(--primary);">35 ortak kategori</span>
+                                <a href="{{ route('companies.index') }}" class="text-xs font-bold" style="color:var(--secondary);">Tüm firmalar →</a>
+                            </div>
+                            <div class="grid grid-cols-2 gap-1 sm:grid-cols-3 lg:grid-cols-4">
+                                @foreach($headerCategories as $cat)
+                                    <a href="{{ route('categories.show', $cat->slug) }}" class="flex min-w-0 items-center gap-2 rounded-lg px-2 py-2 text-xs font-semibold transition hover:bg-black/5 dark:hover:bg-white/5" style="color:var(--text);">
+                                        <span class="shrink-0 text-base">{{ $cat->icon ?? '◆' }}</span>
+                                        <span class="min-w-0 truncate">{{ $cat->name }}</span>
+                                    </a>
+                                @endforeach
+                            </div>
                         </div>
                     </div>
                     <div class="group relative">
@@ -144,6 +150,15 @@
                     </div>
                 </form>
                 <nav class="flex flex-col gap-1">
+                    <details class="rounded-lg md:hidden">
+                        <summary class="cursor-pointer rounded-lg px-3 py-2 text-sm font-semibold" style="color:var(--text);">Kategoriler</summary>
+                        @php $mobileCategories = \App\Models\Category::active()->visibleForDirectory($directory ?? null)->orderBy('name')->take(35)->get(); @endphp
+                        <div class="grid grid-cols-2 gap-1 px-3 pb-2 pt-1">
+                            @foreach($mobileCategories as $cat)
+                                <a href="{{ route('categories.show', $cat->slug) }}" class="rounded-lg px-2 py-2 text-xs font-semibold" style="color:var(--text_muted);">{{ $cat->icon ?? '◆' }} {{ $cat->name }}</a>
+                            @endforeach
+                        </div>
+                    </details>
                     <a href="{{ route('companies.index') }}" class="rounded-lg px-3 py-2 text-sm font-semibold" style="color:var(--text);">Firmalar</a>
                     <a href="{{ route('blog.index') }}" class="rounded-lg px-3 py-2 text-sm font-semibold" style="color:var(--text);">Blog</a>
                     <a href="{{ route('listing.create') }}" class="rounded-lg px-3 py-2 text-sm font-semibold text-white" style="background:var(--primary);">Firma Ekle</a>

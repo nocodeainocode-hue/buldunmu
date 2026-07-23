@@ -55,19 +55,16 @@ class SeedCategories extends Command
         foreach ($categories as $name => $icon) {
             $slug = Str::slug($name);
 
-            if (Category::where('slug', $slug)->exists()) {
-                $this->line("⏭️ {$name} — zaten var");
-                continue;
-            }
+            $category = Category::updateOrCreate(
+                ['slug' => $slug],
+                [
+                    'name' => $name,
+                    'icon' => $icon,
+                    'status' => 'active',
+                ],
+            );
 
-            Category::create([
-                'name' => $name,
-                'slug' => $slug,
-                'icon' => $icon,
-                'status' => 'active',
-            ]);
-
-            $this->info("✅ {$icon} {$name}");
+            $this->line("✅ {$icon} {$name} (" . ($category->wasRecentlyCreated ? 'eklendi' : 'güncellendi') . ')');
             $count++;
         }
 
