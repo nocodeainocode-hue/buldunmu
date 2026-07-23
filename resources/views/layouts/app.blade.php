@@ -8,10 +8,24 @@
     <title>@yield('title', $settings->site_name ?? 'Firma Rehberi')</title>
     <meta name="description" content="@yield('meta_description', $settings->meta_description ?? '')">
     <meta name="robots" content="@yield('robots', 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1')">
-    <meta property="og:site_name" content="{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}">
+    @php
+        $seoName = $directory->name ?? $settings->site_name ?? 'Firma Rehberi';
+        $seoTitle = trim($__env->yieldContent('title') ?: $seoName);
+        $seoDescription = trim($__env->yieldContent('meta_description') ?: ($directory->meta_description ?? $settings->meta_description ?? ''));
+        $seoCanonical = trim($__env->yieldContent('canonical') ?: url()->current());
+    @endphp
+    <link rel="canonical" href="{{ $seoCanonical }}">
+    <meta property="og:site_name" content="{{ $seoName }}">
+    <meta property="og:title" content="{{ $seoTitle }}">
+    <meta property="og:description" content="{{ $seoDescription }}">
+    <meta property="og:url" content="{{ $seoCanonical }}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{{ $seoTitle }}">
+    <meta name="twitter:description" content="{{ $seoDescription }}">
 
-    @hasSection('canonical')
-        <link rel="canonical" href="@yield('canonical')">
+    @if($__env->hasSection('canonical'))
+        {{-- Page-specific canonical overrides the tenant-aware default above. --}}
     @endif
 
     @php $dirFavicon = ($directory->favicon ?? null) ?: ($settings->favicon ?? null); @endphp
