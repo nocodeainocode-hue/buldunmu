@@ -152,33 +152,79 @@
                 </button>
             </div>
 
-            <div id="mobile-menu" class="hidden border-t py-3 md:hidden" style="border-color:var(--border);">
-                <form action="{{ route('search') }}" method="GET" class="mb-3">
-                    <div class="relative">
-                        <input type="text" name="q" value="{{ request('q') }}" placeholder="Firma, kategori veya şehir ara..."
-                            class="w-full rounded-xl border px-4 py-2.5 text-sm focus:outline-none focus:ring-2"
-                            style="border-color:var(--border);background:var(--bg);color:var(--text);">
-                        <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2" style="color:var(--text_muted);" aria-label="Ara">
-                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            {{-- Mobile menu backdrop --}}
+            <div id="mobile-backdrop" class="fixed inset-0 z-40 hidden bg-black/40 backdrop-blur-sm md:hidden" aria-hidden="true"></div>
+
+            {{-- Mobile menu panel — slides in from left, full height, scrollable --}}
+            <div id="mobile-menu" class="fixed inset-y-0 left-0 z-50 w-[min(88vw,26rem)] translate-x-[-105%] overflow-hidden border-r shadow-2xl transition-transform duration-300 ease-in-out md:hidden" style="background:var(--bg_card);border-color:var(--border);">
+                <div class="flex h-full flex-col">
+                    {{-- Header row: logo + close --}}
+                    <div class="flex shrink-0 items-center justify-between border-b px-4 py-3" style="border-color:var(--border);">
+                        <a href="{{ route('home') }}" class="flex items-center gap-2" onclick="closeMobileMenu()">
+                            @php $dirLogo = ($directory->logo ?? null) ?: ($settings->logo ?? null); @endphp
+                            @if($dirLogo)
+                                <img src="{{ asset('storage/' . $dirLogo) }}" alt="{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}" width="32" height="32" class="h-8 w-auto">
+                            @else
+                                <div class="flex h-8 w-8 items-center justify-center rounded-lg text-xs font-black text-white" style="background:var(--primary);">
+                                    {{ mb_substr($directory->name ?? $settings->site_name ?? 'F', 0, 1) }}
+                                </div>
+                            @endif
+                            <span class="text-lg font-black" style="color:var(--text);">{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}</span>
+                        </a>
+                        <button id="mobile-menu-close" class="rounded-lg p-2 transition hover:bg-black/5 dark:hover:bg-white/5" style="color:var(--text_muted);" aria-label="Menüyü kapat">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                         </button>
                     </div>
-                </form>
-                <nav class="flex flex-col gap-1">
-                    <details class="rounded-lg md:hidden">
-                        <summary class="cursor-pointer rounded-lg px-3 py-2 text-sm font-semibold" style="color:var(--text);">Kategoriler</summary>
-                        @php $mobileCategories = \App\Models\Category::active()->visibleForDirectory($directory ?? null)->orderBy('name')->take(35)->get(); @endphp
-                        <div class="grid grid-cols-2 gap-1 px-3 pb-2 pt-1">
-                            @foreach($mobileCategories as $cat)
-                                <a href="{{ route('categories.show', $cat->slug) }}" class="rounded-lg px-2 py-2 text-xs font-semibold" style="color:var(--text_muted);">{{ $cat->icon ?? '◆' }} {{ $cat->name }}</a>
-                            @endforeach
+
+                    {{-- Scrollable body --}}
+                    <div class="flex-1 overflow-y-auto overscroll-contain px-4 py-3">
+                        {{-- Search --}}
+                        <form action="{{ route('search') }}" method="GET" class="mb-4">
+                            <div class="relative">
+                                <input type="text" name="q" value="{{ request('q') }}" placeholder="Firma, kategori veya şehir ara..."
+                                    class="w-full rounded-xl border px-4 py-2.5 text-sm focus:outline-none focus:ring-2"
+                                    style="border-color:var(--border);background:var(--bg);color:var(--text);">
+                                <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2" style="color:var(--text_muted);" aria-label="Ara">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                                </button>
+                            </div>
+                        </form>
+
+                        {{-- Quick actions --}}
+                        <div class="mb-4 flex gap-2">
+                            <a href="{{ route('companies.index') }}" onclick="closeMobileMenu()" class="flex-1 rounded-xl px-4 py-2.5 text-center text-sm font-bold transition hover:opacity-80" style="background:var(--primary_light);color:var(--primary);">Firmalar</a>
+                            <a href="{{ route('listing.create') }}" onclick="closeMobileMenu()" class="flex-1 rounded-xl px-4 py-2.5 text-center text-sm font-bold text-white transition hover:opacity-90" style="background:var(--primary);">+ Firma Ekle</a>
                         </div>
-                    </details>
-                    <a href="{{ route('companies.index') }}" class="rounded-lg px-3 py-2 text-sm font-semibold" style="color:var(--text);">Firmalar</a>
-                    <a href="{{ route('blog.index') }}" class="rounded-lg px-3 py-2 text-sm font-semibold" style="color:var(--text);">Blog</a>
-                    <a href="{{ route('listing.create') }}" class="rounded-lg px-3 py-2 text-sm font-semibold text-white" style="background:var(--primary);">Firma Ekle</a>
-                    <a href="{{ route('pages.about') }}" class="rounded-lg px-3 py-2 text-sm font-semibold" style="color:var(--text);">Hakkımızda</a>
-                    <a href="{{ route('pages.contact') }}" class="rounded-lg px-3 py-2 text-sm font-semibold" style="color:var(--text);">İletişim</a>
-                </nav>
+
+                        {{-- Categories — scrollable grid --}}
+                        <div class="mb-4">
+                            <div class="mb-2 flex items-center justify-between">
+                                <span class="text-xs font-black uppercase tracking-widest" style="color:var(--primary);">Kategoriler</span>
+                                <span class="text-xs" style="color:var(--text_muted);">35</span>
+                            </div>
+                            @php $mobileCategories = \App\Models\Category::active()->visibleForDirectory($directory ?? null)->orderBy('name')->take(35)->get(); @endphp
+                            <div class="grid grid-cols-2 gap-1">
+                                @foreach($mobileCategories as $cat)
+                                    <a href="{{ route('categories.show', $cat->slug) }}" onclick="closeMobileMenu()" class="flex items-center gap-2 rounded-lg px-2 py-2 text-xs font-semibold transition hover:bg-black/5 dark:hover:bg-white/5" style="color:var(--text);">
+                                        <span class="shrink-0 text-base">{{ $cat->icon ?? '◆' }}</span>
+                                        <span class="min-w-0 truncate">{{ $cat->name }}</span>
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Fixed bottom links --}}
+                    <div class="shrink-0 border-t px-4 py-3" style="border-color:var(--border);">
+                        <nav class="flex flex-wrap gap-x-4 gap-y-2 text-xs font-semibold" style="color:var(--text_muted);">
+                            <a href="{{ route('blog.index') }}" onclick="closeMobileMenu()" class="transition hover:opacity-70">Blog</a>
+                            <a href="{{ route('pages.about') }}" onclick="closeMobileMenu()" class="transition hover:opacity-70">Hakkımızda</a>
+                            <a href="{{ route('pages.contact') }}" onclick="closeMobileMenu()" class="transition hover:opacity-70">İletişim</a>
+                            <a href="{{ route('pages.privacy') }}" onclick="closeMobileMenu()" class="transition hover:opacity-70">Gizlilik</a>
+                            <a href="{{ route('pages.terms') }}" onclick="closeMobileMenu()" class="transition hover:opacity-70">Kullanım</a>
+                        </nav>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -254,8 +300,32 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('mobile-menu-btn')?.addEventListener('click', function() {
-                document.getElementById('mobile-menu')?.classList.toggle('hidden');
+            const menu = document.getElementById('mobile-menu');
+            const backdrop = document.getElementById('mobile-backdrop');
+            const openBtn = document.getElementById('mobile-menu-btn');
+            const closeBtn = document.getElementById('mobile-menu-close');
+
+            function openMobileMenu() {
+                menu?.classList.remove('translate-x-[-105%]');
+                backdrop?.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+
+            window.closeMobileMenu = function() {
+                menu?.classList.add('translate-x-[-105%]');
+                backdrop?.classList.add('hidden');
+                document.body.style.overflow = '';
+            };
+
+            openBtn?.addEventListener('click', openMobileMenu);
+            closeBtn?.addEventListener('click', closeMobileMenu);
+            backdrop?.addEventListener('click', closeMobileMenu);
+
+            // Close on Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && !menu?.classList.contains('translate-x-[-105%]')) {
+                    closeMobileMenu();
+                }
             });
         });
 
