@@ -33,6 +33,7 @@ class ThemeHelperTest extends TestCase
         foreach ([
             'pocket-directory', 'service-console', 'decision-desk',
             'city-board', 'craft-market', 'quick-quote', 'district-showcase', 'sector-exchange',
+            'social-feed', 'chat-directory',
         ] as $template) {
             $this->assertArrayHasKey($template, ThemeHelper::TEMPLATES);
             $this->assertSame($template, ThemeHelper::TEMPLATES[$template]['layout']);
