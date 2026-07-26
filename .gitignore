@@ -34,3 +34,6 @@ Homestead.yaml
 Thumbs.db
 .wrongstack/
 .temp_files/
+!/.wrongstack/
+/.wrongstack/*
+!/.wrongstack/project.json
