@@ -36,10 +36,10 @@
 @if($categories->isNotEmpty())
 <section class="py-8 border-t" style="border-color:var(--border);background:var(--bg_card);">
     <div class="mx-auto px-4 text-center" style="max-width:900px;">
-        <h3 class="text-xs font-medium mb-3 uppercase tracking-widest" style="color:var(--text_muted);">Kategoriler</h3>
-        <div class="flex flex-wrap gap-1.5 justify-center">
+        <h3 class="text-xs font-medium mb-4 uppercase tracking-widest" style="color:var(--text_muted);">Kategoriler</h3>
+        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 md:gap-1.5 md:flex md:flex-wrap md:justify-center">
             @foreach($categories as $cat)
-            <a href="{{ route('categories.show',$cat->slug) }}" class="px-3 py-1 text-xs rounded" style="color:var(--text_muted);">{{ $cat->name }}</a>
+            <a href="{{ route('categories.show',$cat->slug) }}" class="py-2 px-1 md:px-3 md:py-1 text-[11px] md:text-xs rounded text-center truncate" style="color:var(--text_muted);" title="{{ $cat->name }}">{{ $cat->name }}</a>
             @endforeach
         </div>
     </div>
