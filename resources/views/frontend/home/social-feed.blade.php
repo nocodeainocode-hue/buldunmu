@@ -14,6 +14,7 @@
         .feed-shell { min-height:100vh !important; border:0 !important; border-radius:0 !important; }
     }
     .story-ring { background:linear-gradient(135deg,var(--hero_gradient_from),var(--hero_gradient_to)); }
+    html.theme-social-feed #pwa-install-banner { bottom:60px !important; }
 </style>
 @endpush
 

@@ -50,6 +50,17 @@
 
     <style>
         {!! \App\View\Helpers\ThemeHelper::cssVariables($directory ?? null) !!}
+        @php $mobileShellTemplates = ['pocket-directory', 'social-feed', 'chat-directory']; @endphp
+        @if(in_array(($directory->template ?? 'default'), $mobileShellTemplates))
+        html.theme-{{ $directory->template }} body > header,
+        html.theme-{{ $directory->template }} body > footer { display:none; }
+        html.theme-{{ $directory->template }} body { background:var(--bg) !important; }
+        html.theme-{{ $directory->template }} body > main { padding:4px 0; }
+        @media (max-width:520px) {
+            html.theme-{{ $directory->template }} body > main { padding:0; }
+        }
+        html.theme-{{ $directory->template }} #pwa-install-banner { bottom:60px !important; }
+        @endif
     </style>
 
     {{-- Dynamic Google Fonts per template --}}
