@@ -16,4 +16,18 @@ class EditCompany extends EditRecord
             DeleteAction::make(),
         ];
     }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        if ($data['is_global'] ?? false) {
+            $data['directory_id'] = null;
+        } else {
+            $dir = app()->bound('currentDirectory') ? app('currentDirectory') : null;
+            if ($dir) {
+                $data['directory_id'] = $dir->id;
+            }
+        }
+        unset($data['is_global']);
+        return $data;
+    }
 }

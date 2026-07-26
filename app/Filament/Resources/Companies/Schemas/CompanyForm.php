@@ -271,6 +271,10 @@ class CompanyForm
                                 'passive' => 'Pasif',
                             ])
                             ->default('pending'),
+                        Toggle::make('is_global')
+                            ->label('Tüm rehberlerde görünsün')
+                            ->helperText('Açık ise bu firma tüm tenant\'larda görünür. Kapalı ise yalnızca seçili tenant\'ta görünür.')
+                            ->default(false),
                     ]),
 
                 Section::make('SEO')

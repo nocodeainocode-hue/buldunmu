@@ -12,10 +12,15 @@ class CreateCompany extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $dir = app()->bound('currentDirectory') ? app('currentDirectory') : null;
-        if ($dir) {
-            $data['directory_id'] = $dir->id;
+        if ($data['is_global'] ?? false) {
+            $data['directory_id'] = null;
+        } else {
+            $dir = app()->bound('currentDirectory') ? app('currentDirectory') : null;
+            if ($dir) {
+                $data['directory_id'] = $dir->id;
+            }
         }
+        unset($data['is_global']);
         return $data;
     }
 
