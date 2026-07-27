@@ -262,6 +262,7 @@
                         <li><a href="{{ route('packages.index') }}" class="transition hover:text-white">Üyelik Paketleri</a></li>
                         <li><a href="{{ route('pages.about') }}" class="transition hover:text-white">Hakkımızda</a></li>
                         <li><a href="{{ route('pages.contact') }}" class="transition hover:text-white">İletişim</a></li>
+                        <li><button onclick="window._installPwa ? window._installPwa() : null" class="pwa-install-btn hidden transition hover:text-white" style="color:#94a3b8;">📲 Uygulamayı Yükle</button></li>
                     </ul>
                 </div>
                 <div>
