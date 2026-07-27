@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             DistrictSeeder::class,
             SiteSettingSeeder::class,
             CompanySeeder::class,
+            SampleCompaniesSeeder::class,
         ]);
     }
 }
