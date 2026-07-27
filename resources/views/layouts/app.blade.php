@@ -59,7 +59,7 @@
         @media (max-width:520px) {
             html.theme-{{ $directory->template }} body > main { padding:0; }
         }
-        html.theme-{{ $directory->template }} #pwa-install-banner { bottom:60px !important; }
+        html.theme-{{ $directory->template }} .mobile-shell { border:0; border-radius:0; }
         @endif
     </style>
 
@@ -79,19 +79,6 @@
     @stack('head')
 </head>
 <body class="min-h-screen flex flex-col" style="background-color:var(--bg);color:var(--text);font-family:var(--font_body);">
-    {{-- PWA Install Banner --}}
-    <div id="pwa-install-banner" class="fixed inset-x-0 bottom-0 z-50 hidden translate-y-full border-t px-4 py-3 shadow-2xl transition-transform duration-300" style="background:var(--bg_card);border-color:var(--border);">
-        <div class="mx-auto flex max-w-2xl items-center gap-3">
-            <button id="pwa-install-dismiss" class="shrink-0 rounded-full p-1 transition hover:opacity-70" style="color:var(--text_muted);" aria-label="Kapat">
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-            </button>
-            <div class="flex-1 text-left">
-                <div class="text-sm font-black" style="color:var(--text);">Uygulamayı yükle</div>
-                <div class="text-xs" style="color:var(--text_muted);">Ana ekrana ekleyerek hızlı erişim sağlayın.</div>
-            </div>
-            <button id="pwa-install-btn" class="shrink-0 rounded-xl px-5 py-2 text-sm font-black text-white shadow-sm transition hover:opacity-90" style="background:var(--primary);">Yükle</button>
-        </div>
-    </div>
 
     <header class="sticky top-0 z-50 border-b backdrop-blur" style="background-color:color-mix(in srgb,var(--bg_card) 92%,transparent);border-color:var(--border);box-shadow:var(--card_shadow);">
         <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width:var(--page_width,1280px);">
@@ -241,23 +228,11 @@
     </header>
 
     <main class="flex-1">
-        {{-- PWA Install Banner --}}
-        <div id="pwa-install-banner" class="hidden fixed bottom-4 left-4 right-4 z-[9999] translate-y-full transition-transform duration-300">
-            <div class="mx-auto flex max-w-md items-center gap-3 rounded-2xl border bg-white p-4 shadow-2xl" style="max-width:var(--page_width,1280px);border-color:var(--border);">
-                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-lg font-black text-white" style="background:var(--primary);">
-                    {{ mb_substr($directory->name ?? $settings->site_name ?? 'F', 0, 1) }}
-                </div>
-                <div class="min-w-0 flex-1">
-                    <div class="truncate text-sm font-bold" style="color:var(--text);">{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}</div>
-                    <div class="text-xs" style="color:var(--text_muted);">Uygulamayı ana ekrana ekle</div>
-                </div>
-                <button id="pwa-install-btn" class="shrink-0 rounded-xl px-4 py-2 text-sm font-bold text-white" style="background:var(--primary);">Yükle</button>
-                <button id="pwa-install-dismiss" class="shrink-0 p-1" style="color:var(--text_muted);" aria-label="Kapat">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                </button>
-            </div>
-        </div>
-        @yield('content')
+        @if(!request()->routeIs('home') && in_array(($directory->template ?? 'default'), $mobileShellTemplates))
+            @include('partials.mobile-shell')
+        @else
+            @yield('content')
+        @endif
     </main>
 
     <footer style="background-color:#0f172a;color:#cbd5e1;">
@@ -349,14 +324,11 @@
             });
         }
 
-        // PWA Install Prompt (beforeinstallprompt)
+        // PWA Install Prompt — exposes window._installPwa() for buttons to call
         (function () {
             let deferredPrompt = null;
-            const banner  = document.getElementById('pwa-install-banner');
-            const install = document.getElementById('pwa-install-btn');
-            const dismiss = document.getElementById('pwa-install-dismiss');
 
-            if (!banner || !install || !dismiss) return;
+            window._pwaInstallReady = false;
 
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
@@ -366,37 +338,29 @@
                 if (window.matchMedia('(display-mode: standalone)').matches) return;
                 if (navigator.standalone) return;
 
-                banner.classList.remove('hidden');
-                requestAnimationFrame(() => {
-                    banner.classList.remove('translate-y-full');
-                });
+                window._pwaInstallReady = true;
+                document.body.classList.add('pwa-installable');
+
+                // Show install buttons
+                document.querySelectorAll('.pwa-install-btn').forEach(el => el.classList.remove('hidden'));
             });
 
-            install.addEventListener('click', async () => {
+            window._installPwa = async function() {
                 if (!deferredPrompt) return;
                 deferredPrompt.prompt();
                 const { outcome } = await deferredPrompt.userChoice;
                 console.log('[PWA] Install outcome:', outcome);
                 deferredPrompt = null;
-                hideBanner();
-            });
+                window._pwaInstallReady = false;
+                document.body.classList.remove('pwa-installable');
+                document.querySelectorAll('.pwa-install-btn').forEach(el => el.classList.add('hidden'));
+            };
 
-            dismiss.addEventListener('click', () => {
-                deferredPrompt = null;
-                hideBanner();
-            });
-
-            function hideBanner() {
-                banner.classList.add('translate-y-full');
-                banner.addEventListener('transitionend', () => {
-                    banner.classList.add('hidden');
-                }, { once: true });
-            }
-
-            // Hide banner if app was installed elsewhere
             window.addEventListener('appinstalled', () => {
                 deferredPrompt = null;
-                hideBanner();
+                window._pwaInstallReady = false;
+                document.body.classList.remove('pwa-installable');
+                document.querySelectorAll('.pwa-install-btn').forEach(el => el.classList.add('hidden'));
             });
         })();
     </script>

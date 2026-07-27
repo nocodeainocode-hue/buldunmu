@@ -13,7 +13,6 @@
         html.theme-chat-directory body > main { padding:0; }
         .chat-shell { min-height:100vh !important; border:0 !important; border-radius:0 !important; }
     }
-    html.theme-chat-directory #pwa-install-banner { bottom:60px !important; }
 </style>
 @endpush
 
