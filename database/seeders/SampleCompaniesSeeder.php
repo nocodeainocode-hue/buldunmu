@@ -77,10 +77,10 @@ class SampleCompaniesSeeder extends Seeder
                 'premium_until'    => ($c['premium'] ?? false) ? now()->addMonths(2) : null,
                 'status'           => 'active',
                 'view_count'       => rand(50, 2500),
-                'opening_hours'    => json_encode([
-                    'Pazartesi' => '09:00-22:00', 'Salı' => '09:00-22:00', 'Çarşamba' => '09:00-22:00',
-                    'Perşembe' => '09:00-22:00', 'Cuma' => '09:00-23:00',
-                    'Cumartesi' => '10:00-23:00', 'Pazar' => '10:00-20:00',
+                'opening_hours'    => implode("\n", [
+                    'Pazartesi 09:00-22:00', 'Salı 09:00-22:00', 'Çarşamba 09:00-22:00',
+                    'Perşembe 09:00-22:00', 'Cuma 09:00-23:00',
+                    'Cumartesi 10:00-23:00', 'Pazar 10:00-20:00',
                 ]),
             ]);
             $created++;
