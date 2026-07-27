@@ -7,7 +7,6 @@ use App\Models\City;
 use App\Models\Company;
 use App\Models\District;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class SampleCompaniesSeeder extends Seeder
 {
@@ -56,14 +55,19 @@ class SampleCompaniesSeeder extends Seeder
         ];
 
         $created = 0;
+        $skipped = 0;
         foreach ($companies as $c) {
             $sid = $catId($c['cat']);
             $cid = $cityId($c['city']);
             $did = $distId($c['dist']);
 
+            if (Company::withoutGlobalScopes()->where('name', $c['name'])->exists()) {
+                $skipped++;
+                continue;
+            }
+
             Company::create([
                 'name'             => $c['name'],
-                'slug'             => Str::slug($c['name']),
                 'category_id'      => $sid,
                 'city_id'          => $cid,
                 'district_id'      => $did,
@@ -86,6 +90,6 @@ class SampleCompaniesSeeder extends Seeder
             $created++;
         }
 
-        $this->command->info("✅ {$created} sample companies seeded.");
+        $this->command->info("✅ {$created} created, {$skipped} skipped (already exist).");
     }
 }
