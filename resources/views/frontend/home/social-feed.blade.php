@@ -22,6 +22,9 @@
 
     {{-- App bar --}}
     <div class="flex items-center justify-between border-b px-4 py-3" style="border-color:var(--border);">
+        <button onclick="window.openMobileMenu?.()" class="rounded-lg p-1.5 transition hover:bg-black/5" style="color:var(--text);" aria-label="Menü">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
         <a href="{{ route('home') }}" class="flex min-w-0 items-center gap-2">
             <span class="story-ring flex h-9 w-9 items-center justify-center rounded-xl text-sm font-black text-white">{{ mb_substr($directory->name ?? $settings->site_name ?? 'R', 0, 1) }}</span>
             <strong class="truncate text-base" style="color:var(--text);font-family:var(--font_heading);">{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}</strong>

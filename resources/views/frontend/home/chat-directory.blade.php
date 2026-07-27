@@ -22,7 +22,10 @@
     {{-- App bar (messenger style) --}}
     <div class="px-4 pb-3 pt-4" style="background:linear-gradient(135deg,var(--hero_gradient_from),var(--hero_gradient_to));">
         <div class="flex items-center justify-between">
-            <div class="min-w-0">
+            <button onclick="window.openMobileMenu?.()" class="rounded-lg p-1.5 transition hover:bg-white/10" style="color:white;" aria-label="Menü">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+            <div class="min-w-0 flex-1 px-2">
                 <strong class="block truncate text-lg text-white" style="font-family:var(--font_heading);">{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}</strong>
                 <span class="text-[11px] text-white/80">{{ \App\Models\Company::active()->count() }} işletme çevrimiçi gibi listelendi</span>
             </div>
