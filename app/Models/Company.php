@@ -222,6 +222,27 @@ class Company extends Model
         return $this;
     }
 
+    /**
+     * Normalize opening_hours to readable text regardless of storage format.
+     * Accepts both JSON ({"Pazartesi":"09:00-22:00",...}) and plain text.
+     */
+    public function getOpeningHoursAttribute($value): string
+    {
+        if (blank($value)) return '';
+
+        // Detect JSON format
+        if (in_array(($value[0] ?? ''), ['{', '['])) {
+            $decoded = json_decode($value, true);
+            if (is_array($decoded)) {
+                return collect($decoded)
+                    ->map(fn($hours, $day) => "{$day} {$hours}")
+                    ->implode("\n");
+            }
+        }
+
+        return $value;
+    }
+
     public function isOpenNow(?CarbonInterface $now = null): ?bool
     {
         if (blank($this->opening_hours)) {
