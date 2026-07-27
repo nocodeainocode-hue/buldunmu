@@ -409,7 +409,7 @@
         {{-- ═══ SIDEBAR ═══ --}}
         <aside class="space-y-6">
             {{-- Contact Card --}}
-            <div class="sticky top-24 rounded-3xl border bg-white p-5 shadow-lg" style="border-color:var(--border);box-shadow:var(--card_shadow);">
+            <div class="lg:sticky lg:top-24 rounded-3xl border bg-white p-5 shadow-lg" style="border-color:var(--border);box-shadow:var(--card_shadow);">
                 <h3 class="mb-4 text-lg font-black" style="color:var(--text);">📋 Firma Bilgileri</h3>
                 <dl class="space-y-4 text-sm">
                     <div>
