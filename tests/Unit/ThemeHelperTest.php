@@ -81,6 +81,19 @@ class ThemeHelperTest extends TestCase
         $this->assertEquals('default', ThemeHelper::layoutFile($dir2));
     }
 
+    public function test_usta_pro_templates_are_registered(): void
+    {
+        // demo11 tarzı usta rehberi düzeni: ana tema + koyu varyant aynı layout'u paylaşır
+        $this->assertArrayHasKey('usta-pro', ThemeHelper::TEMPLATES);
+        $this->assertArrayHasKey('usta-premium', ThemeHelper::TEMPLATES);
+        $this->assertSame('usta-pro', ThemeHelper::TEMPLATES['usta-pro']['layout']);
+        $this->assertSame('usta-pro', ThemeHelper::TEMPLATES['usta-premium']['layout']);
+        $this->assertFileExists(resource_path('views/frontend/home/usta-pro.blade.php'));
+        // CTA/buton metni token'ı her iki varyantta da tanımlı olmalı
+        $this->assertArrayHasKey('btn_text', ThemeHelper::TEMPLATES['usta-pro']);
+        $this->assertArrayHasKey('btn_text', ThemeHelper::TEMPLATES['usta-premium']);
+    }
+
     public function test_card_partial_resolves_correctly(): void
     {
         $dir = new Directory(['template' => 'premium-showcase']);

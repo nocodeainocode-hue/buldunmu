@@ -20,9 +20,11 @@ class CompanyTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->dir = Directory::create(['name'=>'Test','slug'=>'test','domain'=>'test.local','status'=>'active']);
+        // slug_pattern '{name}': slug servisinin varsayılan '{name}-{city}' deseni test sluglarını değiştirirdi
+        $this->dir = Directory::create(['name'=>'Test','slug'=>'test','domain'=>'test.local','status'=>'active','slug_pattern'=>'{name}']);
         $this->category = Category::create(['name'=>'Restoran','slug'=>'restoran','status'=>'active','directory_id'=>$this->dir->id]);
-        $this->city = City::create(['name'=>'İstanbul','slug'=>'istanbul','directory_id'=>$this->dir->id]);
+        // Şehir sayfaları yalnızca paylaşılan (directory_id NULL) şehirlere hizmet verir
+        $this->city = City::create(['name'=>'İstanbul','slug'=>'istanbul']);
     }
 
     public function test_company_detail_page_shows_info(): void

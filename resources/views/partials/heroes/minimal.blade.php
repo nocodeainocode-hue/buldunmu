@@ -10,7 +10,8 @@
                 <button type="submit" class="px-6 py-3 text-white text-sm font-medium rounded-lg transition" style="background-color: var(--primary);">Ara</button>
             </div>
         </form>
-        <div class="flex justify-center gap-6 mt-10 text-sm" style="color: var(--text_muted);">
+        {{-- flex-wrap: 6 kategori linki dar ekranlarda tek satıra sığmayıp yatay kaydırma yaratıyordu --}}
+        <div class="flex flex-wrap justify-center gap-x-6 gap-y-3 mt-10 px-4 text-sm" style="color: var(--text_muted);">
             @php $cats = \App\Models\Category::active()->withCount('companies')->orderByDesc('companies_count')->take(6)->get(); @endphp
             @foreach($cats as $cat)
                 <a href="{{ route('categories.show', $cat->slug) }}" class="hover:underline">{{ $cat->name }}</a>
