@@ -61,4 +61,20 @@ class MembershipPlanTest extends TestCase
         $fresh = MembershipPlan::find($plan->id);
         $this->assertIsArray($fresh->features);
     }
+
+    public function test_global_plan_can_be_created_without_a_directory(): void
+    {
+        $plan = MembershipPlan::create([
+            'name' => 'Genel Paket',
+            'slug' => 'genel-paket',
+            'price' => 499,
+            'is_active' => true,
+        ]);
+
+        $this->assertNull($plan->directory_id);
+        $this->assertDatabaseHas('membership_plans', [
+            'slug' => 'genel-paket',
+            'directory_id' => null,
+        ]);
+    }
 }

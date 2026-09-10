@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources\MembershipPlans\Tables;
 
+use App\Models\Directory;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class MembershipPlansTable
@@ -22,6 +24,12 @@ class MembershipPlansTable
                 TextColumn::make('name')
                     ->label('Plan Adı')
                     ->searchable()
+                    ->sortable(),
+                TextColumn::make('directory.name')
+                    ->label('Rehber')
+                    ->badge()
+                    ->placeholder('Genel')
+                    ->color(fn ($state): string => filled($state) ? 'info' : 'success')
                     ->sortable(),
                 TextColumn::make('slug')
                     ->label('Slug')
@@ -59,6 +67,14 @@ class MembershipPlansTable
                     ->sortable(),
             ])
             ->defaultSort('sort_order', 'asc')
+            ->filters([
+                SelectFilter::make('directory_id')
+                    ->label('Rehber')
+                    ->options(fn (): array => Directory::query()
+                        ->orderBy('name')
+                        ->pluck('name', 'id')
+                        ->all()),
+            ])
             ->recordActions([
                 EditAction::make(),
             ])

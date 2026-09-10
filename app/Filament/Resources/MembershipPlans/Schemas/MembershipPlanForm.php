@@ -9,6 +9,8 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Utilities\Get;
+use Illuminate\Validation\Rules\Unique;
 
 class MembershipPlanForm
 {
@@ -25,14 +27,21 @@ class MembershipPlanForm
                         TextInput::make('slug')
                             ->label('Slug')
                             ->required()
-                            ->unique(ignoreRecord: true)
+                            ->unique(
+                                ignoreRecord: true,
+                                modifyRuleUsing: fn (Unique $rule, Get $get): Unique => filled($get('directory_id'))
+                                    ? $rule->where('directory_id', $get('directory_id'))
+                                    : $rule->whereNull('directory_id'),
+                            )
                             ->maxLength(255)
-                            ->helperText('URL için benzersiz tanımlayıcı'),
+                            ->helperText('Aynı rehber içinde benzersiz tanımlayıcı'),
                         Select::make('directory_id')
                             ->label('Rehber')
                             ->options(fn() => Directory::orderBy('name')->pluck('name', 'id')->toArray())
                             ->searchable()
-                            ->required()
+                            ->live()
+                            ->placeholder('Genel paket')
+                            ->helperText('Boş bırakırsanız özel paketi olmayan rehberlerde gösterilir.')
                             ->default(fn() => app()->bound('currentDirectory') ? app('currentDirectory')->id : null),
                         TextInput::make('price')
                             ->label('Fiyat')

@@ -13,7 +13,8 @@ class PaketController extends Controller
         $settings = SiteSetting::getSettings();
         $directory = app()->bound('currentDirectory') ? app('currentDirectory') : null;
 
-        $plans = MembershipPlan::where('is_active', true)
+        $plans = MembershipPlan::forDirectoryWithFallback($directory)
+            ->active()
             ->orderBy('sort_order', 'asc')
             ->get();
 
