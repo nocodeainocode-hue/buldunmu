@@ -17,6 +17,7 @@ use Filament\PanelProvider;
 use Filament\Navigation\NavigationGroup;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Width;
+use Filament\View\PanelsRenderHook;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -87,6 +88,10 @@ class AdminPanelProvider extends PanelProvider
                     'directories' => Directory::orderBy('name')->get(),
                     'current' => app()->bound('currentDirectory') ? app('currentDirectory') : null,
                 ]),
+            )
+            ->renderHook(
+                PanelsRenderHook::SIDEBAR_FOOTER,
+                fn () => view('filament.version-badge'),
             );
     }
 }

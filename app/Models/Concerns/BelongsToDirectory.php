@@ -12,13 +12,24 @@ trait BelongsToDirectory
         static::addGlobalScope('directory', function (Builder $builder) {
             $dir = app()->bound('currentDirectory') ? app('currentDirectory') : null;
             if ($dir) {
-                $table = $builder->getModel()->getTable();
-                $builder->where(function ($q) use ($table, $dir) {
-                    $q->whereNull("{$table}.directory_id")
-                      ->orWhere("{$table}.directory_id", $dir->id);
-                });
+                $model = $builder->getModel();
+                $table = $model->getTable();
+
+                if ($model->allowsSharedDirectoryRecords()) {
+                    $builder->where(function ($q) use ($table, $dir) {
+                        $q->whereNull("{$table}.directory_id")
+                          ->orWhere("{$table}.directory_id", $dir->id);
+                    });
+                } else {
+                    $builder->where("{$table}.directory_id", $dir->id);
+                }
             }
         });
+    }
+
+    public function allowsSharedDirectoryRecords(): bool
+    {
+        return true;
     }
 
     public function directory()

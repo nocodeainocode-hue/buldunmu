@@ -2,11 +2,14 @@
 
 namespace App\Filament\Resources\ListingRequests\Tables;
 
+use App\Models\Directory;
+use App\Models\ListingRequest;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Notifications\Notification;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -20,6 +23,13 @@ class ListingRequestsTable
             ->columns([
                 TextColumn::make('company_name')
                     ->label('Firma Adı')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('directory.name')
+                    ->label('Geldiği Rehber')
+                    ->badge()
+                    ->placeholder('Eski kayıt - rehber seçilmemiş')
+                    ->color(fn ($state): string => filled($state) ? 'info' : 'danger')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('contact_name')
@@ -70,6 +80,12 @@ class ListingRequestsTable
                         'approved' => 'Onaylandı',
                         'rejected' => 'Reddedildi',
                     ]),
+                SelectFilter::make('directory_id')
+                    ->label('Rehber')
+                    ->options(fn (): array => Directory::query()
+                        ->orderBy('name')
+                        ->pluck('name', 'id')
+                        ->all()),
             ])
             ->recordActions([
                 Action::make('approve')
@@ -78,24 +94,27 @@ class ListingRequestsTable
                     ->color('success')
                     ->requiresConfirmation()
                     ->modalHeading('Firma Kaydına Dönüştür')
-                    ->modalDescription('Bu talep onaylanacak ve yeni bir firma kaydı oluşturulacak. Onaylıyor musunuz?')
-                    ->action(function ($record) {
-                        $record->update(['status' => 'reviewed']);
-
-                        $company = \App\Models\Company::create([
-                            'name' => $record->company_name,
-                            'directory_id' => $record->directory_id,
-                            'category_id' => $record->category_id,
-                            'city_id' => $record->city_id,
-                            'district_id' => $record->district_id,
-                            'phone' => $record->phone,
-                            'whatsapp' => $record->whatsapp,
-                            'email' => $record->email,
-                            'website' => $record->website,
-                            'status' => 'active',
-                        ]);
-
-                        $record->update(['status' => 'approved']);
+                    ->modalDescription(fn (ListingRequest $record): string => $record->directory
+                        ? "Firma yalnızca {$record->directory->name} rehberine eklenecek. Onaylıyor musunuz?"
+                        : 'Bu eski talepte kaynak rehber kayıtlı değil. Firmanın ekleneceği rehberi seçin.')
+                    ->form([
+                        Select::make('directory_id')
+                            ->label('Hedef Rehber')
+                            ->options(fn (): array => Directory::query()
+                                ->where('status', 'active')
+                                ->orderBy('name')
+                                ->pluck('name', 'id')
+                                ->all())
+                            ->searchable()
+                            ->preload()
+                            ->required()
+                            ->default(fn (ListingRequest $record): ?int => $record->directory_id)
+                            ->disabled(fn (ListingRequest $record): bool => filled($record->directory_id))
+                            ->dehydrated(),
+                    ])
+                    ->action(function (ListingRequest $record, array $data) {
+                        $directoryId = $record->directory_id ?: (int) $data['directory_id'];
+                        $company = $record->approveToCompany($directoryId);
 
                         Notification::make()
                             ->title('Firma oluşturuldu!')

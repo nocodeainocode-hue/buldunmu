@@ -15,6 +15,11 @@ class Company extends Model
 
     private bool $slugChangeAllowed = false;
 
+    public function allowsSharedDirectoryRecords(): bool
+    {
+        return false;
+    }
+
     protected static function booted(): void
     {
         static::creating(function (self $company) {

@@ -28,12 +28,13 @@ class UstaProThemeTest extends TestCase
         ]);
     }
 
-    private function seedDirectoryContent(): void
+    private function seedDirectoryContent(Directory $directory): void
     {
         $city = City::create(['name' => 'İstanbul', 'slug' => 'istanbul']);
         $category = Category::create(['name' => 'Su Tesisatçısı', 'slug' => 'su-tesisatcisi', 'status' => 'active']);
 
         Company::create([
+            'directory_id' => $directory->id,
             'name' => 'Yılmaz Tesisat',
             'slug' => 'yilmaz-tesisat',
             'category_id' => $category->id,
@@ -47,8 +48,8 @@ class UstaProThemeTest extends TestCase
 
     public function test_home_renders_with_usta_pro_layout(): void
     {
-        $this->makeDirectory('usta-pro');
-        $this->seedDirectoryContent();
+        $directory = $this->makeDirectory('usta-pro');
+        $this->seedDirectoryContent($directory);
 
         $response = $this->get('/');
 

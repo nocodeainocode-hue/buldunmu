@@ -21,8 +21,14 @@ class SetCurrentDirectory
         }
         // Frontend: domain-based resolution
         else {
-            $host = $request->getHost();
-            $directory = Directory::where('domain', $host)->first();
+            $host = strtolower($request->getHost());
+            $rootHost = str_starts_with($host, 'www.') ? substr($host, 4) : $host;
+
+            $directory = Directory::whereIn('domain', [$host, $rootHost, 'www.' . $rootHost])->first();
+
+            if (! $directory && app()->environment('production')) {
+                abort(404);
+            }
         }
 
         if ($directory) {
