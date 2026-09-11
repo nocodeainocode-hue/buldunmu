@@ -26,10 +26,9 @@ class SitemapController extends Controller
             ->whereHas('companies', fn($q) => $q->active())
             ->get();
 
-        $posts = Post::published()
+        $posts = Post::publishedForDirectory($directory)
             ->where('is_indexable', true)
             ->whereNull('canonical_url')
-            ->when($directory, fn($q) => $q->whereHas('directories', fn($q) => $q->where('directory_id', $directory->id)))
             ->latest('published_at')
             ->get();
 

@@ -46,11 +46,11 @@ class CategoryController extends Controller
         $seoContent = $this->buildSeoContent($category, $popularCities);
 
         // Blog posts from this directory
-        $postsQuery = Post::published()->with('directories');
-        if ($directory) {
-            $postsQuery->whereHas('directories', fn($q) => $q->where('directory_id', $directory->id));
-        }
-        $posts = $postsQuery->latest('published_at')->take(3)->get();
+        $posts = Post::publishedForDirectory($directory)
+            ->with('directories')
+            ->latest('published_at')
+            ->take(3)
+            ->get();
 
         // Total companies in category
         $totalInCategory = Company::active()->where('category_id', $category->id)->count();

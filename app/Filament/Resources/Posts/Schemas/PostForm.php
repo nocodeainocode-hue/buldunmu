@@ -26,7 +26,7 @@ class PostForm
                 Section::make('Blog Yazisi')
                     ->schema([
                         Select::make('directories')
-                            ->label('Birincil Rehber')
+                            ->label('Rehber')
                             ->relationship(
                                 'directories',
                                 'name',
@@ -39,11 +39,9 @@ class PostForm
                             ->maxItems(1)
                             ->searchable()
                             ->preload()
-                            ->required()
-                            ->minItems(1)
-                            ->rules(['required', 'array', 'min:1'])
-                            ->validationMessages(['required'=>'En az bir rehber secmelisiniz','min'=>'En az bir rehber secmelisiniz'])
-                            ->helperText('Her yazı yalnızca bir rehberde yayınlanır. Aynı içeriği başka rehbere bağlamayın.'),
+                            ->placeholder('Genel yazı')
+                            ->default(fn () => app()->bound('currentDirectory') ? [app('currentDirectory')->id] : [])
+                            ->helperText('Boş bırakırsanız özel blog yazısı olmayan rehberlerde gösterilir.'),
                         Grid::make(2)->schema([
                             TextInput::make('title')->label('Baslik')->required()->live(onBlur: true)
                                 ->afterStateUpdated(fn($s, callable $set) => $set('slug', Str::slug($s))),

@@ -115,8 +115,7 @@ class CompanyController extends Controller
             ->get();
 
         // Related posts for SEO
-        $relatedPosts = Post::published()
-            ->whereHas('directories', fn($q) => $q->where('directory_id', $directory->id ?? 0))
+        $relatedPosts = Post::publishedForDirectory($directory)
             ->latest('published_at')
             ->take(3)
             ->get();

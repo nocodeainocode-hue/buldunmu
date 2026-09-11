@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
@@ -30,6 +31,23 @@ class Post extends Model
     public function scopePublished($query)
     {
         return $query->where('status', 'published')->where('published_at', '<=', now());
+    }
+
+    public static function publishedForDirectory(?Directory $directory): Builder
+    {
+        $query = static::query()->published();
+
+        if (! $directory) {
+            return $query->whereDoesntHave('directories');
+        }
+
+        $hasDirectoryPosts = (clone $query)
+            ->whereHas('directories', fn (Builder $directoryQuery) => $directoryQuery->whereKey($directory->id))
+            ->exists();
+
+        return $hasDirectoryPosts
+            ? $query->whereHas('directories', fn (Builder $directoryQuery) => $directoryQuery->whereKey($directory->id))
+            : $query->whereDoesntHave('directories');
     }
 
     public function robotsDirective(): string

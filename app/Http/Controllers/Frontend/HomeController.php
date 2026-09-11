@@ -39,11 +39,11 @@ class HomeController extends Controller
             ->latest()
             ->take(60)
             ->get();
-        $postsQuery = Post::published()->with('directories');
-        if ($directory) {
-            $postsQuery->whereHas('directories', fn($q) => $q->where('directory_id', $directory->id));
-        }
-        $posts = $postsQuery->latest('published_at')->take(3)->get();
+        $posts = Post::publishedForDirectory($directory)
+            ->with('directories')
+            ->latest('published_at')
+            ->take(3)
+            ->get();
 
         $layout = ThemeHelper::layoutFile($directory);
         $viewName = 'frontend.home.' . (view()->exists('frontend.home.' . $layout) ? $layout : 'default');

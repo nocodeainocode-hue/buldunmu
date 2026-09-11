@@ -54,11 +54,11 @@ class CityController extends Controller
             'aradığınız hizmeti en hızlı şekilde bulabilir, firma profillerini inceleyerek karar verebilirsiniz.';
 
         // Blog posts
-        $postsQuery = Post::published()->with('directories');
-        if ($directory) {
-            $postsQuery->whereHas('directories', fn($q) => $q->where('directory_id', $directory->id));
-        }
-        $posts = $postsQuery->latest('published_at')->take(3)->get();
+        $posts = Post::publishedForDirectory($directory)
+            ->with('directories')
+            ->latest('published_at')
+            ->take(3)
+            ->get();
 
         return view('frontend.cities.show', compact(
             'city', 'companies', 'districts', 'directory', 'popularCategories',
@@ -111,11 +111,11 @@ class CityController extends Controller
         $seoContent = $this->buildSeoContent($city, $popularCategories);
 
         // Blog posts from this directory
-        $postsQuery = Post::published()->with('directories');
-        if ($directory) {
-            $postsQuery->whereHas('directories', fn($q) => $q->where('directory_id', $directory->id));
-        }
-        $posts = $postsQuery->latest('published_at')->take(3)->get();
+        $posts = Post::publishedForDirectory($directory)
+            ->with('directories')
+            ->latest('published_at')
+            ->take(3)
+            ->get();
 
         $totalInCity = Company::active()->where('city_id', $city->id)->count();
 

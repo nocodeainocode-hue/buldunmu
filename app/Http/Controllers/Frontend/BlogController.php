@@ -14,10 +14,7 @@ class BlogController extends Controller
     {
         $directory = app()->bound('currentDirectory') ? app('currentDirectory') : null;
 
-        $query = Post::published()->with('directories');
-        if ($directory) {
-            $query->whereHas('directories', fn($q) => $q->where('directory_id', $directory->id));
-        }
+        $query = Post::publishedForDirectory($directory)->with('directories');
         if ($request->filled('q')) {
             $term = $request->string('q')->trim()->toString();
             $query->where(fn($q) => $q->where('title', 'like', "%{$term}%")->orWhere('excerpt', 'like', "%{$term}%"));
@@ -32,16 +29,9 @@ class BlogController extends Controller
     {
         $directory = app()->bound('currentDirectory') ? app('currentDirectory') : null;
 
-        $postQuery = Post::published()->where('slug', $slug);
-        if ($directory) {
-            $postQuery->whereHas('directories', fn($q) => $q->where('directory_id', $directory->id));
-        }
-        $post = $postQuery->firstOrFail();
+        $post = Post::publishedForDirectory($directory)->where('slug', $slug)->firstOrFail();
 
-        $relatedPosts = Post::published()
-            ->whereHas('directories', fn($q) =>
-                $q->whereIn('directory_id', $post->directories->pluck('id'))
-            )
+        $relatedPosts = Post::publishedForDirectory($directory)
             ->where('id', '!=', $post->id)
             ->latest('published_at')
             ->take(3)

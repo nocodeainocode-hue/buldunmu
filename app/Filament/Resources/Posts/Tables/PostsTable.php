@@ -19,7 +19,12 @@ class PostsTable
             ->columns([
                 ImageColumn::make('image')->label('Görsel')->circular()->disk('public'),
                 TextColumn::make('title')->label('Başlık')->searchable()->sortable(),
-                TextColumn::make('directories.name')->label('Rehberler')->badge()->separator(','),
+                TextColumn::make('directories.name')
+                    ->label('Rehber')
+                    ->badge()
+                    ->separator(',')
+                    ->placeholder('Genel')
+                    ->color(fn ($state): string => filled($state) ? 'info' : 'success'),
                 TextColumn::make('content_type')->label('Tür')->badge()
                     ->formatStateUsing(fn($state) => match ($state) {
                         'comparison' => 'Karşılaştırma',
@@ -47,13 +52,17 @@ class PostsTable
             ->filters([
                 SelectFilter::make('directory_id')
                     ->label('Rehber')
-                    ->options(fn() => Directory::query()
+                    ->options(fn() => ['general' => 'Genel'] + Directory::query()
                         ->orderBy('name')
                         ->pluck('name', 'id')
                         ->all())
                     ->searchable()
                     ->query(function (Builder $query, array $data): Builder {
                         $directoryId = $data['value'] ?? null;
+
+                        if ($directoryId === 'general') {
+                            return $query->whereDoesntHave('directories');
+                        }
 
                         return $query->when(
                             filled($directoryId),

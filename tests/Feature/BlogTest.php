@@ -23,6 +23,7 @@ class BlogTest extends TestCase
             'domain' => 'test.local',
             'status' => 'active',
         ]);
+        app()->instance('currentDirectory', $this->directory);
     }
 
     public function test_published_posts_appear_in_blog_listing(): void
@@ -57,6 +58,75 @@ class BlogTest extends TestCase
         $response = $this->get('/blog');
         $response->assertStatus(200);
         $response->assertDontSee('Draft Post');
+    }
+
+    public function test_general_posts_appear_when_directory_has_no_published_posts(): void
+    {
+        Post::create([
+            'title' => 'Genel Blog Yazisi',
+            'slug' => 'genel-blog-yazisi',
+            'content' => 'Genel content',
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+
+        $this->get('/blog')
+            ->assertOk()
+            ->assertSee('Genel Blog Yazisi');
+    }
+
+    public function test_directory_posts_replace_general_posts(): void
+    {
+        Post::create([
+            'title' => 'Genel Blog Yazisi',
+            'slug' => 'genel-blog-yazisi',
+            'content' => 'Genel content',
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+
+        $directoryPost = Post::create([
+            'title' => 'Rehbere Ozel Yazi',
+            'slug' => 'rehbere-ozel-yazi',
+            'content' => 'Ozel content',
+            'status' => 'published',
+            'published_at' => now(),
+            'directory_id' => $this->directory->id,
+        ]);
+        $directoryPost->directories()->attach($this->directory);
+
+        $this->get('/blog')
+            ->assertOk()
+            ->assertSee('Rehbere Ozel Yazi')
+            ->assertDontSee('Genel Blog Yazisi');
+
+        $this->get('/blog/genel-blog-yazisi')->assertNotFound();
+    }
+
+    public function test_draft_directory_post_does_not_hide_general_posts(): void
+    {
+        Post::create([
+            'title' => 'Genel Blog Yazisi',
+            'slug' => 'genel-blog-yazisi',
+            'content' => 'Genel content',
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+
+        $draft = Post::create([
+            'title' => 'Taslak Ozel Yazi',
+            'slug' => 'taslak-ozel-yazi',
+            'content' => 'Taslak content',
+            'status' => 'draft',
+            'published_at' => now(),
+            'directory_id' => $this->directory->id,
+        ]);
+        $draft->directories()->attach($this->directory);
+
+        $this->get('/blog')
+            ->assertOk()
+            ->assertSee('Genel Blog Yazisi')
+            ->assertDontSee('Taslak Ozel Yazi');
     }
 
     public function test_sitemap_includes_published_posts(): void
