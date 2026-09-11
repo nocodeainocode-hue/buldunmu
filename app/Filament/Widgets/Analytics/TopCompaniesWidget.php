@@ -8,6 +8,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Illuminate\Database\Eloquent\Builder;
 
 class TopCompaniesWidget extends BaseWidget
 {
@@ -30,20 +31,8 @@ class TopCompaniesWidget extends BaseWidget
     {
         $directoryId = $this->getPageDirectoryId();
 
-        $query = Company::withoutGlobalScope('directory')
-            ->when($directoryId, fn ($companies) => $companies->where('directory_id', $directoryId))
-            ->withCount(['pageViews as views_count' => function ($q) use ($directoryId) {
-                $q->withoutGlobalScope('directory');
-                if ($directoryId) {
-                    $q->directory($directoryId);
-                }
-            }])
-            ->having('views_count', '>', 0)
-            ->orderByDesc('views_count')
-            ->limit(10);
-
         return $table
-            ->query($query)
+            ->query($this->getTopCompaniesQuery($directoryId))
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('Firma')
@@ -56,6 +45,24 @@ class TopCompaniesWidget extends BaseWidget
                     ->alignEnd(),
             ])
             ->paginated(false);
+    }
+
+    protected function getTopCompaniesQuery(?int $directoryId): Builder
+    {
+        return Company::withoutGlobalScope('directory')
+            ->when($directoryId, fn ($companies) => $companies->where('directory_id', $directoryId))
+            ->whereHas('pageViews', function ($query) use ($directoryId): void {
+                $query->withoutGlobalScope('directory')
+                    ->when($directoryId, fn ($pageViews) => $pageViews->directory($directoryId));
+            })
+            ->withCount(['pageViews as views_count' => function ($q) use ($directoryId) {
+                $q->withoutGlobalScope('directory');
+                if ($directoryId) {
+                    $q->directory($directoryId);
+                }
+            }])
+            ->orderByDesc('views_count')
+            ->limit(10);
     }
 
     private function getPageDirectoryId(): ?int

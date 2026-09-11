@@ -6,6 +6,9 @@ use App\Filament\Widgets\Analytics\PageViewStats;
 use App\Filament\Widgets\Analytics\TopCompaniesWidget;
 use App\Filament\Widgets\Analytics\TopPagesWidget;
 use App\Filament\Widgets\Analytics\TrafficChartWidget;
+use App\Models\Category;
+use App\Models\City;
+use App\Models\Company;
 use App\Models\Directory;
 use App\Models\PageView;
 use App\Models\User;
@@ -74,5 +77,48 @@ class AnalyticsDashboardTest extends TestCase
         $data = $method->invoke($widget);
 
         $this->assertSame(1, array_sum($data['datasets'][0]['data']));
+    }
+
+    public function test_top_companies_query_does_not_use_a_postgres_incompatible_having_alias(): void
+    {
+        $directory = Directory::create([
+            'name' => 'Test Rehber',
+            'slug' => 'test-rehber',
+            'domain' => 'test.local',
+            'status' => 'active',
+        ]);
+        $category = Category::create([
+            'name' => 'Genel',
+            'slug' => 'genel',
+            'status' => 'active',
+            'directory_id' => null,
+        ]);
+        $city = City::create([
+            'name' => 'Tekirdağ',
+            'slug' => 'tekirdag',
+            'directory_id' => null,
+        ]);
+        $company = Company::create([
+            'name' => 'Test Firma',
+            'category_id' => $category->id,
+            'city_id' => $city->id,
+            'directory_id' => $directory->id,
+            'status' => 'active',
+        ]);
+        PageView::withoutGlobalScope('directory')->create([
+            'path' => '/firma/'.$company->slug,
+            'ip_hash' => hash('sha256', 'test'),
+            'company_id' => $company->id,
+            'directory_id' => $directory->id,
+            'created_at' => now(),
+        ]);
+
+        app()->instance('currentDirectory', $directory);
+        $widget = app(TopCompaniesWidget::class);
+        $method = new ReflectionMethod($widget, 'getTopCompaniesQuery');
+        $query = $method->invoke($widget, $directory->id);
+
+        $this->assertStringNotContainsString(' having ', strtolower($query->toSql()));
+        $this->assertSame($company->id, $query->first()?->id);
     }
 }
