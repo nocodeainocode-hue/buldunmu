@@ -2,32 +2,51 @@
 
 namespace App\Filament\Resources\Companies\Schemas;
 
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Fieldset;
-use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Schema;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\RichEditor;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
 class CompanyForm
 {
-    /** Admin panelinde seçili rehbere ait şehir/kategori/ilçeleri filtrele — çoklu kaydı engeller */
+    /** Ortak kataloğu ve varsa seçili rehbere özel kayıtları birlikte gösterir. */
     protected static function scopeByDirectory(Builder $query): Builder
     {
         $dir = app()->bound('currentDirectory') ? app('currentDirectory') : null;
+        $table = $query->getModel()->getTable();
 
-        return $dir
-            ? $query->where('directory_id', $dir->id)
-            : $query->whereNull('directory_id');
+        return $query
+            ->withoutGlobalScope('directory')
+            ->where(function (Builder $scope) use ($dir, $table): void {
+                $scope->whereNull("{$table}.directory_id");
+
+                if ($dir) {
+                    $scope->orWhere("{$table}.directory_id", $dir->id);
+                }
+            });
     }
+
+    protected static function scopeDistricts(Builder $query, mixed $cityId): Builder
+    {
+        return static::scopeByDirectory($query)
+            ->when(
+                filled($cityId),
+                fn (Builder $districts) => $districts->where('districts.city_id', $cityId),
+                fn (Builder $districts) => $districts->whereRaw('1 = 0'),
+            );
+    }
+
     public static function configure(Schema $schema): Schema
     {
         return $schema
@@ -41,8 +60,7 @@ class CompanyForm
                                     ->label('Firma Adı')
                                     ->required()
                                     ->live(onBlur: true)
-                                    ->afterStateUpdated(fn($state, callable $set) =>
-                                        $set('slug', Str::slug($state))
+                                    ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))
                                     ),
                                 TextInput::make('slug')
                                     ->label('Slug')
@@ -54,22 +72,29 @@ class CompanyForm
                             ->schema([
                                 Select::make('category_id')
                                     ->label('Kategori')
-                                    ->relationship('category', 'name', fn($query) => static::scopeByDirectory($query))
+                                    ->relationship('category', 'name', fn ($query) => static::scopeByDirectory($query))
                                     ->required()
                                     ->searchable()
                                     ->preload(),
                                 Select::make('city_id')
                                     ->label('Şehir')
-                                    ->relationship('city', 'name', fn($query) => static::scopeByDirectory($query))
+                                    ->relationship('city', 'name', fn ($query) => static::scopeByDirectory($query))
                                     ->required()
                                     ->searchable()
                                     ->preload()
-                                    ->live(),
+                                    ->live()
+                                    ->afterStateUpdated(fn (Set $set) => $set('district_id', null)),
                                 Select::make('district_id')
                                     ->label('İlçe')
-                                    ->relationship('district', 'name', fn($query) => static::scopeByDirectory($query))
+                                    ->relationship(
+                                        'district',
+                                        'name',
+                                        fn (Builder $query, Get $get) => static::scopeDistricts($query, $get('city_id')),
+                                    )
                                     ->searchable()
-                                    ->preload(),
+                                    ->preload()
+                                    ->disabled(fn (Get $get): bool => blank($get('city_id')))
+                                    ->helperText('Önce şehir seçin; yalnızca o şehrin ilçeleri listelenir.'),
                             ]),
                         Grid::make(2)
                             ->schema([
@@ -172,7 +197,7 @@ class CompanyForm
                             ->defaultItems(0)
                             ->addActionLabel('Fotoğraf Ekle')
                             ->collapsible()
-                            ->itemLabel(fn(array $state): ?string => !empty($state['image_path']) ? basename($state['image_path']) : 'Yeni Fotoğraf')
+                            ->itemLabel(fn (array $state): ?string => ! empty($state['image_path']) ? basename($state['image_path']) : 'Yeni Fotoğraf')
                             ->grid(2),
                     ]),
 
@@ -191,7 +216,7 @@ class CompanyForm
                             ->defaultItems(3)
                             ->addActionLabel('Hizmet Ekle')
                             ->collapsible()
-                            ->itemLabel(fn(array $state): ?string => $state['title'] ?? 'Yeni Hizmet')
+                            ->itemLabel(fn (array $state): ?string => $state['title'] ?? 'Yeni Hizmet')
                             ->grid(2),
                     ]),
 
@@ -215,7 +240,7 @@ class CompanyForm
                             ->defaultItems(3)
                             ->addActionLabel('Özellik Ekle')
                             ->collapsible()
-                            ->itemLabel(fn(array $state): ?string => $state['title'] ?? 'Yeni Özellik')
+                            ->itemLabel(fn (array $state): ?string => $state['title'] ?? 'Yeni Özellik')
                             ->grid(1),
                     ]),
 
@@ -244,7 +269,7 @@ class CompanyForm
                             ->defaultItems(0)
                             ->addActionLabel('Bağlantı Ekle')
                             ->collapsible()
-                            ->itemLabel(fn(array $state): ?string => $state['label'] ?? 'Yeni Bağlantı')
+                            ->itemLabel(fn (array $state): ?string => $state['label'] ?? 'Yeni Bağlantı')
                             ->grid(1),
                     ]),
 

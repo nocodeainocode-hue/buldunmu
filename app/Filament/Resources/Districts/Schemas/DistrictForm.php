@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\Districts\Schemas;
 
+use App\Models\City;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
 class DistrictForm
@@ -17,7 +19,15 @@ class DistrictForm
                     ->label('Şehir')
                     ->options(function () {
                         $dirId = app()->bound('currentDirectory') ? app('currentDirectory')->id : null;
-                        return \App\Models\City::when($dirId, fn($q) => $q->where('directory_id', $dirId))
+
+                        return City::withoutGlobalScope('directory')
+                            ->where(function (Builder $query) use ($dirId): void {
+                                $query->whereNull('cities.directory_id');
+
+                                if ($dirId) {
+                                    $query->orWhere('cities.directory_id', $dirId);
+                                }
+                            })
                             ->orderBy('name')
                             ->pluck('name', 'id');
                     })
@@ -28,7 +38,7 @@ class DistrictForm
                     ->label('İlçe Adı')
                     ->required()
                     ->live(onBlur: true)
-                    ->afterStateUpdated(fn($state, callable $set) => $set('slug', Str::slug($state))),
+                    ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))),
                 TextInput::make('slug')
                     ->label('Slug')
                     ->required()
