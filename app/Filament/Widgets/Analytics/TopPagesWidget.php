@@ -32,15 +32,8 @@ class TopPagesWidget extends BaseWidget
         $directoryId = $this->getPageDirectoryId();
 
         return $table
-            ->query(
-                PageView::withoutGlobalScope('directory')
-                    ->select('path')
-                    ->selectRaw('COUNT(*) as views')
-                    ->when($directoryId, fn (Builder $q) => $q->directory($directoryId))
-                    ->groupBy('path')
-                    ->orderByDesc('views')
-                    ->limit(15)
-            )
+            ->query($this->getTopPagesQuery($directoryId))
+            ->defaultKeySort(false)
             ->columns([
                 Tables\Columns\TextColumn::make('path')
                     ->label('Sayfa')
@@ -53,6 +46,17 @@ class TopPagesWidget extends BaseWidget
                     ->alignEnd(),
             ])
             ->paginated(false);
+    }
+
+    protected function getTopPagesQuery(?int $directoryId): Builder
+    {
+        return PageView::withoutGlobalScope('directory')
+            ->select('path')
+            ->selectRaw('MIN(page_views.id) as id, COUNT(*) as views')
+            ->when($directoryId, fn (Builder $query) => $query->directory($directoryId))
+            ->groupBy('path')
+            ->orderByDesc('views')
+            ->limit(15);
     }
 
     private function getPageDirectoryId(): ?int
