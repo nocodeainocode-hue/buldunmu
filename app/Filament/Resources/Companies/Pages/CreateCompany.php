@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Companies\Pages;
 use App\Filament\Resources\Companies\CompanyResource;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\ValidationException;
 
 class CreateCompany extends CreateRecord
 {
@@ -12,15 +13,14 @@ class CreateCompany extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        if ($data['is_global'] ?? false) {
-            $data['directory_id'] = null;
-        } else {
-            $dir = app()->bound('currentDirectory') ? app('currentDirectory') : null;
-            if ($dir) {
-                $data['directory_id'] = $dir->id;
-            }
+        if (! app()->bound('currentDirectory')) {
+            throw ValidationException::withMessages([
+                'name' => 'Firma oluşturmadan önce üst menüden hedef rehberi seçin.',
+            ]);
         }
-        unset($data['is_global']);
+
+        $data['directory_id'] = app('currentDirectory')->id;
+
         return $data;
     }
 

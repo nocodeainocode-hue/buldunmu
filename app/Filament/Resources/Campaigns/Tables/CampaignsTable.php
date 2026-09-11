@@ -21,6 +21,9 @@ class CampaignsTable
     {
         return $table
             ->columns([
+                TextColumn::make('directory.name')
+                    ->label('Kaynak Rehber')
+                    ->badge(),
                 TextColumn::make('name')
                     ->label('Kampanya')
                     ->searchable()
@@ -39,14 +42,14 @@ class CampaignsTable
                 TextColumn::make('status')
                     ->label('Durum')
                     ->badge()
-                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
                         'draft' => 'Taslak',
                         'active' => 'Aktif',
                         'completed' => 'Tamamlandı',
                         'cancelled' => 'İptal',
                         default => $state,
                     })
-                    ->color(fn(string $state): string => match ($state) {
+                    ->color(fn (string $state): string => match ($state) {
                         'draft' => 'gray',
                         'active' => 'warning',
                         'completed' => 'success',
@@ -92,17 +95,19 @@ class CampaignsTable
                         $count = 0;
 
                         foreach ($directories as $i => $dir) {
-                            if ($i > 0 && $i % $perDay === 0) $day++;
+                            if ($i > 0 && $i % $perDay === 0) {
+                                $day++;
+                            }
 
                             $anchor = AnchorTextService::generate($company, $dir);
-                            $slug = Str::slug($company->name . '-' . ($dir->plate_code ?? $dir->slug ?? $i));
+                            $slug = Str::slug($company->name.'-'.($dir->plate_code ?? $dir->slug ?? $i));
 
                             CampaignItem::create([
                                 'campaign_id' => $record->id,
                                 'directory_id' => $dir->id,
                                 'company_id' => $company->id,
                                 'slug' => $slug,
-                                'description' => $company->short_description ?? $company->name . ' - ' . $dir->name,
+                                'description' => $company->short_description ?? $company->name.' - '.$dir->name,
                                 'anchor_text' => $anchor['anchor_text'],
                                 'link_type' => $anchor['link_type'],
                                 'scheduled_for' => now()->addDays($day),
@@ -119,15 +124,15 @@ class CampaignsTable
                             ->body("{$count} yayın {$totalDirs} rehbere planlandı. Her gün {$perDay} yayın yapılacak.")
                             ->send();
                     })
-                    ->visible(fn($record) => $record->status === 'draft'),
+                    ->visible(fn ($record) => $record->status === 'draft'),
 
                 Action::make('export_csv')
                     ->label('CSV Rapor')
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('gray')
-                    ->url(fn($record) => route('filament.admin.campaigns.export-csv', $record))
+                    ->url(fn ($record) => route('filament.admin.campaigns.export-csv', $record))
                     ->openUrlInNewTab()
-                    ->visible(fn($record) => $record->items()->count() > 0),
+                    ->visible(fn ($record) => $record->items()->count() > 0),
 
                 EditAction::make(),
             ])

@@ -13,12 +13,14 @@ class CreateDirectory extends CreateRecord
     {
         $theme = [];
         foreach ($data as $key => $value) {
-            if (str_starts_with($key, 'theme_') && $value) {
-                $theme[substr($key, 6)] = $value;
+            if (str_starts_with($key, 'theme_')) {
+                if (filled($value)) {
+                    $theme[substr($key, 6)] = $value;
+                }
                 unset($data[$key]);
             }
         }
-        $data['theme'] = json_encode($theme);
+        $data['theme'] = $theme;
 
         return $data;
     }

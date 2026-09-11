@@ -2,16 +2,20 @@
 
 namespace App\Filament\Widgets\Analytics;
 
+use App\Filament\Pages\AnalyticsDashboard;
 use App\Models\Company;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\TableWidget as BaseWidget;
 
 class TopCompaniesWidget extends BaseWidget
 {
+    use InteractsWithPageFilters;
+
     protected static ?int $sort = 2;
 
-    protected int | string | array $columnSpan = [
+    protected int|string|array $columnSpan = [
         'md' => 1,
     ];
 
@@ -19,15 +23,17 @@ class TopCompaniesWidget extends BaseWidget
 
     public static function canView(): bool
     {
-        return request()?->route()?->getController() instanceof \App\Filament\Pages\AnalyticsDashboard;
+        return request()?->route()?->getController() instanceof AnalyticsDashboard;
     }
 
     public function table(Table $table): Table
     {
         $directoryId = $this->getPageDirectoryId();
 
-        $query = Company::query()
+        $query = Company::withoutGlobalScope('directory')
+            ->when($directoryId, fn ($companies) => $companies->where('directory_id', $directoryId))
             ->withCount(['pageViews as views_count' => function ($q) use ($directoryId) {
+                $q->withoutGlobalScope('directory');
                 if ($directoryId) {
                     $q->directory($directoryId);
                 }
@@ -54,12 +60,8 @@ class TopCompaniesWidget extends BaseWidget
 
     private function getPageDirectoryId(): ?int
     {
-        $page = $this->getPage();
+        $directoryId = $this->pageFilters['directoryFilter'] ?? null;
 
-        if ($page && property_exists($page, 'directoryFilter')) {
-            return $page->directoryFilter;
-        }
-
-        return null;
+        return filled($directoryId) ? (int) $directoryId : null;
     }
 }

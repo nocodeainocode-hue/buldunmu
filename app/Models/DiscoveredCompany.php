@@ -3,7 +3,11 @@
 namespace App\Models;
 
 use App\Models\Concerns\BelongsToDirectory;
+use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use RuntimeException;
 
 class DiscoveredCompany extends Model
 {
@@ -70,18 +74,17 @@ class DiscoveredCompany extends Model
             'directory_id' => $this->directory_id,
         ];
 
-        // Handle category_id and city_id from overrides
+        // Resolve every approved record against the shared catalog.
         $categoryId = $overrides['category_id'] ?? null;
         $cityId = $overrides['city_id'] ?? null;
-        unset($overrides['category_id'], $overrides['city_id']);
+        $districtId = $overrides['district_id'] ?? null;
 
-        // Auto-assign defaults if not explicitly provided (required FK on companies table)
-        $directoryId = $this->directory_id;
-        $data['category_id'] = $categoryId ?: $this->findOrCreateDefaultCategory($directoryId);
-        $data['city_id'] = $cityId ?: $this->findOrCreateDefaultCity($directoryId);
+        $data['category_id'] = $this->resolveSharedCategory($categoryId);
+        $data['city_id'] = $this->resolveSharedCity($cityId);
+        $data['district_id'] = $this->resolveSharedDistrict($districtId, $data['city_id']);
 
         // Download logo if available
-        if (!empty($this->logo_url) && empty($overrides['logo'])) {
+        if (! empty($this->logo_url) && empty($overrides['logo'])) {
             try {
                 $logoPath = $this->downloadLogo();
                 if ($logoPath) {
@@ -102,75 +105,80 @@ class DiscoveredCompany extends Model
         return $company;
     }
 
-    /**
-     * Find or create a default "Genel" category for the directory.
-     */
-    protected function findOrCreateDefaultCategory(?int $directoryId): int
+    protected function resolveSharedCategory(mixed $categoryId): int
     {
-        $category = Category::where('directory_id', $directoryId)->first();
+        $selected = filled($categoryId)
+            ? Category::withoutGlobalScope('directory')->find($categoryId)
+            : null;
+        $slug = $selected?->slug ?: 'genel';
 
-        if (!$category) {
+        $category = Category::withoutGlobalScope('directory')
+            ->whereNull('directory_id')
+            ->where('slug', $slug)
+            ->first();
+
+        if (! $category) {
             $category = Category::create([
-                'name' => 'Genel',
-                'slug' => 'genel',
+                'name' => $selected?->name ?: 'Genel',
+                'slug' => $slug,
                 'status' => 'active',
-                'directory_id' => $directoryId,
+                'directory_id' => null,
             ]);
         }
 
         return $category->id;
     }
 
-    /**
-     * Find or create a default city for the directory.
-     * Tries to match the search_city first, then falls back to a default.
-     */
-    protected function findOrCreateDefaultCity(?int $directoryId): int
+    protected function resolveSharedCity(mixed $cityId): int
     {
-        // Try to match search_city
-        if (!empty($this->search_city)) {
-            $city = City::where('directory_id', $directoryId)
-                ->where('name', 'like', '%' . $this->search_city . '%')
-                ->first();
-            if ($city) {
-                return $city->id;
-            }
+        $selected = filled($cityId)
+            ? City::withoutGlobalScope('directory')->find($cityId)
+            : null;
+        $name = $selected?->name ?: trim((string) $this->search_city);
+        $slug = $selected?->slug ?: Str::slug($name);
 
-            // Create city from search_city
-            $city = City::create([
-                'name' => $this->search_city,
-                'slug' => \Illuminate\Support\Str::slug($this->search_city),
-                'directory_id' => $directoryId,
-            ]);
-            return $city->id;
-        }
+        $city = filled($slug)
+            ? City::withoutGlobalScope('directory')->whereNull('directory_id')->where('slug', $slug)->first()
+            : null;
 
-        // Ultimate fallback
-        $city = City::where('directory_id', $directoryId)->first();
-
-        if (!$city) {
-            $city = City::create([
-                'name' => 'Türkiye',
-                'slug' => 'turkiye',
-                'directory_id' => $directoryId,
-            ]);
+        if (! $city) {
+            throw new RuntimeException('Şehir ortak katalogda bulunamadı. Detaylı onaydan geçerli bir şehir seçin.');
         }
 
         return $city->id;
     }
 
+    protected function resolveSharedDistrict(mixed $districtId, int $cityId): ?int
+    {
+        if (blank($districtId)) {
+            return null;
+        }
+
+        $selected = District::withoutGlobalScope('directory')->find($districtId);
+
+        if (! $selected) {
+            return null;
+        }
+
+        return District::withoutGlobalScope('directory')
+            ->whereNull('directory_id')
+            ->where('city_id', $cityId)
+            ->where('slug', $selected->slug)
+            ->value('id');
+    }
+
     protected function downloadLogo(): ?string
     {
-        $client = new \GuzzleHttp\Client(['timeout' => 15]);
+        $client = new Client(['timeout' => 15]);
         $response = $client->get($this->logo_url);
 
         $ext = pathinfo(parse_url($this->logo_url, PHP_URL_PATH), PATHINFO_EXTENSION);
-        if (empty($ext) || !in_array(strtolower($ext), ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'])) {
+        if (empty($ext) || ! in_array(strtolower($ext), ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'])) {
             $ext = 'png';
         }
 
-        $filename = 'companies/logos/' . \Illuminate\Support\Str::uuid() . '.' . $ext;
-        \Illuminate\Support\Facades\Storage::disk('public')->put($filename, $response->getBody()->getContents());
+        $filename = 'companies/logos/'.Str::uuid().'.'.$ext;
+        Storage::disk('public')->put($filename, $response->getBody()->getContents());
 
         return $filename;
     }

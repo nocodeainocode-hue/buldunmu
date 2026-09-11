@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 class SeedCategories extends Command
 {
     protected $signature = 'seed:categories';
+
     protected $description = 'Seed all 35 main categories and subcategories from find.com.tr';
 
     public function handle(): int
@@ -55,16 +56,17 @@ class SeedCategories extends Command
         foreach ($categories as $name => $icon) {
             $slug = Str::slug($name);
 
-            $category = Category::updateOrCreate(
-                ['slug' => $slug],
+            $category = Category::withoutGlobalScope('directory')->updateOrCreate(
+                ['slug' => $slug, 'directory_id' => null],
                 [
                     'name' => $name,
                     'icon' => $icon,
                     'status' => 'active',
+                    'directory_id' => null,
                 ],
             );
 
-            $this->line("✅ {$icon} {$name} (" . ($category->wasRecentlyCreated ? 'eklendi' : 'güncellendi') . ')');
+            $this->line("✅ {$icon} {$name} (".($category->wasRecentlyCreated ? 'eklendi' : 'güncellendi').')');
             $count++;
         }
 

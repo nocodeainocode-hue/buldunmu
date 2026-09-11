@@ -4,18 +4,22 @@ namespace App\Filament\Resources\DiscoveredCompanies\Pages;
 
 use App\Filament\Resources\DiscoveredCompanies\DiscoveredCompanyResource;
 use App\Jobs\DiscoverCompaniesJob;
+use App\Models\Category;
+use App\Models\City;
 use App\Models\DiscoveredCompany;
-use Filament\Actions;
+use Filament\Actions\Action;
+use Filament\Actions\BulkAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
-use Filament\Schemas\Schema;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Page;
-use Filament\Actions\BulkAction;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -42,11 +46,17 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
     public array $discoveredResults = [];
 
     public ?string $keyword = '';
+
     public ?string $city = '';
+
     public ?string $source = 'google_maps';
+
     public ?string $customUrl = '';
+
     public int $limit = 50;
+
     public bool $hasSearched = false;
+
     public bool $isSearching = false;
 
     public function mount(): void
@@ -64,7 +74,7 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
     {
         return $schema
             ->components([
-                \Filament\Schemas\Components\Section::make('Keşif Ayarları')
+                Section::make('Keşif Ayarları')
                     ->description('Firma keşfi için kaynak ve anahtar kelime girin.')
                     ->schema([
                         Select::make('source')
@@ -92,7 +102,7 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
                             ->label('Özel URL')
                             ->url()
                             ->placeholder('https://example.com/firmalar')
-                            ->visible(fn($get) => $get('source') === 'custom_url')
+                            ->visible(fn ($get) => $get('source') === 'custom_url')
                             ->requiredIf('source', 'custom_url')
                             ->helperText('Kazınacak sayfanın tam URL\'si'),
                         TextInput::make('limit')
@@ -101,7 +111,7 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
                             ->minValue(1)
                             ->maxValue(100)
                             ->default(50)
-                            ->visible(fn($get) => $get('source') === 'openstreetmap'),
+                            ->visible(fn ($get) => $get('source') === 'openstreetmap'),
                     ])
                     ->columns(2),
             ]);
@@ -111,9 +121,17 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
     {
         $data = $this->form->getState();
 
-        $directoryId = app()->bound('currentDirectory')
-            ? app('currentDirectory')->id
-            : \App\Models\Directory::first()?->id ?? 1;
+        if (! app()->bound('currentDirectory')) {
+            Notification::make()
+                ->title('Önce bir rehber seçin')
+                ->body('Keşfedilen firmalar yalnızca seçili rehbere kaydedilir.')
+                ->danger()
+                ->send();
+
+            return;
+        }
+
+        $directoryId = app('currentDirectory')->id;
 
         $userId = auth()->id();
 
@@ -180,7 +198,9 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
      * Bulk approve with category/city assignment wizard.
      */
     public ?int $bulkCategoryId = null;
+
     public ?int $bulkCityId = null;
+
     public ?int $bulkDistrictId = null;
 
     public function approveAllWithCategory(): void
@@ -195,11 +215,12 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
         $cityId = $this->bulkCityId;
         $districtId = $this->bulkDistrictId;
 
-        if (!$categoryId) {
+        if (! $categoryId) {
             Notification::make()
                 ->title('Lütfen bir kategori seçin.')
                 ->danger()
                 ->send();
+
             return;
         }
 
@@ -207,8 +228,12 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
         foreach ($pending as $record) {
             try {
                 $overrides = ['category_id' => (int) $categoryId];
-                if ($cityId) $overrides['city_id'] = (int) $cityId;
-                if ($districtId) $overrides['district_id'] = (int) $districtId;
+                if ($cityId) {
+                    $overrides['city_id'] = (int) $cityId;
+                }
+                if ($districtId) {
+                    $overrides['district_id'] = (int) $districtId;
+                }
                 $record->approve($overrides);
                 $approved++;
             } catch (\Exception $e) {
@@ -220,7 +245,7 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
         $this->bulkCityId = null;
         $this->bulkDistrictId = null;
 
-        $catName = \App\Models\Category::find($categoryId)?->name ?? 'seçili kategori';
+        $catName = Category::find($categoryId)?->name ?? 'seçili kategori';
 
         Notification::make()
             ->title('Kategorili toplu onay tamamlandı!')
@@ -236,17 +261,17 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
                 DiscoveredCompany::query()
                     ->when($this->hasSearched, function ($query) {
                         $query->where('search_keyword', $this->keyword)
-                              ->where('search_city', $this->city)
-                              ->where('source', $this->source);
+                            ->where('search_city', $this->city)
+                            ->where('source', $this->source);
                     })
-                    ->when(!$this->hasSearched, fn($q) => $q->whereRaw('1=0'))
+                    ->when(! $this->hasSearched, fn ($q) => $q->whereRaw('1=0'))
                     ->latest()
             )
             ->columns([
                 ImageColumn::make('logo_url')
                     ->label('Logo')
                     ->circular()
-                    ->defaultImageUrl(fn($record) => 'https://ui-avatars.com/api/?name=' . urlencode($record->name ?? '?') . '&size=64&background=6366f1&color=fff'),
+                    ->defaultImageUrl(fn ($record) => 'https://ui-avatars.com/api/?name='.urlencode($record->name ?? '?').'&size=64&background=6366f1&color=fff'),
                 TextColumn::make('name')
                     ->label('Firma Adı')
                     ->searchable()
@@ -265,13 +290,13 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
                 TextColumn::make('status')
                     ->label('Durum')
                     ->badge()
-                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
                         'pending' => 'Onay Bekliyor',
                         'approved' => 'Onaylandı',
                         'rejected' => 'Reddedildi',
                         default => $state,
                     })
-                    ->color(fn(string $state): string => match ($state) {
+                    ->color(fn (string $state): string => match ($state) {
                         'pending' => 'warning',
                         'approved' => 'success',
                         'rejected' => 'danger',
@@ -284,58 +309,53 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
             ])
             ->filters([])
             ->actions([
-                \Filament\Actions\Action::make('approve_single')
+                Action::make('approve_single')
                     ->label('Onayla')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
-                    ->visible(fn(DiscoveredCompany $record) => $record->status === 'pending')
+                    ->visible(fn (DiscoveredCompany $record) => $record->status === 'pending')
                     ->action(function (DiscoveredCompany $record) {
                         $record->approve();
                         Notification::make()->title('Firma onaylandı!')->success()->send();
                     })
                     ->requiresConfirmation()
                     ->modalHeading('Firmayı Onayla')
-                    ->modalDescription(fn(DiscoveredCompany $record) => "{$record->name} firması onaylanıp rehbere eklenecek."),
-                \Filament\Actions\Action::make('approve_with_details')
+                    ->modalDescription(fn (DiscoveredCompany $record) => "{$record->name} firması onaylanıp rehbere eklenecek."),
+                Action::make('approve_with_details')
                     ->label('Detaylı Onayla')
                     ->icon('heroicon-o-pencil-square')
                     ->color('success')
-                    ->visible(fn(DiscoveredCompany $record) => $record->status === 'pending')
+                    ->visible(fn (DiscoveredCompany $record) => $record->status === 'pending')
                     ->form([
-                        TextInput::make('name')->label('Firma Adı')->required()->default(fn($record) => $record->name),
-                        TextInput::make('phone')->label('Telefon')->tel()->default(fn($record) => $record->phone),
-                        TextInput::make('email')->label('E-posta')->email()->default(fn($record) => $record->email),
-                        TextInput::make('website')->label('Web Sitesi')->url()->default(fn($record) => $record->website),
-                        Textarea::make('address')->label('Adres')->default(fn($record) => $record->address),
-                        Textarea::make('description')->label('Açıklama')->default(fn($record) => $record->description),
+                        TextInput::make('name')->label('Firma Adı')->required()->default(fn ($record) => $record->name),
+                        TextInput::make('phone')->label('Telefon')->tel()->default(fn ($record) => $record->phone),
+                        TextInput::make('email')->label('E-posta')->email()->default(fn ($record) => $record->email),
+                        TextInput::make('website')->label('Web Sitesi')->url()->default(fn ($record) => $record->website),
+                        Textarea::make('address')->label('Adres')->default(fn ($record) => $record->address),
+                        Textarea::make('description')->label('Açıklama')->default(fn ($record) => $record->description),
                         Select::make('category_id')
                             ->label('Kategori')
-                            ->options(\App\Models\Category::pluck('name', 'id'))
+                            ->options(Category::pluck('name', 'id'))
                             ->searchable()
                             ->preload(),
                         Select::make('city_id')
                             ->label('Şehir')
-                            ->options(\App\Models\City::pluck('name', 'id'))
+                            ->options(City::pluck('name', 'id'))
                             ->searchable()
                             ->preload(),
                     ])
                     ->action(function (DiscoveredCompany $record, array $data) {
-                        $categoryId = $data['category_id'] ?? null;
-                        $cityId = $data['city_id'] ?? null;
-                        unset($data['category_id'], $data['city_id']);
-                        $company = $record->approve($data);
-                        if ($categoryId) $company->update(['category_id' => $categoryId]);
-                        if ($cityId) $company->update(['city_id' => $cityId]);
+                        $record->approve($data);
                         Notification::make()->title('Firma detaylı onaylandı!')->success()->send();
                     }),
-                \Filament\Actions\Action::make('reject_single')
+                Action::make('reject_single')
                     ->label('Reddet')
                     ->icon('heroicon-o-x-circle')
                     ->color('danger')
-                    ->visible(fn(DiscoveredCompany $record) => $record->status === 'pending')
-                    ->action(fn(DiscoveredCompany $record) => $record->update(['status' => 'rejected']))
+                    ->visible(fn (DiscoveredCompany $record) => $record->status === 'pending')
+                    ->action(fn (DiscoveredCompany $record) => $record->update(['status' => 'rejected']))
                     ->requiresConfirmation(),
-                \Filament\Actions\DeleteAction::make(),
+                DeleteAction::make(),
             ])
             ->bulkActions([
                 BulkAction::make('bulk_approve')
@@ -346,7 +366,11 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
                         $count = 0;
                         foreach ($records as $record) {
                             if ($record->status === 'pending') {
-                                try { $record->approve(); $count++; } catch (\Exception $e) {}
+                                try {
+                                    $record->approve();
+                                    $count++;
+                                } catch (\Exception $e) {
+                                }
                             }
                         }
                         Notification::make()->title("{$count} firma onaylandı!")->success()->send();
@@ -365,7 +389,7 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
                         Notification::make()->title('Seçili firmalar reddedildi.')->success()->send();
                     })
                     ->requiresConfirmation(),
-                \Filament\Actions\DeleteBulkAction::make(),
+                DeleteBulkAction::make(),
             ])
             ->emptyStateHeading('Keşif Sonucu Bekleniyor')
             ->emptyStateDescription('Yukarıdaki formu doldurup "Keşfet" butonuna tıklayarak firma araması yapabilirsiniz.')
@@ -377,11 +401,11 @@ class DiscoverCompanies extends Page implements HasForms, HasTable
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make('go_to_list')
+            Action::make('go_to_list')
                 ->label('Keşfedilenler Listesi')
                 ->icon('heroicon-o-list-bullet')
                 ->color('gray')
-                ->url(fn() => DiscoveredCompanyResource::getUrl('index')),
+                ->url(fn () => DiscoveredCompanyResource::getUrl('index')),
         ];
     }
 }

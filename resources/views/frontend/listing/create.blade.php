@@ -57,7 +57,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
-                    <select name="category_id" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400">
+                    <select name="category_id" required class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400">
                         <option value="">Seçiniz</option>
                         @foreach($categories as $cat)
                             <option value="{{ $cat->id }}" {{ old('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
@@ -66,7 +66,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Şehir</label>
-                    <select name="city_id" id="city_select" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400">
+                    <select name="city_id" id="city_select" required class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400">
                         <option value="">Seçiniz</option>
                         @foreach($cities as $ct)
                             <option value="{{ $ct->id }}" {{ old('city_id') == $ct->id ? 'selected' : '' }}>{{ $ct->name }}</option>
@@ -75,7 +75,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">İlçe</label>
-                    <select name="district_id" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400">
+                    <select name="district_id" id="district_select" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400">
                         <option value="">Seçiniz</option>
                     </select>
                 </div>
@@ -92,4 +92,30 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const city = document.getElementById('city_select');
+        const district = document.getElementById('district_select');
+        const districts = @json($districts);
+        const previousDistrict = @json((string) old('district_id'));
+
+        const refreshDistricts = () => {
+            const selectedCity = Number(city.value);
+            district.innerHTML = '<option value="">Seçiniz</option>';
+
+            districts
+                .filter((item) => Number(item.city_id) === selectedCity)
+                .forEach((item) => {
+                    const option = new Option(item.name, item.id, false, String(item.id) === previousDistrict);
+                    district.add(option);
+                });
+
+            district.disabled = !selectedCity;
+        };
+
+        city.addEventListener('change', refreshDistricts);
+        refreshDistricts();
+    });
+</script>
 @endsection

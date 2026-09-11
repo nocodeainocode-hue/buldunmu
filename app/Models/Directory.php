@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Directory extends Model
 {
@@ -49,5 +50,24 @@ class Directory extends Model
             'custom' => array_values(array_filter($this->featured_city_slugs ?? [])),
             default => [],
         };
+    }
+
+    public static function normalizeDomain(?string $domain): ?string
+    {
+        if (blank($domain)) {
+            return null;
+        }
+
+        $normalized = Str::lower(trim($domain));
+        $normalized = preg_replace('#^https?://#', '', $normalized);
+        $normalized = explode('/', $normalized, 2)[0];
+        $normalized = preg_replace('/:\d+$/', '', $normalized);
+
+        return preg_replace('/^www\./', '', rtrim($normalized, '.'));
+    }
+
+    public function setDomainAttribute(?string $value): void
+    {
+        $this->attributes['domain'] = static::normalizeDomain($value);
     }
 }

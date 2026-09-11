@@ -1,18 +1,20 @@
 <?php
 
-use App\Http\Controllers\Frontend\HomeController;
-use App\Http\Controllers\Frontend\CompanyController;
-use App\Http\Controllers\Frontend\CompanyReviewController;
+use App\Http\Controllers\Frontend\BlogController;
 use App\Http\Controllers\Frontend\CategoryController;
 use App\Http\Controllers\Frontend\CityController;
-use App\Http\Controllers\Frontend\PageController;
-use App\Http\Controllers\Frontend\ListingRequestController;
-use App\Http\Controllers\Frontend\BlogController;
+use App\Http\Controllers\Frontend\CompanyController;
+use App\Http\Controllers\Frontend\CompanyReviewController;
 use App\Http\Controllers\Frontend\ContactController;
+use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\ListingRequestController;
+use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\PaketController;
 use App\Http\Controllers\Frontend\PwaController;
 use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\SitemapController;
+use App\Models\Campaign;
+use App\Services\CampaignReportService;
 use Illuminate\Support\Facades\Route;
 
 // Ana sayfa
@@ -71,7 +73,7 @@ Route::get('/robots.txt', function () {
         'Disallow: /livewire/',
         '',
         '# Sitemap',
-        'Sitemap: ' . $sitemapUrl,
+        'Sitemap: '.$sitemapUrl,
     ];
 
     return response(implode("\n", $lines))
@@ -91,10 +93,11 @@ Route::post('/admin/tenant/switch', function () {
         session()->forget('current_directory_id');
     }
     session()->save();
+
     return redirect()->back();
-})->name('filament.admin.tenant.switch')->middleware('web');
+})->name('filament.admin.tenant.switch')->middleware(['web', 'auth']);
 
 // Campaign CSV export
-Route::get('/admin/campaigns/{campaign}/export-csv', function (App\Models\Campaign $campaign) {
-    return App\Services\CampaignReportService::exportCsv($campaign);
+Route::get('/admin/campaigns/{campaign}/export-csv', function (Campaign $campaign) {
+    return CampaignReportService::exportCsv($campaign);
 })->name('filament.admin.campaigns.export-csv')->middleware(['web', 'auth']);

@@ -3,11 +3,10 @@
 namespace App\Filament\Pages;
 
 use App\Filament\Widgets\Analytics\PageViewStats;
-use App\Filament\Widgets\Analytics\TrafficChartWidget;
 use App\Filament\Widgets\Analytics\TopCompaniesWidget;
 use App\Filament\Widgets\Analytics\TopPagesWidget;
+use App\Filament\Widgets\Analytics\TrafficChartWidget;
 use App\Models\Directory;
-use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -18,19 +17,17 @@ class AnalyticsDashboard extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-chart-bar';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-chart-bar';
 
     protected static ?string $navigationLabel = 'Analitik';
 
     protected static ?string $title = 'Analitik Paneli';
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Sistem';
+    protected static string|\UnitEnum|null $navigationGroup = 'Sistem';
 
     protected static ?int $navigationSort = 100;
 
     protected string $view = 'filament.pages.analytics-dashboard';
-
-    public ?int $directoryFilter = null;
 
     public ?array $filters = [];
 
@@ -51,10 +48,7 @@ class AnalyticsDashboard extends Page implements HasForms
                     ->options(fn () => Directory::orderBy('name')->pluck('name', 'id')->toArray())
                     ->default(session('current_directory_id'))
                     ->nullable()
-                    ->live()
-                    ->afterStateUpdated(function (?string $state): void {
-                        $this->directoryFilter = $state ? (int) $state : null;
-                    }),
+                    ->live(),
             ])
             ->statePath('filters');
     }
@@ -75,12 +69,12 @@ class AnalyticsDashboard extends Page implements HasForms
         ];
     }
 
-    public function getHeaderWidgetsColumns(): int | array
+    public function getHeaderWidgetsColumns(): int|array
     {
         return 2;
     }
 
-    public function getFooterWidgetsColumns(): int | array
+    public function getFooterWidgetsColumns(): int|array
     {
         return [
             'md' => 3,

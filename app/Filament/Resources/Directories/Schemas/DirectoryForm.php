@@ -2,22 +2,23 @@
 
 namespace App\Filament\Resources\Directories\Schemas;
 
+use App\Models\Directory;
+use App\Services\CompanySlugService;
+use App\Support\BlogLayout;
+use App\Support\TurkeyCities;
 use App\View\Helpers\ThemeHelper;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Schema;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
-use App\Services\CompanySlugService;
-use App\Support\TurkeyCities;
-use App\Support\BlogLayout;
 
 class DirectoryForm
 {
@@ -33,8 +34,7 @@ class DirectoryForm
                                     ->label('Rehber Adı')
                                     ->required()
                                     ->live(onBlur: true)
-                                    ->afterStateUpdated(fn($state, callable $set) =>
-                                        $set('slug', Str::slug($state))
+                                    ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))
                                     ),
                                 TextInput::make('slug')
                                     ->label('Slug')
@@ -45,6 +45,8 @@ class DirectoryForm
                             ->label('Domain')
                             ->helperText('Örn: firmarehberi.com.tr')
                             ->prefix('https://')
+                            ->dehydrateStateUsing(fn ($state) => Directory::normalizeDomain($state))
+                            ->unique(ignoreRecord: true)
                             ->required(),
                         Grid::make(2)
                             ->schema([
@@ -90,19 +92,19 @@ class DirectoryForm
                             ->label('Ana Şehir')
                             ->options(TurkeyCities::options())
                             ->searchable()
-                            ->visible(fn($get) => $get('geography_mode') === 'local')
-                            ->required(fn($get) => $get('geography_mode') === 'local'),
+                            ->visible(fn ($get) => $get('geography_mode') === 'local')
+                            ->required(fn ($get) => $get('geography_mode') === 'local'),
                         Select::make('featured_city_slugs')
                             ->label('Gösterilecek Şehirler')
                             ->options(TurkeyCities::options())
                             ->multiple()
                             ->searchable()
-                            ->visible(fn($get) => $get('geography_mode') === 'custom')
-                            ->required(fn($get) => $get('geography_mode') === 'custom'),
+                            ->visible(fn ($get) => $get('geography_mode') === 'custom')
+                            ->required(fn ($get) => $get('geography_mode') === 'custom'),
                         Toggle::make('group_other_cities')
                             ->label('Kalan şehirleri "Diğer İller" altında göster')
                             ->default(true)
-                            ->visible(fn($get) => in_array($get('geography_mode'), ['local', 'custom'], true)),
+                            ->visible(fn ($get) => in_array($get('geography_mode'), ['local', 'custom'], true)),
                         Select::make('blog_layout')
                             ->label('Blog Görünümü')
                             ->options(BlogLayout::OPTIONS)

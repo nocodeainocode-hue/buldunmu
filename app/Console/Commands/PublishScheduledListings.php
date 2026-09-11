@@ -4,13 +4,18 @@ namespace App\Console\Commands;
 
 use App\Models\Campaign;
 use App\Models\CampaignItem;
+use App\Models\Category;
+use App\Models\City;
 use App\Models\Company;
+use App\Models\District;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class PublishScheduledListings extends Command
 {
     protected $signature = 'listings:publish-daily';
+
     protected $description = 'Publish scheduled campaign items for today';
 
     public function handle(): void
@@ -24,7 +29,9 @@ class PublishScheduledListings extends Command
                 ->count();
 
             $remaining = $limit - $publishedToday;
-            if ($remaining <= 0) continue;
+            if ($remaining <= 0) {
+                continue;
+            }
 
             $items = CampaignItem::where('campaign_id', $campaign->id)
                 ->where('status', 'scheduled')
@@ -38,53 +45,36 @@ class PublishScheduledListings extends Command
                     $source = $item->company;
                     $directoryId = $item->directory_id;
 
-                    // Find matching category in target directory
-                    $categoryId = null;
-                    if ($source->category_id) {
-                        $sourceCat = \App\Models\Category::find($source->category_id);
-                        if ($sourceCat) {
-                            $targetCat = \App\Models\Category::where('directory_id', $directoryId)
-                                ->where('name', $sourceCat->name)
-                                ->first();
-                            if (!$targetCat) {
-                                $targetCat = \App\Models\Category::create([
-                                    'name' => $sourceCat->name,
-                                    'slug' => \Illuminate\Support\Str::slug($sourceCat->name . '-' . $directoryId),
-                                    'icon' => $sourceCat->icon,
-                                    'status' => 'active',
-                                    'directory_id' => $directoryId,
-                                ]);
-                            }
-                            $categoryId = $targetCat->id;
-                        }
+                    $sourceCategory = Category::withoutGlobalScope('directory')->find($source->category_id);
+                    $sourceCity = City::withoutGlobalScope('directory')->find($source->city_id);
+                    $categoryId = $sourceCategory
+                        ? Category::withoutGlobalScope('directory')->whereNull('directory_id')->where('slug', $sourceCategory->slug)->value('id')
+                        : null;
+                    $cityId = $sourceCity
+                        ? City::withoutGlobalScope('directory')->whereNull('directory_id')->where('slug', $sourceCity->slug)->value('id')
+                        : null;
+
+                    if (! $categoryId || ! $cityId) {
+                        throw new \RuntimeException('Firmanın kategori veya şehri ortak katalogda bulunamadı.');
                     }
 
-                    // Find matching city in target directory
-                    $cityId = null;
-                    if ($source->city_id) {
-                        $sourceCity = \App\Models\City::find($source->city_id);
-                        if ($sourceCity) {
-                            $targetCity = \App\Models\City::where('directory_id', $directoryId)
-                                ->where('name', $sourceCity->name)
-                                ->first();
-                            $cityId = $targetCity?->id;
-                        }
-                    }
-
-                    // Fallback to first city in target directory
-                    if (!$cityId) {
-                        $cityId = \App\Models\City::where('directory_id', $directoryId)->value('id');
-                    }
-                    if (!$categoryId) {
-                        $categoryId = \App\Models\Category::where('directory_id', $directoryId)->value('id');
+                    $districtId = null;
+                    $sourceDistrict = District::withoutGlobalScope('directory')->find($source->district_id);
+                    if ($sourceDistrict) {
+                        $districtId = District::withoutGlobalScope('directory')
+                            ->whereNull('directory_id')
+                            ->where('city_id', $cityId)
+                            ->where('slug', $sourceDistrict->slug)
+                            ->value('id');
                     }
 
                     $targetCompany = Company::firstOrCreate(
-                        ['external_id' => 'campaign-company-' . $source->id, 'directory_id' => $directoryId],
+                        ['external_id' => 'campaign-company-'.$source->id, 'directory_id' => $directoryId],
                         [
                             'name' => $source->name,
-                            'category_id' => $categoryId ?? 1,
-                            'city_id' => $cityId ?? 1,
+                            'category_id' => $categoryId,
+                            'city_id' => $cityId,
+                            'district_id' => $districtId,
                             'phone' => $source->phone,
                             'whatsapp' => $source->whatsapp,
                             'email' => $source->email,
@@ -103,13 +93,13 @@ class PublishScheduledListings extends Command
                     $item->update(['slug' => $targetCompany->slug]);
 
                     // Copy logo
-                    if ($source->logo && !$targetCompany->logo) {
+                    if ($source->logo && ! $targetCompany->logo) {
                         $targetCompany->logo = $this->copyFile($source->logo, 'logos');
                         $targetCompany->save();
                     }
 
                     // Copy cover
-                    if ($source->cover_image && !$targetCompany->cover_image) {
+                    if ($source->cover_image && ! $targetCompany->cover_image) {
                         $targetCompany->cover_image = $this->copyFile($source->cover_image, 'covers');
                         $targetCompany->save();
                     }
@@ -154,18 +144,19 @@ class PublishScheduledListings extends Command
 
     protected function copyFile(?string $path, string $type): ?string
     {
-        if (!$path || !\Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
+        if (! $path || ! Storage::disk('public')->exists($path)) {
             return null;
         }
 
         $ext = pathinfo($path, PATHINFO_EXTENSION);
-        $newPath = match($type) {
-            'logos' => 'companies/logos/' . \Illuminate\Support\Str::uuid() . '.' . $ext,
-            'covers' => 'companies/covers/' . \Illuminate\Support\Str::uuid() . '.' . $ext,
-            default => 'firmalar/galeri/' . \Illuminate\Support\Str::uuid() . '.' . $ext,
+        $newPath = match ($type) {
+            'logos' => 'companies/logos/'.Str::uuid().'.'.$ext,
+            'covers' => 'companies/covers/'.Str::uuid().'.'.$ext,
+            default => 'firmalar/galeri/'.Str::uuid().'.'.$ext,
         };
 
-        \Illuminate\Support\Facades\Storage::disk('public')->copy($path, $newPath);
+        Storage::disk('public')->copy($path, $newPath);
+
         return $newPath;
     }
 }

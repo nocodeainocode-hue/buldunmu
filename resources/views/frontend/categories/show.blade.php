@@ -8,6 +8,7 @@
 
 @section('title', $category->meta_title ?: $category->name . ' Firmaları')
 @section('meta_description', $category->meta_description ?: $category->name . ' kategorisindeki en iyi firmalar. Telefon, adres, yorumlar ve iletişim bilgileriyle ' . $category->name . ' firmalarını keşfedin.')
+@section('robots', $totalInCategory > 0 ? 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1' : 'noindex,follow,max-image-preview:large')
 @section('canonical', route('categories.show', $category->slug))
 
 @push('head')

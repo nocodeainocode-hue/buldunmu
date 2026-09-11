@@ -2,12 +2,16 @@
 
 namespace App\Filament\Resources\Campaigns\Schemas;
 
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Schema;
+use App\Models\Company;
+use App\Models\Directory;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Schema;
 
 class CampaignForm
 {
@@ -17,11 +21,25 @@ class CampaignForm
             ->components([
                 Section::make('Kampanya Bilgileri')
                     ->schema([
-                        Select::make('company_id')
-                            ->label('Firma')
-                            ->relationship('company', 'name')
+                        Select::make('directory_id')
+                            ->label('Kaynak Rehber')
+                            ->options(fn () => Directory::orderBy('name')->pluck('name', 'id')->all())
+                            ->default(fn () => app()->bound('currentDirectory') ? app('currentDirectory')->id : null)
                             ->searchable()
                             ->preload()
+                            ->required()
+                            ->live()
+                            ->afterStateUpdated(fn (Set $set) => $set('company_id', null)),
+                        Select::make('company_id')
+                            ->label('Firma')
+                            ->options(fn (Get $get) => Company::withoutGlobalScope('directory')
+                                ->where('directory_id', $get('directory_id'))
+                                ->orderBy('name')
+                                ->pluck('name', 'id')
+                                ->all())
+                            ->searchable()
+                            ->preload()
+                            ->disabled(fn (Get $get): bool => blank($get('directory_id')))
                             ->required(),
                         TextInput::make('name')
                             ->label('Kampanya Adı')

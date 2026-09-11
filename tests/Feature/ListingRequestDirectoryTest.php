@@ -4,7 +4,9 @@ namespace Tests\Feature;
 
 use App\Models\Category;
 use App\Models\City;
+use App\Models\Company;
 use App\Models\Directory;
+use App\Models\District;
 use App\Models\ListingRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use InvalidArgumentException;
@@ -48,6 +50,37 @@ class ListingRequestDirectoryTest extends TestCase
             'directory_id' => $directory->id,
             'status' => 'new',
         ]);
+    }
+
+    public function test_frontend_form_contains_shared_districts_and_requires_catalog_selection(): void
+    {
+        $directory = Directory::create([
+            'name' => 'Tekirdağ Rehberi',
+            'slug' => 'tekirdag-rehberi',
+            'domain' => 'tekirdag.test',
+            'status' => 'active',
+        ]);
+        $city = City::create([
+            'name' => 'Tekirdağ',
+            'slug' => 'tekirdag',
+            'directory_id' => null,
+        ]);
+        District::create([
+            'name' => 'Çorlu',
+            'slug' => 'corlu',
+            'city_id' => $city->id,
+            'directory_id' => null,
+        ]);
+
+        $this->withServerVariables(['HTTP_HOST' => $directory->domain])
+            ->get('http://tekirdag.test/firma-ekle')
+            ->assertOk()
+            ->assertSee('\u00c7orlu', false);
+
+        $this->withServerVariables(['HTTP_HOST' => $directory->domain])
+            ->from('http://tekirdag.test/firma-ekle')
+            ->post('http://tekirdag.test/firma-ekle', ['company_name' => 'Eksik Firma'])
+            ->assertSessionHasErrors(['category_id', 'city_id']);
     }
 
     public function test_request_directory_is_carried_to_the_approved_company(): void
@@ -155,7 +188,7 @@ class ListingRequestDirectoryTest extends TestCase
             'slug' => 'tekirdag',
         ]);
 
-        \App\Models\Company::create([
+        Company::create([
             'name' => 'Eski Global Firma',
             'category_id' => $category->id,
             'city_id' => $city->id,
@@ -164,7 +197,7 @@ class ListingRequestDirectoryTest extends TestCase
 
         app()->instance('currentDirectory', $directory);
 
-        $this->assertFalse(\App\Models\Company::where('name', 'Eski Global Firma')->exists());
+        $this->assertFalse(Company::where('name', 'Eski Global Firma')->exists());
     }
 
     public function test_www_host_resolves_the_root_domain_directory(): void

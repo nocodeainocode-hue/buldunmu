@@ -25,12 +25,12 @@ class DiscoveredCompanyApprovalTest extends TestCase
             'name' => 'Eczane',
             'slug' => 'eczane',
             'status' => 'active',
-            'directory_id' => $directory->id,
+            'directory_id' => null,
         ]);
         $city = City::create([
             'name' => 'İstanbul',
             'slug' => 'istanbul',
-            'directory_id' => $directory->id,
+            'directory_id' => null,
         ]);
         $discovered = DiscoveredCompany::create([
             'name' => 'Örnek Eczane',
@@ -59,6 +59,41 @@ class DiscoveredCompanyApprovalTest extends TestCase
         $this->assertSame('29.0200000', $company->longitude);
         $this->assertSame('Mo-Sa 09:00-19:00', $company->opening_hours);
         $this->assertStringContainsString('41.01,29.02', $company->google_maps_url);
+        $this->assertNull($company->category->directory_id);
+        $this->assertNull($company->city->directory_id);
         $this->assertSame('approved', $discovered->fresh()->status);
+    }
+
+    public function test_approval_without_overrides_creates_only_shared_fallback_taxonomies(): void
+    {
+        $directory = Directory::create([
+            'name' => 'Test Rehber',
+            'slug' => 'test-rehber',
+            'domain' => 'test.local',
+            'status' => 'active',
+        ]);
+
+        $discovered = DiscoveredCompany::create([
+            'name' => 'Örnek Firma',
+            'source' => 'openstreetmap',
+            'search_city' => 'Tekirdağ',
+            'status' => 'pending',
+            'directory_id' => $directory->id,
+        ]);
+
+        City::create([
+            'name' => 'Tekirdağ',
+            'slug' => 'tekirdag',
+            'directory_id' => null,
+        ]);
+
+        $company = $discovered->approve();
+
+        $this->assertNull($company->category->directory_id);
+        $this->assertSame('genel', $company->category->slug);
+        $this->assertNull($company->city->directory_id);
+        $this->assertSame('tekirdag', $company->city->slug);
+        $this->assertDatabaseCount('categories', 1);
+        $this->assertDatabaseCount('cities', 1);
     }
 }

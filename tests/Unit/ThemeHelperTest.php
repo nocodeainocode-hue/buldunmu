@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\View\Helpers\ThemeHelper;
 use App\Models\Directory;
+use App\View\Helpers\ThemeHelper;
 use Tests\TestCase;
 
 class ThemeHelperTest extends TestCase
@@ -28,6 +28,21 @@ class ThemeHelperTest extends TestCase
         $this->assertEquals('fallback', ThemeHelper::get('nonexistent', null, 'fallback'));
     }
 
+    public function test_directory_theme_overrides_template_values(): void
+    {
+        $directory = new Directory([
+            'template' => 'default',
+            'theme' => [
+                'primary' => '#123456',
+                'hero_gradient_from' => '#abcdef',
+            ],
+        ]);
+
+        $this->assertSame('#123456', ThemeHelper::get('primary', $directory));
+        $this->assertStringContainsString('--primary: #123456;', ThemeHelper::cssVariables($directory));
+        $this->assertStringContainsString('--hero_gradient_from: #abcdef;', ThemeHelper::cssVariables($directory));
+    }
+
     public function test_new_layout_templates_are_registered(): void
     {
         foreach ([
@@ -37,7 +52,7 @@ class ThemeHelperTest extends TestCase
         ] as $template) {
             $this->assertArrayHasKey($template, ThemeHelper::TEMPLATES);
             $this->assertSame($template, ThemeHelper::TEMPLATES[$template]['layout']);
-            $this->assertFileExists(resource_path('views/frontend/home/' . $template . '.blade.php'));
+            $this->assertFileExists(resource_path('views/frontend/home/'.$template.'.blade.php'));
         }
     }
 

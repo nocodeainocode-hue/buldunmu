@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\City;
+use App\Models\District;
 use App\Models\ListingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -15,8 +16,11 @@ class ListingRequestController extends Controller
     {
         $categories = Category::active()->orderBy('name')->get();
         $cities = City::orderBy('name')->get();
-        return view('frontend.listing.create', compact('categories', 'cities'));
+        $districts = District::orderBy('name')->get(['id', 'city_id', 'name']);
+
+        return view('frontend.listing.create', compact('categories', 'cities', 'districts'));
     }
+
     public function store(Request $request)
     {
         abort_unless(app()->bound('currentDirectory'), 404);
@@ -31,7 +35,7 @@ class ListingRequestController extends Controller
             'email' => 'nullable|email|max:255',
             'website' => 'nullable|url|max:255',
             'category_id' => [
-                'nullable',
+                'required',
                 Rule::exists('categories', 'id')->where(
                     fn ($query) => $query
                         ->whereNull('directory_id')
@@ -39,7 +43,7 @@ class ListingRequestController extends Controller
                 ),
             ],
             'city_id' => [
-                'nullable',
+                'required',
                 Rule::exists('cities', 'id')->where(
                     fn ($query) => $query
                         ->whereNull('directory_id')

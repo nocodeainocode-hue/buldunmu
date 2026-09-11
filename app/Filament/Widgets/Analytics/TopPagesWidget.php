@@ -2,17 +2,21 @@
 
 namespace App\Filament\Widgets\Analytics;
 
+use App\Filament\Pages\AnalyticsDashboard;
 use App\Models\PageView;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Builder;
 
 class TopPagesWidget extends BaseWidget
 {
+    use InteractsWithPageFilters;
+
     protected static ?int $sort = 3;
 
-    protected int | string | array $columnSpan = [
+    protected int|string|array $columnSpan = [
         'md' => 1,
     ];
 
@@ -20,7 +24,7 @@ class TopPagesWidget extends BaseWidget
 
     public static function canView(): bool
     {
-        return request()?->route()?->getController() instanceof \App\Filament\Pages\AnalyticsDashboard;
+        return request()?->route()?->getController() instanceof AnalyticsDashboard;
     }
 
     public function table(Table $table): Table
@@ -29,7 +33,7 @@ class TopPagesWidget extends BaseWidget
 
         return $table
             ->query(
-                PageView::query()
+                PageView::withoutGlobalScope('directory')
                     ->select('path')
                     ->selectRaw('COUNT(*) as views')
                     ->when($directoryId, fn (Builder $q) => $q->directory($directoryId))
@@ -53,12 +57,8 @@ class TopPagesWidget extends BaseWidget
 
     private function getPageDirectoryId(): ?int
     {
-        $page = $this->getPage();
+        $directoryId = $this->pageFilters['directoryFilter'] ?? null;
 
-        if ($page && property_exists($page, 'directoryFilter')) {
-            return $page->directoryFilter;
-        }
-
-        return null;
+        return filled($directoryId) ? (int) $directoryId : null;
     }
 }

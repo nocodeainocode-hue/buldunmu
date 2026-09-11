@@ -2,12 +2,16 @@
 
 namespace App\Filament\Widgets\Analytics;
 
+use App\Filament\Pages\AnalyticsDashboard;
 use App\Models\PageView;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class PageViewStats extends BaseWidget
 {
+    use InteractsWithPageFilters;
+
     protected static ?int $sort = 0;
 
     protected ?string $heading = 'Sayfa Görüntüleme İstatistikleri';
@@ -17,15 +21,15 @@ class PageViewStats extends BaseWidget
      */
     public static function canView(): bool
     {
-        return request()?->route()?->getController() instanceof \App\Filament\Pages\AnalyticsDashboard;
+        return request()?->route()?->getController() instanceof AnalyticsDashboard;
     }
 
     protected function getStats(): array
     {
         $directoryId = $this->getPageDirectoryId();
 
-        $totalQuery = PageView::query();
-        $todayQuery = PageView::query()->whereDate('created_at', today());
+        $totalQuery = PageView::withoutGlobalScope('directory');
+        $todayQuery = PageView::withoutGlobalScope('directory')->whereDate('created_at', today());
 
         if ($directoryId) {
             $totalQuery->directory($directoryId);
@@ -35,7 +39,7 @@ class PageViewStats extends BaseWidget
         $totalViews = $totalQuery->count();
         $todayViews = $todayQuery->count();
 
-        $yesterdayViews = PageView::query()
+        $yesterdayViews = PageView::withoutGlobalScope('directory')
             ->when($directoryId, fn ($q) => $q->directory($directoryId))
             ->whereDate('created_at', today()->subDay())
             ->count();
@@ -54,7 +58,7 @@ class PageViewStats extends BaseWidget
                 ->color('primary'),
 
             Stat::make('Bugünkü Trafik', number_format($todayViews))
-                ->description('Dün: ' . number_format($yesterdayViews))
+                ->description('Dün: '.number_format($yesterdayViews))
                 ->descriptionIcon($trendIcon)
                 ->color($trendColor),
         ];
@@ -62,12 +66,8 @@ class PageViewStats extends BaseWidget
 
     private function getPageDirectoryId(): ?int
     {
-        $page = $this->getPage();
+        $directoryId = $this->pageFilters['directoryFilter'] ?? null;
 
-        if ($page && property_exists($page, 'directoryFilter')) {
-            return $page->directoryFilter;
-        }
-
-        return null;
+        return filled($directoryId) ? (int) $directoryId : null;
     }
 }

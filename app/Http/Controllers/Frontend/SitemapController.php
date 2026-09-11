@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Company;
 use App\Models\Category;
 use App\Models\City;
+use App\Models\Company;
 use App\Models\Post;
 
 class SitemapController extends Controller
@@ -15,15 +15,15 @@ class SitemapController extends Controller
         $directory = app()->bound('currentDirectory') ? app('currentDirectory') : null;
 
         $companies = Company::active()
-            ->when($directory, fn($q) => $q->where('directory_id', $directory->id))
+            ->when($directory, fn ($q) => $q->where('directory_id', $directory->id))
             ->get();
 
         $categories = Category::active()
-            ->when($directory, fn($q) => $q->where('directory_id', $directory->id))
+            ->whereHas('companies', fn ($q) => $q->active())
             ->get();
 
-        $cities = City::when($directory, fn($q) => $q->where('directory_id', $directory->id))
-            ->whereHas('companies', fn($q) => $q->active())
+        $cities = City::query()
+            ->whereHas('companies', fn ($q) => $q->active())
             ->get();
 
         $posts = Post::publishedForDirectory($directory)

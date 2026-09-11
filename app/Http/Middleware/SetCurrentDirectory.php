@@ -24,7 +24,12 @@ class SetCurrentDirectory
             $host = strtolower($request->getHost());
             $rootHost = str_starts_with($host, 'www.') ? substr($host, 4) : $host;
 
-            $directory = Directory::whereIn('domain', [$host, $rootHost, 'www.' . $rootHost])->first();
+            $directory = Directory::whereIn('domain', [$host, $rootHost, 'www.'.$rootHost])
+                ->where('status', 'active')
+                ->where(fn ($query) => $query
+                    ->whereNull('expires_at')
+                    ->orWhere('expires_at', '>', now()))
+                ->first();
 
             if (! $directory && app()->environment('production')) {
                 abort(404);

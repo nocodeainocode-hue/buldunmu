@@ -29,7 +29,7 @@ class CompanyImportService
         $reader->setReadDataOnly(true);
         $sheet = $reader->load($path)->getActiveSheet()->toArray(null, true, true, false);
         $header = array_shift($sheet) ?? [];
-        $header = array_map(fn($value) => $this->normalizeHeader((string) $value), $header);
+        $header = array_map(fn ($value) => $this->normalizeHeader((string) $value), $header);
         $rows = [];
 
         foreach ($sheet as $values) {
@@ -42,7 +42,7 @@ class CompanyImportService
                     $row[$key] = is_string($values[$index] ?? null) ? trim($values[$index]) : ($values[$index] ?? null);
                 }
             }
-            if (collect($row)->filter(fn($value) => filled($value))->isNotEmpty()) {
+            if (collect($row)->filter(fn ($value) => filled($value))->isNotEmpty()) {
                 $rows[] = $row;
             }
         }
@@ -57,10 +57,18 @@ class CompanyImportService
         return collect($this->rows($path, $limit))->map(function (array $row, int $index) use ($directories) {
             $targets = $this->targetDirectories($row, $directories);
             $errors = [];
-            if (blank($row['name'] ?? null)) $errors[] = 'Firma adı eksik';
-            if ($targets->isEmpty()) $errors[] = 'Hedef rehber bulunamadı';
-            if (blank($row['category'] ?? null)) $errors[] = 'Kategori eksik';
-            if (blank($row['city'] ?? null)) $errors[] = 'Şehir eksik';
+            if (blank($row['name'] ?? null)) {
+                $errors[] = 'Firma adı eksik';
+            }
+            if ($targets->isEmpty()) {
+                $errors[] = 'Hedef rehber bulunamadı';
+            }
+            if (blank($row['category'] ?? null)) {
+                $errors[] = 'Kategori eksik';
+            }
+            if (blank($row['city'] ?? null)) {
+                $errors[] = 'Şehir eksik';
+            }
 
             return [
                 'row' => $index + 2,
@@ -69,7 +77,7 @@ class CompanyImportService
                 'city' => $row['city'] ?? '',
                 'directories' => $targets->pluck('domain')->implode(', '),
                 'status' => $errors ? implode(', ', $errors) : 'Hazır',
-                'valid' => !$errors,
+                'valid' => ! $errors,
             ];
         })->all();
     }
@@ -89,18 +97,19 @@ class CompanyImportService
 
                 if (blank($row['name'] ?? null) || $targets->isEmpty()) {
                     $stats['failed']++;
-                    $errors[] = 'Satır ' . ($rowIndex + 2) . ': Firma adı veya hedef rehber eksik.';
+                    $errors[] = 'Satır '.($rowIndex + 2).': Firma adı veya hedef rehber eksik.';
+
                     continue;
                 }
 
                 foreach ($targets as $directory) {
                     try {
-                        $result = DB::transaction(fn() => $this->importForDirectory($batch, $directory, $row, $options));
+                        $result = DB::transaction(fn () => $this->importForDirectory($batch, $directory, $row, $options));
                         $stats[$result]++;
                     } catch (\Throwable $exception) {
                         $stats['failed']++;
                         if (count($errors) < 500) {
-                            $errors[] = 'Satır ' . ($rowIndex + 2) . ' / ' . $directory->domain . ': ' . $exception->getMessage();
+                            $errors[] = 'Satır '.($rowIndex + 2).' / '.$directory->domain.': '.$exception->getMessage();
                         }
                     }
                 }
@@ -138,21 +147,25 @@ class CompanyImportService
 
     private function importForDirectory(CompanyImportBatch $batch, Directory $directory, array $row, array $options): string
     {
-        $category = $this->taxonomy(Category::class, $directory->id, $row['category'] ?? null, $options['auto_create_taxonomies'] ?? true);
-        $city = $this->taxonomy(City::class, $directory->id, $row['city'] ?? null, $options['auto_create_taxonomies'] ?? true);
-        if (!$category || !$city) {
+        $category = $this->taxonomy(Category::class, $row['category'] ?? null, $options['auto_create_taxonomies'] ?? false);
+        $city = $this->taxonomy(City::class, $row['city'] ?? null, $options['auto_create_taxonomies'] ?? false);
+        if (! $category || ! $city) {
             throw new \RuntimeException('Kategori veya şehir eşleştirilemedi.');
         }
 
         $district = null;
         if (filled($row['district'] ?? null)) {
             $district = District::withoutGlobalScope('directory')
-                ->where('directory_id', $directory->id)->where('city_id', $city->id)
-                ->whereRaw('LOWER(name) = ?', [Str::lower($row['district'])])->first();
-            if (!$district && ($options['auto_create_taxonomies'] ?? true)) {
-                $district = District::create([
-                    'name' => $row['district'], 'slug' => $this->uniqueTaxonomySlug(District::class, $row['district'], $directory->id),
-                    'city_id' => $city->id, 'directory_id' => $directory->id,
+                ->whereNull('directory_id')
+                ->where('city_id', $city->id)
+                ->where('slug', Str::slug($row['district']))
+                ->first();
+            if (! $district && ($options['auto_create_taxonomies'] ?? false)) {
+                $district = District::withoutGlobalScope('directory')->create([
+                    'name' => trim($row['district']),
+                    'slug' => $this->uniqueTaxonomySlug(District::class, $row['district'], $city->id),
+                    'city_id' => $city->id,
+                    'directory_id' => null,
                 ]);
             }
         }
@@ -175,15 +188,19 @@ class CompanyImportService
             'status' => in_array($row['status'] ?? null, ['pending', 'active', 'passive'], true)
                 ? $row['status'] : ($batch->default_status ?: 'pending'),
             'directory_id' => $directory->id,
-        ], fn($value) => $value !== null && $value !== '');
+        ], fn ($value) => $value !== null && $value !== '');
 
         $existing = $this->findDuplicate($directory->id, $row, $city->id);
         $strategy = $batch->duplicate_strategy;
-        if ($existing && $strategy === 'skip') return 'skipped';
+        if ($existing && $strategy === 'skip') {
+            return 'skipped';
+        }
 
         if (filled($row['logo_url'] ?? null)) {
             $logo = $this->downloadLogo($row['logo_url']);
-            if ($logo) $data['logo'] = $logo;
+            if ($logo) {
+                $data['logo'] = $logo;
+            }
         }
 
         if ($existing && $strategy === 'update') {
@@ -199,6 +216,7 @@ class CompanyImportService
                 'action' => 'updated', 'before_data' => $before, 'after_data' => $existing->fresh()->only(array_keys($data)),
                 'created_at' => now(),
             ]);
+
             return 'updated';
         }
 
@@ -214,27 +232,36 @@ class CompanyImportService
 
     private function targetDirectories(array $row, $allowedDirectories)
     {
-        $requested = collect(preg_split('/[,;|]/', (string) ($row['directory'] ?? '')))->map(fn($value) => trim($value))->filter();
-        if ($requested->isEmpty() || $requested->contains(fn($value) => Str::upper($value) === 'ALL')) {
+        $requested = collect(preg_split('/[,;|]/', (string) ($row['directory'] ?? '')))->map(fn ($value) => trim($value))->filter();
+        if ($requested->isEmpty() || $requested->contains(fn ($value) => Str::upper($value) === 'ALL')) {
             return $allowedDirectories->values();
         }
 
-        return $allowedDirectories->filter(fn(Directory $directory) => $requested->contains(fn($value) =>
-            Str::lower($value) === Str::lower($directory->domain) || Str::lower($value) === Str::lower($directory->slug)
+        return $allowedDirectories->filter(fn (Directory $directory) => $requested->contains(fn ($value) => Str::lower($value) === Str::lower($directory->domain) || Str::lower($value) === Str::lower($directory->slug)
         ))->values();
     }
 
-    private function taxonomy(string $model, int $directoryId, ?string $name, bool $create)
+    private function taxonomy(string $model, ?string $name, bool $create)
     {
-        if (blank($name)) return null;
-        $record = $model::withoutGlobalScope('directory')->where('directory_id', $directoryId)
-            ->whereRaw('LOWER(name) = ?', [Str::lower(trim($name))])->first();
-        if (!$record && $create) {
-            $record = $model::withoutGlobalScope('directory')->create([
-                'name' => trim($name), 'slug' => $this->uniqueTaxonomySlug($model, $name, $directoryId),
-                'status' => 'active', 'directory_id' => $directoryId,
-            ]);
+        if (blank($name)) {
+            return null;
         }
+        $record = $model::withoutGlobalScope('directory')
+            ->whereNull('directory_id')
+            ->where('slug', Str::slug($name))
+            ->first();
+        if (! $record && $create) {
+            $attributes = [
+                'name' => trim($name),
+                'slug' => $this->uniqueTaxonomySlug($model, $name),
+                'directory_id' => null,
+            ];
+            if ($model === Category::class) {
+                $attributes['status'] = 'active';
+            }
+            $record = $model::withoutGlobalScope('directory')->create($attributes);
+        }
+
         return $record;
     }
 
@@ -242,23 +269,39 @@ class CompanyImportService
     {
         return Company::withoutGlobalScope('directory')->where('directory_id', $directoryId)
             ->where(function ($query) use ($row, $cityId) {
-                if (filled($row['external_id'] ?? null)) $query->orWhere('external_id', $row['external_id']);
-                if (filled($row['website'] ?? null)) $query->orWhere('website', $row['website']);
-                if (filled($row['phone'] ?? null)) $query->orWhere('phone', $row['phone']);
-                $query->orWhere(fn($nested) => $nested->where('name', $row['name'])->where('city_id', $cityId));
+                if (filled($row['external_id'] ?? null)) {
+                    $query->orWhere('external_id', $row['external_id']);
+                }
+                if (filled($row['website'] ?? null)) {
+                    $query->orWhere('website', $row['website']);
+                }
+                if (filled($row['phone'] ?? null)) {
+                    $query->orWhere('phone', $row['phone']);
+                }
+                $query->orWhere(fn ($nested) => $nested->where('name', $row['name'])->where('city_id', $cityId));
             })->first();
     }
 
-    private function uniqueTaxonomySlug(string $model, string $name, int $directoryId): string
+    private function uniqueTaxonomySlug(string $model, string $name, ?int $cityId = null): string
     {
-        $base = Str::slug($name) ?: 'kayit'; $slug = $base; $counter = 2;
-        while ($model::withoutGlobalScope('directory')->where('directory_id', $directoryId)->where('slug', $slug)->exists()) $slug = $base . '-' . $counter++;
+        $base = Str::slug($name) ?: 'kayit';
+        $slug = $base;
+        $counter = 2;
+        while ($model::withoutGlobalScope('directory')
+            ->whereNull('directory_id')
+            ->when($model === District::class, fn ($query) => $query->where('city_id', $cityId))
+            ->where('slug', $slug)
+            ->exists()) {
+            $slug = $base.'-'.$counter++;
+        }
+
         return $slug;
     }
 
     private function normalizeHeader(string $header): string
     {
         $key = Str::snake(Str::ascii(trim($header)));
+
         return match ($key) {
             'firma', 'firma_adi', 'company', 'company_name' => 'name',
             'rehber', 'rehberler', 'domain', 'domains', 'target' => 'directory',
@@ -273,21 +316,26 @@ class CompanyImportService
 
     private function downloadLogo(string $url): ?string
     {
-        if (!filter_var($url, FILTER_VALIDATE_URL) || !in_array(parse_url($url, PHP_URL_SCHEME), ['http', 'https'], true)) {
+        if (! filter_var($url, FILTER_VALIDATE_URL) || ! in_array(parse_url($url, PHP_URL_SCHEME), ['http', 'https'], true)) {
             return null;
         }
 
         try {
             $response = Http::timeout(15)->retry(1, 250)->get($url);
-            if (!$response->successful() || strlen($response->body()) > 5 * 1024 * 1024) return null;
+            if (! $response->successful() || strlen($response->body()) > 5 * 1024 * 1024) {
+                return null;
+            }
             $mime = Str::before((string) $response->header('Content-Type'), ';');
             $extension = match ($mime) {
                 'image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp',
                 'image/gif' => 'gif', 'image/svg+xml' => 'svg', default => null,
             };
-            if (!$extension) return null;
-            $path = 'companies/logos/import-' . Str::uuid() . '.' . $extension;
+            if (! $extension) {
+                return null;
+            }
+            $path = 'companies/logos/import-'.Str::uuid().'.'.$extension;
             Storage::disk('public')->put($path, $response->body());
+
             return $path;
         } catch (\Throwable) {
             return null;

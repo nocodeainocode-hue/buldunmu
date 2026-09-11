@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use App\Models\Concerns\BelongsToDirectory;
+use App\Services\CompanySlugService;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Carbon\CarbonInterface;
-use App\Services\CompanySlugService;
 
 class Company extends Model
 {
@@ -27,7 +27,7 @@ class Company extends Model
         });
 
         static::updating(function (self $company) {
-            if ($company->isDirty('slug') && !$company->slugChangeAllowed) {
+            if ($company->isDirty('slug') && ! $company->slugChangeAllowed) {
                 $company->slug = $company->getOriginal('slug');
             }
         });
@@ -64,8 +64,9 @@ class Company extends Model
             // Only rename if logo was actually uploaded/changed
             if ($company->wasChanged('logo') && $company->logo && Storage::disk('public')->exists($company->logo)) {
                 $ext = pathinfo($company->logo, PATHINFO_EXTENSION);
-                $newPath = 'companies/logos/' . $slug . '-logo.' . $ext;
+                $newPath = 'companies/logos/'.($company->directory_id ?? 'global').'/'.$slug.'-'.$company->id.'-logo.'.$ext;
                 if ($company->logo !== $newPath) {
+                    Storage::disk('public')->makeDirectory(dirname($newPath));
                     Storage::disk('public')->move($company->logo, $newPath);
                     $company->updateQuietly(['logo' => $newPath]);
                 }
@@ -74,14 +75,16 @@ class Company extends Model
             // Only rename if cover was actually uploaded/changed
             if ($company->wasChanged('cover_image') && $company->cover_image && Storage::disk('public')->exists($company->cover_image)) {
                 $ext = pathinfo($company->cover_image, PATHINFO_EXTENSION);
-                $newPath = 'companies/covers/' . $slug . '-cover.' . $ext;
+                $newPath = 'companies/covers/'.($company->directory_id ?? 'global').'/'.$slug.'-'.$company->id.'-cover.'.$ext;
                 if ($company->cover_image !== $newPath) {
+                    Storage::disk('public')->makeDirectory(dirname($newPath));
                     Storage::disk('public')->move($company->cover_image, $newPath);
                     $company->updateQuietly(['cover_image' => $newPath]);
                 }
             }
         });
     }
+
     protected $fillable = [
         'name', 'slug', 'external_id', 'import_batch_id', 'category_id', 'city_id', 'district_id',
         'phone', 'whatsapp', 'email', 'website', 'address', 'google_maps_url',
@@ -207,7 +210,7 @@ class Company extends Model
         return $query->where('is_premium', true)
             ->where(function ($q) {
                 $q->whereNull('premium_until')
-                  ->orWhere('premium_until', '>=', now());
+                    ->orWhere('premium_until', '>=', now());
             });
     }
 
@@ -224,6 +227,7 @@ class Company extends Model
     public function allowSlugChange(): self
     {
         $this->slugChangeAllowed = true;
+
         return $this;
     }
 
@@ -233,14 +237,16 @@ class Company extends Model
      */
     public function getOpeningHoursAttribute($value): string
     {
-        if (blank($value)) return '';
+        if (blank($value)) {
+            return '';
+        }
 
         // Detect JSON format
         if (in_array(($value[0] ?? ''), ['{', '['])) {
             $decoded = json_decode($value, true);
             if (is_array($decoded)) {
                 return collect($decoded)
-                    ->map(fn($hours, $day) => "{$day} {$hours}")
+                    ->map(fn ($hours, $day) => "{$day} {$hours}")
                     ->implode("\n");
             }
         }
@@ -274,7 +280,7 @@ class Company extends Model
         $schedule = [];
         foreach (preg_split('/\R/u', $text) as $line) {
             foreach ($dayNames as $day => $names) {
-                if (collect($names)->contains(fn(string $name) => Str::contains($line, $name))) {
+                if (collect($names)->contains(fn (string $name) => Str::contains($line, $name))) {
                     $schedule[$day] = $line;
                     break;
                 }
@@ -282,7 +288,7 @@ class Company extends Model
         }
 
         $parseRange = static function (?string $line): ?array {
-            if (!$line || Str::contains($line, ['kapalı', 'kapali', 'closed'])) {
+            if (! $line || Str::contains($line, ['kapalı', 'kapali', 'closed'])) {
                 return null;
             }
 
@@ -334,6 +340,6 @@ class Company extends Model
             $this->opening_hours, $this->short_description, $this->description, filled($this->services),
         ];
 
-        return (int) round((collect($fields)->filter(fn($value) => filled($value))->count() / count($fields)) * 100);
+        return (int) round((collect($fields)->filter(fn ($value) => filled($value))->count() / count($fields)) * 100);
     }
 }

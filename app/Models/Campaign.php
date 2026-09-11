@@ -2,15 +2,23 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToDirectory;
 use Illuminate\Database\Eloquent\Model;
 
 class Campaign extends Model
 {
+    use BelongsToDirectory;
+
     protected $fillable = [
-        'company_id', 'name',
+        'directory_id', 'company_id', 'name',
         'total_directories', 'daily_limit',
         'start_date', 'end_date', 'status',
     ];
+
+    public function allowsSharedDirectoryRecords(): bool
+    {
+        return false;
+    }
 
     protected $casts = [
         'start_date' => 'datetime',
