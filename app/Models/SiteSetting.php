@@ -27,6 +27,8 @@ class SiteSetting extends Model
         if ($directory) {
             $settings = (clone $query)->where('directory_id', $directory->id)->first();
             if ($settings) {
+                $settings->site_name = $directory->name;
+
                 return $settings;
             }
         }

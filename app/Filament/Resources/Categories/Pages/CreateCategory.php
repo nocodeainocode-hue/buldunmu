@@ -11,10 +11,8 @@ class CreateCategory extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $dir = app()->bound('currentDirectory') ? app('currentDirectory') : null;
-        if ($dir) {
-            $data['directory_id'] = $dir->id;
-        }
+        $data['directory_id'] = null;
+
         return $data;
     }
 }

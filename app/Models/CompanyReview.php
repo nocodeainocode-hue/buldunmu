@@ -9,6 +9,11 @@ class CompanyReview extends Model
 {
     use BelongsToDirectory;
 
+    public function allowsSharedDirectoryRecords(): bool
+    {
+        return false;
+    }
+
     protected $fillable = [
         'company_id',
         'directory_id',

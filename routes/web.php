@@ -86,7 +86,10 @@ Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
 // Tenant switch
 Route::post('/admin/tenant/switch', function () {
-    $id = request('directory_id');
+    $validated = request()->validate([
+        'directory_id' => ['nullable', 'integer', 'exists:directories,id'],
+    ]);
+    $id = $validated['directory_id'] ?? null;
     if ($id) {
         session(['current_directory_id' => (int) $id]);
     } else {

@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\SiteSettings\Schemas;
 
-use Filament\Schemas\Components\Section;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class SiteSettingForm
@@ -15,23 +15,19 @@ class SiteSettingForm
         return $schema
             ->components([
                 Section::make('Site Bilgileri')
+                    ->description('Site adı, logo, favicon, domain, tema ve genel SEO bilgileri Rehberler > Düzenle ekranından yönetilir.')
                     ->schema([
-                        TextInput::make('site_name')
-                            ->required(),
-                        TextInput::make('logo'),
-                        TextInput::make('favicon'),
                         TextInput::make('phone')
+                            ->label('Telefon')
                             ->tel(),
-                        TextInput::make('whatsapp'),
+                        TextInput::make('whatsapp')->label('WhatsApp'),
                         TextInput::make('email')
-                            ->label('Email address')
+                            ->label('E-posta')
                             ->email(),
-                        Textarea::make('address')
+                        Textarea::make('address')->label('Adres')
                             ->columnSpanFull(),
-                        TextInput::make('homepage_title'),
-                        TextInput::make('homepage_subtitle'),
-                        TextInput::make('meta_title'),
-                        TextInput::make('meta_description'),
+                        TextInput::make('homepage_title')->label('Ana Sayfa Başlığı'),
+                        TextInput::make('homepage_subtitle')->label('Ana Sayfa Alt Başlığı'),
                     ]),
                 Section::make('Özellik Ayarları')
                     ->schema([

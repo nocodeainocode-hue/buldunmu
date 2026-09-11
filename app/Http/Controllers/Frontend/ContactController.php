@@ -6,11 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\ContactMessage;
 use Illuminate\Http\Request;
 
-
 class ContactController extends Controller
 {
     public function store(Request $request)
     {
+        abort_unless(app()->bound('currentDirectory'), 404);
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
@@ -24,6 +25,7 @@ class ContactController extends Controller
         $captchaResult = session('captcha_result');
         if ((int) $validated['captcha'] !== $captchaResult) {
             session()->forget('captcha_result');
+
             return redirect()->back()
                 ->withInput()
                 ->with('error', 'Güvenlik sorusu yanlış. Lütfen tekrar deneyin.');
@@ -31,6 +33,7 @@ class ContactController extends Controller
         session()->forget('captcha_result');
 
         $validated['status'] = 'new';
+        $validated['directory_id'] = app('currentDirectory')->id;
 
         ContactMessage::create($validated);
 

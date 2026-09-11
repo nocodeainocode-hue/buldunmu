@@ -18,4 +18,15 @@ class DirectoryObserver
             ],
         );
     }
+
+    public function updated(Directory $directory): void
+    {
+        if (! $directory->wasChanged('name')) {
+            return;
+        }
+
+        SiteSetting::withoutGlobalScope('directory')
+            ->where('directory_id', $directory->id)
+            ->update(['site_name' => $directory->name]);
+    }
 }

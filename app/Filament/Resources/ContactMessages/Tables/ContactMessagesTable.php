@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources\ContactMessages\Tables;
 
+use App\Models\Directory;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class ContactMessagesTable
@@ -17,6 +19,10 @@ class ContactMessagesTable
                 TextColumn::make('name')
                     ->label('Gönderen')
                     ->searchable(),
+                TextColumn::make('directory.name')
+                    ->label('Geldiği Rehber')
+                    ->badge()
+                    ->placeholder('Eski kayıt'),
                 TextColumn::make('email')
                     ->label('E-posta')
                     ->searchable(),
@@ -29,8 +35,12 @@ class ContactMessagesTable
                 TextColumn::make('status')
                     ->label('Durum')
                     ->badge()
-                    ->formatStateUsing(fn($state) => match($state) {'new'=>'Yeni','read'=>'Okundu','replied'=>'Yanıtlandı',default=>$state})
-                    ->color(fn($state) => match($state) {'new'=>'danger','read'=>'info','replied'=>'success',default=>'gray'}),
+                    ->formatStateUsing(fn ($state) => match ($state) {
+                        'new' => 'Yeni','read' => 'Okundu','replied' => 'Yanıtlandı',default => $state
+                    })
+                    ->color(fn ($state) => match ($state) {
+                        'new' => 'danger','read' => 'info','replied' => 'success',default => 'gray'
+                    }),
                 TextColumn::make('created_at')
                     ->label('Tarih')
                     ->dateTime('d.m.Y H:i')
@@ -44,7 +54,9 @@ class ContactMessagesTable
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
-                //
+                SelectFilter::make('directory_id')
+                    ->label('Rehber')
+                    ->options(fn (): array => Directory::query()->orderBy('name')->pluck('name', 'id')->all()),
             ])
             ->recordActions([
                 EditAction::make(),

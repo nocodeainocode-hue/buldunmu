@@ -13,6 +13,11 @@ class DiscoveredCompany extends Model
 {
     use BelongsToDirectory;
 
+    public function allowsSharedDirectoryRecords(): bool
+    {
+        return false;
+    }
+
     protected $fillable = [
         'name', 'external_id', 'phone', 'address', 'latitude', 'longitude',
         'opening_hours', 'website', 'logo_url', 'email', 'description',

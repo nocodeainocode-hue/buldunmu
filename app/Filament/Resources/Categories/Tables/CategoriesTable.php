@@ -2,8 +2,6 @@
 
 namespace App\Filament\Resources\Categories\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -37,8 +35,8 @@ class CategoriesTable
                 TextColumn::make('status')
                     ->label('Durum')
                     ->badge()
-                    ->formatStateUsing(fn($state) => $state === 'active' ? 'Aktif' : 'Pasif')
-                    ->color(fn($state) => $state === 'active' ? 'success' : 'gray'),
+                    ->formatStateUsing(fn ($state) => $state === 'active' ? 'Aktif' : 'Pasif')
+                    ->color(fn ($state) => $state === 'active' ? 'success' : 'gray'),
                 TextColumn::make('created_at')
                     ->label('Oluşturulma')
                     ->dateTime('d.m.Y')
@@ -57,10 +55,6 @@ class CategoriesTable
             ->recordActions([
                 EditAction::make(),
             ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->toolbarActions([]);
     }
 }
