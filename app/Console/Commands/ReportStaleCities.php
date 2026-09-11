@@ -4,12 +4,17 @@ namespace App\Console\Commands;
 
 use App\Models\City;
 use App\Models\Company;
-use App\Models\Directory;
+use App\Models\District;
+use App\Models\ListingRequest;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class ReportStaleCities extends Command
 {
-    protected $signature = 'cities:report-stale {--prune : Delete stale tenant copies with 0 companies}';
+    protected $signature = 'cities:report-stale
+        {--prune : Delete stale tenant copies with 0 companies}
+        {--merge : Move related records to canonical cities and delete stale copies}';
+
     protected $description = 'Report (and optionally prune) stale tenant-specific city copies';
 
     public function handle(): int
@@ -78,7 +83,16 @@ class ReportStaleCities extends Command
             count($tableRows),
         ));
 
-        if ($this->option('prune')) {
+        if ($this->option('merge')) {
+            $movedCompanies = 0;
+
+            foreach ($staleCopies as $staleCity) {
+                $movedCompanies += $this->mergeIntoCanonicalCity($staleCity);
+            }
+
+            $this->newLine();
+            $this->info("✅ {$movedCompanies} firma ortak şehir kayıtlarına taşındı; eski şehir kopyaları silindi.");
+        } elseif ($this->option('prune')) {
             if (empty($prunableIds)) {
                 $this->warn('Hiçbir kopya silinemez durumda değil.');
 
@@ -97,5 +111,50 @@ class ReportStaleCities extends Command
         }
 
         return self::SUCCESS;
+    }
+
+    private function mergeIntoCanonicalCity(City $staleCity): int
+    {
+        $canonicalCity = City::withoutGlobalScope('directory')
+            ->whereNull('directory_id')
+            ->where('slug', $staleCity->slug)
+            ->firstOrFail();
+
+        return DB::transaction(function () use ($staleCity, $canonicalCity): int {
+            $staleDistricts = District::withoutGlobalScope('directory')
+                ->where('city_id', $staleCity->id)
+                ->get();
+
+            foreach ($staleDistricts as $staleDistrict) {
+                $canonicalDistrict = District::withoutGlobalScope('directory')
+                    ->where('city_id', $canonicalCity->id)
+                    ->where('slug', $staleDistrict->slug)
+                    ->first();
+
+                if ($canonicalDistrict) {
+                    Company::withoutGlobalScope('directory')
+                        ->where('district_id', $staleDistrict->id)
+                        ->update(['district_id' => $canonicalDistrict->id]);
+                    ListingRequest::withoutGlobalScope('directory')
+                        ->where('district_id', $staleDistrict->id)
+                        ->update(['district_id' => $canonicalDistrict->id]);
+                    $staleDistrict->delete();
+                } else {
+                    $staleDistrict->update(['city_id' => $canonicalCity->id]);
+                }
+            }
+
+            $companyQuery = Company::withoutGlobalScope('directory')->where('city_id', $staleCity->id);
+            $movedCompanies = $companyQuery->count();
+            $companyQuery->update(['city_id' => $canonicalCity->id]);
+
+            ListingRequest::withoutGlobalScope('directory')
+                ->where('city_id', $staleCity->id)
+                ->update(['city_id' => $canonicalCity->id]);
+
+            $staleCity->delete();
+
+            return $movedCompanies;
+        });
     }
 }
