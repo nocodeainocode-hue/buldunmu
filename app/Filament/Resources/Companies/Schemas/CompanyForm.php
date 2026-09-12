@@ -152,6 +152,8 @@ class CompanyForm
                             ->image()
                             ->disk('public')
                             ->directory('companies/logos')
+                            ->maxSize(10240)
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                             ->imageResizeMode('cover')
                             ->imageResizeTargetWidth('300')
                             ->imageResizeTargetHeight('300'),
@@ -160,13 +162,15 @@ class CompanyForm
                             ->image()
                             ->disk('public')
                             ->directory('companies/covers')
+                            ->maxSize(10240)
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                             ->imageResizeMode('cover')
                             ->imageResizeTargetWidth('1200')
                             ->imageResizeTargetHeight('400'),
                     ]),
 
                 Section::make('Fotoğraf Galerisi')
-                    ->description('Sürükle-bırak ile çoklu fotoğraf yükleyin ve sıralayın (max 20 adet, her biri max 5MB, jpg/png/webp)')
+                    ->description('Sürükle-bırak ile çoklu fotoğraf yükleyin ve sıralayın (max 20 adet, her biri max 10MB, jpg/png/webp)')
                     ->collapsible()
                     ->schema([
                         Repeater::make('gallery_images')
@@ -178,7 +182,7 @@ class CompanyForm
                                     ->image()
                                     ->disk('public')
                                     ->directory('firmalar/galeri')
-                                    ->maxSize(5120)
+                                    ->maxSize(10240)
                                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                                     ->imageResizeMode('cover')
                                     ->imageResizeTargetWidth('1200')

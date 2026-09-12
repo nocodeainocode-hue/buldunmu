@@ -17,7 +17,7 @@ class Company extends Model
 
     public function allowsSharedDirectoryRecords(): bool
     {
-        return false;
+        return true;
     }
 
     protected static function booted(): void

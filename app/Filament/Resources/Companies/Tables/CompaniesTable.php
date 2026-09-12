@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Companies\Tables;
 
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -20,11 +21,16 @@ class CompaniesTable
                 ImageColumn::make('logo')
                     ->label('Logo')
                     ->circular()
-                    ->defaultImageUrl(fn($record) => 'https://ui-avatars.com/api/?name=' . urlencode($record->name) . '&size=64&background=6366f1&color=fff'),
+                    ->defaultImageUrl(fn ($record) => 'https://ui-avatars.com/api/?name='.urlencode($record->name).'&size=64&background=6366f1&color=fff'),
                 TextColumn::make('name')
                     ->label('Firma Adı')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('directory_id')
+                    ->label('Yayın Kapsamı')
+                    ->formatStateUsing(fn ($state): string => blank($state) ? 'Tüm Rehberler' : 'Bu Rehber')
+                    ->badge()
+                    ->color(fn ($state): string => blank($state) ? 'info' : 'gray'),
                 TextColumn::make('category.name')
                     ->label('Kategori')
                     ->sortable(),
@@ -45,13 +51,13 @@ class CompaniesTable
                 TextColumn::make('status')
                     ->label('Durum')
                     ->badge()
-                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
                         'active' => 'Aktif',
                         'passive' => 'Pasif',
                         'pending' => 'Onay Bekliyor',
                         default => $state,
                     })
-                    ->color(fn(string $state): string => match ($state) {
+                    ->color(fn (string $state): string => match ($state) {
                         'active' => 'success',
                         'passive' => 'danger',
                         'pending' => 'warning',
@@ -90,15 +96,15 @@ class CompaniesTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
-                    \Filament\Actions\Action::make('activate')
+                    Action::make('activate')
                         ->label('Aktif Et')
                         ->icon('heroicon-o-check-circle')
-                        ->action(fn($records) => $records->each->update(['status' => 'active'])),
-                    \Filament\Actions\Action::make('deactivate')
+                        ->action(fn ($records) => $records->each->update(['status' => 'active'])),
+                    Action::make('deactivate')
                         ->label('Pasif Et')
                         ->icon('heroicon-o-x-circle')
                         ->color('danger')
-                        ->action(fn($records) => $records->each->update(['status' => 'passive'])),
+                        ->action(fn ($records) => $records->each->update(['status' => 'passive'])),
                 ]),
             ]);
     }

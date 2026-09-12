@@ -64,7 +64,7 @@ class SystemPreflight extends Command
             ['Ayarı eksik rehber', $missingSettings->count(), $missingSettings->isEmpty() ? 'OK' : 'HATA'],
             ['Domainsiz rehber', $missingDomains->count(), $missingDomains->isEmpty() ? 'OK' : 'HATA'],
             ['Tekrarlanan domain', $duplicateDomains->count(), $duplicateDomains->isEmpty() ? 'OK' : 'HATA'],
-            ['Rehbersiz firma', $globalCompanies, $globalCompanies === 0 ? 'OK' : 'HATA'],
+            ['Tüm rehberlerde yayınlanan firma', $globalCompanies, 'BİLGİ'],
             ['Tekrarlanan ortak kategori slug', $duplicateSharedCategorySlugs, $duplicateSharedCategorySlugs === 0 ? 'OK' : 'HATA'],
             ['Tekrarlanan ortak şehir slug', $duplicateSharedCitySlugs, $duplicateSharedCitySlugs === 0 ? 'OK' : 'HATA'],
         ];
@@ -89,7 +89,6 @@ class SystemPreflight extends Command
             || $missingSettings->isNotEmpty()
             || $missingDomains->isNotEmpty()
             || $duplicateDomains->isNotEmpty()
-            || $globalCompanies > 0
             || $duplicateSharedCategorySlugs > 0
             || $duplicateSharedCitySlugs > 0;
 

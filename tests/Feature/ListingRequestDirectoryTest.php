@@ -170,7 +170,7 @@ class ListingRequestDirectoryTest extends TestCase
         ]);
     }
 
-    public function test_null_directory_companies_are_not_shared_between_sites(): void
+    public function test_null_directory_companies_are_visible_on_all_sites(): void
     {
         $directory = Directory::create([
             'name' => 'İzole Rehber',
@@ -197,7 +197,43 @@ class ListingRequestDirectoryTest extends TestCase
 
         app()->instance('currentDirectory', $directory);
 
-        $this->assertFalse(Company::where('name', 'Eski Global Firma')->exists());
+        $this->assertTrue(Company::where('name', 'Eski Global Firma')->exists());
+    }
+
+    public function test_directory_company_takes_priority_over_shared_company_with_the_same_slug(): void
+    {
+        $directory = Directory::create([
+            'name' => 'Yerel Rehber',
+            'slug' => 'yerel-rehber',
+            'domain' => 'yerel.test',
+            'status' => 'active',
+        ]);
+        $category = Category::create([
+            'name' => 'Ortak Kategori',
+            'slug' => 'ortak-kategori',
+            'status' => 'active',
+        ]);
+        $city = City::create([
+            'name' => 'Tekirdağ',
+            'slug' => 'tekirdag',
+        ]);
+
+        foreach ([
+            ['name' => 'Genel Firma', 'directory_id' => null],
+            ['name' => 'Yerel Firma', 'directory_id' => $directory->id],
+        ] as $company) {
+            Company::create(array_merge($company, [
+                'slug' => 'ortak-firma',
+                'category_id' => $category->id,
+                'city_id' => $city->id,
+                'status' => 'active',
+            ]));
+        }
+
+        $this->withServerVariables(['HTTP_HOST' => $directory->domain])
+            ->get('http://yerel.test/firma/ortak-firma')
+            ->assertOk()
+            ->assertSee('Yerel Firma');
     }
 
     public function test_www_host_resolves_the_root_domain_directory(): void

@@ -18,11 +18,21 @@ class CacheHeaders
     {
         $response = $next($request);
 
+        if ($request->is('admin*') || $request->is('livewire*')) {
+            $response->headers->set('Cache-Control', 'no-store, private');
+
+            return $response;
+        }
+
+        if (! $request->isMethodCacheable()) {
+            return $response;
+        }
+
         $ext = pathinfo($request->path(), PATHINFO_EXTENSION);
 
         if (in_array($ext, ['css', 'js', 'woff2', 'jpg', 'png', 'svg', 'ico'])) {
             $response->headers->set('Cache-Control', 'public, max-age=31536000, immutable');
-        } elseif (!$request->is('admin*')) {
+        } else {
             $response->headers->set('Cache-Control', 'public, max-age=3600');
         }
 
