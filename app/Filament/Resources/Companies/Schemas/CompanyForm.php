@@ -53,6 +53,7 @@ class CompanyForm
             ->components([
                 Section::make('Firma Bilgileri')
                     ->description('Firmanın temel bilgileri')
+                    ->columnSpanFull()
                     ->schema([
                         Grid::make(2)
                             ->schema([
@@ -146,31 +147,36 @@ class CompanyForm
                     ]),
 
                 Section::make('Görseller')
+                    ->columnSpanFull()
                     ->schema([
-                        FileUpload::make('logo')
-                            ->label('Logo')
-                            ->image()
-                            ->disk('public')
-                            ->directory('companies/logos')
-                            ->maxSize(10240)
-                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                            ->imageResizeMode('cover')
-                            ->imageResizeTargetWidth('300')
-                            ->imageResizeTargetHeight('300'),
-                        FileUpload::make('cover_image')
-                            ->label('Kapak Görseli')
-                            ->image()
-                            ->disk('public')
-                            ->directory('companies/covers')
-                            ->maxSize(10240)
-                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                            ->imageResizeMode('cover')
-                            ->imageResizeTargetWidth('1200')
-                            ->imageResizeTargetHeight('400'),
+                        Grid::make(2)
+                            ->schema([
+                                FileUpload::make('logo')
+                                    ->label('Logo')
+                                    ->image()
+                                    ->disk('public')
+                                    ->directory('companies/logos')
+                                    ->maxSize(10240)
+                                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                                    ->imageResizeMode('cover')
+                                    ->imageResizeTargetWidth('300')
+                                    ->imageResizeTargetHeight('300'),
+                                FileUpload::make('cover_image')
+                                    ->label('Kapak Görseli')
+                                    ->image()
+                                    ->disk('public')
+                                    ->directory('companies/covers')
+                                    ->maxSize(10240)
+                                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                                    ->imageResizeMode('cover')
+                                    ->imageResizeTargetWidth('1200')
+                                    ->imageResizeTargetHeight('400'),
+                            ]),
                     ]),
 
                 Section::make('Fotoğraf Galerisi')
                     ->description('Sürükle-bırak ile çoklu fotoğraf yükleyin ve sıralayın (max 20 adet, her biri max 10MB, jpg/png/webp)')
+                    ->columnSpanFull()
                     ->collapsible()
                     ->schema([
                         Repeater::make('gallery_images')
