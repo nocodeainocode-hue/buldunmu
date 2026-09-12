@@ -2,8 +2,9 @@
 
 namespace App\Filament\Widgets\Analytics;
 
-use App\Filament\Pages\AnalyticsDashboard;
 use App\Models\PageView;
+use Filament\Facades\Filament;
+use Filament\Models\Contracts\FilamentUser;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -16,13 +17,15 @@ class PageViewStats extends BaseWidget
 
     protected ?string $heading = 'Sayfa Görüntüleme İstatistikleri';
 
-    /**
-     * Only show on the AnalyticsDashboard page, not on the default dashboard.
-     */
     public static function canView(): bool
     {
-        return request()?->route()?->getController() instanceof AnalyticsDashboard;
+        $panel = Filament::getPanel('admin');
+        $user = auth($panel->getAuthGuard())->user();
+
+        return $user instanceof FilamentUser && $user->canAccessPanel($panel);
     }
+
+    protected static bool $isDiscovered = false;
 
     protected function getStats(): array
     {

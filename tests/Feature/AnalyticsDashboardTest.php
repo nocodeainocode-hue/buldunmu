@@ -13,12 +13,33 @@ use App\Models\Directory;
 use App\Models\PageView;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
 use ReflectionMethod;
 use Tests\TestCase;
 
 class AnalyticsDashboardTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_analytics_widgets_allow_authenticated_livewire_refreshes(): void
+    {
+        $this->actingAs(User::factory()->create());
+
+        foreach ([PageViewStats::class, TrafficChartWidget::class, TopCompaniesWidget::class, TopPagesWidget::class] as $widgetClass) {
+            $this->assertFalse($widgetClass::isDiscovered());
+            Livewire::withoutLazyLoading()
+                ->test($widgetClass)
+                ->call('$refresh')
+                ->assertStatus(200);
+        }
+    }
+
+    public function test_analytics_widgets_deny_guests(): void
+    {
+        foreach ([PageViewStats::class, TrafficChartWidget::class, TopCompaniesWidget::class, TopPagesWidget::class] as $widgetClass) {
+            $this->assertFalse($widgetClass::canView());
+        }
+    }
 
     public function test_authenticated_admin_can_open_analytics_dashboard(): void
     {

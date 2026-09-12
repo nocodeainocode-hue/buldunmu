@@ -2,8 +2,9 @@
 
 namespace App\Filament\Widgets\Analytics;
 
-use App\Filament\Pages\AnalyticsDashboard;
 use App\Models\PageView;
+use Filament\Facades\Filament;
+use Filament\Models\Contracts\FilamentUser;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
@@ -24,8 +25,13 @@ class TopPagesWidget extends BaseWidget
 
     public static function canView(): bool
     {
-        return request()?->route()?->getController() instanceof AnalyticsDashboard;
+        $panel = Filament::getPanel('admin');
+        $user = auth($panel->getAuthGuard())->user();
+
+        return $user instanceof FilamentUser && $user->canAccessPanel($panel);
     }
+
+    protected static bool $isDiscovered = false;
 
     public function table(Table $table): Table
     {
