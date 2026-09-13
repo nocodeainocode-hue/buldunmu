@@ -26,7 +26,12 @@
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
             </button>
             <div class="min-w-0 flex-1 px-2">
-                <strong class="block truncate text-lg text-white" style="font-family:var(--font_heading);">{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}</strong>
+                @php $chatLogo = ($directory->logo ?? null) ?: ($settings->logo ?? null); @endphp
+                @if($chatLogo)
+                    <img src="{{ asset('storage/'.$chatLogo) }}" alt="{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}" width="160" height="40" class="h-9 max-w-40 object-contain object-left">
+                @else
+                    <strong class="block truncate text-lg text-white" style="font-family:var(--font_heading);">{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}</strong>
+                @endif
                 <span class="text-[11px] text-white/80">{{ \App\Models\Company::active()->count() }} işletme çevrimiçi gibi listelendi</span>
             </div>
             <a href="{{ route('listing.create') }}" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20 text-lg font-black text-white" aria-label="Firma ekle">+</a>

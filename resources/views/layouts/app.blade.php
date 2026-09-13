@@ -50,8 +50,11 @@
 
     <style>
         {!! \App\View\Helpers\ThemeHelper::cssVariables($directory ?? null) !!}
-        @php $mobileShellTemplates = ['pocket-directory', 'social-feed', 'chat-directory']; @endphp
-        @if(in_array(($directory->template ?? 'default'), $mobileShellTemplates))
+        @php
+            $mobileShellLayouts = ['pocket-directory', 'social-feed', 'chat-directory'];
+            $activeLayout = \App\View\Helpers\ThemeHelper::layoutFile($directory ?? null);
+        @endphp
+        @if(in_array($activeLayout, $mobileShellLayouts))
         html.theme-{{ $directory->template }} body > header,
         html.theme-{{ $directory->template }} body > footer { display:none; }
         html.theme-{{ $directory->template }} body { background:var(--bg) !important; }
@@ -222,7 +225,7 @@
     </header>
 
     <main class="flex-1">
-        @if(!request()->routeIs('home') && in_array(($directory->template ?? 'default'), $mobileShellTemplates))
+        @if(!request()->routeIs('home') && in_array($activeLayout, $mobileShellLayouts))
             @include('partials.mobile-shell')
         @else
             @yield('content')

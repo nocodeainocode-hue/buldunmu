@@ -67,6 +67,9 @@ class ThemeHelperTest extends TestCase
             'city-focused' => 'city-journal',
             'category-mega' => 'category-atlas',
             'map-first' => 'local-map-landing',
+            'dashboard' => 'service-console',
+            'mobile-app' => 'pocket-directory',
+            'step-by-step' => 'quick-quote',
         ];
 
         foreach ($expectedLayouts as $template => $layout) {
@@ -135,5 +138,12 @@ class ThemeHelperTest extends TestCase
 
         $dir2 = new Directory(['template' => 'modern']);
         $this->assertEquals('horizontal', ThemeHelper::cardPartial($dir2));
+    }
+
+    public function test_template_class_includes_specialized_layout_class_for_aliases(): void
+    {
+        $directory = new Directory(['template' => 'mobile-app']);
+
+        $this->assertSame('theme-mobile-app theme-pocket-directory', ThemeHelper::templateClass($directory));
     }
 }

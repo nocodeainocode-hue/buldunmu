@@ -26,8 +26,12 @@
             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
         <a href="{{ route('home') }}" class="flex min-w-0 items-center gap-2">
-            <span class="story-ring flex h-9 w-9 items-center justify-center rounded-xl text-sm font-black text-white">{{ mb_substr($directory->name ?? $settings->site_name ?? 'R', 0, 1) }}</span>
-            <strong class="truncate text-base" style="color:var(--text);font-family:var(--font_heading);">{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}</strong>
+            @php $feedLogo = ($directory->logo ?? null) ?: ($settings->logo ?? null); @endphp
+            @if($feedLogo)
+                <img src="{{ asset('storage/'.$feedLogo) }}" alt="{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}" width="160" height="40" class="h-9 max-w-40 object-contain object-left">
+            @else
+                <strong class="truncate text-base" style="color:var(--text);font-family:var(--font_heading);">{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}</strong>
+            @endif
         </a>
         <a href="{{ route('search') }}" class="flex h-9 w-9 items-center justify-center rounded-full" style="background:var(--primary_light);color:var(--primary);" aria-label="Ara">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>

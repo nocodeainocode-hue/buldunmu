@@ -25,8 +25,12 @@
 
     <div class="flex items-center justify-between border-b px-4 py-4" style="border-color:var(--border);">
         <a href="{{ route('home') }}" class="flex min-w-0 items-center gap-2">
-            <span class="flex h-9 w-9 items-center justify-center rounded-lg text-sm font-black text-white" style="background:var(--primary);">{{ mb_substr($directory->name ?? $settings->site_name ?? 'R', 0, 1) }}</span>
-            <strong class="truncate text-base" style="color:var(--text);">{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}</strong>
+            @php $pocketLogo = ($directory->logo ?? null) ?: ($settings->logo ?? null); @endphp
+            @if($pocketLogo)
+                <img src="{{ asset('storage/'.$pocketLogo) }}" alt="{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}" width="160" height="40" class="h-9 max-w-40 object-contain object-left">
+            @else
+                <strong class="truncate text-base" style="color:var(--text);">{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}</strong>
+            @endif
         </a>
         <a href="{{ route('listing.create') }}" class="shrink-0 rounded-lg border px-3 py-2 text-xs font-bold" style="border-color:var(--border);color:var(--primary);">+ Firma ekle</a>
     </div>

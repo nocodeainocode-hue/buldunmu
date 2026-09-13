@@ -4,19 +4,26 @@
 @section('meta_description', $settings->meta_description ?? 'Şu an açık restoranları, eczaneleri, çekicileri ve acil hizmet veren yerel firmaları bulun.')
 
 @section('content')
-@php $displayCompanies = $openCompanies->isNotEmpty() ? $openCompanies : $latestCompanies->take(8); @endphp
+@php
+    $displayCompanies = $openCompanies->isNotEmpty() ? $openCompanies : $latestCompanies->take(8);
+    $openNowHero = $directory?->hero_image
+        ? asset('storage/'.$directory->hero_image)
+        : asset('images/themes/open-now-hero.png');
+@endphp
 
 <main style="background:var(--bg);">
-    <section class="border-b py-12 sm:py-16" style="border-color:var(--border);background:var(--bg_card);">
-        <div class="mx-auto grid gap-9 px-4 sm:px-6 lg:grid-cols-[1fr_0.75fr] lg:px-8" style="max-width:var(--page_width,1280px);">
+    <section class="relative isolate overflow-hidden border-b" style="border-color:var(--border);background:var(--bg_card);">
+        <img src="{{ $openNowHero }}" alt="{{ $settings->site_name ?? 'Şu an açık yerel firmalar' }}" class="absolute inset-0 -z-20 h-full w-full object-cover object-right" width="1920" height="1080" fetchpriority="high">
+        <div class="absolute inset-0 -z-10" style="background:linear-gradient(90deg,rgba(12,30,48,.94) 0%,rgba(12,30,48,.80) 43%,rgba(12,30,48,.42) 69%,rgba(12,30,48,.08) 100%);"></div>
+        <div class="mx-auto grid min-h-[520px] items-center gap-9 px-4 py-12 sm:px-6 lg:grid-cols-[1fr_0.75fr] lg:px-8 lg:py-16" style="max-width:var(--page_width,1280px);">
             <div>
-                <div class="mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-black" style="border-color:#bbf7d0;color:#166534;background:#f0fdf4;"><span class="h-2 w-2 rounded-full bg-green-600"></span>{{ now()->format('H:i') }} · Canlı çalışma saati</div>
-                <h1 class="max-w-3xl text-4xl font-black leading-tight sm:text-6xl" style="color:var(--text);">{{ $settings->homepage_title ?? 'Şu an açık olan firmayı hemen bul' }}</h1>
-                <p class="mt-5 max-w-2xl text-base leading-8" style="color:var(--text_muted);">{{ $settings->homepage_subtitle ?? 'Gece geç saatte, hafta sonunda veya acil bir anda hizmet veren işletmelere hızlıca ulaşın.' }}</p>
-                <form action="{{ route('search') }}" method="GET" class="mt-7 flex max-w-2xl overflow-hidden rounded-lg border shadow-sm" style="border-color:var(--border);"><input name="q" class="min-w-0 flex-1 px-5 py-4 outline-none" placeholder="Nöbetçi eczane, çekici, restoran..." style="background:var(--bg_card);color:var(--text);"><button class="px-7 font-black text-white" style="background:var(--primary);">Bul</button></form>
+                <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-2 text-xs font-black" style="color:#fff;"><span class="h-2 w-2 rounded-full bg-green-400"></span>{{ now()->format('H:i') }} · Canlı çalışma saati</div>
+                <h1 class="max-w-3xl text-4xl font-black leading-tight sm:text-6xl" style="color:#fff;">{{ $settings->homepage_title ?? 'Şu an açık olan firmayı hemen bul' }}</h1>
+                <p class="mt-5 max-w-2xl text-base leading-8" style="color:rgba(255,255,255,.82);">{{ $settings->homepage_subtitle ?? 'Gece geç saatte, hafta sonunda veya acil bir anda hizmet veren işletmelere hızlıca ulaşın.' }}</p>
+                <form action="{{ route('search') }}" method="GET" class="mt-7 flex max-w-2xl flex-col gap-2 rounded-2xl bg-white p-3 shadow-2xl sm:flex-row"><label class="sr-only" for="open-now-search">Açık firma ara</label><input id="open-now-search" name="q" class="min-h-14 min-w-0 flex-1 rounded-xl border px-5 text-sm outline-none" placeholder="Nöbetçi eczane, çekici, restoran..." style="border-color:var(--border);color:var(--text);"><button class="min-h-14 rounded-xl px-7 font-black" style="background:var(--primary);color:#fff;">Bul</button></form>
             </div>
             <div class="grid grid-cols-2 gap-3 self-center">
-                @foreach($categories->take(6) as $category)<a href="{{ route('categories.show',$category->slug) }}" class="border-l-4 p-4 shadow-sm transition hover:-translate-y-0.5" style="border-color:var(--primary);background:var(--bg);"><div class="text-sm font-black" style="color:var(--text);">{{ $category->name }}</div><div class="mt-1 text-xs" style="color:var(--text_muted);">{{ $category->companies_count }} firma</div></a>@endforeach
+                @foreach($categories->take(6) as $category)<a href="{{ route('categories.show',$category->slug) }}" class="border-l-4 bg-white/90 p-4 shadow-xl backdrop-blur-sm transition hover:-translate-y-0.5" style="border-color:var(--primary);"><div class="text-sm font-black" style="color:var(--text);">{{ $category->name }}</div><div class="mt-1 text-xs" style="color:var(--text_muted);">{{ $category->companies_count }} firma</div></a>@endforeach
             </div>
         </div>
     </section>
