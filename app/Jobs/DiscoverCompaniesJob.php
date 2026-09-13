@@ -12,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 
 class DiscoverCompaniesJob implements ShouldQueue, ShouldBeUnique
@@ -57,9 +58,9 @@ class DiscoverCompaniesJob implements ShouldQueue, ShouldBeUnique
      */
     public function handle(FirecrawlService $firecrawl, OpenStreetMapService $openStreetMap): void
     {
-        $keyword = $this->data['keyword'] ?? '';
-        $city = $this->data['city'] ?? '';
-        $source = $this->data['source'] ?? 'google_maps';
+        $keyword = $this->limitString($this->data['keyword'] ?? null, 255) ?? '';
+        $city = $this->limitString($this->data['city'] ?? null, 255) ?? '';
+        $source = $this->limitString($this->data['source'] ?? null, 255) ?? 'google_maps';
         $customUrl = $this->data['customUrl'] ?? null;
 
         Log::info('Firecrawl keşif job başladı.', [
@@ -82,11 +83,18 @@ class DiscoverCompaniesJob implements ShouldQueue, ShouldBeUnique
         $skipped = 0;
 
         foreach ($results as $company) {
-            if (empty($company['name'])) {
+            $rawData = array_merge(
+                is_array($company['raw_data'] ?? null) ? $company['raw_data'] : [],
+                $company,
+            );
+            $company = $this->normalizeCompany($company);
+
+            if (blank($company['name'] ?? null)) {
                 continue;
             }
 
-            $exists = DiscoveredCompany::query()
+            $exists = DiscoveredCompany::withoutGlobalScope('directory')
+                ->where('directory_id', $this->directoryId)
                 ->where('source', $source)
                 ->where(function ($query) use ($company, $keyword, $city) {
                     if (filled($company['external_id'] ?? null)) {
@@ -120,7 +128,7 @@ class DiscoverCompaniesJob implements ShouldQueue, ShouldBeUnique
                 'source_url' => $company['source_url'] ?? null,
                 'search_keyword' => $keyword,
                 'search_city' => $city,
-                'raw_data' => array_merge($company['raw_data'] ?? [], $company),
+                'raw_data' => $rawData,
                 'status' => 'pending',
                 'directory_id' => $this->directoryId,
             ]);
@@ -154,6 +162,54 @@ class DiscoverCompaniesJob implements ShouldQueue, ShouldBeUnique
                     ->sendToDatabase($user);
             }
         }
+    }
+
+    /**
+     * Keep provider payloads from exceeding varchar columns while retaining the
+     * original values in raw_data for review.
+     *
+     * @param array<string, mixed> $company
+     * @return array<string, mixed>
+     */
+    private function normalizeCompany(array $company): array
+    {
+        foreach ([
+            'name' => 255,
+            'external_id' => 255,
+            'phone' => 255,
+            'opening_hours' => 255,
+            'website' => 255,
+            'logo_url' => 255,
+            'email' => 255,
+            'source_url' => 255,
+        ] as $field => $limit) {
+            $company[$field] = $this->limitString($company[$field] ?? null, $limit);
+        }
+
+        foreach (['address', 'description'] as $field) {
+            $company[$field] = $this->limitString($company[$field] ?? null);
+        }
+
+        foreach (['latitude', 'longitude'] as $field) {
+            $company[$field] = is_numeric($company[$field] ?? null) ? $company[$field] : null;
+        }
+
+        return $company;
+    }
+
+    private function limitString(mixed $value, ?int $limit = null): ?string
+    {
+        if (! is_scalar($value) && ! $value instanceof \Stringable) {
+            return null;
+        }
+
+        $value = trim((string) $value);
+
+        if ($value === '') {
+            return null;
+        }
+
+        return $limit === null ? $value : Str::limit($value, $limit, '');
     }
 
     /**
