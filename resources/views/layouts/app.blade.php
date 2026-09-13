@@ -91,13 +91,10 @@
                 <a href="{{ route('home') }}" class="flex items-center gap-2" onclick="closeMobileMenu()">
                     @php $dirLogo = ($directory->logo ?? null) ?: ($settings->logo ?? null); @endphp
                     @if($dirLogo)
-                        <img src="{{ asset('storage/' . $dirLogo) }}" alt="{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}" width="32" height="32" class="h-8 w-auto">
+                        <img src="{{ asset('storage/' . $dirLogo) }}" alt="{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}" width="160" height="40" class="h-8 max-w-40 object-contain object-left">
                     @else
-                        <div class="flex h-8 w-8 items-center justify-center rounded-lg text-xs font-black text-white" style="background:var(--primary);">
-                            {{ mb_substr($directory->name ?? $settings->site_name ?? 'F', 0, 1) }}
-                        </div>
+                        <span class="text-lg font-black" style="color:var(--text);">{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}</span>
                     @endif
-                    <span class="text-lg font-black" style="color:var(--text);">{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}</span>
                 </a>
                 <button id="mobile-menu-close" class="rounded-lg p-2 transition hover:bg-black/5 dark:hover:bg-white/5" style="color:var(--text_muted);" aria-label="Menüyü kapat">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -161,13 +158,10 @@
                 <a href="{{ route('home') }}" class="flex shrink-0 items-center gap-2">
                     @php $dirLogo = ($directory->logo ?? null) ?: ($settings->logo ?? null); @endphp
                     @if($dirLogo)
-                        <img src="{{ asset('storage/' . $dirLogo) }}" alt="{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}" width="40" height="40" class="h-10 w-auto">
+                        <img src="{{ asset('storage/' . $dirLogo) }}" alt="{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}" width="200" height="48" class="h-10 max-w-48 object-contain object-left">
                     @else
-                        <div class="flex h-10 w-10 items-center justify-center rounded-xl text-sm font-black text-white" style="background:var(--primary);">
-                            {{ mb_substr($directory->name ?? $settings->site_name ?? 'F', 0, 1) }}
-                        </div>
+                        <span class="text-xl font-black" style="color:var(--text);">{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}</span>
                     @endif
-                    <span class="hidden text-xl font-black sm:block" style="color:var(--text);">{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}</span>
                 </a>
 
                 <nav class="hidden items-center gap-1 md:flex">
@@ -245,11 +239,10 @@
                     @endphp
                     <a href="{{ route('home') }}" class="inline-flex items-center gap-3" aria-label="{{ $footerName }} ana sayfa">
                         @if($footerLogo)
-                            <img src="{{ asset('storage/' . $footerLogo) }}" alt="{{ $footerName }}" width="40" height="40" class="h-10 w-auto rounded-lg object-contain">
+                            <img src="{{ asset('storage/' . $footerLogo) }}" alt="{{ $footerName }}" width="220" height="56" class="h-12 max-w-52 object-contain object-left">
                         @else
-                            <span class="flex h-10 w-10 items-center justify-center rounded-lg text-sm font-black" style="background:var(--primary);color:white;">{{ mb_substr($footerName, 0, 1) }}</span>
+                            <span class="text-xl font-black" style="color:white;">{{ $footerName }}</span>
                         @endif
-                        <span class="text-xl font-black" style="color:white;">{{ $footerName }}</span>
                     </a>
                     <p class="mt-3 max-w-xs text-sm leading-6" style="color:#94a3b8;">{{ $directory->meta_description ?? $settings->meta_description ?? 'Türkiye genelinde firma, kategori ve şehir araması için sade rehber deneyimi.' }}</p>
                 </div>
