@@ -13,6 +13,8 @@
     $hasRichContent = !empty($company->description) && strlen(strip_tags($company->description)) > 200;
     $googleMapsEmbedSrc = $company->googleMapsEmbedSrc();
     $isSearchIndexable = $company->isSearchIndexable();
+    $profileScore = $company->profileCompletionScore();
+    $socialImage = $company->cover_image ?: $company->logo;
 
     // FAQ items for JSON-LD schema
     $faqItems = [
@@ -54,8 +56,9 @@
 <meta property="og:description" content="{{ $company->short_description ?: $company->name . ' iletişim bilgileri, adresi ve kullanıcı yorumları.' }}">
 <meta property="og:url" content="{{ route('companies.show', $company->slug) }}">
 <meta property="og:type" content="website">
-@if($company->logo)
-<meta property="og:image" content="{{ asset('storage/' . $company->logo) }}">
+@if($socialImage)
+<meta property="og:image" content="{{ asset('storage/' . $socialImage) }}">
+<meta name="twitter:card" content="summary_large_image">
 @endif
 
 @if($isSearchIndexable)
@@ -460,6 +463,25 @@
                     @endif
                 </div>
             </div>
+
+            {{-- Owner conversion card --}}
+            <section class="overflow-hidden rounded-3xl border p-5" style="border-color:color-mix(in srgb, var(--primary) 28%, var(--border));background:linear-gradient(145deg,var(--primary_light),#fff);box-shadow:var(--card_shadow);">
+                <div class="flex items-start gap-3">
+                    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-xl" style="background:var(--primary);color:#fff;">✦</div>
+                    <div>
+                        <p class="text-xs font-black uppercase tracking-wider" style="color:var(--primary);">Firma sahipleri için</p>
+                        <h3 class="mt-1 text-lg font-black" style="color:var(--text);">Bu profil size mi ait?</h3>
+                    </div>
+                </div>
+                <p class="mt-3 text-sm leading-6" style="color:var(--text_muted);">Bilgilerinizi doğrulayın; telefon, web sitesi, konum, çalışma saatleri, hizmetler ve görselleriniz profilinizde doğru yer alsın.</p>
+                <a href="{{ route('companies.claim', $company->slug) }}" class="mt-4 flex items-center justify-center rounded-xl px-4 py-3 text-sm font-black text-white transition hover:opacity-90 active:scale-[.98]" style="background:var(--primary);">
+                    Profili Sahiplen ve Güncelle
+                </a>
+                <div class="mt-4 flex items-center justify-between border-t pt-3 text-xs" style="border-color:var(--border);color:var(--text_muted);">
+                    <span>Bilgi kapsamı: <strong style="color:var(--text);">%{{ $profileScore }}</strong></span>
+                    <span>Son güncelleme: {{ $company->updated_at?->format('d.m.Y') }}</span>
+                </div>
+            </section>
 
             {{-- Similar Companies --}}
             @if($similarCompanies->isNotEmpty())

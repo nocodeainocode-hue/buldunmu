@@ -121,6 +121,61 @@ class ListingRequestDirectoryTest extends TestCase
         ]);
     }
 
+    public function test_profile_claim_updates_the_existing_company_without_creating_a_duplicate(): void
+    {
+        $directory = Directory::create([
+            'name' => 'Profil Rehberi',
+            'slug' => 'profil-rehberi',
+            'domain' => 'profil.test',
+            'status' => 'active',
+        ]);
+        $category = Category::create([
+            'name' => 'Diş Kliniği',
+            'slug' => 'dis-klinigi',
+            'status' => 'active',
+        ]);
+        $city = City::create([
+            'name' => 'İstanbul',
+            'slug' => 'istanbul',
+        ]);
+        $company = Company::create([
+            'name' => 'Örnek Klinik',
+            'directory_id' => $directory->id,
+            'category_id' => $category->id,
+            'city_id' => $city->id,
+            'phone' => '0212 000 00 00',
+            'status' => 'active',
+        ]);
+
+        $this->withServerVariables(['HTTP_HOST' => $directory->domain])
+            ->get("http://profil.test/firma/{$company->slug}/sahiplen")
+            ->assertOk()
+            ->assertSee('Örnek Klinik profilini sahiplenin')
+            ->assertSee('name="claim_company_id"', false);
+
+        $this->withServerVariables(['HTTP_HOST' => $directory->domain])
+            ->post('http://profil.test/firma-ekle', [
+                'claim_company_id' => $company->id,
+                'company_name' => 'Örnek Klinik',
+                'phone' => '0212 111 11 11',
+                'website' => 'https://ornekklinik.test',
+                'category_id' => $category->id,
+                'city_id' => $city->id,
+            ])
+            ->assertRedirect("http://profil.test/firma/{$company->slug}/sahiplen");
+
+        $claim = ListingRequest::query()->latest('id')->firstOrFail();
+
+        $this->assertSame($company->id, $claim->claim_company_id);
+        $updatedCompany = $claim->approveToCompany();
+
+        $this->assertSame($company->id, $updatedCompany->id);
+        $this->assertSame('0212 111 11 11', $updatedCompany->fresh()->phone);
+        $this->assertSame('https://ornekklinik.test', $updatedCompany->fresh()->website);
+        $this->assertSame(1, Company::withoutGlobalScope('directory')->count());
+        $this->assertSame('approved', $claim->fresh()->status);
+    }
+
     public function test_legacy_request_cannot_be_approved_without_selecting_a_directory(): void
     {
         $request = ListingRequest::create([

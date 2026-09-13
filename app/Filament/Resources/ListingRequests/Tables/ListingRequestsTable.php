@@ -8,12 +8,11 @@ use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Notifications\Notification;
 use Filament\Forms\Components\Select;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Illuminate\Support\Str;
 
 class ListingRequestsTable
 {
@@ -25,6 +24,11 @@ class ListingRequestsTable
                     ->label('Firma Adı')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('claimCompany.name')
+                    ->label('Talep Türü')
+                    ->formatStateUsing(fn (?string $state): string => $state ? 'Profil sahiplenme' : 'Yeni firma')
+                    ->badge()
+                    ->color(fn (?string $state): string => $state ? 'warning' : 'gray'),
                 TextColumn::make('directory.name')
                     ->label('Geldiği Rehber')
                     ->badge()
@@ -51,14 +55,14 @@ class ListingRequestsTable
                 TextColumn::make('status')
                     ->label('Durum')
                     ->badge()
-                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
                         'new' => 'Yeni',
                         'reviewed' => 'İncelendi',
                         'approved' => 'Onaylandı',
                         'rejected' => 'Reddedildi',
                         default => $state,
                     })
-                    ->color(fn(string $state): string => match ($state) {
+                    ->color(fn (string $state): string => match ($state) {
                         'new' => 'warning',
                         'reviewed' => 'info',
                         'approved' => 'success',
@@ -89,13 +93,15 @@ class ListingRequestsTable
             ])
             ->recordActions([
                 Action::make('approve')
-                    ->label('Onayla → Firmaya Dönüştür')
+                    ->label(fn (ListingRequest $record): string => $record->claim_company_id ? 'Onayla → Profili Güncelle' : 'Onayla → Firmaya Dönüştür')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
                     ->requiresConfirmation()
-                    ->modalHeading('Firma Kaydına Dönüştür')
+                    ->modalHeading(fn (ListingRequest $record): string => $record->claim_company_id ? 'Profil Sahiplenme Talebini Onayla' : 'Firma Kaydına Dönüştür')
                     ->modalDescription(fn (ListingRequest $record): string => $record->directory
-                        ? "Firma yalnızca {$record->directory->name} rehberine eklenecek. Onaylıyor musunuz?"
+                        ? ($record->claimCompany
+                            ? "{$record->claimCompany->name} profili, talepteki bilgilerle güncellenecek. Onaylıyor musunuz?"
+                            : "Firma yalnızca {$record->directory->name} rehberine eklenecek. Onaylıyor musunuz?")
                         : 'Bu eski talepte kaynak rehber kayıtlı değil. Firmanın ekleneceği rehberi seçin.')
                     ->form([
                         Select::make('directory_id')
@@ -117,12 +123,14 @@ class ListingRequestsTable
                         $company = $record->approveToCompany($directoryId);
 
                         Notification::make()
-                            ->title('Firma oluşturuldu!')
+                            ->title($record->claim_company_id ? 'Firma profili güncellendi!' : 'Firma oluşturuldu!')
                             ->success()
-                            ->body("\"{$company->name}\" firması başarıyla eklendi.")
+                            ->body($record->claim_company_id
+                                ? "\"{$company->name}\" profilindeki iletişim bilgileri güncellendi."
+                                : "\"{$company->name}\" firması başarıyla eklendi.")
                             ->send();
                     })
-                    ->visible(fn($record) => $record->status === 'new' || $record->status === 'reviewed'),
+                    ->visible(fn ($record) => $record->status === 'new' || $record->status === 'reviewed'),
 
                 Action::make('reject')
                     ->label('Reddet')
@@ -138,7 +146,7 @@ class ListingRequestsTable
                             ->warning()
                             ->send();
                     })
-                    ->visible(fn($record) => $record->status === 'new' || $record->status === 'reviewed'),
+                    ->visible(fn ($record) => $record->status === 'new' || $record->status === 'reviewed'),
 
                 EditAction::make(),
             ])

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\City;
+use App\Models\Company;
 use App\Models\District;
 use App\Models\ListingRequest;
 use Illuminate\Http\Request;
@@ -14,11 +15,27 @@ class ListingRequestController extends Controller
 {
     public function create()
     {
+        return $this->form();
+    }
+
+    public function claim(Company $company)
+    {
+        abort_unless(app()->bound('currentDirectory'), 404);
+
+        $directory = app('currentDirectory');
+
+        abort_unless((int) $company->directory_id === (int) $directory->id, 404);
+
+        return $this->form($company);
+    }
+
+    private function form(?Company $claimCompany = null)
+    {
         $categories = Category::active()->orderBy('name')->get();
         $cities = City::orderBy('name')->get();
         $districts = District::orderBy('name')->get(['id', 'city_id', 'name']);
 
-        return view('frontend.listing.create', compact('categories', 'cities', 'districts'));
+        return view('frontend.listing.create', compact('categories', 'cities', 'districts', 'claimCompany'));
     }
 
     public function store(Request $request)
@@ -34,6 +51,7 @@ class ListingRequestController extends Controller
             'whatsapp' => 'nullable|string|max:30',
             'email' => 'nullable|email|max:255',
             'website' => 'nullable|url|max:255',
+            'claim_company_id' => 'nullable|integer',
             'category_id' => [
                 'required',
                 Rule::exists('categories', 'id')->where(
@@ -64,10 +82,25 @@ class ListingRequestController extends Controller
             'message' => 'nullable|string|max:1000',
         ]);
 
+        $claimCompany = null;
+
+        if (! empty($validated['claim_company_id'])) {
+            $claimCompany = Company::withoutGlobalScope('directory')
+                ->active()
+                ->where('directory_id', $directory->id)
+                ->find($validated['claim_company_id']);
+
+            abort_unless($claimCompany, 404);
+        }
+
         $validated['directory_id'] = $directory->id;
         $validated['status'] = 'new';
 
         ListingRequest::create($validated);
+
+        if ($claimCompany) {
+            return redirect()->route('companies.claim', $claimCompany->slug)->with('success', 'Profil sahiplenme talebiniz alındı. İnceleme sonrası bilgileriniz güncellenecektir.');
+        }
 
         return redirect()->route('listing.create')->with('success', 'Firma ekleme talebiniz başarıyla gönderildi. İncelendikten sonra size dönüş yapılacaktır.');
     }

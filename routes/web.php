@@ -26,6 +26,7 @@ Route::get('/firmalar', [CompanyController::class, 'index'])->name('companies.in
 // Firma detay
 Route::get('/firma/{slug}', [CompanyController::class, 'show'])->name('companies.show');
 Route::post('/firma/{company:slug}/yorum', [CompanyReviewController::class, 'store'])->name('companies.reviews.store');
+Route::get('/firma/{company:slug}/sahiplen', [ListingRequestController::class, 'claim'])->name('companies.claim');
 
 // Kategori detay
 Route::get('/kategori/{slug}', [CategoryController::class, 'show'])->name('categories.show');

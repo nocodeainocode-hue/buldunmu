@@ -19,7 +19,7 @@ class ListingRequest extends Model
     protected $fillable = [
         'company_name', 'contact_name', 'phone', 'whatsapp',
         'email', 'website', 'category_id', 'city_id', 'district_id',
-        'message', 'status', 'directory_id',
+        'message', 'status', 'directory_id', 'claim_company_id',
     ];
 
     public function category()
@@ -37,6 +37,11 @@ class ListingRequest extends Model
         return $this->belongsTo(District::class);
     }
 
+    public function claimCompany()
+    {
+        return $this->belongsTo(Company::class, 'claim_company_id');
+    }
+
     public function approveToCompany(?int $directoryId = null): Company
     {
         $directoryId ??= $this->directory_id;
@@ -47,6 +52,33 @@ class ListingRequest extends Model
 
         return DB::transaction(function () use ($directoryId): Company {
             $this->update(['status' => 'reviewed']);
+
+            if ($this->claim_company_id) {
+                $company = Company::withoutGlobalScope('directory')->find($this->claim_company_id);
+
+                if (! $company || (int) $company->directory_id !== (int) $directoryId) {
+                    throw new InvalidArgumentException('Sahiplenme talebi, kaynak rehberdeki mevcut firmayla eşleşmiyor.');
+                }
+
+                $company->fill(array_filter([
+                    'name' => $this->company_name,
+                    'category_id' => $this->category_id,
+                    'city_id' => $this->city_id,
+                    'district_id' => $this->district_id,
+                    'phone' => $this->phone,
+                    'whatsapp' => $this->whatsapp,
+                    'email' => $this->email,
+                    'website' => $this->website,
+                ], fn ($value) => $value !== null));
+                $company->save();
+
+                $this->update([
+                    'directory_id' => $directoryId,
+                    'status' => 'approved',
+                ]);
+
+                return $company;
+            }
 
             $company = Company::create([
                 'name' => $this->company_name,
