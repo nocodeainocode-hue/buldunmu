@@ -62,6 +62,6 @@ class StaticPageContentTest extends TestCase
 
         $this->assertSame('Kobiva', $settings->site_name);
         $this->assertSame($directory->id, $settings->directory_id);
-        $this->assertNull($settings->homepage_title);
+        $this->assertSame('Kobiva - Aradiginiz Firmayi Bulun', $settings->homepage_title);
     }
 }

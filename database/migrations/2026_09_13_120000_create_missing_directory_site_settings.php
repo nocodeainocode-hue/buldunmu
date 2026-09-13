@@ -21,6 +21,7 @@ return new class extends Migration
                 DB::table('site_settings')->insert([
                     'directory_id' => $directory->id,
                     'site_name' => $directory->name,
+                    'homepage_title' => $directory->name.' - Aradiginiz Firmayi Bulun',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);

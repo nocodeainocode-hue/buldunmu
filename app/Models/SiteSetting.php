@@ -36,6 +36,7 @@ class SiteSetting extends Model
             return new static([
                 'directory_id' => $directory->id,
                 'site_name' => $directory->name,
+                'homepage_title' => $directory->name.' - Aradiginiz Firmayi Bulun',
             ]);
         }
 
