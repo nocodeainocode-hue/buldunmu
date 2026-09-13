@@ -8,7 +8,7 @@
 
 @section('title', $city->meta_title ?: $city->name . ' Firmaları - Firma Rehberi')
 @section('meta_description', $city->meta_description ?: $city->name . ' ilinde faaliyet gösteren tüm firmalar. Kategorilere göre filtreleyin, iletişim bilgilerini ve kullanıcı yorumlarını inceleyin.')
-@section('robots', $totalInCity > 0 ? 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1' : 'noindex,follow,max-image-preview:large')
+@section('robots', $hasIndexableCompanies && !request()->hasAny(['district', 'category']) ? 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1' : 'noindex,follow,max-image-preview:large')
 @section('canonical', ($isOtherCities ?? false) ? route('cities.other') : route('cities.show', $city->slug))
 
 @push('head')

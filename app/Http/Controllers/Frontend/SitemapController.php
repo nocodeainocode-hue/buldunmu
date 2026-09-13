@@ -14,16 +14,16 @@ class SitemapController extends Controller
     {
         $directory = app()->bound('currentDirectory') ? app('currentDirectory') : null;
 
-        $companies = Company::active()
+        $companies = Company::searchIndexable()
             ->when($directory, fn ($q) => $q->where('directory_id', $directory->id))
             ->get();
 
         $categories = Category::active()
-            ->whereHas('companies', fn ($q) => $q->active())
+            ->whereHas('companies', fn ($q) => $q->searchIndexable())
             ->get();
 
         $cities = City::query()
-            ->whereHas('companies', fn ($q) => $q->active())
+            ->whereHas('companies', fn ($q) => $q->searchIndexable())
             ->get();
 
         $posts = Post::publishedForDirectory($directory)

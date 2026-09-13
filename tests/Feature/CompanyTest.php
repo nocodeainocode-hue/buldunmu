@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Models\Company;
 use App\Models\Category;
 use App\Models\City;
+use App\Models\Company;
 use App\Models\Directory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -14,17 +14,19 @@ class CompanyTest extends TestCase
     use RefreshDatabase;
 
     protected Directory $dir;
+
     protected Category $category;
+
     protected City $city;
 
     protected function setUp(): void
     {
         parent::setUp();
         // slug_pattern '{name}': slug servisinin varsayılan '{name}-{city}' deseni test sluglarını değiştirirdi
-        $this->dir = Directory::create(['name'=>'Test','slug'=>'test','domain'=>'test.local','status'=>'active','slug_pattern'=>'{name}']);
-        $this->category = Category::create(['name'=>'Restoran','slug'=>'restoran','status'=>'active','directory_id'=>$this->dir->id]);
+        $this->dir = Directory::create(['name' => 'Test', 'slug' => 'test', 'domain' => 'test.local', 'status' => 'active', 'slug_pattern' => '{name}']);
+        $this->category = Category::create(['name' => 'Restoran', 'slug' => 'restoran', 'status' => 'active', 'directory_id' => $this->dir->id]);
         // Şehir sayfaları yalnızca paylaşılan (directory_id NULL) şehirlere hizmet verir
-        $this->city = City::create(['name'=>'İstanbul','slug'=>'istanbul']);
+        $this->city = City::create(['name' => 'İstanbul', 'slug' => 'istanbul']);
     }
 
     public function test_company_detail_page_shows_info(): void
@@ -127,6 +129,9 @@ class CompanyTest extends TestCase
             'name' => 'Aktif Firma',
             'category_id' => $this->category->id,
             'city_id' => $this->city->id,
+            'phone' => '02125555555',
+            'address' => 'İstanbul merkez',
+            'description' => 'İstanbul merkezde hizmet veren Aktif Firma, müşterilerine güncel iletişim kanalları, açık adres bilgisi ve hizmet detaylarıyla yardımcı olmaktadır.',
             'status' => 'active',
             'directory_id' => $this->dir->id,
         ]);

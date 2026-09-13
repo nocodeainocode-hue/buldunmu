@@ -12,6 +12,7 @@
     $isSeoStory = ($detailVariant ?? 'compact-local') === 'seo-story';
     $hasRichContent = !empty($company->description) && strlen(strip_tags($company->description)) > 200;
     $googleMapsEmbedSrc = $company->googleMapsEmbedSrc();
+    $isSearchIndexable = $company->isSearchIndexable();
 
     // FAQ items for JSON-LD schema
     $faqItems = [
@@ -45,6 +46,7 @@
 @section('title', $company->meta_title ?: $company->name . ' - ' . $cityName . ' - Firma Rehberi')
 @section('meta_description', $company->meta_description ?: ($company->short_description ?: $company->name . ' | Telefon, adres, web sitesi ve kullanıcı yorumlarıyla ' . $cityName . ' ' . $categoryName . ' firması.'))
 @section('canonical', route('companies.show', $company->slug))
+@section('robots', $isSearchIndexable ? 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1' : 'noindex,follow,max-image-preview:large')
 
 @push('head')
 {{-- Open Graph --}}
@@ -56,8 +58,10 @@
 <meta property="og:image" content="{{ asset('storage/' . $company->logo) }}">
 @endif
 
-@include('partials.seo.json-ld', ['schema' => \App\Support\SeoSchema::company($company)])
-@include('partials.seo.json-ld', ['schema' => \App\Support\SeoSchema::faqPage(route('companies.show', $company->slug), $faqItems)])
+@if($isSearchIndexable)
+    @include('partials.seo.json-ld', ['schema' => \App\Support\SeoSchema::company($company)])
+    @include('partials.seo.json-ld', ['schema' => \App\Support\SeoSchema::faqPage(route('companies.show', $company->slug), $faqItems)])
+@endif
 @endpush
 
 @section('content')
