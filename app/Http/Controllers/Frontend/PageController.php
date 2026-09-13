@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\SiteSetting;
+use App\Support\PageContent;
 
 
 class PageController extends Controller
@@ -12,7 +13,9 @@ class PageController extends Controller
     {
         $dir = app()->bound('currentDirectory') ? app('currentDirectory') : null;
         $pages = $dir->page_contents ?? [];
-        return $pages[$key] ?? null;
+        $content = $pages[$key] ?? null;
+
+        return PageContent::isMeaningful($content) ? $content : null;
     }
 
     public function about()
