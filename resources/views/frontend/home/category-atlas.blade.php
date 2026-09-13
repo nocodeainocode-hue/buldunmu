@@ -4,9 +4,16 @@
 @section('meta_description', $settings->meta_description ?? 'Türkiye genelindeki firma kategorilerini, şehirleri ve popüler şehir-kategori rehberlerini keşfedin.')
 
 @section('content')
+@php
+    $atlasHero = $directory?->hero_image
+        ? asset('storage/'.$directory->hero_image)
+        : asset('images/themes/category-atlas-hero.png');
+@endphp
 <main style="background:var(--bg);">
-    <section class="py-14 text-white" style="background:linear-gradient(135deg,var(--hero_gradient_from),var(--hero_gradient_to));">
-        <div class="mx-auto px-4 text-center sm:px-6 lg:px-8" style="max-width:900px;"><div class="text-xs font-black uppercase tracking-[0.22em] text-white/70">Türkiye firma kategorileri</div><h1 class="mt-4 text-4xl font-black sm:text-6xl">{{ $settings->homepage_title ?? 'Aradığınız hizmetin haritasını çıkarın' }}</h1><p class="mx-auto mt-5 max-w-2xl text-base leading-8 text-white/75">{{ $settings->homepage_subtitle ?? 'Kategoriyi seçin, şehrinizi belirleyin ve doğru işletmeye ulaşın.' }}</p><form action="{{ route('search') }}" method="GET" class="mx-auto mt-8 flex max-w-2xl overflow-hidden rounded-md bg-white p-2 shadow-2xl"><input name="q" class="min-w-0 flex-1 px-4 text-sm outline-none" placeholder="Hizmet, kategori veya firma ara..." style="color:var(--text);"><button class="rounded px-6 py-3 text-sm font-black text-white" style="background:var(--accent);">Atlası ara</button></form></div>
+    <section class="relative isolate overflow-hidden py-16 sm:py-20" style="background:var(--text);">
+        <img src="{{ $atlasHero }}" alt="{{ $settings->site_name ?? 'Türkiye firma kategorileri' }}" class="absolute inset-0 -z-20 h-full w-full object-cover object-right" width="1920" height="1080" fetchpriority="high">
+        <div class="absolute inset-0 -z-10" style="background:linear-gradient(90deg,rgba(7,31,45,.94) 0%,rgba(7,31,45,.82) 42%,rgba(7,31,45,.36) 69%,rgba(7,31,45,.08) 100%);"></div>
+        <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width:var(--page_width,1280px);"><div class="max-w-3xl"><div class="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-2 text-xs font-black uppercase tracking-[0.22em]" style="color:#fff;"><span class="h-2 w-2 rounded-full" style="background:var(--accent);"></span> Türkiye firma kategorileri</div><h1 class="mt-5 text-4xl font-black leading-tight sm:text-6xl" style="color:#fff;">{{ $settings->homepage_title ?? 'Aradığınız hizmetin haritasını çıkarın' }}</h1><p class="mt-5 max-w-2xl text-base leading-8" style="color:rgba(255,255,255,.8);">{{ $settings->homepage_subtitle ?? 'Kategoriyi seçin, şehrinizi belirleyin ve doğru işletmeye ulaşın.' }}</p><form action="{{ route('search') }}" method="GET" class="mt-8 flex max-w-2xl flex-col gap-2 rounded-2xl bg-white p-3 shadow-2xl sm:flex-row"><label class="sr-only" for="atlas-search">Hizmet, kategori veya firma ara</label><input id="atlas-search" name="q" class="min-h-14 min-w-0 flex-1 rounded-xl border px-4 text-sm outline-none" placeholder="Hizmet, kategori veya firma ara..." style="border-color:var(--border);color:var(--text);"><button class="min-h-14 rounded-xl px-6 text-sm font-black" style="background:var(--accent);color:#fff;">Atlası ara</button></form></div></div>
     </section>
 
     <section class="py-12">

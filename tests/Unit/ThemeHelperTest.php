@@ -56,6 +56,25 @@ class ThemeHelperTest extends TestCase
         }
     }
 
+    public function test_named_theme_variants_resolve_to_their_specialized_layouts(): void
+    {
+        $expectedLayouts = [
+            'premium-showcase' => 'verified',
+            'landing' => 'quick-quote',
+            'split-hero' => 'quick-quote',
+            'magazine' => 'editorial',
+            'comparison' => 'decision-desk',
+            'city-focused' => 'city-journal',
+            'category-mega' => 'category-atlas',
+            'map-first' => 'local-map-landing',
+        ];
+
+        foreach ($expectedLayouts as $template => $layout) {
+            $this->assertSame($layout, ThemeHelper::TEMPLATES[$template]['layout']);
+            $this->assertFileExists(resource_path('views/frontend/home/'.$layout.'.blade.php'));
+        }
+    }
+
     public function test_css_variables_contain_key_properties(): void
     {
         $css = ThemeHelper::cssVariables(null);

@@ -202,6 +202,17 @@ class DirectoryManagementCenter extends Page implements HasForms
                             ->imageResizeTargetWidth('32')
                             ->imageResizeTargetHeight('32'),
                     ]),
+                    FileUpload::make('hero_image')
+                        ->label('Hero Görseli')
+                        ->helperText('Tema destekliyorsa ana sayfanın ilk alanında kullanılır. En iyi sonuç için yatay, gerçek bir mekan veya hizmet görseli yükleyin.')
+                        ->image()
+                        ->disk('public')
+                        ->directory('directories/heroes')
+                        ->imageResizeMode('cover')
+                        ->imageResizeTargetWidth('1920')
+                        ->imageResizeTargetHeight('1080')
+                        ->maxSize(5120)
+                        ->columnSpanFull(),
                 ]),
             Section::make('Yayın Durumu')
                 ->schema([

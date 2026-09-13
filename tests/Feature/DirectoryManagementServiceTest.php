@@ -37,6 +37,7 @@ class DirectoryManagementServiceTest extends TestCase
         $data['homepage_title'] = 'Yeni Ana Sayfa';
         $data['phone'] = '555 111 22 33';
         $data['theme_primary'] = '#abcdef';
+        $data['hero_image'] = 'directories/heroes/birinci.webp';
 
         $service->update($first, $data);
 
@@ -44,6 +45,7 @@ class DirectoryManagementServiceTest extends TestCase
             'id' => $first->id,
             'name' => 'Birinci Yeni',
             'domain' => 'birinci-yeni.test',
+            'hero_image' => 'directories/heroes/birinci.webp',
         ]);
         $this->assertSame('#abcdef', $first->fresh()->theme['primary']);
         $this->assertDatabaseHas('site_settings', [

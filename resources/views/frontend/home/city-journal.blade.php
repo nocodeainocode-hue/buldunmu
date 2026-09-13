@@ -7,6 +7,9 @@
 @php
     $leadCompany = $premiumCompanies->first() ?? $latestCompanies->first();
     $journalCompanies = $premiumCompanies->isNotEmpty() ? $premiumCompanies : $latestCompanies->take(6);
+    $journalHero = $leadCompany && ($leadCompany->cover_image || $leadCompany->logo)
+        ? asset('storage/'.($leadCompany->cover_image ?: $leadCompany->logo))
+        : ($directory?->hero_image ? asset('storage/'.$directory->hero_image) : asset('images/themes/city-journal-hero.png'));
 @endphp
 
 <main style="background:var(--bg);">
@@ -26,9 +29,7 @@
     <section class="mx-auto px-4 py-10 sm:px-6 lg:px-8" style="max-width:var(--page_width,1180px);">
         <div class="grid gap-8 lg:grid-cols-[1.55fr_0.8fr]">
             <div class="relative min-h-[460px] overflow-hidden border" style="border-color:var(--border);background:var(--text);">
-                @if($leadCompany && ($leadCompany->cover_image || $leadCompany->logo))
-                    <img src="{{ asset('storage/'.($leadCompany->cover_image ?: $leadCompany->logo)) }}" alt="{{ $leadCompany->name }}" class="absolute inset-0 h-full w-full object-cover opacity-70">
-                @endif
+                <img src="{{ $journalHero }}" alt="{{ $leadCompany?->name ?? ($settings->site_name ?? 'Şehir rehberi') }}" class="absolute inset-0 h-full w-full object-cover opacity-75" width="1920" height="1080" fetchpriority="high">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent"></div>
                 <div class="absolute inset-x-0 bottom-0 p-6 sm:p-9">
                     <div class="mb-3 inline-block px-3 py-1 text-xs font-black uppercase tracking-wider text-white" style="background:var(--primary);">Haftanın seçimi</div>

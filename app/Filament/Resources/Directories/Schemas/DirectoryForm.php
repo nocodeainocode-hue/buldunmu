@@ -65,6 +65,16 @@ class DirectoryForm
                                     ->directory('directories/favicons')
                                     ->imageResizeTargetWidth('32')
                                     ->imageResizeTargetHeight('32'),
+                                FileUpload::make('hero_image')
+                                    ->label('Hero Görseli')
+                                    ->image()
+                                    ->disk('public')
+                                    ->directory('directories/heroes')
+                                    ->imageResizeMode('cover')
+                                    ->imageResizeTargetWidth('1920')
+                                    ->imageResizeTargetHeight('1080')
+                                    ->maxSize(5120)
+                                    ->columnSpanFull(),
                             ]),
                         Select::make('template')
                             ->label('Tema (Görsel Stil)')

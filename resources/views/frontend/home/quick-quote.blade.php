@@ -4,30 +4,32 @@
 @section('meta_description', $settings->meta_description ?? 'İhtiyacınızı seçin, bölgenizdeki firmaları inceleyin ve hızlıca iletişime geçin.')
 
 @section('content')
-@php $quoteCompanies = $premiumCompanies->isNotEmpty() ? $premiumCompanies->take(5) : $latestCompanies->take(5); @endphp
+@php
+    $quoteCompanies = $premiumCompanies->isNotEmpty() ? $premiumCompanies->take(5) : $latestCompanies->take(5);
+    $heroImage = $directory?->hero_image
+        ? asset('storage/'.$directory->hero_image)
+        : asset('images/themes/local-service-street-hero.png');
+@endphp
 <main class="min-h-screen" style="background:var(--bg);">
-    <section class="relative overflow-hidden border-b bg-white" style="border-color:var(--border);">
-        <div class="absolute inset-y-0 right-0 hidden w-1/3 lg:block" style="background:var(--primary_light);"></div>
-        <div class="relative mx-auto grid gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[1fr_420px] lg:px-8" style="max-width:var(--page_width);">
-            <div>
-                <span class="rounded-full px-3 py-2 text-xs font-black uppercase tracking-wider" style="background:var(--primary_light);color:var(--primary);">İhtiyaçtan firmaya kısa yol</span>
-                <h1 class="mt-6 max-w-3xl text-4xl font-black leading-tight sm:text-6xl" style="color:var(--text);">{{ $settings->homepage_title ?? 'Hizmeti seçin, uygun firmaya hemen ulaşın' }}</h1>
-                <p class="mt-5 max-w-2xl text-base leading-7" style="color:var(--text_muted);">{{ $settings->homepage_subtitle ?? 'Kategori ve konum seçiminizi daraltın, firma profillerini inceleyip doğrudan iletişime geçin.' }}</p>
+    <section class="relative isolate overflow-hidden border-b" style="border-color:var(--border);background:var(--text);">
+        <img src="{{ $heroImage }}" alt="{{ $settings->site_name ?? 'Yerel hizmetler' }}" class="absolute inset-0 -z-20 h-full w-full object-cover" width="1920" height="1080" fetchpriority="high">
+        <div class="absolute inset-0 -z-10" style="background:linear-gradient(90deg,rgba(9,20,30,.92) 0%,rgba(9,20,30,.79) 39%,rgba(9,20,30,.28) 67%,rgba(9,20,30,.08) 100%);"></div>
+        <div class="relative mx-auto grid min-h-[590px] gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[minmax(0,660px)_1fr] lg:px-8 lg:py-20" style="max-width:var(--page_width);">
+            <div class="flex flex-col justify-center">
+                <span class="w-fit rounded-full border border-white/30 bg-white/10 px-3 py-2 text-xs font-black uppercase tracking-wider" style="color:#fff;">İhtiyaçtan firmaya kısa yol</span>
+                <h1 class="mt-6 max-w-3xl text-4xl font-black leading-tight sm:text-6xl" style="color:#fff;">{{ $settings->homepage_title ?? 'Hizmeti seçin, uygun firmaya hemen ulaşın' }}</h1>
+                <p class="mt-5 max-w-2xl text-base leading-7" style="color:rgba(255,255,255,.8);">{{ $settings->homepage_subtitle ?? 'Kategori ve konum seçiminizi daraltın, firma profillerini inceleyip doğrudan iletişime geçin.' }}</p>
                 <div class="mt-8 grid max-w-2xl grid-cols-3 gap-3 text-center">
                     @foreach([['01','Hizmeti seç'],['02','Firmaları incele'],['03','İletişime geç']] as [$number,$label])
-                        <div class="rounded-xl border bg-white p-4" style="border-color:var(--border);"><strong class="text-xl" style="color:var(--secondary);">{{ $number }}</strong><span class="mt-1 block text-xs font-black" style="color:var(--text);">{{ $label }}</span></div>
+                        <div class="rounded-xl border border-white/20 bg-white/10 p-4 backdrop-blur-sm"><strong class="text-xl" style="color:#fff;">{{ $number }}</strong><span class="mt-1 block text-xs font-black" style="color:rgba(255,255,255,.85);">{{ $label }}</span></div>
                     @endforeach
                 </div>
+                <form action="{{ route('search') }}" method="GET" class="mt-9 max-w-2xl rounded-2xl border border-white/20 bg-white p-3 shadow-2xl">
+                    <label class="sr-only" for="quick-quote-search">Hizmet veya firma</label>
+                    <div class="flex flex-col gap-2 sm:flex-row"><input id="quick-quote-search" name="q" class="min-h-14 min-w-0 flex-1 rounded-xl border px-4 text-sm outline-none" style="border-color:var(--border);color:var(--text);" placeholder="Örn. diş kliniği, oto servis"><button class="min-h-14 rounded-xl px-6 text-sm font-black" style="background:var(--primary);color:#fff;">Uygun firmaları göster</button></div>
+                    <div class="mt-3 flex flex-wrap gap-2 px-1">@foreach($categories->take(5) as $category)<a href="{{ route('categories.show',$category->slug) }}" class="rounded-full px-3 py-2 text-xs font-bold" style="background:var(--primary_light);color:var(--primary);">{{ $category->name }}</a>@endforeach</div>
+                </form>
             </div>
-            <form action="{{ route('search') }}" method="GET" class="relative rounded-2xl border bg-white p-6" style="border-color:var(--border);box-shadow:var(--card_shadow);">
-                <div class="text-xs font-black uppercase tracking-wider" style="color:var(--secondary);">Hızlı eşleştirme</div>
-                <h2 class="mt-2 text-2xl font-black" style="color:var(--text);">Neye ihtiyacınız var?</h2>
-                <label class="mt-6 block text-xs font-black" style="color:var(--text_muted);">Hizmet veya firma</label>
-                <input name="q" class="mt-2 w-full rounded-xl border px-4 py-3 text-sm outline-none" style="border-color:var(--border);" placeholder="Örn. diş kliniği, oto servis">
-                <div class="mt-5 text-xs font-black" style="color:var(--text_muted);">Popüler seçimler</div>
-                <div class="mt-3 flex flex-wrap gap-2">@foreach($categories->take(6) as $category)<a href="{{ route('categories.show',$category->slug) }}" class="rounded-full px-3 py-2 text-xs font-bold" style="background:var(--primary_light);color:var(--primary);">{{ $category->name }}</a>@endforeach</div>
-                <button class="mt-6 w-full rounded-xl py-4 text-sm font-black text-white" style="background:var(--primary);">Uygun firmaları göster</button>
-            </form>
         </div>
     </section>
 

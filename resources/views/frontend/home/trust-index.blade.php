@@ -4,10 +4,37 @@
 @section('meta_description', $settings->meta_description ?? 'Doğrulanmış firma bilgileri, onaylı kullanıcı yorumları ve profil doluluk puanlarıyla işletmeleri karşılaştırın.')
 
 @section('content')
-@php $trustList = $trustedCompanies->isNotEmpty() ? $trustedCompanies : $latestCompanies->take(8); @endphp
+@php
+    $trustList = $trustedCompanies->isNotEmpty() ? $trustedCompanies : $latestCompanies->take(8);
+    $trustHero = $directory?->hero_image
+        ? asset('storage/'.$directory->hero_image)
+        : asset('images/themes/trust-index-hero.png');
+@endphp
 
 <main style="background:var(--bg);">
-    <section class="border-b py-14" style="border-color:var(--border);background:var(--bg_card);"><div class="mx-auto grid gap-10 px-4 sm:px-6 lg:grid-cols-[1fr_0.75fr] lg:px-8" style="max-width:var(--page_width,1200px);"><div><div class="text-xs font-black uppercase tracking-[0.2em]" style="color:var(--primary);">Şeffaf firma karşılaştırması</div><h1 class="mt-4 text-4xl font-black leading-tight sm:text-6xl" style="color:var(--text);">{{ $settings->homepage_title ?? 'Güvenebileceğiniz firmayı verilerle bulun' }}</h1><p class="mt-5 max-w-2xl text-base leading-8" style="color:var(--text_muted);">{{ $settings->homepage_subtitle ?? 'Doğrulanmış bilgiler, gerçek yorumlar ve güncel profil verileriyle daha bilinçli seçim yapın.' }}</p><form action="{{ route('search') }}" method="GET" class="mt-7 flex max-w-2xl overflow-hidden rounded-md border" style="border-color:var(--border);"><input name="q" class="min-w-0 flex-1 px-5 py-4 outline-none" placeholder="Firma veya hizmet ara..." style="background:var(--bg);color:var(--text);"><button class="px-7 font-black text-white" style="background:var(--primary);">Karşılaştır</button></form></div><div class="grid grid-cols-2 gap-px overflow-hidden rounded-lg border" style="border-color:var(--border);background:var(--border);"><div class="p-5" style="background:var(--bg);"><strong class="text-3xl" style="color:var(--primary);">{{ $trustedCompanies->count() }}</strong><span class="mt-1 block text-xs" style="color:var(--text_muted);">Doğrulanmış firma</span></div><div class="p-5" style="background:var(--bg);"><strong class="text-3xl" style="color:var(--primary);">{{ $trustList->sum('approved_reviews_count') }}</strong><span class="mt-1 block text-xs" style="color:var(--text_muted);">Onaylı yorum</span></div><div class="col-span-2 p-5" style="background:var(--bg);"><strong class="text-lg" style="color:var(--text);">Puan nasıl oluşur?</strong><p class="mt-2 text-xs leading-6" style="color:var(--text_muted);">Profil doluluğu %45, kullanıcı puanı %35, admin doğrulaması %20 ağırlığındadır.</p></div></div></div></section>
+    <section class="relative isolate overflow-hidden border-b" style="border-color:var(--border);background:var(--bg_card);">
+        <img src="{{ $trustHero }}" alt="{{ $settings->site_name ?? 'Firma değerlendirmesi' }}" class="absolute inset-0 -z-20 h-full w-full object-cover object-right" width="1920" height="1080" fetchpriority="high">
+        <div class="absolute inset-0 -z-10" style="background:linear-gradient(90deg,rgba(255,255,255,.98) 0%,rgba(255,255,255,.92) 46%,rgba(255,255,255,.45) 68%,rgba(255,255,255,.08) 100%);"></div>
+        <div class="mx-auto grid min-h-[530px] items-center gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,1fr)_390px] lg:px-8" style="max-width:var(--page_width,1200px);">
+            <div>
+                <div class="inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-black uppercase tracking-[0.18em]" style="border-color:color-mix(in srgb,var(--primary) 24%,transparent);background:color-mix(in srgb,var(--primary) 8%,white);color:var(--primary);">
+                    <span class="h-2 w-2 rounded-full" style="background:var(--primary);"></span> Şeffaf firma karşılaştırması
+                </div>
+                <h1 class="mt-5 max-w-3xl text-4xl font-black leading-tight sm:text-6xl" style="color:var(--text);">{{ $settings->homepage_title ?? 'Güvenebileceğiniz firmayı verilerle bulun' }}</h1>
+                <p class="mt-5 max-w-2xl text-base leading-8" style="color:var(--text_muted);">{{ $settings->homepage_subtitle ?? 'Doğrulanmış bilgiler, gerçek yorumlar ve güncel profil verileriyle daha bilinçli seçim yapın.' }}</p>
+                <form action="{{ route('search') }}" method="GET" class="mt-8 flex max-w-2xl flex-col gap-2 rounded-2xl border bg-white p-3 shadow-xl sm:flex-row" style="border-color:var(--border);">
+                    <label class="sr-only" for="trust-search">Firma veya hizmet ara</label>
+                    <input id="trust-search" name="q" class="min-h-14 min-w-0 flex-1 rounded-xl border px-5 text-sm outline-none" placeholder="Firma veya hizmet ara..." style="border-color:var(--border);color:var(--text);">
+                    <button class="min-h-14 rounded-xl px-7 text-sm font-black" style="background:var(--primary);color:#fff;">Karşılaştır</button>
+                </form>
+            </div>
+            <div class="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border bg-white/50 shadow-2xl backdrop-blur-sm" style="border-color:var(--border);">
+                <div class="p-5 sm:p-6" style="background:rgba(255,255,255,.91);"><strong class="text-3xl" style="color:var(--primary);">{{ $trustedCompanies->count() }}</strong><span class="mt-1 block text-xs font-semibold" style="color:var(--text_muted);">Doğrulanmış firma</span></div>
+                <div class="p-5 sm:p-6" style="background:rgba(255,255,255,.91);"><strong class="text-3xl" style="color:var(--primary);">{{ $trustList->sum('approved_reviews_count') }}</strong><span class="mt-1 block text-xs font-semibold" style="color:var(--text_muted);">Onaylı yorum</span></div>
+                <div class="col-span-2 p-5 sm:p-6" style="background:rgba(255,255,255,.94);"><strong class="text-lg" style="color:var(--text);">Puan nasıl oluşur?</strong><p class="mt-2 text-xs leading-6" style="color:var(--text_muted);">Profil doluluğu %45, kullanıcı puanı %35, admin doğrulaması %20 ağırlığındadır.</p></div>
+            </div>
+        </div>
+    </section>
 
     <section class="py-12"><div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width:var(--page_width,1200px);"><div class="mb-8 flex items-end justify-between gap-4"><div><div class="text-xs font-black uppercase tracking-[0.2em]" style="color:var(--primary);">Güven sıralaması</div><h2 class="mt-2 text-3xl font-black" style="color:var(--text);">Öne çıkan firma profilleri</h2></div><a href="{{ route('companies.index') }}" class="text-sm font-black" style="color:var(--primary);">Tümünü gör</a></div><div class="grid gap-5 md:grid-cols-2">
         @foreach($trustList as $company)

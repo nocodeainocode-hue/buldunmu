@@ -15,6 +15,7 @@ class DirectoryManagementService
         'domain',
         'logo',
         'favicon',
+        'hero_image',
         'template',
         'slug_pattern',
         'plan',

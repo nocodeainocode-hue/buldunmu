@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 class Directory extends Model
 {
     protected $fillable = [
-        'name', 'slug', 'domain', 'logo', 'favicon', 'template', 'theme',
+        'name', 'slug', 'domain', 'logo', 'favicon', 'hero_image', 'template', 'theme',
         'slug_pattern', 'plan', 'status', 'expires_at',
         'meta_title', 'meta_description', 'page_contents', 'geography_mode',
         'primary_city_slug', 'featured_city_slugs', 'group_other_cities',
