@@ -78,6 +78,23 @@ class ThemeHelperTest extends TestCase
         }
     }
 
+    public function test_legacy_visual_variants_now_have_their_own_layouts(): void
+    {
+        $layouts = [
+            'corporate' => 'corporate-ledger',
+            'solarpunk-market' => 'solarpunk-market',
+            'timeline' => 'timeline-directory',
+            'mosaic' => 'mosaic-gallery',
+            'terminal-directory' => 'terminal-directory',
+            'brutalist-directory' => 'brutalist-directory',
+        ];
+
+        foreach ($layouts as $template => $layout) {
+            $this->assertSame($layout, ThemeHelper::TEMPLATES[$template]['layout']);
+            $this->assertFileExists(resource_path('views/frontend/home/'.$layout.'.blade.php'));
+        }
+    }
+
     public function test_css_variables_contain_key_properties(): void
     {
         $css = ThemeHelper::cssVariables(null);
