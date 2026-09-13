@@ -23,6 +23,16 @@ class Directory extends Model
         'expires_at' => 'datetime',
     ];
 
+    protected static function booted(): void
+    {
+        static::created(function (Directory $directory): void {
+            SiteSetting::withoutGlobalScope('directory')->firstOrCreate(
+                ['directory_id' => $directory->id],
+                ['site_name' => $directory->name],
+            );
+        });
+    }
+
     public function companies()
     {
         return $this->hasMany(Company::class);

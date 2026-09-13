@@ -31,6 +31,12 @@ class SiteSetting extends Model
 
                 return $settings;
             }
+
+            // A directory must never inherit another directory's textual identity.
+            return new static([
+                'directory_id' => $directory->id,
+                'site_name' => $directory->name,
+            ]);
         }
 
         return $query->whereNull('directory_id')->first()

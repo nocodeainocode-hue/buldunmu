@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Directory;
+use App\Models\SiteSetting;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -40,5 +41,27 @@ class StaticPageContentTest extends TestCase
             ->assertSuccessful();
 
         $this->assertArrayNotHasKey('privacy', $directory->fresh()->page_contents);
+    }
+
+    public function test_directory_uses_its_own_settings_instead_of_global_branding(): void
+    {
+        SiteSetting::create([
+            'site_name' => 'İşletme Bulvarı',
+            'homepage_title' => 'Güvenilir Firma Rehberi',
+        ]);
+
+        $directory = Directory::create([
+            'name' => 'Kobiva',
+            'slug' => 'kobiva',
+            'domain' => 'kobiva.test',
+            'status' => 'active',
+        ]);
+        app()->instance('currentDirectory', $directory);
+
+        $settings = SiteSetting::getSettings();
+
+        $this->assertSame('Kobiva', $settings->site_name);
+        $this->assertSame($directory->id, $settings->directory_id);
+        $this->assertNull($settings->homepage_title);
     }
 }
