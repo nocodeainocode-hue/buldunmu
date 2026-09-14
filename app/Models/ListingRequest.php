@@ -56,8 +56,30 @@ class ListingRequest extends Model
             if ($this->claim_company_id) {
                 $company = Company::withoutGlobalScope('directory')->find($this->claim_company_id);
 
-                if (! $company || (int) $company->directory_id !== (int) $directoryId) {
+                if (! $company || ($company->directory_id !== null && (int) $company->directory_id !== (int) $directoryId)) {
                     throw new InvalidArgumentException('Sahiplenme talebi, kaynak rehberdeki mevcut firmayla eşleşmiyor.');
+                }
+
+                if ($company->directory_id === null) {
+                    $company = Company::create([
+                        'name' => $this->company_name,
+                        'directory_id' => $directoryId,
+                        'category_id' => $this->category_id,
+                        'city_id' => $this->city_id,
+                        'district_id' => $this->district_id,
+                        'phone' => $this->phone,
+                        'whatsapp' => $this->whatsapp,
+                        'email' => $this->email,
+                        'website' => $this->website,
+                        'status' => 'active',
+                    ]);
+
+                    $this->update([
+                        'directory_id' => $directoryId,
+                        'status' => 'approved',
+                    ]);
+
+                    return $company;
                 }
 
                 $company->fill(array_filter([

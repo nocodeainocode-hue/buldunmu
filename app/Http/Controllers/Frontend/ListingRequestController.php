@@ -24,7 +24,10 @@ class ListingRequestController extends Controller
 
         $directory = app('currentDirectory');
 
-        abort_unless((int) $company->directory_id === (int) $directory->id, 404);
+        // Shared discovery records are visible on every directory. Claiming one creates
+        // a directory-specific profile after approval; an owned record can only be
+        // claimed from its own directory.
+        abort_unless($company->directory_id === null || (int) $company->directory_id === (int) $directory->id, 404);
 
         return $this->form($company);
     }
@@ -87,10 +90,12 @@ class ListingRequestController extends Controller
         if (! empty($validated['claim_company_id'])) {
             $claimCompany = Company::withoutGlobalScope('directory')
                 ->active()
-                ->where('directory_id', $directory->id)
                 ->find($validated['claim_company_id']);
 
-            abort_unless($claimCompany, 404);
+            abort_unless(
+                $claimCompany && ($claimCompany->directory_id === null || (int) $claimCompany->directory_id === (int) $directory->id),
+                404
+            );
         }
 
         $validated['directory_id'] = $directory->id;

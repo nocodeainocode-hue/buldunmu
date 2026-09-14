@@ -100,7 +100,9 @@ class ListingRequestsTable
                     ->modalHeading(fn (ListingRequest $record): string => $record->claim_company_id ? 'Profil Sahiplenme Talebini Onayla' : 'Firma Kaydına Dönüştür')
                     ->modalDescription(fn (ListingRequest $record): string => $record->directory
                         ? ($record->claimCompany
-                            ? "{$record->claimCompany->name} profili, talepteki bilgilerle güncellenecek. Onaylıyor musunuz?"
+                            ? ($record->claimCompany->directory_id === null
+                                ? "{$record->claimCompany->name} için {$record->directory->name} rehberine özel firma profili oluşturulacak. Onaylıyor musunuz?"
+                                : "{$record->claimCompany->name} profili, talepteki bilgilerle güncellenecek. Onaylıyor musunuz?")
                             : "Firma yalnızca {$record->directory->name} rehberine eklenecek. Onaylıyor musunuz?")
                         : 'Bu eski talepte kaynak rehber kayıtlı değil. Firmanın ekleneceği rehberi seçin.')
                     ->form([
@@ -126,7 +128,7 @@ class ListingRequestsTable
                             ->title($record->claim_company_id ? 'Firma profili güncellendi!' : 'Firma oluşturuldu!')
                             ->success()
                             ->body($record->claim_company_id
-                                ? "\"{$company->name}\" profilindeki iletişim bilgileri güncellendi."
+                                ? "\"{$company->name}\" profilindeki iletişim bilgileri güncellendi veya rehbere özel profili oluşturuldu."
                                 : "\"{$company->name}\" firması başarıyla eklendi.")
                             ->send();
                     })

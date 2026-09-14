@@ -176,6 +176,51 @@ class ListingRequestDirectoryTest extends TestCase
         $this->assertSame('approved', $claim->fresh()->status);
     }
 
+    public function test_shared_company_can_be_claimed_into_a_directory_specific_profile(): void
+    {
+        $directory = Directory::create([
+            'name' => 'Yerel Profil Rehberi',
+            'slug' => 'yerel-profil-rehberi',
+            'domain' => 'yerel-profil.test',
+            'status' => 'active',
+        ]);
+        $category = Category::create([
+            'name' => 'Elektrikçi',
+            'slug' => 'elektrikci',
+            'status' => 'active',
+        ]);
+        $city = City::create([
+            'name' => 'Tekirdağ',
+            'slug' => 'tekirdag',
+        ]);
+        $sharedCompany = Company::create([
+            'name' => 'Ortak Elektrik',
+            'category_id' => $category->id,
+            'city_id' => $city->id,
+            'status' => 'active',
+        ]);
+
+        $this->withServerVariables(['HTTP_HOST' => $directory->domain])
+            ->get("http://yerel-profil.test/firma/{$sharedCompany->slug}/sahiplen")
+            ->assertOk();
+
+        $this->withServerVariables(['HTTP_HOST' => $directory->domain])
+            ->post('http://yerel-profil.test/firma-ekle', [
+                'claim_company_id' => $sharedCompany->id,
+                'company_name' => 'Ortak Elektrik',
+                'phone' => '0282 222 22 22',
+                'category_id' => $category->id,
+                'city_id' => $city->id,
+            ]);
+
+        $claim = ListingRequest::query()->latest('id')->firstOrFail();
+        $directoryCompany = $claim->approveToCompany();
+
+        $this->assertNotSame($sharedCompany->id, $directoryCompany->id);
+        $this->assertSame($directory->id, $directoryCompany->directory_id);
+        $this->assertDatabaseCount('companies', 2);
+    }
+
     public function test_legacy_request_cannot_be_approved_without_selecting_a_directory(): void
     {
         $request = ListingRequest::create([
