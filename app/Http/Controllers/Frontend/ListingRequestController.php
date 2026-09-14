@@ -15,7 +15,7 @@ class ListingRequestController extends Controller
 {
     public function create()
     {
-        return $this->form();
+        return redirect()->route('owner.register');
     }
 
     public function claim(Company $company)

@@ -52,7 +52,7 @@ class ListingRequestDirectoryTest extends TestCase
         ]);
     }
 
-    public function test_frontend_form_contains_shared_districts_and_requires_catalog_selection(): void
+    public function test_public_firma_ekle_url_redirects_to_the_account_and_company_registration_flow(): void
     {
         $directory = Directory::create([
             'name' => 'Tekirdağ Rehberi',
@@ -74,13 +74,7 @@ class ListingRequestDirectoryTest extends TestCase
 
         $this->withServerVariables(['HTTP_HOST' => $directory->domain])
             ->get('http://tekirdag.test/firma-ekle')
-            ->assertOk()
-            ->assertSee('\u00c7orlu', false);
-
-        $this->withServerVariables(['HTTP_HOST' => $directory->domain])
-            ->from('http://tekirdag.test/firma-ekle')
-            ->post('http://tekirdag.test/firma-ekle', ['company_name' => 'Eksik Firma'])
-            ->assertSessionHasErrors(['category_id', 'city_id']);
+            ->assertRedirect('http://tekirdag.test/firma-kayit');
     }
 
     public function test_request_directory_is_carried_to_the_approved_company(): void
@@ -347,7 +341,7 @@ class ListingRequestDirectoryTest extends TestCase
 
         $response = $this
             ->withServerVariables(['HTTP_HOST' => 'www.www-test.test'])
-            ->get('http://www.www-test.test/firma-ekle');
+            ->get('http://www.www-test.test/firma-kayit');
 
         $response->assertOk();
         $this->assertTrue(app()->bound('currentDirectory'));
