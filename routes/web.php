@@ -48,6 +48,7 @@ Route::get('/giris', [OwnerPanelController::class, 'login'])->middleware('guest'
 Route::post('/panel/giris', [OwnerPanelController::class, 'authenticate'])->middleware('guest')->name('owner.login.store');
 Route::middleware('auth')->group(function (): void {
     Route::get('/panel', [OwnerPanelController::class, 'dashboard'])->name('owner.dashboard');
+    Route::get('/panel/kampanyalar', [OwnerPanelController::class, 'campaigns'])->name('owner.campaigns');
     Route::get('/panel/firma/{company:slug}/duzenle', [OwnerPanelController::class, 'edit'])->name('owner.company.edit');
     Route::put('/panel/firma/{company:slug}', [OwnerPanelController::class, 'update'])->name('owner.company.update');
     Route::post('/panel/cikis', [OwnerPanelController::class, 'logout'])->name('owner.logout');

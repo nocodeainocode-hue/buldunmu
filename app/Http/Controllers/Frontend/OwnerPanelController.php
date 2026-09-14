@@ -8,6 +8,7 @@ use App\Models\City;
 use App\Models\Company;
 use App\Models\CompanyOwner;
 use App\Models\District;
+use App\Models\SiteSetting;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -101,6 +102,25 @@ class OwnerPanelController extends Controller
             ->get();
 
         return view('frontend.owner.dashboard', compact('directory', 'companies'));
+    }
+
+    public function campaigns()
+    {
+        $directory = $this->directory();
+        $companies = Auth::user()->ownedCompanies()
+            ->wherePivot('directory_id', $directory->id)
+            ->orderBy('name')
+            ->get(['companies.id', 'companies.name']);
+        $settings = SiteSetting::getSettings();
+        $whatsapp = preg_replace('/\D+/', '', (string) (config('owner_campaign.whatsapp') ?: $settings->whatsapp));
+        $message = sprintf(
+            'Merhaba, %s rehberindeki %s firma profilim için %s hakkında bilgi almak istiyorum.',
+            $directory->name,
+            $companies->pluck('name')->join(', ') ?: 'firma profilim',
+            config('owner_campaign.title')
+        );
+
+        return view('frontend.owner.campaigns', compact('directory', 'companies', 'whatsapp', 'message'));
     }
 
     public function edit(Company $company)

@@ -12,7 +12,10 @@
             <h1 class="mt-2 text-3xl font-black" style="color:var(--text);">Firma Panelim</h1>
             <p class="mt-2" style="color:var(--text_muted);">Hoş geldiniz, {{ auth()->user()->name }}. Bu rehberde sahip olduğunuz profiller burada.</p>
         </div>
-        <form method="POST" action="{{ route('owner.logout') }}">@csrf<button class="rounded-xl border px-4 py-2 text-sm font-bold" style="border-color:var(--border);color:var(--text);">Çıkış yap</button></form>
+        <div class="flex items-center gap-3">
+            <a href="{{ route('owner.campaigns') }}" class="rounded-xl px-4 py-2 text-sm font-black text-white" style="background:var(--primary);">Kampanyalar</a>
+            <form method="POST" action="{{ route('owner.logout') }}">@csrf<button class="rounded-xl border px-4 py-2 text-sm font-bold" style="border-color:var(--border);color:var(--text);">Çıkış yap</button></form>
+        </div>
     </div>
 
     <div class="mt-8 grid gap-5 md:grid-cols-2">

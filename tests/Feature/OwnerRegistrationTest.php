@@ -55,5 +55,11 @@ class OwnerRegistrationTest extends TestCase
             'directory_id' => $directory->id,
             'role' => 'owner',
         ]);
+
+        $this->withServerVariables(['HTTP_HOST' => $directory->domain])
+            ->get('http://buldunmu.test/panel/kampanyalar')
+            ->assertOk()
+            ->assertSee('100 Firma Rehberinde Yayın Projesi')
+            ->assertSee('Ayşe Diş Kliniği');
     }
 }
