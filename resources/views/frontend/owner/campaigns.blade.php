@@ -10,7 +10,7 @@
         <section class="overflow-hidden rounded-3xl border" style="border-color:var(--border);background:var(--bg_card);box-shadow:var(--card_shadow);">
             <div class="p-7 sm:p-9" style="background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;">
                 <p class="text-xs font-black uppercase tracking-[.18em] text-white/70">Firma paneline özel kampanya</p>
-                <h1 class="mt-3 text-3xl font-black sm:text-4xl">{{ config('owner_campaign.title') }}</h1>
+                <h1 class="mt-3 text-3xl font-black sm:text-4xl">{{ $campaignTitle }}</h1>
                 <p class="mt-4 max-w-xl leading-7 text-white/80">Firmanız için çoklu rehber yayını, farklı temalarda görünürlük ve geniş yerel erişim fırsatı.</p>
             </div>
             <div class="p-7 sm:p-9">
@@ -21,11 +21,7 @@
                 </div>
                 <div class="mt-8 rounded-2xl border p-5" style="border-color:var(--border);background:var(--bg);">
                     <p class="text-sm font-bold" style="color:var(--text_muted);">Kampanya fiyatı</p>
-                    @if(filled(config('owner_campaign.price')))
-                        <p class="mt-1 text-4xl font-black" style="color:var(--text);">{{ config('owner_campaign.price') }} TL</p>
-                    @else
-                        <p class="mt-1 text-xl font-black" style="color:var(--text);">Size özel fiyat için WhatsApp'tan yazın</p>
-                    @endif
+                    <p class="mt-1 text-4xl font-black" style="color:var(--text);">{{ number_format((float) $settings->campaign_price, 0, ',', '.') }} TL</p>
                 </div>
                 @if($whatsapp)
                     <a href="https://wa.me/{{ $whatsapp }}?text={{ urlencode($message) }}" target="_blank" rel="noopener noreferrer" class="mt-5 flex w-full items-center justify-center rounded-xl px-5 py-4 text-center font-black text-white transition hover:opacity-90" style="background:#16a34a;">WhatsApp'tan Kampanya Bilgisi Al</a>

@@ -36,6 +36,12 @@ class SiteSettingForm
                             ->helperText('Aktif edildiğinde ön yüzde üyelik paketleri listelenir.')
                             ->default(false),
                     ]),
+                Section::make('Firma Sahibi Paneli Kampanyası')
+                    ->schema([
+                        TextInput::make('campaign_title')->label('Kampanya Başlığı')->required(),
+                        TextInput::make('campaign_price')->label('Kampanya Fiyatı')->numeric()->prefix('TL')->required(),
+                        TextInput::make('campaign_whatsapp')->label('Kampanya WhatsApp Hattı')->tel()->required(),
+                    ]),
             ]);
     }
 }

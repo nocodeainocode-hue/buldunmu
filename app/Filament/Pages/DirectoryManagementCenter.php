@@ -396,6 +396,24 @@ class DirectoryManagementCenter extends Page implements HasForms
                         ->label('Üyelik paketlerini ön yüzde göster')
                         ->helperText('Bu rehbere özel paket yoksa genel paketler gösterilir.'),
                 ]),
+            Section::make('Firma Sahibi Paneli Kampanyası')
+                ->description('Firma sahiplerinin panelde gördüğü çoklu rehber yayın teklifi. Bu ayarlar yalnız seçili rehberi etkiler.')
+                ->schema([
+                    TextInput::make('campaign_title')
+                        ->label('Kampanya Başlığı')
+                        ->required()
+                        ->maxLength(255),
+                    TextInput::make('campaign_price')
+                        ->label('Kampanya Fiyatı')
+                        ->numeric()
+                        ->prefix('TL')
+                        ->required(),
+                    TextInput::make('campaign_whatsapp')
+                        ->label('Kampanya WhatsApp Hattı')
+                        ->tel()
+                        ->required()
+                        ->helperText('Ülke koduyla, boşluksuz yazın. Örnek: 905345957147'),
+                ]),
         ];
     }
 }

@@ -112,15 +112,16 @@ class OwnerPanelController extends Controller
             ->orderBy('name')
             ->get(['companies.id', 'companies.name']);
         $settings = SiteSetting::getSettings();
-        $whatsapp = preg_replace('/\D+/', '', (string) (config('owner_campaign.whatsapp') ?: $settings->whatsapp));
+        $campaignTitle = $settings->campaign_title ?: '100 Firma Rehberinde Yayın Projesi';
+        $whatsapp = preg_replace('/\D+/', '', (string) ($settings->campaign_whatsapp ?: $settings->whatsapp));
         $message = sprintf(
             'Merhaba, %s rehberindeki %s firma profilim için %s hakkında bilgi almak istiyorum.',
             $directory->name,
             $companies->pluck('name')->join(', ') ?: 'firma profilim',
-            config('owner_campaign.title')
+            $campaignTitle
         );
 
-        return view('frontend.owner.campaigns', compact('directory', 'companies', 'whatsapp', 'message'));
+        return view('frontend.owner.campaigns', compact('directory', 'companies', 'whatsapp', 'message', 'settings', 'campaignTitle'));
     }
 
     public function edit(Company $company)

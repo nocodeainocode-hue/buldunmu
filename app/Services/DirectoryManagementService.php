@@ -40,6 +40,9 @@ class DirectoryManagementService
         'homepage_title',
         'homepage_subtitle',
         'show_membership_plans',
+        'campaign_title',
+        'campaign_price',
+        'campaign_whatsapp',
     ];
 
     private const THEME_FIELDS = [

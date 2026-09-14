@@ -60,6 +60,7 @@ class OwnerRegistrationTest extends TestCase
             ->get('http://buldunmu.test/panel/kampanyalar')
             ->assertOk()
             ->assertSee('100 Firma Rehberinde Yayın Projesi')
+            ->assertSee('4.900 TL')
             ->assertSee('Ayşe Diş Kliniği');
     }
 }

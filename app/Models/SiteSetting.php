@@ -12,11 +12,13 @@ class SiteSetting extends Model
     protected $fillable = [
         'site_name', 'logo', 'favicon', 'phone', 'whatsapp',
         'email', 'address', 'homepage_title', 'homepage_subtitle',
-        'meta_title', 'meta_description', 'show_membership_plans', 'directory_id',
+        'meta_title', 'meta_description', 'show_membership_plans',
+        'campaign_title', 'campaign_price', 'campaign_whatsapp', 'directory_id',
     ];
 
     protected $casts = [
         'show_membership_plans' => 'boolean',
+        'campaign_price' => 'decimal:2',
     ];
 
     public static function getSettings()
