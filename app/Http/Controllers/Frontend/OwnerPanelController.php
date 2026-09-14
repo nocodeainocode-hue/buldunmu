@@ -8,6 +8,7 @@ use App\Models\City;
 use App\Models\Company;
 use App\Models\CompanyOwner;
 use App\Models\District;
+use App\Models\ListingRequest;
 use App\Models\SiteSetting;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -61,6 +62,22 @@ class OwnerPanelController extends Controller
                 'directory_id' => $directory->id,
                 'role' => 'owner',
                 'status' => 'active',
+            ]);
+
+            ListingRequest::create([
+                'company_name' => $company->name,
+                'contact_name' => $user->name,
+                'phone' => $company->phone,
+                'whatsapp' => $company->whatsapp,
+                'email' => $company->email ?: $user->email,
+                'website' => $company->website,
+                'category_id' => $company->category_id,
+                'city_id' => $company->city_id,
+                'district_id' => $company->district_id,
+                'directory_id' => $directory->id,
+                'claim_company_id' => $company->id,
+                'source' => 'owner_registration',
+                'status' => 'new',
             ]);
 
             return $user;

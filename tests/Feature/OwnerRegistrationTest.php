@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\City;
 use App\Models\Company;
 use App\Models\Directory;
+use App\Models\ListingRequest;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -55,6 +56,20 @@ class OwnerRegistrationTest extends TestCase
             'directory_id' => $directory->id,
             'role' => 'owner',
         ]);
+        $this->assertDatabaseHas('listing_requests', [
+            'company_name' => 'Ayşe Diş Kliniği',
+            'claim_company_id' => $company->id,
+            'directory_id' => $directory->id,
+            'source' => 'owner_registration',
+            'status' => 'new',
+        ]);
+
+        $approval = ListingRequest::query()->latest('id')->firstOrFail();
+        $approvedCompany = $approval->approveToCompany();
+
+        $this->assertSame($company->id, $approvedCompany->id);
+        $this->assertSame('active', $approvedCompany->fresh()->status);
+        $this->assertSame('approved', $approval->fresh()->status);
 
         $this->withServerVariables(['HTTP_HOST' => $directory->domain])
             ->get('http://buldunmu.test/panel')

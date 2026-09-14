@@ -100,6 +100,7 @@ class ListingRequestController extends Controller
 
         $validated['directory_id'] = $directory->id;
         $validated['status'] = 'new';
+        $validated['source'] = $claimCompany ? 'claim' : 'manual';
 
         ListingRequest::create($validated);
 

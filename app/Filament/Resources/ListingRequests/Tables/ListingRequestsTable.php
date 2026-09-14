@@ -24,11 +24,19 @@ class ListingRequestsTable
                     ->label('Firma Adı')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('claimCompany.name')
+                TextColumn::make('source')
                     ->label('Talep Türü')
-                    ->formatStateUsing(fn (?string $state): string => $state ? 'Profil sahiplenme' : 'Yeni firma')
+                    ->formatStateUsing(fn (?string $state): string => match ($state) {
+                        'owner_registration' => 'Panelden firma kaydı',
+                        'claim' => 'Profil sahiplenme',
+                        default => 'Yeni firma',
+                    })
                     ->badge()
-                    ->color(fn (?string $state): string => $state ? 'warning' : 'gray'),
+                    ->color(fn (?string $state): string => match ($state) {
+                        'owner_registration' => 'success',
+                        'claim' => 'warning',
+                        default => 'gray',
+                    }),
                 TextColumn::make('directory.name')
                     ->label('Geldiği Rehber')
                     ->badge()
@@ -93,17 +101,19 @@ class ListingRequestsTable
             ])
             ->recordActions([
                 Action::make('approve')
-                    ->label(fn (ListingRequest $record): string => $record->claim_company_id ? 'Onayla → Profili Güncelle' : 'Onayla → Firmaya Dönüştür')
+                    ->label(fn (ListingRequest $record): string => $record->source === 'owner_registration' ? 'Onayla → Yayına Al' : ($record->claim_company_id ? 'Onayla → Profili Güncelle' : 'Onayla → Firmaya Dönüştür'))
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
                     ->requiresConfirmation()
-                    ->modalHeading(fn (ListingRequest $record): string => $record->claim_company_id ? 'Profil Sahiplenme Talebini Onayla' : 'Firma Kaydına Dönüştür')
+                    ->modalHeading(fn (ListingRequest $record): string => $record->source === 'owner_registration' ? 'Firma Sahibi Kaydını Yayına Al' : ($record->claim_company_id ? 'Profil Sahiplenme Talebini Onayla' : 'Firma Kaydına Dönüştür'))
                     ->modalDescription(fn (ListingRequest $record): string => $record->directory
-                        ? ($record->claimCompany
+                        ? ($record->source === 'owner_registration'
+                            ? "{$record->company_name} profili yayınlanacak. Firma sahibi panel erişimini kullanmaya devam edecek."
+                            : ($record->claimCompany
                             ? ($record->claimCompany->directory_id === null
                                 ? "{$record->claimCompany->name} için {$record->directory->name} rehberine özel firma profili oluşturulacak. Onaylıyor musunuz?"
                                 : "{$record->claimCompany->name} profili, talepteki bilgilerle güncellenecek. Onaylıyor musunuz?")
-                            : "Firma yalnızca {$record->directory->name} rehberine eklenecek. Onaylıyor musunuz?")
+                            : "Firma yalnızca {$record->directory->name} rehberine eklenecek. Onaylıyor musunuz?"))
                         : 'Bu eski talepte kaynak rehber kayıtlı değil. Firmanın ekleneceği rehberi seçin.')
                     ->form([
                         Select::make('directory_id')

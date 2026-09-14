@@ -19,7 +19,7 @@ class ListingRequest extends Model
     protected $fillable = [
         'company_name', 'contact_name', 'phone', 'whatsapp',
         'email', 'website', 'category_id', 'city_id', 'district_id',
-        'message', 'status', 'directory_id', 'claim_company_id',
+        'message', 'status', 'directory_id', 'claim_company_id', 'source',
     ];
 
     public function category()
@@ -92,6 +92,9 @@ class ListingRequest extends Model
                     'email' => $this->email,
                     'website' => $this->website,
                 ], fn ($value) => $value !== null));
+                if ($this->source === 'owner_registration' && $company->status === 'pending') {
+                    $company->status = 'active';
+                }
                 $company->save();
 
                 $this->update([
