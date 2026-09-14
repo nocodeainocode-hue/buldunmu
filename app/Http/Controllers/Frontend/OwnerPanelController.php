@@ -96,12 +96,19 @@ class OwnerPanelController extends Controller
     public function dashboard()
     {
         $directory = $this->directory();
-        $companies = Auth::user()->ownedCompanies()
+        $user = Auth::user();
+        $companies = $user->ownedCompanies()
             ->wherePivot('directory_id', $directory->id)
             ->with(['category', 'city'])
             ->get();
+        $showCampaignPopup = $user->campaign_popup_seen_at === null;
+        $campaignSettings = SiteSetting::getSettings();
 
-        return view('frontend.owner.dashboard', compact('directory', 'companies'));
+        if ($showCampaignPopup) {
+            $user->forceFill(['campaign_popup_seen_at' => now()])->save();
+        }
+
+        return view('frontend.owner.dashboard', compact('directory', 'companies', 'showCampaignPopup', 'campaignSettings'));
     }
 
     public function campaigns()

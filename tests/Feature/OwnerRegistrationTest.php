@@ -57,6 +57,14 @@ class OwnerRegistrationTest extends TestCase
         ]);
 
         $this->withServerVariables(['HTTP_HOST' => $directory->domain])
+            ->get('http://buldunmu.test/panel')
+            ->assertOk()
+            ->assertSee('Rakiplerinizden sıyrılın.')
+            ->assertSee('4.900 TL');
+
+        $this->assertNotNull($user->fresh()->campaign_popup_seen_at);
+
+        $this->withServerVariables(['HTTP_HOST' => $directory->domain])
             ->get('http://buldunmu.test/panel/kampanyalar')
             ->assertOk()
             ->assertSee('100 Firma Rehberinde Yayın Projesi')

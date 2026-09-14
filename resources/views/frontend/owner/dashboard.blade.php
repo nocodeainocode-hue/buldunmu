@@ -13,7 +13,10 @@
             <p class="mt-2" style="color:var(--text_muted);">Hoş geldiniz, {{ auth()->user()->name }}. Bu rehberde sahip olduğunuz profiller burada.</p>
         </div>
         <div class="flex items-center gap-3">
-            <a href="{{ route('owner.campaigns') }}" class="rounded-xl px-4 py-2 text-sm font-black text-white" style="background:var(--primary);">Kampanyalar</a>
+            <a href="{{ route('owner.campaigns') }}" class="relative overflow-hidden rounded-xl px-4 py-2 text-sm font-black text-white shadow-lg transition hover:-translate-y-0.5" style="background:linear-gradient(135deg,#ea580c,#dc2626);">
+                <span class="mr-1.5 rounded bg-white/20 px-1.5 py-0.5 text-[10px] uppercase tracking-wider">Fırsat</span>
+                100 Rehberde Yayın
+            </a>
             <form method="POST" action="{{ route('owner.logout') }}">@csrf<button class="rounded-xl border px-4 py-2 text-sm font-bold" style="border-color:var(--border);color:var(--text);">Çıkış yap</button></form>
         </div>
     </div>
@@ -42,4 +45,29 @@
         @endforelse
     </div>
 </div>
+
+@if($showCampaignPopup)
+    <div id="campaign-offer-popup" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/75 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="campaign-offer-title">
+        <div class="relative w-full max-w-lg overflow-hidden rounded-3xl bg-white shadow-2xl">
+            <div class="p-7 text-white sm:p-9" style="background:linear-gradient(135deg,#7c2d12,#dc2626 55%,#f97316);">
+                <button type="button" data-close-campaign-popup class="absolute right-4 top-4 rounded-full bg-white/15 px-3 py-1.5 text-lg font-bold text-white transition hover:bg-white/25" aria-label="Kapat">×</button>
+                <p class="text-xs font-black uppercase tracking-[.2em] text-white/70">Firma sahiplerine özel fırsat</p>
+                <h2 id="campaign-offer-title" class="mt-4 text-3xl font-black leading-tight sm:text-4xl">Rakiplerinizden sıyrılın.</h2>
+                <p class="mt-3 text-lg font-bold text-white/90">{{ $campaignSettings->campaign_title }}</p>
+            </div>
+            <div class="p-7 sm:p-9">
+                <p class="text-base leading-7" style="color:var(--text_muted);">Firmanızın görünürlüğünü tek bir rehberle sınırlamayın. Çoklu rehber yayınıyla daha geniş yerel arama kitlesine ulaşın.</p>
+                <div class="mt-6 flex items-end justify-between rounded-2xl p-5" style="background:#fff7ed;">
+                    <div><p class="text-sm font-bold" style="color:#9a3412;">Tek seferlik kampanya</p><p class="mt-1 text-xs" style="color:#c2410c;">Detayları WhatsApp'tan birlikte planlayalım.</p></div>
+                    <strong class="text-3xl font-black" style="color:#9a3412;">{{ number_format((float) $campaignSettings->campaign_price, 0, ',', '.') }} TL</strong>
+                </div>
+                <a href="{{ route('owner.campaigns') }}" class="mt-6 flex w-full items-center justify-center rounded-xl px-5 py-4 text-center font-black text-white transition hover:opacity-90" style="background:#16a34a;">Kampanyayı İncele ve WhatsApp'tan Yaz</a>
+                <button type="button" data-close-campaign-popup class="mt-4 w-full text-center text-sm font-bold" style="color:var(--text_muted);">Şimdilik istemiyorum</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.querySelectorAll('[data-close-campaign-popup]').forEach((button) => button.addEventListener('click', () => document.getElementById('campaign-offer-popup')?.remove()));
+    </script>
+@endif
 @endsection

@@ -40,6 +40,7 @@ class User extends Authenticatable implements FilamentUser
     {
         return [
             'email_verified_at' => 'datetime',
+            'campaign_popup_seen_at' => 'datetime',
             'is_admin' => 'boolean',
             'password' => 'hashed',
         ];
