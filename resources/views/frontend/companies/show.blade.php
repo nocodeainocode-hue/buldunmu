@@ -15,6 +15,13 @@
     $isSearchIndexable = $company->isSearchIndexable();
     $profileScore = $company->profileCompletionScore();
     $socialImage = $company->cover_image ?: $company->logo;
+    $profileSignals = [
+        ['label' => 'İletişim', 'ready' => filled($company->phone) || filled($company->whatsapp) || filled($company->email) || filled($company->website)],
+        ['label' => 'Konum', 'ready' => filled($company->address) || (filled($company->latitude) && filled($company->longitude))],
+        ['label' => 'Görseller', 'ready' => filled($company->logo) || filled($company->cover_image) || $company->images->isNotEmpty()],
+        ['label' => 'Hizmetler', 'ready' => filled($company->services) || filled($company->description)],
+    ];
+    $readyProfileSignals = collect($profileSignals)->where('ready', true)->count();
 
     // FAQ items for JSON-LD schema
     $faqItems = [
@@ -122,6 +129,9 @@
                         <div class="mb-2 flex flex-wrap items-center gap-2">
                             @if($company->is_premium)
                                 <span class="rounded-full px-3 py-1 text-xs font-black text-white shadow" style="background:var(--accent);">Premium</span>
+                            @endif
+                            @if($company->is_verified)
+                                <span class="rounded-full px-3 py-1 text-xs font-black" style="background:#dcfce7;color:#166534;">✓ Doğrulanmış profil</span>
                             @endif
                             <span class="rounded-full px-3 py-1 text-xs font-bold" style="background:var(--primary_light);color:var(--primary);">{{ $categoryName }}</span>
                             @if($ratingAvg)
@@ -474,13 +484,22 @@
                     </div>
                 </div>
                 <p class="mt-3 text-sm leading-6" style="color:var(--text_muted);">Bilgilerinizi doğrulayın; telefon, web sitesi, konum, çalışma saatleri, hizmetler ve görselleriniz profilinizde doğru yer alsın.</p>
+                <div class="mt-4 grid grid-cols-2 gap-2">
+                    @foreach($profileSignals as $signal)
+                        <div class="rounded-xl border px-3 py-2 text-xs font-bold" style="border-color:var(--border);background:rgba(255,255,255,.72);color:var(--text);">
+                            <span style="color:{{ $signal['ready'] ? '#16a34a' : 'var(--text_muted)' }};">{{ $signal['ready'] ? '✓' : '○' }}</span>
+                            {{ $signal['label'] }}
+                        </div>
+                    @endforeach
+                </div>
                 <a href="{{ route('companies.claim', $company->slug) }}" class="mt-4 flex items-center justify-center rounded-xl px-4 py-3 text-sm font-black text-white transition hover:opacity-90 active:scale-[.98]" style="background:var(--primary);">
                     Profili Sahiplen ve Güncelle
                 </a>
                 <div class="mt-4 flex items-center justify-between border-t pt-3 text-xs" style="border-color:var(--border);color:var(--text_muted);">
-                    <span>Bilgi kapsamı: <strong style="color:var(--text);">%{{ $profileScore }}</strong></span>
+                    <span>{{ $readyProfileSignals }}/{{ count($profileSignals) }} temel alan hazır · <strong style="color:var(--text);">%{{ $profileScore }}</strong></span>
                     <span>Son güncelleme: {{ $company->updated_at?->format('d.m.Y') }}</span>
                 </div>
+                <a href="{{ route('packages.index') }}" class="mt-3 block text-center text-xs font-bold hover:underline" style="color:var(--primary);">Profilinizi öne çıkarma seçeneklerini inceleyin</a>
             </section>
 
             {{-- Similar Companies --}}
