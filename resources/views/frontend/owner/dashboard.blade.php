@@ -52,6 +52,10 @@
             <div class="p-7 text-white sm:p-9" style="background:linear-gradient(135deg,#7c2d12,#dc2626 55%,#f97316);">
                 <button type="button" data-close-campaign-popup class="absolute right-4 top-4 rounded-full bg-white/15 px-3 py-1.5 text-lg font-bold text-white transition hover:bg-white/25" aria-label="Kapat">×</button>
                 <p class="text-xs font-black uppercase tracking-[.2em] text-white/70">Firma sahiplerine özel fırsat</p>
+                <div class="mt-5 flex items-end gap-3">
+                    <strong data-campaign-counter="100" class="text-6xl font-black leading-none sm:text-7xl">0</strong>
+                    <span class="mb-1.5 text-sm font-black uppercase tracking-wider text-white/80">Firma rehberinde<br>yayın fırsatı</span>
+                </div>
                 <h2 id="campaign-offer-title" class="mt-4 text-3xl font-black leading-tight sm:text-4xl">Rakiplerinizden sıyrılın.</h2>
                 <p class="mt-3 text-lg font-bold text-white/90">{{ $campaignSettings->campaign_title }}</p>
             </div>
@@ -68,6 +72,17 @@
     </div>
     <script>
         document.querySelectorAll('[data-close-campaign-popup]').forEach((button) => button.addEventListener('click', () => document.getElementById('campaign-offer-popup')?.remove()));
+        document.querySelectorAll('[data-campaign-counter]').forEach((counter) => {
+            const target = Number(counter.dataset.campaignCounter);
+            const startedAt = performance.now();
+            const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 1250;
+            const tick = (now) => {
+                const progress = duration ? Math.min((now - startedAt) / duration, 1) : 1;
+                counter.textContent = Math.round(target * (1 - Math.pow(1 - progress, 3)));
+                if (progress < 1) requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+        });
     </script>
 @endif
 @endsection
