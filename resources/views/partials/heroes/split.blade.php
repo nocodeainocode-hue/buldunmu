@@ -27,7 +27,7 @@
                     <div class="text-sm opacity-70 mt-1">Şehir</div>
                 </div>
                 <div class="bg-white/10 backdrop-blur rounded-xl p-6 text-center flex items-center justify-center">
-                    <a href="{{ route('listing.create') }}" class="text-sm font-semibold underline">+ Firma Ekle</a>
+                    <a href="{{ route('owner.register') }}" class="text-sm font-semibold underline">+ Firma Ekle</a>
                 </div>
             </div>
         </div>

@@ -5,7 +5,7 @@
             <h2 class="text-3xl font-black tracking-tight sm:text-4xl" style="color:white;">Firmanızı binlerce potansiyel müşteriyle tanıtın</h2>
             <p class="mx-auto mt-4 max-w-2xl text-sm leading-7 sm:text-base" style="color:rgba(255,255,255,.82);">Ücretsiz kayıt olun, işletmenizin telefon, WhatsApp, web sitesi ve adres bilgilerini rehberde görünür hale getirin.</p>
             <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-                <a href="{{ route('listing.create') }}" class="rounded-xl bg-white px-7 py-3 text-sm font-black shadow-xl transition hover:-translate-y-0.5" style="color:var(--primary);">Hemen firma ekle</a>
+                <a href="{{ route('owner.register') }}" class="rounded-xl bg-white px-7 py-3 text-sm font-black shadow-xl transition hover:-translate-y-0.5" style="color:var(--primary);">Hemen firma ekle</a>
                 <a href="{{ route('companies.index') }}" class="rounded-xl border border-white/30 px-7 py-3 text-sm font-black transition hover:bg-white/10" style="color:white;">Firmaları incele</a>
             </div>
         </div>

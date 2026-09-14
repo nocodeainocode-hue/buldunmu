@@ -35,7 +35,7 @@
         <aside class="space-y-4">
             <div class="rounded-md border bg-white p-4" style="border-color:var(--border);"><div class="text-xs font-black uppercase tracking-wider" style="color:var(--text_muted);">Hızlı durum</div><div class="mt-4 grid grid-cols-2 gap-2"><div class="rounded-md p-3" style="background:var(--primary_light);"><strong class="text-2xl" style="color:var(--primary);">{{ $categories->count() }}</strong><span class="block text-xs" style="color:var(--text_muted);">Kategori</span></div><div class="rounded-md p-3" style="background:#eef6fa;"><strong class="text-2xl" style="color:var(--secondary);">{{ $cities->count() }}</strong><span class="block text-xs" style="color:var(--text_muted);">Aktif şehir</span></div></div></div>
             <div class="rounded-md border bg-white p-4" style="border-color:var(--border);"><h2 class="text-sm font-black" style="color:var(--text);">Öne çıkanlar</h2><div class="mt-3 space-y-3">@foreach($premiumCompanies->take(4) as $company)<a href="{{ route('companies.show',$company->slug) }}" class="block border-b pb-3 text-sm font-bold last:border-0 last:pb-0" style="border-color:var(--border);color:var(--text);">{{ $company->name }}<span class="mt-1 block text-xs font-normal" style="color:var(--text_muted);">{{ $company->city->name ?? '' }}</span></a>@endforeach</div></div>
-            <a href="{{ route('listing.create') }}" class="block rounded-md p-5 text-center text-sm font-black text-white" style="background:var(--secondary);">Firmanızı rehbere ekleyin</a>
+            <a href="{{ route('owner.register') }}" class="block rounded-md p-5 text-center text-sm font-black text-white" style="background:var(--secondary);">Firmanızı rehbere ekleyin</a>
         </aside>
     </div>
 </div>

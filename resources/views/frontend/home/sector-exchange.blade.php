@@ -47,7 +47,7 @@
                     <div class="bg-white p-4"><strong class="text-2xl" style="color:var(--text);">{{ $cities->count() }}</strong><small class="block" style="color:var(--text_muted);">Şehir</small></div>
                 </div>
             </div>
-            <a href="{{ route('listing.create') }}" class="block p-5 text-white" style="background:var(--secondary);"><span class="text-xs font-black uppercase tracking-wider text-white/70">Firma sahipleri</span><strong class="mt-2 block text-xl">Sektör tablosuna katılın</strong><small class="mt-2 block leading-5 text-white/75">İşletme profilinizi oluşturun ve görünürlüğünüzü artırın.</small></a>
+            <a href="{{ route('owner.register') }}" class="block p-5 text-white" style="background:var(--secondary);"><span class="text-xs font-black uppercase tracking-wider text-white/70">Firma sahipleri</span><strong class="mt-2 block text-xl">Sektör tablosuna katılın</strong><small class="mt-2 block leading-5 text-white/75">İşletme profilinizi oluşturun ve görünürlüğünüzü artırın.</small></a>
         </aside>
     </section>
 

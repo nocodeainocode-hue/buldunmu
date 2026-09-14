@@ -113,7 +113,7 @@
         <a href="{{ route('home') }}" class="rounded-xl py-2" style="background:var(--primary_light);color:var(--primary);">🏠<br>Akış</a>
         <a href="{{ route('companies.index') }}" class="py-2" style="color:var(--text_muted);">🏢<br>Firmalar</a>
         <a href="{{ route('blog.index') }}" class="py-2" style="color:var(--text_muted);">✨<br>Keşfet</a>
-        <a href="{{ route('listing.create') }}" class="py-2" style="color:var(--text_muted);">➕<br>Ekle</a>
+        <a href="{{ route('owner.register') }}" class="py-2" style="color:var(--text_muted);">➕<br>Ekle</a>
     </nav>
 </div>
 @endsection

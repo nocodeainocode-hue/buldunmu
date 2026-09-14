@@ -8,6 +8,7 @@ use App\Http\Controllers\Frontend\CompanyReviewController;
 use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\ListingRequestController;
+use App\Http\Controllers\Frontend\OwnerPanelController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\PaketController;
 use App\Http\Controllers\Frontend\PwaController;
@@ -38,6 +39,19 @@ Route::get('/sehir/{slug}', [CityController::class, 'show'])->name('cities.show'
 // Firma ekleme talebi
 Route::get('/firma-ekle', [ListingRequestController::class, 'create'])->name('listing.create');
 Route::post('/firma-ekle', [ListingRequestController::class, 'store'])->name('listing.store');
+
+// Firma sahibi hesabı ve firma paneli
+Route::get('/firma-kayit', [OwnerPanelController::class, 'register'])->middleware('guest')->name('owner.register');
+Route::post('/firma-kayit', [OwnerPanelController::class, 'storeRegistration'])->middleware('guest')->name('owner.register.store');
+Route::get('/panel/giris', [OwnerPanelController::class, 'login'])->middleware('guest')->name('owner.login');
+Route::get('/giris', [OwnerPanelController::class, 'login'])->middleware('guest')->name('login');
+Route::post('/panel/giris', [OwnerPanelController::class, 'authenticate'])->middleware('guest')->name('owner.login.store');
+Route::middleware('auth')->group(function (): void {
+    Route::get('/panel', [OwnerPanelController::class, 'dashboard'])->name('owner.dashboard');
+    Route::get('/panel/firma/{company:slug}/duzenle', [OwnerPanelController::class, 'edit'])->name('owner.company.edit');
+    Route::put('/panel/firma/{company:slug}', [OwnerPanelController::class, 'update'])->name('owner.company.update');
+    Route::post('/panel/cikis', [OwnerPanelController::class, 'logout'])->name('owner.logout');
+});
 
 // İletişim
 Route::post('/iletisim', [ContactController::class, 'store'])->name('contact.store');

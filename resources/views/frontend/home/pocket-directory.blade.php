@@ -32,7 +32,7 @@
                 <strong class="truncate text-base" style="color:var(--text);">{{ $directory->name ?? $settings->site_name ?? 'Firma Rehberi' }}</strong>
             @endif
         </a>
-        <a href="{{ route('listing.create') }}" class="shrink-0 rounded-lg border px-3 py-2 text-xs font-bold" style="border-color:var(--border);color:var(--primary);">+ Firma ekle</a>
+        <a href="{{ route('owner.register') }}" class="shrink-0 rounded-lg border px-3 py-2 text-xs font-bold" style="border-color:var(--border);color:var(--primary);">+ Firma ekle</a>
     </div>
 
     <div class="px-4 pb-24 pt-5">
@@ -84,7 +84,7 @@
         <a href="{{ route('home') }}" class="rounded-lg py-2" style="background:var(--primary_light);color:var(--primary);">Rehber</a>
         <a href="{{ route('companies.index') }}" class="py-2" style="color:var(--text_muted);">Firmalar</a>
         <a href="{{ route('blog.index') }}" class="py-2" style="color:var(--text_muted);">Keşfet</a>
-        <a href="{{ route('listing.create') }}" class="py-2" style="color:var(--text_muted);">Firma Ekle</a>
+        <a href="{{ route('owner.register') }}" class="py-2" style="color:var(--text_muted);">Firma Ekle</a>
     </nav>
 </div>
 @endsection

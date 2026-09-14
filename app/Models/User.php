@@ -21,7 +21,14 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return true;
+        return $panel->getId() !== 'admin' || (bool) $this->is_admin;
+    }
+
+    public function ownedCompanies()
+    {
+        return $this->belongsToMany(Company::class, 'company_owners')
+            ->withPivot(['directory_id', 'role', 'status', 'verified_at'])
+            ->withTimestamps();
     }
 
     /**
@@ -33,6 +40,7 @@ class User extends Authenticatable implements FilamentUser
     {
         return [
             'email_verified_at' => 'datetime',
+            'is_admin' => 'boolean',
             'password' => 'hashed',
         ];
     }

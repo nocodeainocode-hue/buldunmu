@@ -42,7 +42,7 @@
             <div><strong class="block text-3xl" style="color:var(--primary);">{{ $categories->count() }}</strong><span class="text-xs font-bold uppercase tracking-wider" style="color:var(--text_muted);">Sektör</span></div>
             <div><strong class="block text-3xl" style="color:var(--primary);">{{ $cities->count() }}</strong><span class="text-xs font-bold uppercase tracking-wider" style="color:var(--text_muted);">Şehir</span></div>
             <div><strong class="block text-3xl" style="color:var(--primary);">{{ $premiumCompanies->count() }}</strong><span class="text-xs font-bold uppercase tracking-wider" style="color:var(--text_muted);">Öne çıkan</span></div>
-            <div><a href="{{ route('listing.create') }}" class="inline-flex border px-4 py-2 text-sm font-black" style="border-color:var(--primary);color:var(--primary);">Firma ekle</a><span class="mt-1 block text-xs" style="color:var(--text_muted);">Ücretsiz başvuru</span></div>
+            <div><a href="{{ route('owner.register') }}" class="inline-flex border px-4 py-2 text-sm font-black" style="border-color:var(--primary);color:var(--primary);">Firma ekle</a><span class="mt-1 block text-xs" style="color:var(--text_muted);">Ücretsiz başvuru</span></div>
         </div>
     </section>
 

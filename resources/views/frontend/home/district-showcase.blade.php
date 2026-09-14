@@ -25,7 +25,7 @@
                     <div><div class="text-xs font-black uppercase tracking-wider text-white/70">Keşfe başla</div><h2 class="mt-2 text-3xl font-black">Bugün ne arıyorsun?</h2></div>
                     <div class="mt-6 flex overflow-hidden rounded-xl bg-white"><input name="q" class="min-w-0 flex-1 px-4 py-3 text-sm text-slate-900 outline-none" placeholder="Kafe, klinik, usta..."><button class="px-4 text-xs font-black" style="color:var(--secondary);">Ara</button></div>
                 </form>
-                <a href="{{ route('listing.create') }}" class="flex flex-col justify-between rounded-2xl border bg-white p-6" style="border-color:var(--border);">
+                <a href="{{ route('owner.register') }}" class="flex flex-col justify-between rounded-2xl border bg-white p-6" style="border-color:var(--border);">
                     <span class="text-xs font-black uppercase tracking-wider" style="color:var(--accent);">İşletme sahipleri</span><span><strong class="block text-2xl font-black" style="color:var(--text);">Vitrindeki yerinizi alın</strong><small class="mt-2 block leading-6" style="color:var(--text_muted);">Firmanızı ekleyin, profilinizi müşterilerle buluşturun.</small></span>
                 </a>
             </div>

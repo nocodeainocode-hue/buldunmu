@@ -121,7 +121,7 @@
                 {{-- Quick actions --}}
                 <div class="mb-4 flex gap-2">
                     <a href="{{ route('companies.index') }}" onclick="closeMobileMenu()" class="flex-1 rounded-xl px-4 py-2.5 text-center text-sm font-bold transition hover:opacity-80" style="background:var(--primary_light);color:var(--primary);">Firmalar</a>
-                    <a href="{{ route('listing.create') }}" onclick="closeMobileMenu()" class="flex-1 rounded-xl px-4 py-2.5 text-center text-sm font-bold text-white transition hover:opacity-90" style="background:var(--primary);">+ Firma Ekle</a>
+                    <a href="{{ route('owner.register') }}" onclick="closeMobileMenu()" class="flex-1 rounded-xl px-4 py-2.5 text-center text-sm font-bold text-white transition hover:opacity-90" style="background:var(--primary);">+ Firma Ekle</a>
                 </div>
 
                 {{-- Categories — scrollable grid --}}
@@ -214,7 +214,8 @@
                         </div>
                     </div>
                     <a href="{{ route('blog.index') }}" class="rounded-lg px-4 py-2 text-sm font-bold transition hover:opacity-70" style="color:var(--text);">Blog</a>
-                    <a href="{{ route('listing.create') }}" class="ml-2 rounded-xl px-4 py-2 text-sm font-black text-white shadow-sm transition hover:opacity-90" style="background:var(--primary);">+ Firma Ekle</a>
+                    <a href="{{ route('owner.dashboard') }}" class="rounded-lg px-3 py-2 text-sm font-bold transition hover:opacity-70" style="color:var(--text);">Firma Paneli</a>
+                    <a href="{{ route('owner.register') }}" class="ml-2 rounded-xl px-4 py-2 text-sm font-black text-white shadow-sm transition hover:opacity-90" style="background:var(--primary);">+ Firma Ekle</a>
                 </nav>
 
                 <button id="mobile-menu-btn" class="rounded-lg p-2 md:hidden" style="color:var(--text_muted);" aria-label="Menu">
@@ -254,7 +255,8 @@
                     <ul class="space-y-2 text-sm" style="color:#94a3b8;">
                         <li><a href="{{ route('companies.index') }}" class="transition hover:text-white">Firmalar</a></li>
                         <li><a href="{{ route('blog.index') }}" class="transition hover:text-white">Blog</a></li>
-                        <li><a href="{{ route('listing.create') }}" class="transition hover:text-white">Firma Ekle</a></li>
+                        <li><a href="{{ route('owner.register') }}" class="transition hover:text-white">Firma Ekle</a></li>
+                        <li><a href="{{ route('owner.dashboard') }}" class="transition hover:text-white">Firma Paneli</a></li>
                         <li><a href="{{ route('packages.index') }}" class="transition hover:text-white">Üyelik Paketleri</a></li>
                         <li><a href="{{ route('pages.about') }}" class="transition hover:text-white">Hakkımızda</a></li>
                         <li><a href="{{ route('pages.contact') }}" class="transition hover:text-white">İletişim</a></li>

@@ -103,7 +103,7 @@
                 <div class="rounded-3xl border p-16 text-center" style="border-color:var(--border);background:var(--bg_card);">
                     <div class="text-5xl mb-4">🔍</div>
                     <h3 class="text-lg font-bold" style="color:var(--text);">Bu şehirde firma bulunamadı</h3>
-                    <p class="mt-2 text-sm" style="color:var(--text_muted);">Farklı filtrelerle tekrar deneyin veya <a href="{{ route('listing.create') }}" class="font-bold hover:underline" style="color:var(--primary);">firma ekleyin</a>.</p>
+                    <p class="mt-2 text-sm" style="color:var(--text_muted);">Farklı filtrelerle tekrar deneyin veya <a href="{{ route('owner.register') }}" class="font-bold hover:underline" style="color:var(--primary);">firma ekleyin</a>.</p>
                 </div>
             @endif
         </div>

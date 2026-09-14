@@ -27,7 +27,7 @@
                 <div class="bg-white p-5"><span class="text-3xl font-black" style="color:var(--primary);">{{ \App\Models\Company::active()->count() }}</span><span class="mt-1 block text-xs font-bold" style="color:var(--text_muted);">Aktif firma</span></div>
                 <div class="bg-white p-5"><span class="text-3xl font-black" style="color:var(--secondary);">{{ $categories->count() }}</span><span class="mt-1 block text-xs font-bold" style="color:var(--text_muted);">Öne çıkan kategori</span></div>
                 <div class="bg-white p-5"><span class="text-3xl font-black" style="color:var(--accent);">{{ $cities->count() }}</span><span class="mt-1 block text-xs font-bold" style="color:var(--text_muted);">Aktif şehir</span></div>
-                <a href="{{ route('listing.create') }}" class="flex items-center justify-center p-5 text-center text-sm font-black text-white" style="background:var(--secondary);">Firmanı ekle</a>
+                <a href="{{ route('owner.register') }}" class="flex items-center justify-center p-5 text-center text-sm font-black text-white" style="background:var(--secondary);">Firmanı ekle</a>
             </div>
         </div>
     </section>

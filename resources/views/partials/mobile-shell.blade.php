@@ -23,7 +23,7 @@
 
             <div class="mb-4 flex gap-2">
                 <a href="{{ route('companies.index') }}" onclick="closeMsMenu()" class="flex-1 rounded-xl px-3 py-2 text-center text-sm font-bold" style="background:var(--bg);color:var(--text);">Firmalar</a>
-                <a href="{{ route('listing.create') }}" onclick="closeMsMenu()" class="flex-1 rounded-xl px-3 py-2 text-center text-sm font-bold text-white" style="background:var(--primary);">+ Firma Ekle</a>
+                <a href="{{ route('owner.register') }}" onclick="closeMsMenu()" class="flex-1 rounded-xl px-3 py-2 text-center text-sm font-bold text-white" style="background:var(--primary);">+ Firma Ekle</a>
             </div>
 
             <form action="{{ route('search') }}" method="GET" class="mb-4">

@@ -81,7 +81,7 @@
                 <div class="rounded-3xl border p-16 text-center" style="border-color:var(--border);background:var(--bg_card);">
                     <div class="text-5xl mb-4">📭</div>
                     <h3 class="text-lg font-bold" style="color:var(--text);">Bu kategoride henüz firma yok</h3>
-                    <p class="mt-2 text-sm" style="color:var(--text_muted);">İlk firmayı eklemek için <a href="{{ route('listing.create') }}" class="font-bold hover:underline" style="color:var(--primary);">tıklayın</a>.</p>
+                    <p class="mt-2 text-sm" style="color:var(--text_muted);">İlk firmayı eklemek için <a href="{{ route('owner.register') }}" class="font-bold hover:underline" style="color:var(--primary);">tıklayın</a>.</p>
                 </div>
             @endif
         </div>

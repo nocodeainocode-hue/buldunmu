@@ -196,6 +196,13 @@ class Company extends Model
         return $this->belongsTo(CompanyImportBatch::class, 'import_batch_id');
     }
 
+    public function owners()
+    {
+        return $this->belongsToMany(User::class, 'company_owners')
+            ->withPivot(['directory_id', 'role', 'status', 'verified_at'])
+            ->withTimestamps();
+    }
+
     public function pageViews()
     {
         return $this->hasMany(PageView::class);

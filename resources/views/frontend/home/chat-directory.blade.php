@@ -34,7 +34,7 @@
                 @endif
                 <span class="text-[11px] text-white/80">{{ \App\Models\Company::active()->count() }} işletme çevrimiçi gibi listelendi</span>
             </div>
-            <a href="{{ route('listing.create') }}" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20 text-lg font-black text-white" aria-label="Firma ekle">+</a>
+            <a href="{{ route('owner.register') }}" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20 text-lg font-black text-white" aria-label="Firma ekle">+</a>
         </div>
         <form action="{{ route('search') }}" method="GET" class="mt-3 flex items-center gap-2 rounded-full bg-white/95 px-4 py-2.5">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="var(--text_muted)" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
@@ -81,14 +81,14 @@
     </div>
 
     {{-- FAB: quick contact to first reachable company / add listing --}}
-    <a href="{{ route('listing.create') }}" class="absolute bottom-20 right-4 flex h-14 w-14 items-center justify-center rounded-full text-2xl text-white shadow-xl" style="background:var(--accent);" aria-label="Firma ekle">💬</a>
+    <a href="{{ route('owner.register') }}" class="absolute bottom-20 right-4 flex h-14 w-14 items-center justify-center rounded-full text-2xl text-white shadow-xl" style="background:var(--accent);" aria-label="Firma ekle">💬</a>
 
     {{-- Bottom nav --}}
     <nav class="absolute inset-x-0 bottom-0 grid grid-cols-4 border-t bg-white px-1 py-1.5 text-center text-[11px] font-bold" style="border-color:var(--border);">
         <a href="{{ route('home') }}" class="rounded-xl py-2" style="background:var(--primary_light);color:var(--primary);">💬<br>Firmalar</a>
         <a href="{{ route('companies.index') }}" class="py-2" style="color:var(--text_muted);">📇<br>Rehber</a>
         <a href="{{ route('blog.index') }}" class="py-2" style="color:var(--text_muted);">📰<br>Yazılar</a>
-        <a href="{{ route('listing.create') }}" class="py-2" style="color:var(--text_muted);">➕<br>Ekle</a>
+        <a href="{{ route('owner.register') }}" class="py-2" style="color:var(--text_muted);">➕<br>Ekle</a>
     </nav>
 </div>
 @endsection

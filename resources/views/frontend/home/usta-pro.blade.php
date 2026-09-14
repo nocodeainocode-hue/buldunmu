@@ -189,7 +189,7 @@
             <h2 class="text-3xl font-black leading-tight sm:text-4xl" style="color:var(--btn_text,#fff);">Firmanız mı var? Müşterileriniz sizi arıyor.</h2>
             <p class="mt-4 max-w-xl text-sm leading-7 sm:text-base" style="color:var(--btn_text,#fff);opacity:.82;">Profilinizi oluşturun, bölgenizdeki binlerce müşteriye ulaşın. Komisyon yok, aracı yok; müşteri doğrudan sizi arar.</p>
             <div class="mt-7 flex flex-col gap-3 sm:flex-row">
-                <a href="{{ route('listing.create') }}" class="rounded-xl px-7 py-3 text-center text-sm font-black shadow-lg transition hover:opacity-90" style="background:var(--accent);color:#fff;">Ücretsiz Firma Ekle</a>
+                <a href="{{ route('owner.register') }}" class="rounded-xl px-7 py-3 text-center text-sm font-black shadow-lg transition hover:opacity-90" style="background:var(--accent);color:#fff;">Ücretsiz Firma Ekle</a>
                 <a href="{{ route('packages.index') }}" class="rounded-xl border px-7 py-3 text-center text-sm font-black transition hover:opacity-80" style="border-color:var(--btn_text,#fff);color:var(--btn_text,#fff);">Üyelik Paketleri</a>
             </div>
         </div>
