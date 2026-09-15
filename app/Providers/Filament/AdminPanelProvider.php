@@ -2,24 +2,22 @@
 
 namespace App\Providers\Filament;
 
-use App\Http\Middleware\SetCurrentDirectory;
-use App\Http\Middleware\SetAdminLocale;
-use App\Models\Directory;
-use App\Filament\Widgets\StatsOverview;
 use App\Filament\Widgets\QuickActions;
+use App\Filament\Widgets\StatsOverview;
+use App\Http\Middleware\SetAdminLocale;
+use App\Http\Middleware\SetCurrentDirectory;
+use App\Models\Directory;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Navigation\NavigationGroup;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Width;
 use Filament\View\PanelsRenderHook;
-use Filament\Widgets\AccountWidget;
-use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -37,6 +35,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->brandName('Rehber Yönetimi')
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->colors([
                 'primary' => Color::Indigo,
             ])
