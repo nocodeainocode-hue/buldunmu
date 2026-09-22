@@ -126,11 +126,11 @@
 
                 {{-- Categories — scrollable grid --}}
                 <div class="mb-4">
+                    @php $mobileCategories = \App\Models\Category::active()->visibleForDirectory($directory ?? null)->orderBy('name')->take(48)->get(); @endphp
                     <div class="mb-2 flex items-center justify-between">
                         <span class="text-xs font-black uppercase tracking-widest" style="color:var(--primary);">Kategoriler</span>
-                        <span class="text-xs" style="color:var(--text_muted);">35</span>
+                        <span class="text-xs" style="color:var(--text_muted);">{{ $mobileCategories->count() }}</span>
                     </div>
-                    @php $mobileCategories = \App\Models\Category::active()->visibleForDirectory($directory ?? null)->orderBy('name')->take(35)->get(); @endphp
                     <div class="grid grid-cols-2 gap-1">
                         @foreach($mobileCategories as $cat)
                             <a href="{{ route('categories.show', $cat->slug) }}" onclick="closeMobileMenu()" class="flex items-center gap-2 rounded-lg px-2 py-2 text-xs font-semibold transition hover:bg-black/5 dark:hover:bg-white/5" style="color:var(--text);">
@@ -183,9 +183,9 @@
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </button>
                         <div class="invisible absolute left-1/2 top-full z-50 mt-2 w-[min(92vw,54rem)] -translate-x-1/2 rounded-2xl border p-4 opacity-0 shadow-xl transition-all group-hover:visible group-hover:opacity-100" style="background:var(--bg_card);border-color:var(--border);">
-                            @php $headerCategories = \App\Models\Category::active()->visibleForDirectory($directory ?? null)->withCount('companies')->orderBy('name')->take(35)->get(); @endphp
+                            @php $headerCategories = \App\Models\Category::active()->visibleForDirectory($directory ?? null)->withCount('companies')->orderBy('name')->take(48)->get(); @endphp
                             <div class="mb-3 flex items-center justify-between border-b pb-3" style="border-color:var(--border);">
-                                <span class="text-xs font-black uppercase tracking-widest" style="color:var(--primary);">35 ortak kategori</span>
+                                <span class="text-xs font-black uppercase tracking-widest" style="color:var(--primary);">{{ $headerCategories->count() }} kategori</span>
                                 <a href="{{ route('companies.index') }}" class="text-xs font-bold" style="color:var(--secondary);">Tüm firmalar →</a>
                             </div>
                             <div class="grid grid-cols-2 gap-1 sm:grid-cols-3 lg:grid-cols-4">

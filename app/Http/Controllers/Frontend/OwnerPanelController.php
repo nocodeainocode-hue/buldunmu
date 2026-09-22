@@ -72,6 +72,7 @@ class OwnerPanelController extends Controller
                 'email' => $company->email ?: $user->email,
                 'website' => $company->website,
                 'category_id' => $company->category_id,
+                'requested_category' => $validated['requested_category'] ?? null,
                 'city_id' => $company->city_id,
                 'district_id' => $company->district_id,
                 'directory_id' => $directory->id,
@@ -195,7 +196,9 @@ class OwnerPanelController extends Controller
 
     private function validateCompany(Request $request, int $directoryId): array
     {
-        return $request->validate([
+        $categoryIsMissing = $request->input('category_id') === 'other';
+
+        $validated = $request->validate([
             'company_name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:30',
             'whatsapp' => 'nullable|string|max:30',
@@ -203,10 +206,19 @@ class OwnerPanelController extends Controller
             'website' => 'nullable|url|max:255',
             'address' => 'nullable|string|max:1000',
             'short_description' => 'nullable|string|max:500',
-            'category_id' => ['required', Rule::exists('categories', 'id')->where(fn ($query) => $query->whereNull('directory_id')->orWhere('directory_id', $directoryId))],
+            'category_id' => $categoryIsMissing
+                ? ['required', Rule::in(['other'])]
+                : ['required', Rule::exists('categories', 'id')->where(fn ($query) => $query->whereNull('directory_id')->orWhere('directory_id', $directoryId))],
+            'requested_category' => [Rule::requiredIf($categoryIsMissing), 'nullable', 'string', 'max:120'],
             'city_id' => ['required', Rule::exists('cities', 'id')->where(fn ($query) => $query->whereNull('directory_id')->orWhere('directory_id', $directoryId))],
             'district_id' => ['nullable', Rule::exists('districts', 'id')->where(fn ($query) => $query->where('city_id', $request->input('city_id'))->where(fn ($directoryQuery) => $directoryQuery->whereNull('directory_id')->orWhere('directory_id', $directoryId)))],
         ]);
+
+        if ($categoryIsMissing) {
+            $validated['category_id'] = null;
+        }
+
+        return $validated;
     }
 
     private function directory()

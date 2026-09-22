@@ -2,10 +2,11 @@
 
 namespace App\Filament\Resources\ListingRequests\Schemas;
 
+use App\Models\Category;
 use App\Models\Directory;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
 class ListingRequestForm
@@ -35,8 +36,18 @@ class ListingRequestForm
                     ->email(),
                 TextInput::make('website')
                     ->url(),
-                TextInput::make('category_id')
-                    ->numeric(),
+                Select::make('category_id')
+                    ->label('Kategori')
+                    ->options(fn (): array => Category::withoutGlobalScope('directory')
+                        ->where('status', 'active')
+                        ->orderBy('name')
+                        ->pluck('name', 'id')
+                        ->all())
+                    ->searchable()
+                    ->preload(),
+                TextInput::make('requested_category')
+                    ->label('Firma Sahibinin Kategori Talebi')
+                    ->maxLength(120),
                 TextInput::make('city_id')
                     ->numeric(),
                 TextInput::make('district_id')

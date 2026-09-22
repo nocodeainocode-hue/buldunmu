@@ -19,7 +19,7 @@ class ListingRequest extends Model
     protected $fillable = [
         'company_name', 'contact_name', 'phone', 'whatsapp',
         'email', 'website', 'category_id', 'city_id', 'district_id',
-        'message', 'status', 'directory_id', 'claim_company_id', 'source',
+        'requested_category', 'message', 'status', 'directory_id', 'claim_company_id', 'source',
     ];
 
     public function category()
@@ -48,6 +48,10 @@ class ListingRequest extends Model
 
         if (! $directoryId || ! Directory::whereKey($directoryId)->exists()) {
             throw new InvalidArgumentException('Firma talebi için geçerli bir hedef rehber seçilmelidir.');
+        }
+
+        if (! $this->category_id || ! Category::withoutGlobalScope('directory')->whereKey($this->category_id)->exists()) {
+            throw new InvalidArgumentException('Firma yayına alınmadan önce geçerli bir kategori seçilmelidir.');
         }
 
         return DB::transaction(function () use ($directoryId): Company {

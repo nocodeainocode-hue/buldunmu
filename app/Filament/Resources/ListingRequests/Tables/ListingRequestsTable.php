@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ListingRequests\Tables;
 
+use App\Models\Category;
 use App\Models\Directory;
 use App\Models\ListingRequest;
 use Filament\Actions\Action;
@@ -57,7 +58,10 @@ class ListingRequestsTable
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('category.name')
-                    ->label('Kategori'),
+                    ->label('Kategori')
+                    ->placeholder(fn (ListingRequest $record): string => $record->requested_category ?: 'Seçilmedi')
+                    ->description(fn (ListingRequest $record): ?string => $record->requested_category ? 'Talep: '.$record->requested_category : null)
+                    ->color(fn (ListingRequest $record): string => $record->requested_category ? 'warning' : 'gray'),
                 TextColumn::make('city.name')
                     ->label('Şehir'),
                 TextColumn::make('status')
@@ -129,9 +133,31 @@ class ListingRequestsTable
                             ->default(fn (ListingRequest $record): ?int => $record->directory_id)
                             ->disabled(fn (ListingRequest $record): bool => filled($record->directory_id))
                             ->dehydrated(),
+                        Select::make('category_id')
+                            ->label('Yayın Kategorisi')
+                            ->options(fn (ListingRequest $record): array => Category::withoutGlobalScope('directory')
+                                ->where('status', 'active')
+                                ->where(function ($query) use ($record): void {
+                                    $query->whereNull('directory_id');
+
+                                    if ($record->directory_id) {
+                                        $query->orWhere('directory_id', $record->directory_id);
+                                    }
+                                })
+                                ->orderBy('name')
+                                ->pluck('name', 'id')
+                                ->all())
+                            ->searchable()
+                            ->preload()
+                            ->required()
+                            ->default(fn (ListingRequest $record): ?int => $record->requested_category ? null : $record->category_id)
+                            ->helperText(fn (ListingRequest $record): ?string => $record->requested_category
+                                ? "Firma sahibinin yazdığı alan: {$record->requested_category}"
+                                : null),
                     ])
                     ->action(function (ListingRequest $record, array $data) {
                         $directoryId = $record->directory_id ?: (int) $data['directory_id'];
+                        $record->update(['category_id' => (int) $data['category_id']]);
                         $company = $record->approveToCompany($directoryId);
 
                         Notification::make()

@@ -8,12 +8,32 @@ use App\Models\Company;
 use App\Models\Directory;
 use App\Models\ListingRequest;
 use App\Models\User;
+use Database\Seeders\CategorySeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use InvalidArgumentException;
 use Tests\TestCase;
 
 class OwnerRegistrationTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_shared_category_catalog_contains_common_business_types(): void
+    {
+        $this->seed(CategorySeeder::class);
+
+        foreach ([
+            'Emlak ve Gayrimenkul',
+            'Güvenlik Hizmetleri',
+            'Güzellik ve Kişisel Bakım',
+            'Hukuk ve Danışmanlık',
+            'Market ve Perakende',
+            'Reklam ve Organizasyon',
+            'Temizlik Hizmetleri',
+            'Veteriner ve Evcil Hayvan',
+        ] as $categoryName) {
+            $this->assertDatabaseHas('categories', ['name' => $categoryName, 'directory_id' => null]);
+        }
+    }
 
     public function test_registration_page_uses_the_short_two_step_flow(): void
     {
@@ -103,5 +123,40 @@ class OwnerRegistrationTest extends TestCase
             ->assertSee('100 Firma Rehberinde Yayın Projesi')
             ->assertSee('4.900 TL')
             ->assertSee('Ayşe Diş Kliniği');
+    }
+
+    public function test_owner_can_request_a_missing_category_but_company_cannot_be_published_without_mapping_it(): void
+    {
+        $directory = Directory::create([
+            'name' => 'Buldun mu?',
+            'slug' => 'buldun-mu',
+            'domain' => 'buldunmu.test',
+            'status' => 'active',
+        ]);
+        $city = City::create(['name' => 'Tekirdağ', 'slug' => 'tekirdag']);
+
+        $this->withServerVariables(['HTTP_HOST' => $directory->domain])
+            ->post('http://buldunmu.test/firma-kayit', [
+                'name' => 'Deniz Kaya',
+                'email' => 'deniz@example.test',
+                'password' => 'guvenli-parola',
+                'password_confirmation' => 'guvenli-parola',
+                'company_name' => 'Gökyüzü Drone',
+                'category_id' => 'other',
+                'requested_category' => 'Drone çekimi ve havadan görüntüleme',
+                'city_id' => $city->id,
+                'phone' => '0282 111 22 33',
+            ])
+            ->assertRedirect('http://buldunmu.test/panel');
+
+        $company = Company::withoutGlobalScope('directory')->where('name', 'Gökyüzü Drone')->firstOrFail();
+        $request = ListingRequest::query()->where('claim_company_id', $company->id)->firstOrFail();
+
+        $this->assertNull($company->category_id);
+        $this->assertSame('Drone çekimi ve havadan görüntüleme', $request->requested_category);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('geçerli bir kategori seçilmelidir');
+        $request->approveToCompany();
     }
 }

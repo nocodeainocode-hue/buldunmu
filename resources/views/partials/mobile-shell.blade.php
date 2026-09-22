@@ -36,7 +36,7 @@
             </form>
 
             <div class="mb-2 text-xs font-black uppercase tracking-widest" style="color:var(--primary);">Kategoriler</div>
-            @php $msCategories = \App\Models\Category::active()->visibleForDirectory($directory ?? null)->orderBy('name')->take(35)->get(); @endphp
+            @php $msCategories = \App\Models\Category::active()->visibleForDirectory($directory ?? null)->orderBy('name')->take(48)->get(); @endphp
             <div class="grid grid-cols-2 gap-1">
                 @foreach($msCategories as $cat)
                     <a href="{{ route('categories.show', $cat->slug) }}" onclick="closeMsMenu()" class="flex items-center gap-2 rounded-lg px-2 py-2 text-xs font-semibold transition hover:bg-black/5" style="color:var(--text);">

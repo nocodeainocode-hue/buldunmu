@@ -43,11 +43,18 @@
                     </label>
 
                     <label class="block text-sm font-bold" style="color:var(--text);">Kategori *
-                        <select name="category_id" required class="mt-1.5 w-full rounded-lg border px-4 py-3" style="border-color:var(--border);background:var(--bg);">
+                        <select id="category_select" name="category_id" required class="mt-1.5 w-full rounded-lg border px-4 py-3" style="border-color:var(--border);background:var(--bg);">
                             <option value="">Kategori seçin</option>
                             @foreach($categories as $category)<option value="{{ $category->id }}" @selected(old('category_id') == $category->id)>{{ $category->name }}</option>@endforeach
+                            <option value="other" @selected(old('category_id') === 'other')>Kategorimi bulamadım</option>
                         </select>
                         @error('category_id')<span class="mt-1 block text-xs text-red-600">{{ $message }}</span>@enderror
+                    </label>
+
+                    <label id="requested_category_field" class="block text-sm font-bold sm:col-span-2" style="color:var(--text);">Firmanız hangi alanda hizmet veriyor? *
+                        <input id="requested_category" name="requested_category" value="{{ old('requested_category') }}" maxlength="120" placeholder="Örn. Drone çekimi ve havadan görüntüleme" class="mt-1.5 w-full rounded-lg border px-4 py-3" style="border-color:var(--border);background:var(--bg);">
+                        <span class="mt-1 block text-xs font-normal" style="color:var(--text_muted);">Başvurunuzu incelerken en uygun kategoriyle eşleştireceğiz.</span>
+                        @error('requested_category')<span class="mt-1 block text-xs text-red-600">{{ $message }}</span>@enderror
                     </label>
 
                     <label class="block text-sm font-bold" style="color:var(--text);">Şehir *
@@ -187,6 +194,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     city.addEventListener('change', refreshDistricts);
     refreshDistricts();
+
+    const category = document.getElementById('category_select');
+    const requestedCategoryField = document.getElementById('requested_category_field');
+    const requestedCategory = document.getElementById('requested_category');
+    const refreshRequestedCategory = () => {
+        const isMissing = category.value === 'other';
+        requestedCategoryField.hidden = !isMissing;
+        requestedCategory.required = isMissing;
+    };
+
+    category.addEventListener('change', refreshRequestedCategory);
+    refreshRequestedCategory();
     showStep(currentStep, false);
 });
 </script>
