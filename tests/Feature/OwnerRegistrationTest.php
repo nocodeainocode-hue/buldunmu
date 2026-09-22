@@ -15,6 +15,24 @@ class OwnerRegistrationTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_registration_page_uses_the_short_two_step_flow(): void
+    {
+        $directory = Directory::create([
+            'name' => 'Buldun mu?',
+            'slug' => 'buldun-mu',
+            'domain' => 'buldunmu.test',
+            'status' => 'active',
+        ]);
+
+        $this->withServerVariables(['HTTP_HOST' => $directory->domain])
+            ->get('http://buldunmu.test/firma-kayit')
+            ->assertOk()
+            ->assertSee('1. Firma bilgileri')
+            ->assertSee('2. Panel hesabı')
+            ->assertSee('Kredi kartı gerekmez. Kayıt ücretsizdir.')
+            ->assertSee('Bilgileriniz kontrolünüzde');
+    }
+
     public function test_registration_creates_a_pending_company_owned_only_in_the_current_directory(): void
     {
         $directory = Directory::create([
