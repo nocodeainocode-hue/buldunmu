@@ -180,4 +180,23 @@ class BlogTest extends TestCase
             ->assertOk()
             ->assertSee('Karar Masası');
     }
+
+    public function test_published_rich_text_keeps_editor_structure_and_uses_public_article_styles(): void
+    {
+        $post = Post::create([
+            'title' => 'Biçimli Yazı',
+            'slug' => 'bicimli-yazi',
+            'content' => '<h2>Önemli başlık</h2><p><strong>Kalın metin</strong></p><ul><li>Birinci madde</li></ul><blockquote><p>Alıntı</p></blockquote>',
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+        $post->directories()->attach($this->directory);
+
+        $this->get('/blog/bicimli-yazi')
+            ->assertOk()
+            ->assertSee('class="blog-prose mt-9"', false)
+            ->assertSee('<h2>Önemli başlık</h2>', false)
+            ->assertSee('<ul><li>Birinci madde</li></ul>', false)
+            ->assertSee('<blockquote><p>Alıntı</p></blockquote>', false);
+    }
 }

@@ -31,7 +31,7 @@
             <div class="mt-8 grid gap-4 sm:grid-cols-2"><div class="rounded-lg border p-5" style="border-color:#bfe6d2;background:#f2fbf6;"><h2 class="font-black" style="color:#16633f;">Artılar</h2><ul class="mt-3 space-y-2 text-sm">@foreach($post->pros ?? [] as $item)<li>+ {{ $item }}</li>@endforeach</ul></div><div class="rounded-lg border p-5" style="border-color:#f0c9c9;background:#fff7f7;"><h2 class="font-black" style="color:#9b2c2c;">Eksiler</h2><ul class="mt-3 space-y-2 text-sm">@foreach($post->cons ?? [] as $item)<li>− {{ $item }}</li>@endforeach</ul></div></div>
         @endif
 
-        <div class="prose prose-lg mt-9 max-w-none leading-relaxed" style="color:var(--text);">{!! $post->content !!}</div>
+        <div class="blog-prose mt-9">{!! $post->content !!}</div>
 
         @if($targetCity || $targetCategory)
             <nav class="mt-10 flex flex-wrap gap-3 rounded-lg border p-5" style="border-color:var(--border);background:var(--primary_light);" aria-label="İlgili rehber bağlantıları">

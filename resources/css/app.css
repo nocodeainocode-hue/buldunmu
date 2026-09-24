@@ -18,6 +18,56 @@
     }
 }
 
+/* The public blog must restore the typography removed by Tailwind's reset.
+   Filament's rich editor stores semantic HTML, so style those elements here. */
+@layer components {
+    .blog-prose {
+        color: var(--text);
+        font-family: var(--font_body);
+        font-size: 1.125rem;
+        line-height: 1.8;
+        overflow-wrap: anywhere;
+    }
+    .blog-prose > :first-child { margin-top: 0; }
+    .blog-prose :where(p, ul, ol, blockquote, pre, figure, table, hr) { margin-block: 1.25em; }
+    .blog-prose :where(h1, h2, h3, h4, h5, h6) {
+        color: var(--text);
+        font-family: var(--font_heading);
+        font-weight: 800;
+        line-height: 1.25;
+        margin-top: 1.65em;
+        margin-bottom: .65em;
+    }
+    .blog-prose h1 { font-size: clamp(2rem, 4vw, 2.75rem); }
+    .blog-prose h2 { font-size: clamp(1.7rem, 3vw, 2.15rem); }
+    .blog-prose h3 { font-size: 1.45rem; }
+    .blog-prose h4 { font-size: 1.2rem; }
+    .blog-prose :where(ul, ol) { padding-left: 1.6em; }
+    .blog-prose ul { list-style-type: disc; }
+    .blog-prose ol { list-style-type: decimal; }
+    .blog-prose li { padding-left: .15em; margin-block: .4em; }
+    .blog-prose li > :where(p, ul, ol) { margin-block: .4em; }
+    .blog-prose strong { font-weight: 800; }
+    .blog-prose a { color: var(--primary); text-decoration: underline; text-underline-offset: .2em; }
+    .blog-prose a:hover { color: var(--primary_hover); }
+    .blog-prose blockquote {
+        border-left: 4px solid var(--accent);
+        padding: .3em 0 .3em 1.2em;
+        color: var(--text_muted);
+        font-style: italic;
+    }
+    .blog-prose blockquote p { margin-block: .4em; }
+    .blog-prose img { display: block; width: auto; height: auto; max-width: 100%; margin-inline: auto; border-radius: var(--border_radius); }
+    .blog-prose figcaption { margin-top: .5em; color: var(--text_muted); font-size: .85em; text-align: center; }
+    .blog-prose hr { border: 0; border-top: 1px solid var(--border); }
+    .blog-prose :not(pre) > code { background: var(--primary_light); border-radius: .25em; padding: .1em .3em; font-size: .9em; }
+    .blog-prose pre { overflow-x: auto; border-radius: .5rem; background: var(--text); color: var(--bg_card); padding: 1.1em 1.3em; font-size: .88em; line-height: 1.6; }
+    .blog-prose pre code { background: transparent; padding: 0; }
+    .blog-prose table { display: block; width: 100%; overflow-x: auto; border-collapse: collapse; font-size: .92em; }
+    .blog-prose :where(th, td) { border: 1px solid var(--border); padding: .55em .8em; text-align: left; }
+    .blog-prose th { background: var(--primary_light); font-weight: 800; }
+}
+
 /* Blueprint grid texture for technical directory themes */
 .theme-blueprint-directory {
  background-image: linear-gradient(rgba(34, 211, 238, .08) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 211, 238, .08) 1px, transparent 1px);
