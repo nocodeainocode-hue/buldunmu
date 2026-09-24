@@ -93,7 +93,7 @@ class CheckSeoReadiness extends Command
         }
 
         if ($notReadyByDirectory->isNotEmpty()) {
-            $this->line('Not: Noindex profiller; kategori, şehir, iletişim, konum ve en az 120 karakter açıklama tamamlanınca otomatik olarak sitemap’e girer.');
+            $this->line('Not: Noindex profiller; kategori, şehir, iletişim ve en az 80 karakter açıklama tamamlanınca otomatik olarak sitemap’e girer.');
         }
 
         return self::SUCCESS;

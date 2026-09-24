@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('title', 'Firmanızı Ücretsiz Ekleyin')
-@section('robots', 'noindex,follow')
+@section('meta_description', 'Firmanızı ücretsiz ekleyin. İşletme profilinizi oluşturun, iletişim bilgilerinizi yönetin ve müşterilerin sizi bulmasını kolaylaştırın.')
+@section('canonical', route('owner.register'))
 
 @section('content')
 @php

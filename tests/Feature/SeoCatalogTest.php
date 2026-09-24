@@ -38,6 +38,7 @@ class SeoCatalogTest extends TestCase
         $response->assertSee('/sehir/'.$city->slug, false);
         $response->assertDontSee('/kategori/'.$emptyCategory->slug, false);
         $response->assertDontSee('/firma-ekle', false);
+        $response->assertSee('/firma-kayit', false);
 
         $this->get('/kategori/'.$emptyCategory->slug)
             ->assertOk()
@@ -74,5 +75,41 @@ class SeoCatalogTest extends TestCase
             ->assertOk()
             ->assertDontSee('/firma/'.$thin->slug, false)
             ->assertSee('/firma/'.$ready->slug, false);
+    }
+
+    public function test_shorter_service_area_profile_can_be_indexed_without_street_address(): void
+    {
+        $directory = Directory::create([
+            'name' => 'Hizmet Rehberi', 'slug' => 'hizmet-rehberi', 'domain' => 'hizmet.test', 'status' => 'active',
+        ]);
+        $category = Category::create(['name' => 'Mobil Hizmet', 'slug' => 'mobil-hizmet', 'status' => 'active']);
+        $city = City::create(['name' => 'İstanbul', 'slug' => 'istanbul']);
+        $company = Company::create([
+            'name' => 'Yerinde Destek', 'directory_id' => $directory->id, 'category_id' => $category->id,
+            'city_id' => $city->id, 'phone' => '02121234567',
+            'description' => 'İstanbul genelinde işletmeler için yerinde teknik destek ve randevulu bakım hizmeti sunuyoruz.',
+            'status' => 'active',
+        ]);
+        app()->instance('currentDirectory', $directory);
+
+        $this->assertTrue($company->isSearchIndexable());
+        $this->get('/firma/'.$company->slug)
+            ->assertOk()
+            ->assertSee('content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"', false);
+        $this->get('/sitemap.xml')->assertOk()->assertSee('/firma/'.$company->slug, false);
+    }
+
+    public function test_firma_kayit_is_indexable_and_in_sitemap(): void
+    {
+        $directory = Directory::create([
+            'name' => 'Kayıt Rehberi', 'slug' => 'kayit-rehberi', 'domain' => 'kayit.test', 'status' => 'active',
+        ]);
+        app()->instance('currentDirectory', $directory);
+
+        $this->get('/firma-kayit')
+            ->assertOk()
+            ->assertSee('content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"', false)
+            ->assertSee('rel="canonical" href="'.route('owner.register').'"', false);
+        $this->get('/sitemap.xml')->assertOk()->assertSee('/firma-kayit', false);
     }
 }

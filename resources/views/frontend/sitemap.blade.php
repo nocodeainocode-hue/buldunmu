@@ -11,6 +11,11 @@
         <priority>0.9</priority>
     </url>
     <url>
+        <loc>{{ route('owner.register') }}</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
         <loc>{{ route('blog.index') }}</loc>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>

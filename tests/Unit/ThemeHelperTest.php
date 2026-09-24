@@ -46,6 +46,7 @@ class ThemeHelperTest extends TestCase
     public function test_new_layout_templates_are_registered(): void
     {
         foreach ([
+            'sky-archipelago', 'luminous-garden',
             'pocket-directory', 'service-console', 'decision-desk',
             'city-board', 'city-pulse', 'craft-market', 'quick-quote', 'district-showcase', 'sector-exchange',
             'social-feed', 'chat-directory',

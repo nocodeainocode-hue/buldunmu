@@ -14,6 +14,8 @@ class Company extends Model
 {
     use BelongsToDirectory;
 
+    private const INDEXABLE_MIN_DESCRIPTION_LENGTH = 80;
+
     private bool $slugChangeAllowed = false;
 
     public function allowsSharedDirectoryRecords(): bool
@@ -220,6 +222,8 @@ class Company extends Model
      */
     public function scopeSearchIndexable(Builder $query): Builder
     {
+        $lengthFunction = $query->getConnection()->getDriverName() === 'mysql' ? 'CHAR_LENGTH' : 'LENGTH';
+
         return $query
             ->active()
             ->whereNotNull('category_id')
@@ -231,15 +235,10 @@ class Company extends Model
                     ->orWhere(fn (Builder $q) => $q->whereNotNull('email')->where('email', '!=', ''))
                     ->orWhere(fn (Builder $q) => $q->whereNotNull('website')->where('website', '!=', ''));
             })
-            ->where(function (Builder $location): void {
-                $location
-                    ->where(fn (Builder $q) => $q->whereNotNull('address')->where('address', '!=', ''))
-                    ->orWhere(fn (Builder $q) => $q->whereNotNull('latitude')->whereNotNull('longitude'));
-            })
-            ->where(function (Builder $content): void {
+            ->where(function (Builder $content) use ($lengthFunction): void {
                 $content
-                    ->whereRaw("LENGTH(COALESCE(description, '')) >= ?", [120])
-                    ->orWhereRaw("LENGTH(COALESCE(short_description, '')) >= ?", [120]);
+                    ->whereRaw("{$lengthFunction}(TRIM(COALESCE(description, ''))) >= ?", [self::INDEXABLE_MIN_DESCRIPTION_LENGTH])
+                    ->orWhereRaw("{$lengthFunction}(TRIM(COALESCE(short_description, ''))) >= ?", [self::INDEXABLE_MIN_DESCRIPTION_LENGTH]);
             });
     }
 
@@ -383,21 +382,9 @@ class Company extends Model
 
     public function isSearchIndexable(): bool
     {
-        if ($this->status !== 'active' || ! $this->category_id || ! $this->city_id) {
-            return false;
-        }
-
-        $hasContact = filled($this->phone)
-            || filled($this->whatsapp)
-            || filled($this->email)
-            || filled($this->website);
-        $hasLocation = filled($this->address)
-            || (filled($this->latitude) && filled($this->longitude));
-        $contentLength = max(
-            mb_strlen(trim(strip_tags((string) $this->description))),
-            mb_strlen(trim((string) $this->short_description)),
-        );
-
-        return $hasContact && $hasLocation && $contentLength >= 120;
+        return $this->exists && static::query()
+            ->searchIndexable()
+            ->whereKey($this->getKey())
+            ->exists();
     }
 }
