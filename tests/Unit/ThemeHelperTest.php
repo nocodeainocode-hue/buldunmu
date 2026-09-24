@@ -56,6 +56,26 @@ class ThemeHelperTest extends TestCase
         }
     }
 
+    public function test_directory_theme_plan_uses_real_templates_and_dedicated_new_layouts(): void
+    {
+        $plan = config('directory_themes');
+
+        $this->assertCount(40, $plan);
+        $this->assertContains('signal-station', $plan);
+        $this->assertContains('paper-trail', $plan);
+        $this->assertContains('orbit-directory', $plan);
+
+        foreach ($plan as $domain => $template) {
+            $this->assertStringEndsWith('.com.tr', $domain);
+            $this->assertArrayHasKey($template, ThemeHelper::TEMPLATES);
+        }
+
+        foreach (['signal-station', 'paper-trail', 'orbit-directory'] as $template) {
+            $this->assertSame($template, ThemeHelper::TEMPLATES[$template]['layout']);
+            $this->assertFileExists(resource_path('views/frontend/home/'.$template.'.blade.php'));
+        }
+    }
+
     public function test_named_theme_variants_resolve_to_their_specialized_layouts(): void
     {
         $expectedLayouts = [
