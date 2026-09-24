@@ -60,6 +60,32 @@ class BlogTest extends TestCase
         $response->assertDontSee('Draft Post');
     }
 
+    public function test_unpublished_post_disappears_from_home_and_blog_immediately(): void
+    {
+        $post = Post::create([
+            'title' => 'Geçici Deneme Yazısı',
+            'slug' => 'gecici-deneme-yazisi',
+            'content' => 'Deneme içeriği',
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+        $post->directories()->attach($this->directory->id);
+
+        $this->get('/')->assertOk()->assertSee('Geçici Deneme Yazısı');
+        $this->get('/blog')->assertOk()->assertSee('Geçici Deneme Yazısı');
+
+        $post->update(['status' => 'draft']);
+
+        $this->get('/')
+            ->assertOk()
+            ->assertDontSee('Geçici Deneme Yazısı')
+            ->assertHeader('Cache-Control', 'no-store, private');
+        $this->get('/blog')
+            ->assertOk()
+            ->assertDontSee('Geçici Deneme Yazısı')
+            ->assertHeader('Cache-Control', 'no-store, private');
+    }
+
     public function test_general_posts_appear_when_directory_has_no_published_posts(): void
     {
         Post::create([

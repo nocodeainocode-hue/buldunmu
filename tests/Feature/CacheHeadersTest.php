@@ -21,12 +21,20 @@ class CacheHeadersTest extends TestCase
         }
     }
 
-    public function test_frontend_get_responses_keep_the_public_cache_policy(): void
+    public function test_dynamic_frontend_pages_are_not_cached_after_content_changes(): void
     {
         $request = Request::create('/firmalar', 'GET');
         $response = (new CacheHeaders)->handle($request, fn () => new Response('ok'));
 
+        $this->assertSame('no-store, private', $response->headers->get('Cache-Control'));
+    }
+
+    public function test_static_asset_responses_can_still_be_cached(): void
+    {
+        $request = Request::create('/assets/app.css', 'GET');
+        $response = (new CacheHeaders)->handle($request, fn () => new Response('body{}'));
+
         $this->assertTrue($response->headers->hasCacheControlDirective('public'));
-        $this->assertSame('3600', $response->headers->getCacheControlDirective('max-age'));
+        $this->assertSame('31536000', $response->headers->getCacheControlDirective('max-age'));
     }
 }

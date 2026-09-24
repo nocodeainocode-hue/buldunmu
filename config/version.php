@@ -2,8 +2,8 @@
 
 return [
     // Her yayın paketinde yalnızca bu üç alanı güncellemek yeterlidir.
-    'number' => '1.6.5',
-    'name' => 'Rehber Temaları ve Blog Görünümü',
-    'released_at' => '2026-09-24',
+    'number' => '1.6.6',
+    'name' => 'Güncel İçerik ve Ütopik Temalar',
+    'released_at' => '2026-09-25',
     'commit' => env('APP_COMMIT'),
 ];

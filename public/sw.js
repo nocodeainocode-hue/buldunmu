@@ -3,14 +3,13 @@
  * ────────────────────────────
  * Strategy:
  *   CSS / JS / Fonts / Images  →  Cache-first (stale-while-revalidate)
- *   HTML (navigation)          →  Network-first, fallback to offline page
- *   Other                       →  Network-first
+ *   HTML (navigation)          →  Network-only, fallback to offline page
+ *   Other                       →  Network-only
  *
  * Cache version is bumped on every SW update to invalidate old caches.
  */
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v1.6.6';
 const STATIC_CACHE  = 'buldunmu-static-' + CACHE_VERSION;
-const HTML_CACHE    = 'buldunmu-html-' + CACHE_VERSION;
 const OFFLINE_PAGE  = '/offline';
 
 /* ── Install: pre-cache offline + splash + manifest ── */
@@ -34,7 +33,7 @@ self.addEventListener('activate', (event) => {
         caches.keys().then((keys) => {
             return Promise.all(
                 keys
-                    .filter((key) => key.startsWith('buldunmu-') && key !== STATIC_CACHE && key !== HTML_CACHE)
+                    .filter((key) => key.startsWith('buldunmu-') && key !== STATIC_CACHE)
                     .map((key) => caches.delete(key))
             );
         })
@@ -66,14 +65,14 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    /* ── 2. HTML navigations: network-first → offline fallback ── */
+    /* ── 2. HTML navigations: current server content or offline page ── */
     if (request.mode === 'navigate') {
-        event.respondWith(networkFirstHtml(request));
+        event.respondWith(networkOnlyHtml(request));
         return;
     }
 
-    /* ── 3. Everything else: network-first ── */
-    event.respondWith(networkFirst(request, HTML_CACHE));
+    /* ── 3. Everything else: live response ── */
+    event.respondWith(fetch(request));
 });
 
 /* ────────────────────────────────────────────
@@ -81,7 +80,7 @@ self.addEventListener('fetch', (event) => {
    ──────────────────────────────────────────── */
 
 function isStaticAsset(request, url) {
-    const staticExts = /\.(css|js|woff2?|ttf|eot|otf|png|jpe?g|gif|svg|ico|webp|avif|json|xml|txt)$/i;
+    const staticExts = /\.(css|js|woff2?|ttf|eot|otf|png|jpe?g|gif|svg|ico|webp|avif)$/i;
     if (staticExts.test(url.pathname)) return true;
 
     if (request.destination && ['style', 'script', 'font', 'image'].includes(request.destination)) {
@@ -119,18 +118,8 @@ function networkFirst(request, cacheName) {
         .catch(() => caches.match(request));
 }
 
-/** Network-first for HTML; on failure, show offline page. */
-function networkFirstHtml(request) {
-    return fetch(request)
-        .then((response) => {
-            if (!response || response.status !== 200) return response;
-            const clone = response.clone();
-            caches.open(HTML_CACHE).then((cache) => cache.put(request, clone));
-            return response;
-        })
-        .catch(() => {
-            return caches.match(request).then((cached) => {
-                return cached || caches.match(OFFLINE_PAGE);
-            });
-        });
+/** Never show an old page after a post is unpublished or deleted. */
+function networkOnlyHtml(request) {
+    return fetch(request, { cache: 'no-store' })
+        .catch(() => caches.match(OFFLINE_PAGE));
 }
