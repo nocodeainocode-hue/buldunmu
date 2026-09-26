@@ -86,7 +86,8 @@ class NewDirectoryThemesTest extends TestCase
         $company = Company::create([
             'name' => 'Özgün Atölye', 'category_id' => $category->id,
             'city_id' => $city->id, 'directory_id' => $directory->id,
-            'status' => 'active', 'is_premium' => true,
+            'status' => 'active', 'is_premium' => true, 'phone' => '0232 111 22 33',
+            'description' => str_repeat('Özgün mobilya üretimi ve özel tasarım hizmetleri sunuyoruz. ', 2),
         ]);
         CompanyOffering::create([
             'company_id' => $company->id, 'directory_id' => $directory->id,
@@ -110,6 +111,17 @@ class NewDirectoryThemesTest extends TestCase
                 ->assertSee('Mobilya Ustası')
                 ->assertSee(route('search'), false)
                 ->assertSee(route('categories.show', $category->slug), false);
+
+            $this->get('/firma/'.$company->slug)
+                ->assertOk()
+                ->assertSee($template === 'classifieds-board' ? 'cb-detail' : 'ap-detail', false)
+                ->assertSee('Özgün Atölye')
+                ->assertSee('Ahşap Masa')
+                ->assertSee('Mobilya Ustası')
+                ->assertSee('id="urunler-hizmetler"', false)
+                ->assertSee('id="yorumlar"', false)
+                ->assertSee(route('companies.reviews.store', $company->slug), false)
+                ->assertSee('index,follow,max-image-preview:large', false);
         }
     }
 }

@@ -75,6 +75,11 @@
 @endpush
 
 @section('content')
+@if($directory?->template === 'classifieds-board')
+    @include('frontend.companies.themes.classifieds-board')
+@elseif($directory?->template === 'acid-poster')
+    @include('frontend.companies.themes.acid-poster')
+@else
 <div style="background:var(--bg);">
 
     {{-- ═══ COVER IMAGE HERO ═══ --}}
@@ -644,4 +649,5 @@
 </div>
 @endif
 
+@endif
 @endsection
