@@ -2,8 +2,11 @@
 
 namespace App\Filament\Resources\Posts\Schemas;
 
+use App\Models\Post;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
@@ -43,9 +46,24 @@ class PostForm
                             ->default(fn () => app()->bound('currentDirectory') ? [app('currentDirectory')->id] : [])
                             ->helperText('Boş bırakırsanız özel blog yazısı olmayan rehberlerde gösterilir.'),
                         Grid::make(2)->schema([
-                            TextInput::make('title')->label('Baslik')->required()->live(onBlur: true)
-                                ->afterStateUpdated(fn($s, callable $set) => $set('slug', Str::slug($s))),
-                            TextInput::make('slug')->label('Slug')->required()->unique(ignoreRecord: true),
+                            TextInput::make('title')
+                                ->label('Başlık')
+                                ->required()
+                                ->live(debounce: 500)
+                                ->afterStateUpdated(function (?string $state, ?string $old, Get $get, Set $set, ?Post $record): void {
+                                    $currentSlug = $get('slug');
+
+                                    if ($record || (filled($currentSlug) && $currentSlug !== Str::slug((string) $old, '-', 'tr'))) {
+                                        return;
+                                    }
+
+                                    $set('slug', Str::slug((string) $state, '-', 'tr'));
+                                }),
+                            TextInput::make('slug')
+                                ->label('Slug')
+                                ->helperText('Başlıktan otomatik üretilir; isterseniz elle düzenleyebilirsiniz. Yayındaki yazının adresini değiştirirseniz eski bağlantı çalışmaz.')
+                                ->required()
+                                ->unique(ignoreRecord: true),
                         ]),
                         Grid::make(2)->schema([
                             Select::make('content_type')
@@ -73,12 +91,18 @@ class PostForm
                         TextInput::make('primary_query')
                             ->label('Sahiplenilen Ana Sorgu')
                             ->placeholder('su arıtma cihazı seçmeden önce')
-                            ->helperText('Ağ genelinde benzersizdir; başka bir rehber aynı ana sorguyu sahiplenemez.')
+                            ->helperText('İçerik planlamasında yazının ana arama ifadesi. Ağ genelinde benzersizdir; Google sıralamasını tek başına değiştirmez.')
                             ->unique(ignoreRecord: true)
                             ->dehydrateStateUsing(fn($state) => filled($state) ? Str::lower(trim($state)) : null),
                         Grid::make(2)->schema([
-                            TextInput::make('target_city_slug')->label('Hedef Şehir Slug')->placeholder('tekirdag'),
-                            TextInput::make('target_category_slug')->label('Hedef Kategori Slug')->placeholder('su-aritma'),
+                            TextInput::make('target_city_slug')
+                                ->label('Hedef Şehir Slug')
+                                ->placeholder('tekirdag')
+                                ->helperText('Yazıda ilgili şehir rehberine bağlantı gösterir. Şehrin mevcut slug değerini girin.'),
+                            TextInput::make('target_category_slug')
+                                ->label('Hedef Kategori Slug')
+                                ->placeholder('su-aritma')
+                                ->helperText('Yazıda ilgili kategori rehberine bağlantı gösterir. Kategorinin mevcut slug değerini girin.'),
                         ]),
                         Textarea::make('excerpt')->label('Ozet')->rows(2)->columnSpanFull(),
                         RichEditor::make('content')->label('Icerik')->required()->columnSpanFull(),
