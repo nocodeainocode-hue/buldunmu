@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Company;
+use App\Models\CompanyOffering;
 use App\Models\JobPosting;
 use App\Models\Post;
 use App\Models\SiteSetting;
@@ -53,11 +54,19 @@ class HomeController extends Controller
             ->get();
 
         $layout = ThemeHelper::layoutFile($directory);
+        $featuredOfferings = in_array($layout, ['classifieds-board', 'acid-poster'], true)
+            ? CompanyOffering::active()
+                ->with('company')
+                ->whereHas('company', fn ($query) => $query->active()->premium())
+                ->latest()
+                ->take(4)
+                ->get()
+            : collect();
         $viewName = 'frontend.home.' . (view()->exists('frontend.home.' . $layout) ? $layout : 'default');
 
         return view($viewName, compact(
             'settings', 'categories', 'cities', 'premiumCompanies', 'latestCompanies', 'openCompanies', 'trustedCompanies',
-            'mapCompanies', 'posts', 'directory', 'homeJobs'
+            'mapCompanies', 'posts', 'directory', 'homeJobs', 'featuredOfferings'
         ));
     }
 

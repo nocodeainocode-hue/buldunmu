@@ -140,6 +140,8 @@ class ThemeHelperTest extends TestCase
         $this->assertArrayHasKey('default', $opts);
         $this->assertEquals('Klasik Rehber', $opts['default']);
         $this->assertEquals('Cesur Vitrin', $opts['bold']);
+        $this->assertEquals('Mahalle İlan Panosu', $opts['classifieds-board']);
+        $this->assertEquals('Asit Afiş', $opts['acid-poster']);
     }
 
     public function test_grid_cols_returns_tailwind_classes(): void
