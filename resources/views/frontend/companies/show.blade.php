@@ -127,7 +127,7 @@
                     <div class="min-w-0 flex-1">
                         {{-- Badges --}}
                         <div class="mb-2 flex flex-wrap items-center gap-2">
-                            @if($company->is_premium)
+                            @if($company->hasActivePremium())
                                 <span class="rounded-full px-3 py-1 text-xs font-black text-white shadow" style="background:var(--accent);">Premium</span>
                             @endif
                             @if($company->is_verified)
@@ -210,6 +210,48 @@
                     @include('partials.share-buttons', ['url' => route('companies.show', $company->slug), 'title' => $company->name])
                 </div>
             </section>
+
+            @if($offerings->isNotEmpty())
+            <section class="rounded-3xl border p-6" style="border-color:var(--border);background:var(--bg_card);box-shadow:var(--card_shadow);" id="urunler-hizmetler">
+                <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
+                    <div>
+                        <p class="text-xs font-black uppercase tracking-widest" style="color:var(--primary);">Premium vitrin</p>
+                        <h2 class="mt-1 text-2xl font-black" style="color:var(--text);">Ürünler ve Hizmetler</h2>
+                    </div>
+                    <span class="text-xs font-bold" style="color:var(--text_muted);">{{ $offerings->count() }} öğe</span>
+                </div>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    @foreach($offerings as $offering)
+                        <article class="overflow-hidden rounded-2xl border" style="border-color:var(--border);background:var(--bg);">
+                            @if($offering->image_path)<img src="{{ asset('storage/'.$offering->image_path) }}" alt="{{ $offering->name }}" class="h-44 w-full object-cover" loading="lazy">@endif
+                            <div class="p-5">
+                                <span class="text-xs font-black uppercase" style="color:var(--primary);">{{ $offering->type === 'product' ? 'Ürün' : 'Hizmet' }}</span>
+                                <h3 class="mt-1 text-lg font-black" style="color:var(--text);">{{ $offering->name }}</h3>
+                                @if($offering->description)<p class="mt-2 whitespace-pre-line text-sm leading-6" style="color:var(--text_muted);">{{ $offering->description }}</p>@endif
+                                @if($offering->price !== null)<p class="mt-3 font-black" style="color:var(--primary);">{{ number_format((float) $offering->price, 2, ',', '.') }} TL</p>@endif
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+            </section>
+            @endif
+
+            @if($recentJobs->isNotEmpty())
+            <section class="rounded-3xl border p-6" style="border-color:var(--border);background:var(--bg_card);box-shadow:var(--card_shadow);" id="is-ilanlari">
+                <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
+                    <h2 class="text-2xl font-black" style="color:var(--text);">Açık İş İlanları</h2>
+                    <a href="{{ route('jobs.index') }}" class="text-sm font-bold" style="color:var(--primary);">Tüm ilanlar →</a>
+                </div>
+                <div class="grid gap-3 sm:grid-cols-2">
+                    @foreach($recentJobs as $job)
+                        <a href="{{ route('jobs.show', $job->slug) }}" class="block rounded-2xl border p-4 transition hover:-translate-y-0.5" style="border-color:var(--border);background:var(--bg);">
+                            <h3 class="font-black" style="color:var(--text);">{{ $job->title }}</h3>
+                            <p class="mt-1 text-xs" style="color:var(--text_muted);">{{ $job->location ?: $cityName }} · {{ $job->expires_at ? 'Son başvuru '.$job->expires_at->format('d.m.Y') : 'Başvurular açık' }}</p>
+                        </a>
+                    @endforeach
+                </div>
+            </section>
+            @endif
 
             {{-- Services Grid (admin-managed) --}}
             @if(!empty($company->services))

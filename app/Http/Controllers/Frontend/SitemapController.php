@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Company;
+use App\Models\JobPosting;
 use App\Models\Post;
 
 class SitemapController extends Controller
@@ -32,7 +33,12 @@ class SitemapController extends Controller
             ->latest('published_at')
             ->get();
 
-        return response()->view('frontend.sitemap', compact('companies', 'categories', 'cities', 'posts'))
+        $jobs = JobPosting::visible()
+            ->when($directory, fn ($query) => $query->where('directory_id', $directory->id))
+            ->latest('published_at')
+            ->get();
+
+        return response()->view('frontend.sitemap', compact('companies', 'categories', 'cities', 'posts', 'jobs'))
             ->header('Content-Type', 'text/xml');
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Company;
+use App\Models\JobPosting;
 use App\Models\Post;
 use App\Models\SiteSetting;
 use App\View\Helpers\ThemeHelper;
@@ -44,13 +45,19 @@ class HomeController extends Controller
             ->latest('published_at')
             ->take(3)
             ->get();
+        $homeJobs = JobPosting::visible()
+            ->with('company.city')
+            ->when($directory, fn ($query) => $query->where('directory_id', $directory->id))
+            ->latest('published_at')
+            ->take(3)
+            ->get();
 
         $layout = ThemeHelper::layoutFile($directory);
         $viewName = 'frontend.home.' . (view()->exists('frontend.home.' . $layout) ? $layout : 'default');
 
         return view($viewName, compact(
             'settings', 'categories', 'cities', 'premiumCompanies', 'latestCompanies', 'openCompanies', 'trustedCompanies',
-            'mapCompanies', 'posts', 'directory'
+            'mapCompanies', 'posts', 'directory', 'homeJobs'
         ));
     }
 

@@ -29,12 +29,17 @@
                         <div class="text-xs font-black" style="color:{{ $company->status === 'active' ? '#15803d' : '#b45309' }};">{{ $company->status === 'active' ? 'YAYINDA' : 'İNCELEMEDE' }}</div>
                         <h2 class="mt-2 text-xl font-black" style="color:var(--text);">{{ $company->name }}</h2>
                         <p class="mt-1 text-sm" style="color:var(--text_muted);">{{ $company->category?->name }} · {{ $company->city?->name }}</p>
+                        <p class="mt-2 text-xs font-black" style="color:var(--primary);">{{ $company->hasActivePremium() ? 'PREMIUM AKTİF' : 'STANDART PROFİL' }}</p>
                     </div>
                     @if($company->logo)<img src="{{ asset('storage/'.$company->logo) }}" class="h-12 w-12 rounded-xl object-contain" alt="">@endif
                 </div>
                 <div class="mt-5 flex items-center justify-between border-t pt-4 text-sm" style="border-color:var(--border);">
                     <span style="color:var(--text_muted);">Profil kapsamı <strong style="color:var(--text);">%{{ $company->profileCompletionScore() }}</strong></span>
                     <a href="{{ route('owner.company.edit', $company->slug) }}" class="font-black" style="color:var(--primary);">Profili düzenle →</a>
+                </div>
+                <div class="mt-4 flex flex-wrap gap-3 text-sm font-black">
+                    <a href="{{ route('owner.offerings.index', $company) }}" class="rounded-xl border px-3 py-2" style="border-color:var(--border);color:var(--primary);">Ürün ve hizmetler →</a>
+                    <a href="{{ route('owner.jobs.index', $company) }}" class="rounded-xl border px-3 py-2" style="border-color:var(--border);color:var(--primary);">İş ilanları →</a>
                 </div>
             </section>
         @empty

@@ -146,6 +146,7 @@
             <div class="shrink-0 border-t px-4 py-3" style="border-color:var(--border);">
                 <nav class="flex flex-wrap gap-x-4 gap-y-2 text-xs font-semibold" style="color:var(--text_muted);">
                     <a href="{{ route('blog.index') }}" onclick="closeMobileMenu()" class="transition hover:opacity-70">Blog</a>
+                    <a href="{{ route('jobs.index') }}" onclick="closeMobileMenu()" class="transition hover:opacity-70">İş İlanları</a>
                     <a href="{{ route('pages.about') }}" onclick="closeMobileMenu()" class="transition hover:opacity-70">Hakkımızda</a>
                     <a href="{{ route('pages.contact') }}" onclick="closeMobileMenu()" class="transition hover:opacity-70">İletişim</a>
                     <a href="{{ route('pages.privacy') }}" onclick="closeMobileMenu()" class="transition hover:opacity-70">Gizlilik</a>
@@ -214,6 +215,7 @@
                         </div>
                     </div>
                     <a href="{{ route('blog.index') }}" class="rounded-lg px-4 py-2 text-sm font-bold transition hover:opacity-70" style="color:var(--text);">Blog</a>
+                    <a href="{{ route('jobs.index') }}" class="hidden rounded-lg px-4 py-2 text-sm font-bold transition hover:opacity-70 xl:inline-flex" style="color:var(--text);">İş İlanları</a>
                     <a href="{{ route('owner.dashboard') }}" class="rounded-lg px-3 py-2 text-sm font-bold transition hover:opacity-70" style="color:var(--text);">Firma Paneli</a>
                     <a href="{{ route('owner.register') }}" class="ml-2 rounded-xl px-4 py-2 text-sm font-black text-white shadow-sm transition hover:opacity-90" style="background:var(--primary);">+ Firma Ekle</a>
                 </nav>
@@ -230,6 +232,9 @@
             @include('partials.mobile-shell')
         @else
             @yield('content')
+            @if(request()->routeIs('home') && !in_array($activeLayout, $mobileShellLayouts) && isset($homeJobs) && $homeJobs->isNotEmpty())
+                @include('partials.home-jobs')
+            @endif
         @endif
     </main>
 
@@ -255,6 +260,7 @@
                     <ul class="space-y-2 text-sm" style="color:#94a3b8;">
                         <li><a href="{{ route('companies.index') }}" class="transition hover:text-white">Firmalar</a></li>
                         <li><a href="{{ route('blog.index') }}" class="transition hover:text-white">Blog</a></li>
+                        <li><a href="{{ route('jobs.index') }}" class="transition hover:text-white">İş İlanları</a></li>
                         <li><a href="{{ route('owner.register') }}" class="transition hover:text-white">Firma Ekle</a></li>
                         <li><a href="{{ route('owner.dashboard') }}" class="transition hover:text-white">Firma Paneli</a></li>
                         <li><a href="{{ route('packages.index') }}" class="transition hover:text-white">Üyelik Paketleri</a></li>

@@ -49,6 +49,7 @@
             <div class="mt-4 border-t pt-4" style="border-color:var(--border);">
                 <nav class="flex flex-wrap gap-x-4 gap-y-2 text-xs font-semibold" style="color:var(--text_muted);">
                     <a href="{{ route('blog.index') }}" onclick="closeMsMenu()" class="transition hover:opacity-70">Blog</a>
+                    <a href="{{ route('jobs.index') }}" onclick="closeMsMenu()" class="transition hover:opacity-70">İş İlanları</a>
                     <a href="{{ route('pages.about') }}" onclick="closeMsMenu()" class="transition hover:opacity-70">Hakkımızda</a>
                     <a href="{{ route('pages.contact') }}" onclick="closeMsMenu()" class="transition hover:opacity-70">İletişim</a>
                     <a href="{{ route('pages.privacy') }}" onclick="closeMsMenu()" class="transition hover:opacity-70">Gizlilik</a>

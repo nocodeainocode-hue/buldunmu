@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\City;
 use App\Models\Company;
 use App\Models\District;
+use App\Models\JobPosting;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -125,9 +126,19 @@ class CompanyController extends Controller
             ->take(3)
             ->get();
 
+        $offerings = $company->hasActivePremium()
+            ? $company->offerings()->active()->get()
+            : collect();
+        $recentJobs = JobPosting::visible()
+            ->where('company_id', $company->id)
+            ->when($directory, fn ($query) => $query->where('directory_id', $directory->id))
+            ->latest('published_at')
+            ->take(4)
+            ->get();
+
         return view('frontend.companies.show', compact(
             'company', 'similarCompanies', 'sameCategoryCompanies',
-            'nearbyCompanies', 'relatedPosts', 'directory', 'detailVariant'
+            'nearbyCompanies', 'relatedPosts', 'directory', 'detailVariant', 'offerings', 'recentJobs'
         ));
     }
 }

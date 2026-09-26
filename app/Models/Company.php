@@ -47,6 +47,10 @@ class Company extends Model
         });
 
         static::deleting(function (self $company) {
+            CompanyOffering::withoutGlobalScope('directory')
+                ->where('company_id', $company->id)
+                ->get()
+                ->each->delete();
             foreach ($company->images as $image) {
                 if ($image->image_path && Storage::disk('public')->exists($image->image_path)) {
                     Storage::disk('public')->delete($image->image_path);
@@ -208,6 +212,21 @@ class Company extends Model
     public function pageViews()
     {
         return $this->hasMany(PageView::class);
+    }
+
+    public function offerings()
+    {
+        return $this->hasMany(CompanyOffering::class)->orderBy('sort_order')->orderBy('id');
+    }
+
+    public function jobPostings()
+    {
+        return $this->hasMany(JobPosting::class)->latest();
+    }
+
+    public function hasActivePremium(): bool
+    {
+        return $this->is_premium && ($this->premium_until === null || $this->premium_until->isFuture());
     }
 
     public function scopeActive($query)

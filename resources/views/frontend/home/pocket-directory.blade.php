@@ -80,10 +80,11 @@
         </div>
     </div>
 
-    <nav class="absolute inset-x-0 bottom-0 grid grid-cols-4 border-t bg-white px-2 py-2 text-center text-[11px] font-bold" style="border-color:var(--border);">
+    <nav class="absolute inset-x-0 bottom-0 grid grid-cols-5 border-t bg-white px-2 py-2 text-center text-[11px] font-bold" style="border-color:var(--border);">
         <a href="{{ route('home') }}" class="rounded-lg py-2" style="background:var(--primary_light);color:var(--primary);">Rehber</a>
         <a href="{{ route('companies.index') }}" class="py-2" style="color:var(--text_muted);">Firmalar</a>
         <a href="{{ route('blog.index') }}" class="py-2" style="color:var(--text_muted);">Keşfet</a>
+        <a href="{{ route('jobs.index') }}" class="py-2" style="color:var(--text_muted);">İlanlar</a>
         <a href="{{ route('owner.register') }}" class="py-2" style="color:var(--text_muted);">Firma Ekle</a>
     </nav>
 </div>

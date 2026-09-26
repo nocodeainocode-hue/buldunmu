@@ -21,6 +21,11 @@
         <priority>0.8</priority>
     </url>
     <url>
+        <loc>{{ route('jobs.index') }}</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
         <loc>{{ route('pages.about') }}</loc>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
@@ -58,6 +63,14 @@
         <lastmod>{{ $post->updated_at->format('Y-m-d') }}</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
+    </url>
+    @endforeach
+    @foreach($jobs as $job)
+    <url>
+        <loc>{{ route('jobs.show', $job->slug) }}</loc>
+        <lastmod>{{ $job->updated_at->format('Y-m-d') }}</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.6</priority>
     </url>
     @endforeach
 </urlset>

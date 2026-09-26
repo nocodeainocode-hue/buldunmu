@@ -9,6 +9,14 @@
                 </x-filament::button>
             </div>
         </form>
+
+        <x-filament::section heading="Firma vitrini ve iş ilanları" description="Seçili rehberin firmaları, ürünleri, hizmetleri ve ilanları buradan yönetilir.">
+            <div class="flex flex-wrap gap-3">
+                <x-filament::button tag="a" :href="\App\Filament\Resources\Companies\CompanyResource::getUrl('index')" color="gray">Firmalar ve premium durumu</x-filament::button>
+                <x-filament::button tag="a" :href="\App\Filament\Resources\CompanyOfferings\CompanyOfferingResource::getUrl('index')">Ürün ve hizmetler</x-filament::button>
+                <x-filament::button tag="a" :href="\App\Filament\Resources\JobPostings\JobPostingResource::getUrl('index')">İş ilanları</x-filament::button>
+            </div>
+        </x-filament::section>
     @else
         <x-filament::section>
             <div class="py-8 text-center">

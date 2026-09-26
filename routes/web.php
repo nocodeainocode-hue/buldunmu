@@ -8,7 +8,10 @@ use App\Http\Controllers\Frontend\CompanyReviewController;
 use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\ListingRequestController;
+use App\Http\Controllers\Frontend\JobPostingController;
 use App\Http\Controllers\Frontend\OwnerPanelController;
+use App\Http\Controllers\Frontend\OwnerOfferingController;
+use App\Http\Controllers\Frontend\OwnerJobController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\PaketController;
 use App\Http\Controllers\Frontend\PwaController;
@@ -28,6 +31,9 @@ Route::get('/firmalar', [CompanyController::class, 'index'])->name('companies.in
 Route::get('/firma/{slug}', [CompanyController::class, 'show'])->name('companies.show');
 Route::post('/firma/{company:slug}/yorum', [CompanyReviewController::class, 'store'])->name('companies.reviews.store');
 Route::get('/firma/{company:slug}/sahiplen', [ListingRequestController::class, 'claim'])->name('companies.claim');
+
+Route::get('/is-ilanlari', [JobPostingController::class, 'index'])->name('jobs.index');
+Route::get('/is-ilanlari/{slug}', [JobPostingController::class, 'show'])->name('jobs.show');
 
 // Kategori detay
 Route::get('/kategori/{slug}', [CategoryController::class, 'show'])->name('categories.show');
@@ -51,6 +57,16 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/panel/kampanyalar', [OwnerPanelController::class, 'campaigns'])->name('owner.campaigns');
     Route::get('/panel/firma/{company:slug}/duzenle', [OwnerPanelController::class, 'edit'])->name('owner.company.edit');
     Route::put('/panel/firma/{company:slug}', [OwnerPanelController::class, 'update'])->name('owner.company.update');
+    Route::get('/panel/firma/{company:slug}/vitrin', [OwnerOfferingController::class, 'index'])->name('owner.offerings.index');
+    Route::post('/panel/firma/{company:slug}/vitrin', [OwnerOfferingController::class, 'store'])->name('owner.offerings.store');
+    Route::get('/panel/firma/{company:slug}/vitrin/{offering}/duzenle', [OwnerOfferingController::class, 'edit'])->name('owner.offerings.edit');
+    Route::put('/panel/firma/{company:slug}/vitrin/{offering}', [OwnerOfferingController::class, 'update'])->name('owner.offerings.update');
+    Route::delete('/panel/firma/{company:slug}/vitrin/{offering}', [OwnerOfferingController::class, 'destroy'])->name('owner.offerings.destroy');
+    Route::get('/panel/firma/{company:slug}/ilanlar', [OwnerJobController::class, 'index'])->name('owner.jobs.index');
+    Route::post('/panel/firma/{company:slug}/ilanlar', [OwnerJobController::class, 'store'])->name('owner.jobs.store');
+    Route::get('/panel/firma/{company:slug}/ilanlar/{job}/duzenle', [OwnerJobController::class, 'edit'])->name('owner.jobs.edit');
+    Route::put('/panel/firma/{company:slug}/ilanlar/{job}', [OwnerJobController::class, 'update'])->name('owner.jobs.update');
+    Route::delete('/panel/firma/{company:slug}/ilanlar/{job}', [OwnerJobController::class, 'destroy'])->name('owner.jobs.destroy');
     Route::post('/panel/cikis', [OwnerPanelController::class, 'logout'])->name('owner.logout');
 });
 
