@@ -25,6 +25,8 @@
     @include('frontend.cinema.blog')
 @elseif($directory?->template === 'departure-board')
     @include('frontend.departures.blog')
+@elseif(\App\View\Helpers\ThemeHelper::isPhoneShell($directory ?? null))
+    @include('frontend.phone.blog')
 @else
 <div style="background:var(--bg);">
     <section class="border-b py-12" style="border-color:var(--border);background:var(--bg_card);">

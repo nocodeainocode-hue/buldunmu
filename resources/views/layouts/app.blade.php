@@ -56,6 +56,8 @@
             $classifiedsSubpage = $activeLayout === 'classifieds-board' && !request()->routeIs('home', 'companies.show');
             $cinematicSubpage = $activeLayout === 'cinematic-atlas' && !request()->routeIs('home', 'companies.show');
             $departureSubpage = $activeLayout === 'departure-board' && !request()->routeIs('home', 'companies.show');
+            // Cep temaları: masaüstünde cihaz çerçevesi, her sayfada mobil düzen korunur
+            $phoneSubpage = in_array($activeLayout, \App\View\Helpers\ThemeHelper::PHONE_SHELL, true) && !request()->routeIs('home', 'companies.show');
         @endphp
         @if(in_array($activeLayout, $mobileShellLayouts))
         html.theme-{{ $directory->template }} body > header,
@@ -76,6 +78,9 @@
     @endif
     @if($activeLayout === 'departure-board')
         @include('partials.departures.styles')
+    @endif
+    @if(in_array($activeLayout, \App\View\Helpers\ThemeHelper::PHONE_SHELL, true))
+        @include('partials.phone.styles')
     @endif
 
     {{-- Dynamic Google Fonts per template --}}
@@ -252,11 +257,22 @@
             @include('partials.departures.header')
             <div class="dep-shell-content">@yield('content')</div>
             @include('partials.departures.footer')
+        @elseif($phoneSubpage)
+            <div class="ph ph-wrap">
+                <div class="ph-device">
+                    @include('partials.phone.notch')
+                    <div class="ph-screen">
+                        @include('partials.phone.appbar')
+                        <div class="ph-scroll ph-shell-content">@yield('content')</div>
+                    </div>
+                    @include('partials.phone.tabbar')
+                </div>
+            </div>
         @elseif(!request()->routeIs('home') && in_array($activeLayout, $mobileShellLayouts))
             @include('partials.mobile-shell')
         @else
             @yield('content')
-            @if(request()->routeIs('home') && !in_array($activeLayout, [...$mobileShellLayouts, 'classifieds-board', 'acid-poster', 'cinematic-atlas', 'departure-board']) && isset($homeJobs) && $homeJobs->isNotEmpty())
+            @if(request()->routeIs('home') && !in_array($activeLayout, [...$mobileShellLayouts, ...\App\View\Helpers\ThemeHelper::PHONE_SHELL, 'classifieds-board', 'acid-poster', 'cinematic-atlas', 'departure-board']) && isset($homeJobs) && $homeJobs->isNotEmpty())
                 @include('partials.home-jobs')
             @endif
         @endif

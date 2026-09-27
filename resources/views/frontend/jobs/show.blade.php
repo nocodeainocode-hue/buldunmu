@@ -11,6 +11,8 @@
     @include('frontend.cinema.job')
 @elseif($directory?->template === 'departure-board')
     @include('frontend.departures.job')
+@elseif(\App\View\Helpers\ThemeHelper::isPhoneShell($directory ?? null))
+    @include('frontend.phone.job')
 @else
 <div class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
     <x-breadcrumb :items="[['label' => 'İş İlanları', 'url' => route('jobs.index')], ['label' => $job->title]]" />

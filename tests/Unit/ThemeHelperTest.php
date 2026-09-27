@@ -144,6 +144,51 @@ class ThemeHelperTest extends TestCase
         $this->assertEquals('Asit Afiş', $opts['acid-poster']);
         $this->assertEquals('Sinematik Atlas', $opts['cinematic-atlas']);
         $this->assertEquals('Kalkış Panosu', $opts['departure-board']);
+        $this->assertEquals('Cep Akışı', $opts['story-reels']);
+        $this->assertEquals('Cepte Hikâyeler', $opts['pocket-stories']);
+        $this->assertEquals('Kart Destesi', $opts['swipe-cards']);
+        $this->assertEquals('Çekmece Arama', $opts['pull-drawer']);
+        $this->assertEquals('Radar Ekranı', $opts['radar-scope']);
+        $this->assertEquals('Şehir Rampası', $opts['index-rally']);
+    }
+
+    public function test_phone_shell_constant_lists_every_device_frame_theme(): void
+    {
+        $expected = ['story-reels', 'pocket-stories', 'swipe-cards', 'pull-drawer', 'radar-scope', 'index-rally'];
+        $this->assertSame($expected, ThemeHelper::PHONE_SHELL);
+
+        foreach ($expected as $template) {
+            $directory = new \App\Models\Directory(['template' => $template]);
+            $this->assertTrue(ThemeHelper::isPhoneShell($directory), $template.' should be a phone shell theme');
+        }
+
+        $this->assertFalse(ThemeHelper::isPhoneShell(new \App\Models\Directory(['template' => 'cinematic-atlas'])));
+        $this->assertFalse(ThemeHelper::isPhoneShell(null));
+    }
+
+    public function test_phone_themes_share_the_device_shell_and_have_their_own_views(): void
+    {
+        $templates = ['story-reels', 'pocket-stories', 'swipe-cards', 'pull-drawer', 'radar-scope', 'index-rally'];
+
+        foreach ($templates as $template) {
+            $this->assertSame($template, ThemeHelper::TEMPLATES[$template]['layout']);
+            $this->assertSame('430px', ThemeHelper::TEMPLATES[$template]['width']);
+            $this->assertFileExists(resource_path('views/frontend/home/'.$template.'.blade.php'));
+            $this->assertFileExists(resource_path('views/frontend/companies/themes/'.$template.'.blade.php'));
+        }
+
+        $this->assertFileExists(resource_path('views/partials/phone/styles.blade.php'));
+        foreach (['notch', 'appbar', 'tabbar', 'footer', 'page-hero', 'device-start', 'device-end'] as $partial) {
+            $this->assertFileExists(resource_path('views/partials/phone/'.$partial.'.blade.php'));
+        }
+
+        foreach (['companies', 'company-list', 'category', 'city', 'jobs', 'job', 'blog', 'post', 'packages', 'info', 'contact'] as $page) {
+            $this->assertFileExists(resource_path('views/frontend/phone/'.$page.'.blade.php'));
+        }
+
+        foreach (['reels', 'pocket', 'swipe', 'drawer', 'blip', 'rally'] as $card) {
+            $this->assertFileExists(resource_path('views/frontend/phone/cards/'.$card.'.blade.php'));
+        }
     }
 
     public function test_departure_board_theme_is_wired_to_its_own_views(): void

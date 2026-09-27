@@ -16,6 +16,8 @@
     @include('frontend.cinema.post')
 @elseif($directory?->template === 'departure-board')
     @include('frontend.departures.post')
+@elseif(\App\View\Helpers\ThemeHelper::isPhoneShell($directory ?? null))
+    @include('frontend.phone.post')
 @else
 <div class="py-10 sm:py-14" style="background:var(--bg);">
     <article class="mx-auto px-4 sm:px-6" style="max-width:920px;">

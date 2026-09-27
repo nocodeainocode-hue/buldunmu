@@ -17,6 +17,8 @@
     @include('frontend.cinema.contact')
 @elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'departure-board')
     @include('frontend.departures.contact')
+@elseif(\App\View\Helpers\ThemeHelper::isPhoneShell(app()->bound('currentDirectory') ? app('currentDirectory') : null))
+    @include('frontend.phone.contact')
 @else
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <x-breadcrumb :items="[['label' => 'İletişim']]" />

@@ -28,6 +28,8 @@
     @include('frontend.cinema.category')
 @elseif($directory?->template === 'departure-board')
     @include('frontend.departures.category')
+@elseif(\App\View\Helpers\ThemeHelper::isPhoneShell($directory ?? null))
+    @include('frontend.phone.category')
 @else
 <div style="background:var(--bg);">
     {{-- Hero Banner --}}

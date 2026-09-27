@@ -15,6 +15,8 @@
 @section('content')
 @if((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'departure-board')
     @include('frontend.departures.info', ['pageTitle' => 'Gizlilik Politikası', 'pageDescription' => 'Verilerinizin panoda nasıl işlendiğine ilişkin bilgiler.', 'fallbackParagraphs' => ['Bu sayfa, '.($settings->site_name ?? 'sitemiz').' tarafından toplanan bilgilerin nasıl kullanıldığını açıklar.', 'Kişisel verileriniz üçüncü kişilerle paylaşılmaz; hizmet kalitesini artırmak için kullanılır.']])
+@elseif(\App\View\Helpers\ThemeHelper::isPhoneShell(app()->bound('currentDirectory') ? app('currentDirectory') : null))
+    @include('frontend.phone.info', ['pageTitle' => 'Gizlilik Politikası', 'pageDescription' => 'Cep ekranında hangi verilerin nasıl işlendiği.', 'fallbackParagraphs' => ['Bu sayfa, '.($settings->site_name ?? 'sitemiz').' üzerinden toplanan bilgilerin kullanımını açıklar.', 'Kişisel veriler üçüncü kişilerle paylaşılmaz; yalnızca rehber hizmetini iyileştirmek için kullanılır.']])
 @elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'cinematic-atlas')
     @include('frontend.cinema.info', ['pageTitle' => 'Gizlilik Politikası', 'pageDescription' => 'Verilerinizin nasıl işlendiğine ilişkin bilgiler.', 'fallbackParagraphs' => ['Bu sayfa, '.($settings->site_name ?? 'sitemiz').' tarafından toplanan bilgilerin nasıl kullanıldığını açıklar.', 'Kişisel verileriniz üçüncü kişilerle paylaşılmaz; hizmet kalitesini artırmak için kullanılır.']])
 @else

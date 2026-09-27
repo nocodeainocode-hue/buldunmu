@@ -134,6 +134,181 @@ class NewDirectoryThemesTest extends TestCase
         $this->get('/firma-ekle')->assertRedirect(route('owner.register'));
     }
 
+    /** Cep temaları için ortak veri seti. */
+    private function seedPhoneTheme(string $template, string $slug, string $name): array
+    {
+        $host = parse_url(config('app.url'), PHP_URL_HOST) ?: 'localhost';
+        $directory = Directory::create([
+            'name' => $name, 'slug' => $slug, 'domain' => $host,
+            'status' => 'active', 'template' => $template,
+        ]);
+        $city = City::create(['name' => 'İzmir', 'slug' => 'izmir']);
+        $category = Category::create(['name' => 'Mobilya', 'slug' => 'mobilya', 'status' => 'active']);
+        $company = Company::create([
+            'name' => 'Özgün Atölye', 'category_id' => $category->id, 'city_id' => $city->id,
+            'directory_id' => $directory->id, 'status' => 'active', 'is_premium' => true, 'is_verified' => true,
+            'phone' => '0232 111 22 33', 'whatsapp' => '905321112233',
+            'website' => 'https://ozgun-atolye.example', 'address' => '1443/2 Sokak No 7, Bornova',
+            'description' => str_repeat('Özgün mobilya ve tasarım hizmeti sunuyoruz. ', 3),
+        ]);
+        CompanyOffering::create([
+            'company_id' => $company->id, 'directory_id' => $directory->id,
+            'type' => 'product', 'name' => 'Ahşap Masa', 'status' => 'active',
+        ]);
+        $job = JobPosting::create([
+            'company_id' => $company->id, 'directory_id' => $directory->id,
+            'title' => 'Mobilya Ustası', 'description' => 'Ekibimize çalışma arkadaşı arıyoruz.',
+            'employment_type' => 'full_time', 'status' => 'published',
+            'published_at' => now(), 'admin_published' => true,
+        ]);
+        $post = Post::create([
+            'title' => 'Mobilya Seçme Rehberi', 'slug' => 'mobilya-secme-rehberi',
+            'content' => '<p>Ahşap mobilya seçerken malzemeye dikkat edin.</p>',
+            'status' => 'published', 'published_at' => now(), 'directory_id' => $directory->id,
+        ]);
+        $post->directories()->attach($directory->id);
+
+        return compact('company', 'job', 'post');
+    }
+
+    public function test_story_reels_keeps_mobile_shell_on_every_public_page(): void
+    {
+        $data = $this->seedPhoneTheme('story-reels', 'cep-akisi', 'Cep Akışı');
+        $company = $data['company'];
+
+        $this->get('/')->assertOk()->assertSee('theme-story-reels', false)
+            ->assertSee('ph-tabbar', false)->assertSee('ph-rings', false)
+            ->assertSee('Özgün Atölye')->assertSee('Ahşap Masa')->assertSee('Mobilya Ustası')
+            ->assertSee(route('search'), false);
+
+        $this->get('/firma/'.$company->slug)->assertOk()->assertSee('ph-detail', false)
+            ->assertSee('ph-tabbar', false)->assertSee('Ahşap Masa')
+            ->assertSee('id="yorumlar"', false)
+            ->assertSee(route('companies.reviews.store', $company->slug), false);
+
+        $this->assertPhoneShellPages($data);
+    }
+
+    public function test_pocket_stories_keeps_mobile_shell_on_every_public_page(): void
+    {
+        $data = $this->seedPhoneTheme('pocket-stories', 'cepte-hikayeler', 'Cepte Hikâyeler');
+        $company = $data['company'];
+
+        $this->get('/')->assertOk()->assertSee('theme-pocket-stories', false)
+            ->assertSee('ph-tabbar', false)->assertSee('ph-grid', false)
+            ->assertSee('Cebindeki şehir rehberi')->assertSee('Özgün Atölye')->assertSee('Ahşap Masa')
+            ->assertSee(route('search'), false);
+
+        $this->get('/firma/'.$company->slug)->assertOk()->assertSee('ph-detail', false)
+            ->assertSee('Yol tarifi')->assertSee('Ahşap Masa')
+            ->assertSee('id="yorumlar"', false)
+            ->assertSee(route('companies.reviews.store', $company->slug), false);
+
+        $this->assertPhoneShellPages($data);
+    }
+
+    public function test_swipe_cards_keeps_mobile_shell_on_every_public_page(): void
+    {
+        $data = $this->seedPhoneTheme('swipe-cards', 'kart-destesi', 'Kart Destesi');
+        $company = $data['company'];
+
+        $this->get('/')->assertOk()->assertSee('theme-swipe-cards', false)
+            ->assertSee('ph-tabbar', false)->assertSee('ph-deck', false)
+            ->assertSee('Kaydır, seç, ara.')->assertSee('Özgün Atölye')->assertSee('Ahşap Masa')
+            ->assertSee(route('search'), false);
+
+        $this->get('/firma/'.$company->slug)->assertOk()->assertSee('ph-detail', false)
+            ->assertSee('Telefon et')->assertSee('Ahşap Masa')
+            ->assertSee('id="yorumlar"', false)
+            ->assertSee(route('companies.reviews.store', $company->slug), false);
+
+        $this->assertPhoneShellPages($data);
+    }
+
+    public function test_pull_drawer_keeps_mobile_shell_on_every_public_page(): void
+    {
+        $data = $this->seedPhoneTheme('pull-drawer', 'cekmece-arama', 'Çekmece Arama');
+        $company = $data['company'];
+
+        $this->get('/')->assertOk()->assertSee('theme-pull-drawer', false)
+            ->assertSee('ph-tabbar', false)->assertSee('ph-pull', false)
+            ->assertSee('Ne aramıştın')->assertSee('Özgün Atölye')->assertSee('Ahşap Masa')
+            ->assertSee('Mobilya Ustası')->assertSee(route('search'), false);
+
+        $this->get('/firma/'.$company->slug)->assertOk()->assertSee('ph-detail', false)
+            ->assertSee('Hemen ara')->assertSee('Ahşap Masa')
+            ->assertSee('id="yorumlar"', false)
+            ->assertSee(route('companies.reviews.store', $company->slug), false);
+
+        $this->assertPhoneShellPages($data);
+    }
+
+    public function test_radar_scope_keeps_mobile_shell_on_every_public_page(): void
+    {
+        $data = $this->seedPhoneTheme('radar-scope', 'radar-ekrani', 'Radar Ekranı');
+        $company = $data['company'];
+
+        $this->get('/')->assertOk()->assertSee('theme-radar-scope', false)
+            ->assertSee('ph-tabbar', false)->assertSee('ph-dial', false)->assertSee('ph-blips', false)
+            ->assertSee('Tarama sürüyor')->assertSee('Özgün Atölye')->assertSee('Ahşap Masa')
+            ->assertSee('Mobilya Ustası')->assertSee(route('search'), false);
+
+        $this->get('/firma/'.$company->slug)->assertOk()->assertSee('ph-detail', false)
+            ->assertSee('Hedef kilidi')->assertSee('Ahşap Masa')
+            ->assertSee('id="yorumlar"', false)
+            ->assertSee(route('companies.reviews.store', $company->slug), false);
+
+        $this->assertPhoneShellPages($data);
+    }
+
+    public function test_index_rally_keeps_mobile_shell_on_every_public_page(): void
+    {
+        $data = $this->seedPhoneTheme('index-rally', 'sehir-rampasi', 'Şehir Rampası');
+        $company = $data['company'];
+
+        $this->get('/')->assertOk()->assertSee('theme-index-rally', false)
+            ->assertSee('ph-tabbar', false)->assertSee('ph-rally', false)->assertSee('ph-letter', false)
+            ->assertSee('Sıraya gir')->assertSee('Özgün Atölye')->assertSee('Ahşap Masa')
+            ->assertSee('Mobilya Ustası')->assertSee(route('search'), false);
+
+        $this->get('/firma/'.$company->slug)->assertOk()->assertSee('ph-detail', false)
+            ->assertSee('Hemen ara')->assertSee('Ahşap Masa')
+            ->assertSee('id="yorumlar"', false)
+            ->assertSee(route('companies.reviews.store', $company->slug), false);
+
+        $this->assertPhoneShellPages($data);
+    }
+
+    /** Üç cep temasında da alt sayfalar cihaz çerçevesi içinde mobil kalır. */
+    private function assertPhoneShellPages(array $data): void
+    {
+        $pages = [
+            '/firmalar' => 'Kayıtlı firmalar',
+            '/ara?q=Özgün' => 'Arama sonuçları',
+            '/kategori/mobilya' => 'Mobilya seçkisi',
+            '/sehir/izmir' => 'İzmir firmaları',
+            '/is-ilanlari' => 'Güncel ilanlar',
+            '/is-ilanlari/'.$data['job']->slug => 'Görev tanımı',
+            '/blog' => 'Yayın seçkisi',
+            '/blog/'.$data['post']->slug => 'Ahşap mobilya seçerken',
+            '/firma-kayit' => 'Müşteriler firmanızı kolayca bulsun',
+            '/iletisim' => 'Mesaj formu',
+            '/hakkimizda' => 'Bilgi · Servis',
+            '/gizlilik-politikasi' => 'Bilgi · Servis',
+            '/kullanim-sartlari' => 'Bilgi · Servis',
+            '/paketler' => 'Hangi paket sana uygun?',
+        ];
+
+        foreach ($pages as $url => $expected) {
+            $this->get($url)->assertOk()
+                ->assertSee('ph-shell-content', false)
+                ->assertSee('ph-tabbar', false)
+                ->assertSee($expected);
+        }
+
+        $this->get('/firma-ekle')->assertRedirect(route('owner.register'));
+    }
+
     public function test_three_new_homepages_render_search_and_company_links(): void
     {
         $host = parse_url(config('app.url'), PHP_URL_HOST) ?: 'localhost';
