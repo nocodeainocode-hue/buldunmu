@@ -67,7 +67,7 @@
             @endif
             @if($targetCategory)
                 <a class="ph-row" href="{{ route('categories.show', $targetCategory->slug) }}">
-                    <span class="ph-row__av">▤</span>
+                    <span class="ph-row__av">🏷️</span>
                     <div class="ph-row__txt"><strong>{{ $targetCategory->name }} firmaları</strong><span>Kategori listesi</span></div>
                     <span class="ph-row__go">›</span>
                 </a>
@@ -82,7 +82,7 @@
         <div class="ph-list" style="padding:12px 12px 14px">
             @foreach($relatedPosts as $related)
                 <a class="ph-row" href="{{ route('blog.show', $related->slug) }}">
-                    <span class="ph-row__av">✦</span>
+                    <span class="ph-row__av">📖</span>
                     <div class="ph-row__txt"><strong>{{ $related->title }}</strong><span>{{ $related->published_at?->format('d.m.Y') }}</span></div>
                     <span class="ph-row__go">›</span>
                 </a>

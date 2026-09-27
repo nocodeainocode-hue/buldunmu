@@ -143,7 +143,7 @@
             <div class="ph-list">
                 @foreach($featuredOfferings->take(4) as $offering)
                     <a class="ph-row" href="{{ route('companies.show', $offering->company->slug) }}">
-                        <span class="ph-row__av">◈</span>
+                        <span class="ph-row__av">🛍️</span>
                         <div class="ph-row__txt">
                             <strong>{{ $offering->name }}</strong>
                             <span>{{ $offering->company->name ?? 'Firma' }}{{ $offering->price > 0 ? ' · ' . number_format((float) $offering->price, 0, ',', '.') . ' ₺' : '' }}</span>
@@ -167,7 +167,7 @@
             <div class="ph-list">
                 @foreach($posts->take(4) as $post)
                     <a class="ph-row" href="{{ route('blog.show', $post->slug) }}">
-                        <span class="ph-row__av">✦</span>
+                        <span class="ph-row__av">📖</span>
                         <div class="ph-row__txt">
                             <strong>{{ $post->title }}</strong>
                             <span>{{ $post->published_at?->format('d.m.Y') }}</span>

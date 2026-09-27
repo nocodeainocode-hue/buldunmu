@@ -175,7 +175,7 @@
             <div class="ph-list">
                 @foreach($homeJobs->take(5) as $homeJob)
                     <a class="ph-row" href="{{ route('jobs.show', $homeJob->slug) }}">
-                        <span class="ph-row__av">◈</span>
+                        <span class="ph-row__av">💼</span>
                         <div class="ph-row__txt">
                             <strong>{{ $homeJob->title }}</strong>
                             <span>{{ $homeJob->company->name ?? 'Firma' }} · {{ $homeJob->location ?: ($homeJob->company->city?->name ?? 'Türkiye') }}</span>
@@ -224,7 +224,7 @@
             <div class="ph-list">
                 @foreach($posts->take(4) as $post)
                     <a class="ph-row" href="{{ route('blog.show', $post->slug) }}">
-                        <span class="ph-row__av">✦</span>
+                        <span class="ph-row__av">📖</span>
                         <div class="ph-row__txt">
                             <strong>{{ $post->title }}</strong>
                             <span>{{ $post->published_at?->format('d.m.Y') }}</span>

@@ -1,10 +1,10 @@
 {{-- CEP KABUĞU · alt sekme çubuğu --}}
 @php
     $phTabs = [
-        ['route' => 'home', 'label' => 'Ana Sayfa', 'icon' => '⌂', 'match' => ['home']],
-        ['route' => 'companies.index', 'label' => 'Firmalar', 'icon' => '▤', 'match' => ['companies.index', 'search', 'cities.show', 'categories.show']],
-        ['route' => 'jobs.index', 'label' => 'İlanlar', 'icon' => '◈', 'match' => ['jobs.*']],
-        ['route' => 'blog.index', 'label' => 'Rehber', 'icon' => '✦', 'match' => ['blog.*', 'pages.*', 'packages.index']],
+        ['route' => 'home', 'label' => 'Ana Sayfa', 'icon' => '🏠', 'match' => ['home']],
+        ['route' => 'companies.index', 'label' => 'Firmalar', 'icon' => '🏢', 'match' => ['companies.index', 'search', 'cities.show', 'categories.show']],
+        ['route' => 'jobs.index', 'label' => 'İlanlar', 'icon' => '💼', 'match' => ['jobs.*']],
+        ['route' => 'blog.index', 'label' => 'Rehber', 'icon' => '📖', 'match' => ['blog.*', 'pages.*', 'packages.index']],
     ];
 @endphp
 <nav class="ph-tabbar" aria-label="Alt menü">

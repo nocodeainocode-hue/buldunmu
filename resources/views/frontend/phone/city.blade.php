@@ -70,7 +70,7 @@
         <div class="ph-list" style="padding:12px 12px 14px">
             @foreach($posts as $post)
                 <a class="ph-row" href="{{ route('blog.show', $post->slug) }}">
-                    <span class="ph-row__av">✦</span>
+                    <span class="ph-row__av">📖</span>
                     <div class="ph-row__txt"><strong>{{ $post->title }}</strong><span>{{ $post->published_at?->format('d.m.Y') }}</span></div>
                     <span class="ph-row__go">›</span>
                 </a>
