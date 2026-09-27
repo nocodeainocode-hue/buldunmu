@@ -54,6 +54,7 @@
             $mobileShellLayouts = ['pocket-directory', 'social-feed', 'chat-directory'];
             $activeLayout = \App\View\Helpers\ThemeHelper::layoutFile($directory ?? null);
             $classifiedsSubpage = $activeLayout === 'classifieds-board' && !request()->routeIs('home', 'companies.show');
+            $cinematicSubpage = $activeLayout === 'cinematic-atlas' && !request()->routeIs('home', 'companies.show');
         @endphp
         @if(in_array($activeLayout, $mobileShellLayouts))
         html.theme-{{ $directory->template }} body > header,
@@ -68,6 +69,9 @@
     </style>
     @if($activeLayout === 'classifieds-board')
         @include('partials.classifieds.styles')
+    @endif
+    @if($activeLayout === 'cinematic-atlas')
+        @include('partials.cinema.styles')
     @endif
 
     {{-- Dynamic Google Fonts per template --}}
@@ -236,11 +240,15 @@
             @include('partials.classifieds.header')
             <div class="board-shell-content">@yield('content')</div>
             @include('partials.classifieds.footer')
+        @elseif($cinematicSubpage)
+            @include('partials.cinema.header')
+            <div class="cinema-shell-content">@yield('content')</div>
+            @include('partials.cinema.footer')
         @elseif(!request()->routeIs('home') && in_array($activeLayout, $mobileShellLayouts))
             @include('partials.mobile-shell')
         @else
             @yield('content')
-            @if(request()->routeIs('home') && !in_array($activeLayout, [...$mobileShellLayouts, 'classifieds-board', 'acid-poster']) && isset($homeJobs) && $homeJobs->isNotEmpty())
+            @if(request()->routeIs('home') && !in_array($activeLayout, [...$mobileShellLayouts, 'classifieds-board', 'acid-poster', 'cinematic-atlas']) && isset($homeJobs) && $homeJobs->isNotEmpty())
                 @include('partials.home-jobs')
             @endif
         @endif

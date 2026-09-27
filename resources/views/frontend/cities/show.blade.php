@@ -24,6 +24,8 @@
 @section('content')
 @if($directory?->template === 'classifieds-board')
     @include('frontend.classifieds.city')
+@elseif($directory?->template === 'cinematic-atlas')
+    @include('frontend.cinema.city')
 @else
 <div style="background:var(--bg);">
     {{-- Hero Banner --}}

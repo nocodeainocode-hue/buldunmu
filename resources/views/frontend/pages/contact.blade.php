@@ -13,6 +13,9 @@
 @endpush
 
 @section('content')
+@if((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'cinematic-atlas')
+    @include('frontend.cinema.contact')
+@else
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <x-breadcrumb :items="[['label' => 'İletişim']]" />
     <div class="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 mt-6">
@@ -68,4 +71,5 @@
         </form>
     </div>
 </div>
+@endif
 @endsection

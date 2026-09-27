@@ -13,6 +13,9 @@
 @endpush
 
 @section('content')
+@if((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'cinematic-atlas')
+    @include('frontend.cinema.info', ['pageTitle' => 'Gizlilik Politikası', 'pageDescription' => 'Verilerinizin nasıl işlendiğine ilişkin bilgiler.', 'fallbackParagraphs' => ['Bu sayfa, '.($settings->site_name ?? 'sitemiz').' tarafından toplanan bilgilerin nasıl kullanıldığını açıklar.', 'Kişisel verileriniz üçüncü kişilerle paylaşılmaz; hizmet kalitesini artırmak için kullanılır.']])
+@else
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <x-breadcrumb :items="[['label' => 'Gizlilik Politikası']]" />
     <div class="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 mt-6">
@@ -27,4 +30,5 @@
         </div>
     </div>
 </div>
+@endif
 @endsection

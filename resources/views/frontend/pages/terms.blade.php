@@ -13,6 +13,9 @@
 @endpush
 
 @section('content')
+@if((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'cinematic-atlas')
+    @include('frontend.cinema.info', ['pageTitle' => 'Kullanım Şartları', 'pageDescription' => 'Rehberi kullanırken geçerli olan koşullar.', 'fallbackParagraphs' => [($settings->site_name ?? 'Sitemiz').' kullanım şartları bu sayfada açıklanır.', 'Firma bilgileri düzenli olarak güncellenir; doğruluk konusunda garanti verilmez.']])
+@else
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <x-breadcrumb :items="[['label' => 'Kullanım Şartları']]" />
     <div class="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 mt-6">
@@ -27,4 +30,5 @@
         </div>
     </div>
 </div>
+@endif
 @endsection

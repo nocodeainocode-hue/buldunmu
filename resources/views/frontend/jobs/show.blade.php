@@ -7,6 +7,8 @@
 @section('content')
 @if($directory?->template === 'classifieds-board')
     @include('frontend.classifieds.job')
+@elseif($directory?->template === 'cinematic-atlas')
+    @include('frontend.cinema.job')
 @else
 <div class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
     <x-breadcrumb :items="[['label' => 'İş İlanları', 'url' => route('jobs.index')], ['label' => $job->title]]" />

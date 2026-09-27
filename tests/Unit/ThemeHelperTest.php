@@ -142,6 +142,7 @@ class ThemeHelperTest extends TestCase
         $this->assertEquals('Cesur Vitrin', $opts['bold']);
         $this->assertEquals('Mahalle İlan Panosu', $opts['classifieds-board']);
         $this->assertEquals('Asit Afiş', $opts['acid-poster']);
+        $this->assertEquals('Sinematik Atlas', $opts['cinematic-atlas']);
     }
 
     public function test_grid_cols_returns_tailwind_classes(): void

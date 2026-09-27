@@ -37,3 +37,4 @@ Thumbs.db
 !/.wrongstack/
 /.wrongstack/*
 !/.wrongstack/project.json
+/output/
