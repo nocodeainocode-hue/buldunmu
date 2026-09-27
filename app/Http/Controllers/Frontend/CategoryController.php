@@ -17,10 +17,12 @@ class CategoryController extends Controller
 
         $companies = Company::active()
             ->where('category_id', $category->id)
+            ->when(request()->filled('city'), fn ($query) => $query->whereHas('city', fn ($city) => $city->where('slug', request('city'))))
             ->with(['city', 'district'])
             ->orderByDesc('is_premium')
             ->orderByDesc('created_at')
-            ->paginate(12);
+            ->paginate(12)
+            ->withQueryString();
 
         // Cities with active companies in this category for SEO sidebar
         $popularCities = City::whereHas('companies', fn ($q) => $q->active()->where('category_id', $category->id)

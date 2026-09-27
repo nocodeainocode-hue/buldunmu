@@ -5,6 +5,9 @@
 @section('canonical', route('jobs.index'))
 
 @section('content')
+@if($directory?->template === 'classifieds-board')
+    @include('frontend.classifieds.jobs')
+@else
 <div class="mx-auto px-4 py-10 sm:px-6" style="max-width:var(--page_width,1280px);">
     <x-breadcrumb :items="[['label' => 'İş İlanları']]" />
     <div class="mt-5 flex flex-wrap items-end justify-between gap-4">
@@ -40,4 +43,5 @@
 
     <div class="mt-8">{{ $jobs->links() }}</div>
 </div>
+@endif
 @endsection

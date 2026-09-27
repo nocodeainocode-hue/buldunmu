@@ -19,6 +19,9 @@
 @endpush
 
 @section('content')
+@if($directory?->template === 'classifieds-board')
+    @include('frontend.classifieds.blog')
+@else
 <div style="background:var(--bg);">
     <section class="border-b py-12" style="border-color:var(--border);background:var(--bg_card);">
         <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width:var(--page_width,1280px);">
@@ -46,4 +49,5 @@
         <div class="mt-10">{{ $posts->links() }}</div>
     </section>
 </div>
+@endif
 @endsection

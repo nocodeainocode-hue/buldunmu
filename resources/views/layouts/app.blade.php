@@ -53,6 +53,7 @@
         @php
             $mobileShellLayouts = ['pocket-directory', 'social-feed', 'chat-directory'];
             $activeLayout = \App\View\Helpers\ThemeHelper::layoutFile($directory ?? null);
+            $classifiedsSubpage = $activeLayout === 'classifieds-board' && !request()->routeIs('home', 'companies.show');
         @endphp
         @if(in_array($activeLayout, $mobileShellLayouts))
         html.theme-{{ $directory->template }} body > header,
@@ -65,6 +66,9 @@
         html.theme-{{ $directory->template }} .mobile-shell { border:0; border-radius:0; }
         @endif
     </style>
+    @if($activeLayout === 'classifieds-board')
+        @include('partials.classifieds.styles')
+    @endif
 
     {{-- Dynamic Google Fonts per template --}}
     @php $fontsUrl = \App\View\Helpers\ThemeHelper::googleFontsUrl($directory ?? null); @endphp
@@ -228,7 +232,11 @@
     </header>
 
     <main class="flex-1">
-        @if(!request()->routeIs('home') && in_array($activeLayout, $mobileShellLayouts))
+        @if($classifiedsSubpage)
+            @include('partials.classifieds.header')
+            <div class="board-shell-content">@yield('content')</div>
+            @include('partials.classifieds.footer')
+        @elseif(!request()->routeIs('home') && in_array($activeLayout, $mobileShellLayouts))
             @include('partials.mobile-shell')
         @else
             @yield('content')

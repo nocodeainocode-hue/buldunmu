@@ -22,6 +22,9 @@
 @endpush
 
 @section('content')
+@if($directory?->template === 'classifieds-board')
+    @include('frontend.classifieds.city')
+@else
 <div style="background:var(--bg);">
     {{-- Hero Banner --}}
     <section class="py-12" style="background:var(--primary);">
@@ -224,4 +227,5 @@
 
     @include('partials.cta')
 </div>
+@endif
 @endsection

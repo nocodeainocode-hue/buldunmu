@@ -8,6 +8,7 @@ use App\Models\Company;
 use App\Models\CompanyOffering;
 use App\Models\Directory;
 use App\Models\JobPosting;
+use App\Models\Post;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -93,12 +94,19 @@ class NewDirectoryThemesTest extends TestCase
             'company_id' => $company->id, 'directory_id' => $directory->id,
             'type' => 'product', 'name' => 'Ahşap Masa', 'status' => 'active',
         ]);
-        JobPosting::create([
+        $job = JobPosting::create([
             'company_id' => $company->id, 'directory_id' => $directory->id,
             'title' => 'Mobilya Ustası', 'description' => 'Atölye ekibine katılın.',
             'employment_type' => 'full_time', 'status' => 'published',
             'published_at' => now(), 'admin_published' => true,
         ]);
+        $post = Post::create([
+            'title' => 'Mobilya Seçme Rehberi', 'slug' => 'mobilya-secme-rehberi',
+            'content' => '<p>Ahşap mobilya seçerken malzemeye dikkat edin.</p>',
+            'status' => 'published', 'published_at' => now(),
+            'directory_id' => $directory->id,
+        ]);
+        $post->directories()->attach($directory->id);
 
         foreach (['classifieds-board', 'acid-poster'] as $template) {
             $directory->update(['template' => $template]);
@@ -123,5 +131,29 @@ class NewDirectoryThemesTest extends TestCase
                 ->assertSee(route('companies.reviews.store', $company->slug), false)
                 ->assertSee('index,follow,max-image-preview:large', false);
         }
+
+        $directory->update(['template' => 'classifieds-board']);
+
+        foreach ([
+            '/firmalar' => 'Firma kayıtları',
+            '/ara?q=Özgün' => 'Arama sonuçları',
+            '/kategori/'.$category->slug => $category->name.' kayıtları',
+            '/sehir/'.$city->slug => $city->name.' kayıtları',
+            '/is-ilanlari' => 'Güncel ilanlar',
+            '/is-ilanlari/'.$job->slug => 'Pozisyon hakkında',
+            '/blog' => 'Yayın akışı',
+            '/blog/'.$post->slug => 'Ahşap mobilya seçerken',
+            '/firma-kayit' => 'Müşteriler firmanızı kolayca bulsun',
+            '/iletisim' => 'İletişim',
+        ] as $url => $expected) {
+            $this->get($url)
+                ->assertOk()
+                ->assertSee('board-shell-content', false)
+                ->assertSee($expected);
+        }
+
+        $this->get('/kategori/'.$category->slug.'?city=ankara')
+            ->assertOk()
+            ->assertDontSee('class="bp-row-title" href="'.route('companies.show', $company->slug).'"', false);
     }
 }

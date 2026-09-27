@@ -10,6 +10,9 @@
 @endpush
 
 @section('content')
+@if($directory?->template === 'classifieds-board')
+    @include('frontend.classifieds.post')
+@else
 <div class="py-10 sm:py-14" style="background:var(--bg);">
     <article class="mx-auto px-4 sm:px-6" style="max-width:920px;">
         <x-breadcrumb :items="[['label'=>'Blog','url'=>route('blog.index')],['label'=>$post->title]]" />
@@ -52,4 +55,5 @@
 
     @if($relatedPosts->isNotEmpty())<section class="mx-auto mt-14 border-t px-4 pt-10 sm:px-6" style="max-width:920px;border-color:var(--border);"><h2 class="text-xl font-black" style="color:var(--text);">İlgili Yazılar</h2><div class="mt-5 grid gap-4 sm:grid-cols-3">@foreach($relatedPosts as $related)<a href="{{ route('blog.show',$related->slug) }}" class="rounded-lg border p-4 text-sm font-bold" style="border-color:var(--border);background:var(--bg_card);color:var(--text);">{{ $related->title }}</a>@endforeach</div></section>@endif
 </div>
+@endif
 @endsection

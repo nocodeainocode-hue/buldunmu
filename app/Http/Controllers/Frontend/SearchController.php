@@ -14,7 +14,7 @@ class SearchController extends Controller
     {
         $q = trim((string) $request->input('q', ''));
         $query = Company::active()
-            ->with(['category', 'city']);
+            ->with(['category', 'city', 'district']);
 
         if ($q !== '') {
             $query->where(function ($query) use ($q) {
@@ -23,6 +23,14 @@ class SearchController extends Controller
                     ->orWhereHas('category', fn ($category) => $category->where('name', 'like', "%{$q}%"))
                     ->orWhereHas('city', fn ($city) => $city->where('name', 'like', "%{$q}%"));
             });
+        }
+
+        if ($request->filled('category')) {
+            $query->whereHas('category', fn ($category) => $category->where('slug', $request->input('category')));
+        }
+
+        if ($request->filled('city')) {
+            $query->whereHas('city', fn ($city) => $city->where('slug', $request->input('city')));
         }
 
         $mapCompanies = (clone $query)
@@ -40,6 +48,7 @@ class SearchController extends Controller
             ->withQueryString();
 
         return view('frontend.companies.index', [
+            'directory' => app()->bound('currentDirectory') ? app('currentDirectory') : null,
             'companies' => $companies,
             'mapCompanies' => $mapCompanies,
             'categories' => Category::active()->orderBy('name')->get(),
