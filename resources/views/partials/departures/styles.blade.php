@@ -22,7 +22,9 @@
         font: 15px/1.6 Barlow, "Segoe UI", sans-serif; letter-spacing: .005em;
     }
     .dep * { box-sizing: border-box; }
-    .dep a { color: inherit; }
+    /* Varsayılan link rengi: sıfır özgüllük (:where) — böylece tek sınıflı .dep-*
+       bileşen kuralları kendi renklerini bozmadan korur (.dep a yerine). */
+    :where(.dep) a { color: inherit; }
     .dep :is(h1,h2,h3,h4) { margin: 0; font-family: var(--sign); font-weight: 600; letter-spacing: -.005em; }
     .dep p { margin: 0; }
     .dep-wrap { width: min(100% - 44px, 1300px); margin-inline: auto; }
