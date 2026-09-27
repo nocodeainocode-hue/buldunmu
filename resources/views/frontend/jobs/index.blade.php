@@ -11,6 +11,8 @@
     @include('frontend.cinema.jobs')
 @elseif($directory?->template === 'departure-board')
     @include('frontend.departures.jobs')
+@elseif($directory?->template === 'signal-station')
+    @include('frontend.signal.jobs')
 @elseif(\App\View\Helpers\ThemeHelper::isPhoneShell($directory ?? null))
     @include('frontend.phone.jobs')
 @else

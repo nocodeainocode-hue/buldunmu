@@ -28,6 +28,8 @@
     @include('frontend.cinema.category')
 @elseif($directory?->template === 'departure-board')
     @include('frontend.departures.category')
+@elseif($directory?->template === 'signal-station')
+    @include('frontend.signal.category')
 @elseif(\App\View\Helpers\ThemeHelper::isPhoneShell($directory ?? null))
     @include('frontend.phone.category')
 @else

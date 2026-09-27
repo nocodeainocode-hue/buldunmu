@@ -25,6 +25,8 @@
     @include('frontend.cinema.blog')
 @elseif($directory?->template === 'departure-board')
     @include('frontend.departures.blog')
+@elseif($directory?->template === 'signal-station')
+    @include('frontend.signal.blog')
 @elseif(\App\View\Helpers\ThemeHelper::isPhoneShell($directory ?? null))
     @include('frontend.phone.blog')
 @else

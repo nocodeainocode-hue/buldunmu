@@ -79,6 +79,9 @@
     @if($activeLayout === 'departure-board')
         @include('partials.departures.styles')
     @endif
+    @if($activeLayout === 'signal-station')
+        @include('partials.signal.styles')
+    @endif
     @if(in_array($activeLayout, \App\View\Helpers\ThemeHelper::PHONE_SHELL, true))
         @include('partials.phone.styles')
     @endif

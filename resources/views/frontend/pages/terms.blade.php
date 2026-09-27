@@ -15,6 +15,8 @@
 @section('content')
 @if((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'departure-board')
     @include('frontend.departures.info', ['pageTitle' => 'Kullanım Şartları', 'pageDescription' => 'Panoyu kullanırken geçerli olan koşullar.', 'fallbackParagraphs' => [($settings->site_name ?? 'Sitemiz').' kalkış panosunun kullanım şartları bu sayfada açıklanır.', 'Firma bilgileri düzenli olarak güncellenir; doğruluk konusunda garanti verilmez.']])
+    @elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'signal-station')
+    @include('frontend.signal.info', ['pageTitle' => 'Kullanım Şartları', 'pageDescription' => 'İstasyonu kullanırken geçerli olan koşullar.', 'fallbackParagraphs' => [($settings->site_name ?? 'Sitemiz').' sinyal istasyonunun kullanım şartları bu sayfada açıklanır.', 'Firma bilgileri düzenli olarak güncellenir; doğruluk konusunda garanti verilmez.']])
 @elseif(\App\View\Helpers\ThemeHelper::isPhoneShell(app()->bound('currentDirectory') ? app('currentDirectory') : null))
     @include('frontend.phone.info', ['pageTitle' => 'Kullanım Şartları', 'pageDescription' => 'Cep rehberini kullanırken geçerli koşullar.', 'fallbackParagraphs' => [($settings->site_name ?? 'Sitemiz').' cep rehberinin kullanım şartları bu sayfada açıklanır.', 'Firma bilgileri düzenli olarak güncellenir; doğruluk konusunda garanti verilmez.']])
 @elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'cinematic-atlas')

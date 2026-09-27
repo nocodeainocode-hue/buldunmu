@@ -309,6 +309,70 @@ class NewDirectoryThemesTest extends TestCase
         $this->get('/firma-ekle')->assertRedirect(route('owner.register'));
     }
 
+    /**
+     * Sinyal İstasyonu: masaüstü marka teması, özel kabuk yerine varsayılan header/footer kullanır.
+     * İç sayfalar .sig / .sig-band tasarım sistemiyle kendi düzenini render eder.
+     */
+    public function test_signal_station_has_its_own_inner_pages_and_keeps_business_features(): void
+    {
+        $host = parse_url(config('app.url'), PHP_URL_HOST) ?: 'localhost';
+        $directory = Directory::create([
+            'name' => 'Sinyal Testi', 'slug' => 'sinyal-testi', 'domain' => $host,
+            'status' => 'active', 'template' => 'signal-station',
+        ]);
+        $city = City::create(['name' => 'İzmir', 'slug' => 'izmir']);
+        $category = Category::create(['name' => 'Mobilya', 'slug' => 'mobilya', 'status' => 'active']);
+        $company = Company::create([
+            'name' => 'Özgün Atölye', 'category_id' => $category->id, 'city_id' => $city->id,
+            'directory_id' => $directory->id, 'status' => 'active', 'is_premium' => true, 'is_verified' => true,
+            'phone' => '0232 111 22 33', 'description' => str_repeat('Özgün mobilya ve tasarım hizmeti sunuyoruz. ', 3),
+        ]);
+        CompanyOffering::create([
+            'company_id' => $company->id, 'directory_id' => $directory->id,
+            'type' => 'product', 'name' => 'Ahşap Masa', 'status' => 'active',
+        ]);
+        $job = JobPosting::create([
+            'company_id' => $company->id, 'directory_id' => $directory->id,
+            'title' => 'Mobilya Ustası', 'description' => 'Ekibimize çalışma arkadaşı arıyoruz.',
+            'employment_type' => 'full_time', 'status' => 'published',
+            'published_at' => now(), 'admin_published' => true,
+        ]);
+        $post = Post::create([
+            'title' => 'Mobilya Seçme Rehberi', 'slug' => 'mobilya-secme-rehberi',
+            'content' => '<p>Ahşap mobilya seçerken malzemeye dikkat edin.</p>',
+            'status' => 'published', 'published_at' => now(), 'directory_id' => $directory->id,
+        ]);
+        $post->directories()->attach($directory->id);
+
+        // Ana sayfa + firma detayı (ortak td-* parçaları sinyal temasına bağlanır)
+        $this->get('/')->assertOk()->assertSee('theme-signal-station', false)
+            ->assertSee('Özgün Atölye')->assertSee(route('search'), false);
+
+        $this->get('/firma/'.$company->slug)->assertOk()->assertSee('sig-detail', false)
+            ->assertSee('sig-band', false)->assertSee('Sinyal ', false)
+            ->assertSee('Ahşap Masa')->assertSee('id="yorumlar"', false)
+            ->assertSee(route('companies.reviews.store', $company->slug), false);
+
+        foreach ([
+            // [imza, ham mı (class/URL) yoksa kaçırılmış metin mi]
+            '/firmalar' => ['sig-filters', false],
+            '/ara?q=Özgün' => ['Arama', false],
+            '/kategori/mobilya' => ['sig-filters', false],
+            '/sehir/izmir' => ['sig-filters', false],
+            '/is-ilanlari' => ['Personel', false],
+            '/is-ilanlari/'.$job->slug => ['Pozisyon', false],
+            '/blog' => ['Yayın seçkisi', true],
+            '/blog/'.$post->slug => ['sig-prose', false],
+            '/iletisim' => ['sig-form', false],
+            '/hakkimizda' => ['sig-prose', false],
+            '/gizlilik-politikasi' => ['sig-panel', false],
+            '/kullanim-sartlari' => ['Bilgi', false],
+            '/paketler' => ['sig-plan', false],
+        ] as $url => [$expected, $escaped]) {
+            $this->get($url)->assertOk()->assertSee('sig-band', false)->assertSee($expected, $escaped);
+        }
+    }
+
     public function test_three_new_homepages_render_search_and_company_links(): void
     {
         $host = parse_url(config('app.url'), PHP_URL_HOST) ?: 'localhost';

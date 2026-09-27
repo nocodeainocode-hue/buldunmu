@@ -17,6 +17,8 @@
     @include('frontend.cinema.packages')
 @elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'departure-board')
     @include('frontend.departures.packages')
+@elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'signal-station')
+    @include('frontend.signal.packages')
 @elseif(\App\View\Helpers\ThemeHelper::isPhoneShell(app()->bound('currentDirectory') ? app('currentDirectory') : null))
     @include('frontend.phone.packages')
 @else
