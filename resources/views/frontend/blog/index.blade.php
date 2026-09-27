@@ -23,6 +23,8 @@
     @include('frontend.classifieds.blog')
 @elseif($directory?->template === 'cinematic-atlas')
     @include('frontend.cinema.blog')
+@elseif($directory?->template === 'departure-board')
+    @include('frontend.departures.blog')
 @else
 <div style="background:var(--bg);">
     <section class="border-b py-12" style="border-color:var(--border);background:var(--bg_card);">

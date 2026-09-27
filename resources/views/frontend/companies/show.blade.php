@@ -79,6 +79,8 @@
     @include('frontend.companies.themes.classifieds-board')
 @elseif($directory?->template === 'cinematic-atlas')
     @include('frontend.companies.themes.cinematic-atlas')
+@elseif($directory?->template === 'departure-board')
+    @include('frontend.companies.themes.departure-board')
 @elseif($directory?->template === 'acid-poster')
     @include('frontend.companies.themes.acid-poster')
 @else

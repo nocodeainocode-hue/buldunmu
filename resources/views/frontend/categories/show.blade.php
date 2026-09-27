@@ -26,6 +26,8 @@
     @include('frontend.classifieds.category')
 @elseif($directory?->template === 'cinematic-atlas')
     @include('frontend.cinema.category')
+@elseif($directory?->template === 'departure-board')
+    @include('frontend.departures.category')
 @else
 <div style="background:var(--bg);">
     {{-- Hero Banner --}}

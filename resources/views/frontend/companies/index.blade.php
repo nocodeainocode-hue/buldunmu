@@ -31,6 +31,8 @@
     @include('frontend.classifieds.companies')
 @elseif($directory?->template === 'cinematic-atlas')
     @include('frontend.cinema.companies')
+@elseif($directory?->template === 'departure-board')
+    @include('frontend.departures.companies')
 @else
 <div style="background:var(--bg);">
     {{-- Hero --}}

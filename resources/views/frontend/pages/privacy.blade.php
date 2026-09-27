@@ -13,7 +13,9 @@
 @endpush
 
 @section('content')
-@if((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'cinematic-atlas')
+@if((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'departure-board')
+    @include('frontend.departures.info', ['pageTitle' => 'Gizlilik Politikası', 'pageDescription' => 'Verilerinizin panoda nasıl işlendiğine ilişkin bilgiler.', 'fallbackParagraphs' => ['Bu sayfa, '.($settings->site_name ?? 'sitemiz').' tarafından toplanan bilgilerin nasıl kullanıldığını açıklar.', 'Kişisel verileriniz üçüncü kişilerle paylaşılmaz; hizmet kalitesini artırmak için kullanılır.']])
+@elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'cinematic-atlas')
     @include('frontend.cinema.info', ['pageTitle' => 'Gizlilik Politikası', 'pageDescription' => 'Verilerinizin nasıl işlendiğine ilişkin bilgiler.', 'fallbackParagraphs' => ['Bu sayfa, '.($settings->site_name ?? 'sitemiz').' tarafından toplanan bilgilerin nasıl kullanıldığını açıklar.', 'Kişisel verileriniz üçüncü kişilerle paylaşılmaz; hizmet kalitesini artırmak için kullanılır.']])
 @else
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

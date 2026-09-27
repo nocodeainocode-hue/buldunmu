@@ -13,7 +13,9 @@
 @endpush
 
 @section('content')
-@if((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'cinematic-atlas')
+@if((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'departure-board')
+    @include('frontend.departures.info', ['pageTitle' => 'Kullanım Şartları', 'pageDescription' => 'Panoyu kullanırken geçerli olan koşullar.', 'fallbackParagraphs' => [($settings->site_name ?? 'Sitemiz').' kalkış panosunun kullanım şartları bu sayfada açıklanır.', 'Firma bilgileri düzenli olarak güncellenir; doğruluk konusunda garanti verilmez.']])
+@elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'cinematic-atlas')
     @include('frontend.cinema.info', ['pageTitle' => 'Kullanım Şartları', 'pageDescription' => 'Rehberi kullanırken geçerli olan koşullar.', 'fallbackParagraphs' => [($settings->site_name ?? 'Sitemiz').' kullanım şartları bu sayfada açıklanır.', 'Firma bilgileri düzenli olarak güncellenir; doğruluk konusunda garanti verilmez.']])
 @else
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

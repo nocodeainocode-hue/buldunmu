@@ -143,6 +143,23 @@ class ThemeHelperTest extends TestCase
         $this->assertEquals('Mahalle İlan Panosu', $opts['classifieds-board']);
         $this->assertEquals('Asit Afiş', $opts['acid-poster']);
         $this->assertEquals('Sinematik Atlas', $opts['cinematic-atlas']);
+        $this->assertEquals('Kalkış Panosu', $opts['departure-board']);
+    }
+
+    public function test_departure_board_theme_is_wired_to_its_own_views(): void
+    {
+        $this->assertSame('departure-board', ThemeHelper::TEMPLATES['departure-board']['layout']);
+        $this->assertFileExists(resource_path('views/frontend/home/departure-board.blade.php'));
+        $this->assertFileExists(resource_path('views/frontend/companies/themes/departure-board.blade.php'));
+        $this->assertFileExists(resource_path('views/partials/departures/styles.blade.php'));
+
+        foreach (['header', 'footer', 'page-hero'] as $partial) {
+            $this->assertFileExists(resource_path('views/partials/departures/'.$partial.'.blade.php'));
+        }
+
+        foreach (['companies', 'company-card', 'company-list', 'category', 'city', 'jobs', 'job', 'blog', 'post', 'packages', 'info', 'contact'] as $page) {
+            $this->assertFileExists(resource_path('views/frontend/departures/'.$page.'.blade.php'));
+        }
     }
 
     public function test_grid_cols_returns_tailwind_classes(): void

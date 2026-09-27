@@ -15,6 +15,8 @@
 @section('content')
 @if((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'cinematic-atlas')
     @include('frontend.cinema.packages')
+@elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'departure-board')
+    @include('frontend.departures.packages')
 @else
 <div class="mx-auto px-4 sm:px-6 lg:px-8 py-12" style="max-width:var(--page_width,1280px);">
     <x-breadcrumb :items="[['label' => 'Üyelik Paketleri']]" />

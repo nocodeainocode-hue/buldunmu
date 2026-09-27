@@ -15,6 +15,8 @@
 @section('content')
 @if((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'cinematic-atlas')
     @include('frontend.cinema.contact')
+@elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'departure-board')
+    @include('frontend.departures.contact')
 @else
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <x-breadcrumb :items="[['label' => 'İletişim']]" />

@@ -13,7 +13,9 @@
 @endpush
 
 @section('content')
-@if((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'cinematic-atlas')
+@if((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'departure-board')
+    @include('frontend.departures.info', ['pageTitle' => 'Hakkımızda', 'pageDescription' => 'Bu peronun arkasındaki ekip ve servis hikâyesi.', 'fallbackParagraphs' => [($settings->site_name ?? 'Firma Rehberi').' Türkiye genelindeki işletmeleri tek bir kalkış panosunda toplayır.', 'Amacımız, aradığınız işletmeye üç hamlede ulaşmanızı sağlamaktır.']])
+@elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'cinematic-atlas')
     @include('frontend.cinema.info', ['pageTitle' => 'Hakkımızda', 'pageDescription' => 'Rehberin arkasındaki hikâyeyi keşfedin.', 'fallbackParagraphs' => [($settings->site_name ?? 'Firma Rehberi').' Türkiye genelindeki işletmeleri bir araya getirir.', 'Amacımız, ihtiyaç duyduğunuz işletmelere hızlıca ulaşmanıza yardımcı olmaktır.']])
 @else
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

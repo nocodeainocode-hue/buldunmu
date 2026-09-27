@@ -26,6 +26,8 @@
     @include('frontend.classifieds.city')
 @elseif($directory?->template === 'cinematic-atlas')
     @include('frontend.cinema.city')
+@elseif($directory?->template === 'departure-board')
+    @include('frontend.departures.city')
 @else
 <div style="background:var(--bg);">
     {{-- Hero Banner --}}
