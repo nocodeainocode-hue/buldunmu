@@ -6,7 +6,7 @@
             <p>{{ $directory?->meta_description ?: ($settings->meta_description ?? 'Şehrindeki işletmeleri, hizmetleri ve fırsatları tek panoda toplayan yerel rehber.') }}</p>
         </div>
         <div>
-            <h3>İniş bindiş</h3>
+            <h3>İniş biniş</h3>
             <a href="{{ route('companies.index') }}">Tüm firmalar</a>
             <a href="{{ route('jobs.index') }}">İş ilanları</a>
             <a href="{{ route('blog.index') }}">Şehir yazıları</a>

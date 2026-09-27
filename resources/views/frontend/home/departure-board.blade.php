@@ -86,7 +86,7 @@
         <div class="dep-stats">
             <div><strong>{{ number_format($depCompanies, 0, ',', '.') }}</strong><span>Panodaki firma</span></div>
             <div><strong>{{ $depCategories }}</strong><span>Hat / kategori</span></div>
-            <div><strong>{{ $cities->count() }}</strong><span>İniş bindiş noktası</span></div>
+            <div><strong>{{ $cities->count() }}</strong><span>İniş biniş noktası</span></div>
             <div><strong>{{ number_format($depJobs, 0, ',', '.') }}</strong><span>Açık pozisyon</span></div>
         </div>
     </div>
@@ -175,7 +175,7 @@
             <div class="dep-section__head">
                 <div>
                     <span class="dep-kicker">05 / Tarife</span>
-                    <h2 class="dep-h2">Şehre göre iniş bindiş</h2>
+                    <h2 class="dep-h2">Şehre göre iniş biniş</h2>
                     <p>Şehrinizi seçin, o bölgedeki tüm hatları tek bakışta görün.</p>
                 </div>
             </div>
