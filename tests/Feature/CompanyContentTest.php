@@ -4,11 +4,13 @@ namespace Tests\Feature;
 
 use App\Filament\Resources\JobPostings\Pages\CreateJobPosting;
 use App\Filament\Resources\CompanyOfferings\Pages\CreateCompanyOffering;
+use App\Filament\Resources\CompanyReviews\Pages\CreateCompanyReview;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Company;
 use App\Models\CompanyOffering;
 use App\Models\CompanyOwner;
+use App\Models\CompanyReview;
 use App\Models\Directory;
 use App\Models\JobPosting;
 use App\Models\User;
@@ -221,6 +223,36 @@ class CompanyContentTest extends TestCase
         $this->get($this->url('/firma/'.$this->company->slug))->assertDontSee('Kurumsal Bakım');
         $this->company->update(['is_premium' => true]);
         $this->get($this->url('/firma/'.$this->company->slug))->assertSee('Kurumsal Bakım');
+    }
+
+    public function test_admin_added_review_is_scoped_to_active_directory_and_stays_resolvable(): void
+    {
+        $this->actingAs(User::factory()->create(['is_admin' => true]))
+            ->withSession(['current_directory_id' => $this->directory->id]);
+        app()->instance('currentDirectory', $this->directory);
+
+        Livewire::test(CreateCompanyReview::class)
+            ->fillForm([
+                'company_id' => $this->company->id,
+                'name' => 'Ayşe Yılmaz',
+                'email' => 'ayse@example.test',
+                'rating' => 5,
+                'status' => 'approved',
+                'comment' => 'Hizmet kalitesi çok iyiydi.',
+            ])
+            ->call('create')
+            ->assertHasNoFormErrors();
+
+        $review = CompanyReview::withoutGlobalScope('directory')
+            ->where('comment', 'Hizmet kalitesi çok iyiydi.')
+            ->firstOrFail();
+
+        // Kök neden: boş directory_id kaydı tenant kapsamında görünmez kılıp
+        // create sonrası akışı kırar; dizin doğru doldurulmuş olmalı.
+        $this->assertSame($this->directory->id, $review->directory_id);
+
+        // Kayıt aktif dizin kapsamında bulunabilir olmalı (edit sayfası 200 döner).
+        $this->get($this->url('/admin/company-reviews/'.$review->id.'/edit'))->assertOk();
     }
 
     public function test_other_directory_cannot_see_jobs_or_offerings(): void
