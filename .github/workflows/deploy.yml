@@ -31,3 +31,6 @@ jobs:
             PHP_BIN="$(command -v php)"
             printf '* * * * * www-data cd /var/www/firmarehberi && %s artisan schedule:run >> /dev/null 2>&1\n' "$PHP_BIN" > /etc/cron.d/firmarehberi-schedule
             chmod 0644 /etc/cron.d/firmarehberi-schedule
+            if crontab -l 2>/dev/null | grep -Fq 'cd /var/www/firmarehberi && /usr/bin/php artisan schedule:run'; then
+              crontab -l | grep -Fv 'cd /var/www/firmarehberi && /usr/bin/php artisan schedule:run' | crontab -
+            fi
