@@ -7,17 +7,18 @@ use App\Http\Controllers\Frontend\CompanyController;
 use App\Http\Controllers\Frontend\CompanyReviewController;
 use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\HomeController;
-use App\Http\Controllers\Frontend\ListingRequestController;
 use App\Http\Controllers\Frontend\JobPostingController;
-use App\Http\Controllers\Frontend\OwnerPanelController;
-use App\Http\Controllers\Frontend\OwnerOfferingController;
+use App\Http\Controllers\Frontend\ListingRequestController;
 use App\Http\Controllers\Frontend\OwnerJobController;
+use App\Http\Controllers\Frontend\OwnerOfferingController;
+use App\Http\Controllers\Frontend\OwnerPanelController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\PaketController;
 use App\Http\Controllers\Frontend\PwaController;
 use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\SitemapController;
 use App\Models\Campaign;
+use App\Models\ListingRequest;
 use App\Services\CampaignReportService;
 use Illuminate\Support\Facades\Route;
 
@@ -117,6 +118,26 @@ Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
 // Tenant switch
+Route::get('/admin/listing-requests/{listingRequest}/open', function (int $listingRequest) {
+    if (! auth()->check()) {
+        return redirect()->guest('/admin/login');
+    }
+
+    abort_unless(auth()->user()->is_admin, 403);
+
+    $request = ListingRequest::withoutGlobalScope('directory')->findOrFail($listingRequest);
+
+    if ($request->directory_id) {
+        session(['current_directory_id' => (int) $request->directory_id]);
+    } else {
+        session()->forget('current_directory_id');
+    }
+
+    session()->save();
+
+    return redirect()->route('filament.admin.resources.listing-requests.edit', ['record' => $request->id]);
+})->name('filament.admin.listing-requests.open')->middleware('web');
+
 Route::post('/admin/tenant/switch', function () {
     $validated = request()->validate([
         'directory_id' => ['nullable', 'integer', 'exists:directories,id'],

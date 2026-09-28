@@ -43,10 +43,10 @@ return [
         'contact' => env('OPENSTREETMAP_CONTACT_EMAIL', env('MAIL_FROM_ADDRESS')),
     ],
 
-    'admin' => [
-        // Yeni firma başvurularında bildirimin gideceği tek merkezi adres.
-        'email' => env('ADMIN_MAIL', env('MAIL_FROM_ADDRESS')),
-        'name' => env('ADMIN_MAIL_NAME', env('APP_NAME', 'Firma Rehberi')),
+    'telegram' => [
+        'bot_token' => env('TELEGRAM_BOT_TOKEN'),
+        'chat_id' => env('TELEGRAM_CHAT_ID'),
+        'admin_url' => env('TELEGRAM_ADMIN_URL', 'https://buldunmu.com.tr/admin'),
     ],
 
 ];

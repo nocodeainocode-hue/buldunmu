@@ -2,11 +2,10 @@
 
 namespace App\Observers;
 
-use App\Mail\NewCompanyApplicationMail;
 use App\Models\ListingRequest;
+use App\Services\TelegramCompanyApplicationNotifier;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Throwable;
 
 class ListingRequestObserver
@@ -22,21 +21,18 @@ class ListingRequestObserver
             return;
         }
 
-        $recipient = config('services.admin.email');
-        if (blank($recipient)) {
-            return;
-        }
-
         // Defer to after the surrounding transaction commits so a rolled-back
         // registration never produces a phantom notification. Delivery stays
         // synchronous (no queue worker required).
-        DB::afterCommit(function () use ($listing, $recipient) {
+        DB::afterCommit(function () use ($listing) {
             try {
-                Mail::to($recipient)->send(new NewCompanyApplicationMail($listing));
+                app(TelegramCompanyApplicationNotifier::class)->send($listing);
             } catch (Throwable $e) {
-                // A mail failure must never block the company application itself.
-                Log::warning('Yeni firma başvurusu bildirimi gönderilemedi: '.$e->getMessage(), [
+                // Never include the exception message: an HTTP error may contain
+                // the bot token in its URL.
+                Log::warning('Yeni firma başvurusu Telegram bildirimi gönderilemedi.', [
                     'listing_request_id' => $listing->id,
+                    'exception' => $e::class,
                 ]);
             }
         });
