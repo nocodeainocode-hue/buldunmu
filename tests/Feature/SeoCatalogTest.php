@@ -45,7 +45,7 @@ class SeoCatalogTest extends TestCase
             ->assertSee('noindex,follow,max-image-preview:large', false);
     }
 
-    public function test_thin_company_profiles_are_noindex_and_excluded_from_sitemap(): void
+    public function test_thin_but_active_company_profiles_are_indexed_and_included_in_sitemap(): void
     {
         $directory = Directory::create([
             'name' => 'Kalite Rehberi', 'slug' => 'kalite-rehberi', 'domain' => 'kalite.test', 'status' => 'active',
@@ -62,19 +62,26 @@ class SeoCatalogTest extends TestCase
             'description' => 'Tekirdağ merkezde ağız ve diş sağlığı alanında randevulu hizmet veren Hazır Profil, güncel iletişim kanalları ve hizmet bilgileriyle ziyaretçilerini bilgilendirir.',
             'status' => 'active',
         ]);
+        $pending = Company::create([
+            'name' => 'Bekleyen Profil', 'directory_id' => $directory->id, 'category_id' => $category->id,
+            'city_id' => $city->id, 'phone' => '02825554433', 'status' => 'pending',
+        ]);
         app()->instance('currentDirectory', $directory);
 
+        // Active profiles must index even when thin; only non-active stay noindex.
         $this->get('/firma/'.$thin->slug)
             ->assertOk()
-            ->assertSee('noindex,follow,max-image-preview:large', false);
+            ->assertSee('index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1', false);
         $this->get('/firma/'.$ready->slug)
             ->assertOk()
             ->assertSee('index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1', false);
 
         $this->get('/sitemap.xml')
             ->assertOk()
-            ->assertDontSee('/firma/'.$thin->slug, false)
+            ->assertSee('/firma/'.$thin->slug, false)
             ->assertSee('/firma/'.$ready->slug, false);
+
+        $this->assertFalse($pending->isSearchIndexable());
     }
 
     public function test_shorter_service_area_profile_can_be_indexed_without_street_address(): void

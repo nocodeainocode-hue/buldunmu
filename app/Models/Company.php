@@ -14,8 +14,6 @@ class Company extends Model
 {
     use BelongsToDirectory;
 
-    private const INDEXABLE_MIN_DESCRIPTION_LENGTH = 80;
-
     private bool $slugChangeAllowed = false;
 
     public function allowsSharedDirectoryRecords(): bool
@@ -235,30 +233,16 @@ class Company extends Model
     }
 
     /**
-     * Profiles that have enough first-party business information to be offered
-     * to search engines. Raw discovery imports remain public, but are kept out
-     * of sitemaps until someone has completed their essential details.
+     * Public profiles that should be offered to search engines.
+     *
+     * Policy: every active (admin-approved) profile is indexable. Thin or
+     * partially-filled records must still surface in Google — keeping them on
+     * `noindex` starved whole directories of organic traffic. Draft/pending
+     * records stay out of the index because they are not publicly listed yet.
      */
     public function scopeSearchIndexable(Builder $query): Builder
     {
-        $lengthFunction = $query->getConnection()->getDriverName() === 'mysql' ? 'CHAR_LENGTH' : 'LENGTH';
-
-        return $query
-            ->active()
-            ->whereNotNull('category_id')
-            ->whereNotNull('city_id')
-            ->where(function (Builder $contact): void {
-                $contact
-                    ->where(fn (Builder $q) => $q->whereNotNull('phone')->where('phone', '!=', ''))
-                    ->orWhere(fn (Builder $q) => $q->whereNotNull('whatsapp')->where('whatsapp', '!=', ''))
-                    ->orWhere(fn (Builder $q) => $q->whereNotNull('email')->where('email', '!=', ''))
-                    ->orWhere(fn (Builder $q) => $q->whereNotNull('website')->where('website', '!=', ''));
-            })
-            ->where(function (Builder $content) use ($lengthFunction): void {
-                $content
-                    ->whereRaw("{$lengthFunction}(TRIM(COALESCE(description, ''))) >= ?", [self::INDEXABLE_MIN_DESCRIPTION_LENGTH])
-                    ->orWhereRaw("{$lengthFunction}(TRIM(COALESCE(short_description, ''))) >= ?", [self::INDEXABLE_MIN_DESCRIPTION_LENGTH]);
-            });
+        return $query->active();
     }
 
     public function scopePremium($query)
