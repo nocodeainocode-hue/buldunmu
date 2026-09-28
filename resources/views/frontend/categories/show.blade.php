@@ -32,6 +32,10 @@
     @include('frontend.signal.category')
     @elseif($directory?->template === 'ilan-board')
         @include('frontend.ilan.category')
+@elseif($directory?->template === 'elegant')
+    @include('frontend.elegant.category')
+@elseif($directory?->template === 'mobile-app')
+    @include('frontend.mobileapp.category')
 @elseif(\App\View\Helpers\ThemeHelper::isPhoneShell($directory ?? null))
     @include('frontend.phone.category')
 @else

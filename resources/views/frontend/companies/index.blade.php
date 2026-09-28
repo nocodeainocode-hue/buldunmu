@@ -37,6 +37,10 @@
     @include('frontend.signal.companies')
 @elseif($directory?->template === 'ilan-board')
     @include('frontend.ilan.companies')
+@elseif($directory?->template === 'elegant')
+    @include('frontend.elegant.companies')
+@elseif($directory?->template === 'mobile-app')
+    @include('frontend.mobileapp.companies')
 @elseif(\App\View\Helpers\ThemeHelper::isPhoneShell($directory ?? null))
     @include('frontend.phone.companies')
 @else

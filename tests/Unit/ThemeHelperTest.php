@@ -89,7 +89,7 @@ class ThemeHelperTest extends TestCase
             'category-mega' => 'category-atlas',
             'map-first' => 'local-map-landing',
             'dashboard' => 'service-console',
-            'mobile-app' => 'pocket-directory',
+            'mobile-app' => 'mobile-app',
             'step-by-step' => 'quick-quote',
         ];
 
@@ -154,7 +154,7 @@ class ThemeHelperTest extends TestCase
 
     public function test_phone_shell_constant_lists_every_device_frame_theme(): void
     {
-        $expected = ['story-reels', 'pocket-stories', 'swipe-cards', 'pull-drawer', 'radar-scope', 'index-rally'];
+        $expected = ['story-reels', 'pocket-stories', 'swipe-cards', 'pull-drawer', 'radar-scope', 'index-rally', 'mobile-app'];
         $this->assertSame($expected, ThemeHelper::PHONE_SHELL);
 
         foreach ($expected as $template) {
@@ -245,8 +245,12 @@ class ThemeHelperTest extends TestCase
 
     public function test_template_class_includes_specialized_layout_class_for_aliases(): void
     {
-        $directory = new Directory(['template' => 'mobile-app']);
+        // mobile-app artik kendi layout'una sahip (alias degil) → tek sinif
+        $ownLayout = new Directory(['template' => 'mobile-app']);
+        $this->assertSame('theme-mobile-app', ThemeHelper::templateClass($ownLayout));
 
-        $this->assertSame('theme-mobile-app theme-pocket-directory', ThemeHelper::templateClass($directory));
+        // henuz alias olan bir tema iki sinif uretir (theme-{template} theme-{layout})
+        $alias = new Directory(['template' => 'magazine']);
+        $this->assertSame('theme-magazine theme-editorial', ThemeHelper::templateClass($alias));
     }
 }

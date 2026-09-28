@@ -15,6 +15,10 @@
     @include('frontend.signal.jobs')
 @elseif($directory?->template === 'ilan-board')
     @include('frontend.ilan.jobs')
+@elseif($directory?->template === 'elegant')
+    @include('frontend.elegant.jobs')
+@elseif($directory?->template === 'mobile-app')
+    @include('frontend.mobileapp.jobs')
 @elseif(\App\View\Helpers\ThemeHelper::isPhoneShell($directory ?? null))
     @include('frontend.phone.jobs')
 @else

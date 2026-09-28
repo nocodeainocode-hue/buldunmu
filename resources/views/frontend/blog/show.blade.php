@@ -20,6 +20,10 @@
     @include('frontend.signal.post')
 @elseif($directory?->template === 'ilan-board')
     @include('frontend.ilan.post')
+@elseif($directory?->template === 'elegant')
+    @include('frontend.elegant.post')
+@elseif($directory?->template === 'mobile-app')
+    @include('frontend.mobileapp.post')
 @elseif(\App\View\Helpers\ThemeHelper::isPhoneShell($directory ?? null))
     @include('frontend.phone.post')
 @else

@@ -21,6 +21,10 @@
     @include('frontend.signal.packages')
 @elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'ilan-board')
     @include('frontend.ilan.packages')
+@elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'elegant')
+    @include('frontend.elegant.packages')
+@elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'mobile-app')
+    @include('frontend.mobileapp.packages')
 @elseif(\App\View\Helpers\ThemeHelper::isPhoneShell(app()->bound('currentDirectory') ? app('currentDirectory') : null))
     @include('frontend.phone.packages')
 @else

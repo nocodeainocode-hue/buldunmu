@@ -57,7 +57,9 @@
             $cinematicSubpage = $activeLayout === 'cinematic-atlas' && !request()->routeIs('home', 'companies.show');
             $departureSubpage = $activeLayout === 'departure-board' && !request()->routeIs('home', 'companies.show');
             // Cep temaları: masaüstünde cihaz çerçevesi, her sayfada mobil düzen korunur
-            $phoneSubpage = in_array($activeLayout, \App\View\Helpers\ThemeHelper::PHONE_SHELL, true) && !request()->routeIs('home', 'companies.show');
+            $phoneSubpage = in_array($activeLayout, \App\View\Helpers\ThemeHelper::PHONE_SHELL, true) && $activeLayout !== 'mobile-app' && !request()->routeIs('home', 'companies.show');
+            // Mobil Uygulama: kendi .ap cihaz kabuğu (home/detay hariç iç sayfalar çerçeveye sarılır)
+            $appSubpage = $activeLayout === 'mobile-app' && !request()->routeIs('home', 'companies.show');
         @endphp
         @if(in_array($activeLayout, $mobileShellLayouts))
         html.theme-{{ $directory->template }} body > header,
@@ -85,7 +87,12 @@
     @if($activeLayout === 'ilan-board')
         @include('partials.ilan.styles')
     @endif
-    @if(in_array($activeLayout, \App\View\Helpers\ThemeHelper::PHONE_SHELL, true))
+    @if($activeLayout === 'elegant')
+        @include('partials.elegant.styles')
+    @endif
+    @if($activeLayout === 'mobile-app')
+        @include('partials.appshell.styles')
+    @elseif(in_array($activeLayout, \App\View\Helpers\ThemeHelper::PHONE_SHELL, true))
         @include('partials.phone.styles')
     @endif
 
@@ -263,6 +270,10 @@
             @include('partials.departures.header')
             <div class="dep-shell-content">@yield('content')</div>
             @include('partials.departures.footer')
+        @elseif($appSubpage)
+            @include('partials.appshell.device-start')
+            <div class="ap-shell-content">@yield('content')</div>
+            @include('partials.appshell.device-end')
         @elseif($phoneSubpage)
             <div class="ph ph-wrap">
                 <div class="ph-device">

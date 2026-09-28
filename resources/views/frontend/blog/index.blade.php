@@ -29,6 +29,10 @@
     @include('frontend.signal.blog')
     @elseif($directory?->template === 'ilan-board')
         @include('frontend.ilan.blog')
+@elseif($directory?->template === 'elegant')
+    @include('frontend.elegant.blog')
+@elseif($directory?->template === 'mobile-app')
+    @include('frontend.mobileapp.blog')
 @elseif(\App\View\Helpers\ThemeHelper::isPhoneShell($directory ?? null))
     @include('frontend.phone.blog')
 @else
