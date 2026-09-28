@@ -50,28 +50,22 @@ class CampaignForm
                                 TextInput::make('total_directories')
                                     ->label('Toplam Rehber')
                                     ->numeric()
+                                    ->minValue(1)
                                     ->default(100)
                                     ->required(),
                                 TextInput::make('daily_limit')
                                     ->label('Günlük Yayın')
                                     ->numeric()
+                                    ->minValue(1)
                                     ->default(5)
                                     ->helperText('Günde kaç rehberde yayınlansın')
                                     ->required(),
                                 DateTimePicker::make('start_date')
                                     ->label('Başlangıç')
+                                    ->timezone('Europe/Istanbul')
+                                    ->helperText('Yayınları planladığınızda ilk yayın bu tarihte başlar (Türkiye saati).')
                                     ->default(now()->addDay()),
                             ]),
-                        Select::make('status')
-                            ->label('Durum')
-                            ->options([
-                                'draft' => 'Taslak',
-                                'active' => 'Aktif',
-                                'completed' => 'Tamamlandı',
-                                'cancelled' => 'İptal',
-                            ])
-                            ->default('draft')
-                            ->required(),
                     ]),
             ]);
     }

@@ -28,3 +28,6 @@ jobs:
             chown -R www-data:www-data storage bootstrap/cache
             chmod -R 775 storage bootstrap/cache
             rm -rf storage/framework/views/*
+            PHP_BIN="$(command -v php)"
+            printf '* * * * * www-data cd /var/www/firmarehberi && %s artisan schedule:run >> /dev/null 2>&1\n' "$PHP_BIN" > /etc/cron.d/firmarehberi-schedule
+            chmod 0644 /etc/cron.d/firmarehberi-schedule

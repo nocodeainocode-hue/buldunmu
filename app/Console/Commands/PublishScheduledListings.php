@@ -16,16 +16,19 @@ class PublishScheduledListings extends Command
 {
     protected $signature = 'listings:publish-daily';
 
-    protected $description = 'Publish scheduled campaign items for today';
+    protected $description = 'Publish due campaign items within the daily limit';
 
     public function handle(): void
     {
         $activeCampaigns = Campaign::where('status', 'active')->get();
 
         foreach ($activeCampaigns as $campaign) {
-            $limit = $campaign->daily_limit;
+            $limit = max(1, $campaign->daily_limit);
+            $dayStart = now('Europe/Istanbul')->startOfDay()->utc();
+            $nextDayStart = now('Europe/Istanbul')->addDay()->startOfDay()->utc();
             $publishedToday = CampaignItem::where('campaign_id', $campaign->id)
-                ->whereDate('published_at', today())
+                ->where('published_at', '>=', $dayStart)
+                ->where('published_at', '<', $nextDayStart)
                 ->count();
 
             $remaining = $limit - $publishedToday;
@@ -133,7 +136,7 @@ class PublishScheduledListings extends Command
             $totalItems = CampaignItem::where('campaign_id', $campaign->id)->count();
             $publishedItems = CampaignItem::where('campaign_id', $campaign->id)->where('status', 'published')->count();
 
-            if ($publishedItems >= $totalItems) {
+            if ($totalItems > 0 && $publishedItems >= $totalItems) {
                 $campaign->update(['status' => 'completed']);
                 $this->info("Campaign #{$campaign->id} completed!");
             }

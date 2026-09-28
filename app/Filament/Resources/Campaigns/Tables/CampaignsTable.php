@@ -54,11 +54,11 @@ class CampaignsTable
                         default => 'gray',
                     }),
                 TextColumn::make('items_count')
-                    ->label('Yayın')
+                    ->label('Planlanan')
                     ->counts('items'),
                 TextColumn::make('start_date')
                     ->label('Başlangıç')
-                    ->dateTime('d.m.Y')
+                    ->dateTime('d.m.Y H:i', timezone: 'Europe/Istanbul')
                     ->sortable(),
             ])
             ->defaultSort('created_at', 'desc')
@@ -74,7 +74,7 @@ class CampaignsTable
             ])
             ->recordActions([
                 Action::make('generate_items')
-                    ->label('100 Rehbere Yayın Oluştur')
+                    ->label('Yayınları Planla')
                     ->icon('heroicon-o-rocket-launch')
                     ->color('success')
                     ->requiresConfirmation()
@@ -93,13 +93,40 @@ class CampaignsTable
                             return;
                         }
 
+                        if ($result['created'] === 0) {
+                            Notification::make()
+                                ->title('Hedef rehber bulunamadı')
+                                ->body('Kaynak rehber dışında aktif hedef rehber olmadığından kampanya taslak olarak kaldı.')
+                                ->warning()
+                                ->send();
+
+                            return;
+                        }
+
                         Notification::make()
                             ->title('Yayınlar oluşturuldu!')
                             ->success()
                             ->body("{$result['created']} yayın {$result['total']} hedef rehbere planlandı. Kaynak rehber hariç tutuldu; her gün {$result['daily_limit']} yayın yapılacak.")
                             ->send();
                     })
-                    ->visible(fn ($record) => $record->status === 'draft'),
+                    ->visible(fn ($record) => $record->status !== 'cancelled' && ! $record->items()->exists()),
+
+                Action::make('cancel')
+                    ->label('İptal Et')
+                    ->icon('heroicon-o-pause')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->action(fn ($record) => $record->update(['status' => 'cancelled']))
+                    ->visible(fn ($record) => in_array($record->status, ['draft', 'active'], true)),
+
+                Action::make('resume')
+                    ->label('Devam Et')
+                    ->icon('heroicon-o-play')
+                    ->color('success')
+                    ->action(fn ($record) => $record->update([
+                        'status' => $record->items()->exists() ? 'active' : 'draft',
+                    ]))
+                    ->visible(fn ($record) => $record->status === 'cancelled'),
 
                 Action::make('export_csv')
                     ->label('CSV Rapor')

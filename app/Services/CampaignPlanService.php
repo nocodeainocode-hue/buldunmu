@@ -21,10 +21,12 @@ class CampaignPlanService
                 ->with('company')
                 ->findOrFail($campaign->id);
 
-            if ($campaign->status !== 'draft') {
+            $existingItems = $campaign->items()->count();
+
+            if ($existingItems > 0 || $campaign->status === 'cancelled') {
                 return [
                     'created' => 0,
-                    'total' => $campaign->items()->count(),
+                    'total' => $existingItems,
                     'daily_limit' => $campaign->daily_limit,
                     'already_generated' => true,
                 ];
@@ -40,6 +42,9 @@ class CampaignPlanService
             $created = 0;
             $company = $campaign->company;
             $dailyLimit = max(1, $campaign->daily_limit);
+            $firstPublicationAt = $campaign->start_date?->isFuture()
+                ? $campaign->start_date->copy()
+                : now();
 
             foreach ($directories as $index => $directory) {
                 $day = intdiv($index, $dailyLimit);
@@ -56,7 +61,7 @@ class CampaignPlanService
                         'description' => $company->short_description ?? $company->name.' - '.$directory->name,
                         'anchor_text' => $anchor['anchor_text'],
                         'link_type' => $anchor['link_type'],
-                        'scheduled_for' => now()->addDays($day),
+                        'scheduled_for' => $firstPublicationAt->copy()->addDays($day),
                         'status' => 'scheduled',
                     ],
                 );
@@ -66,10 +71,14 @@ class CampaignPlanService
                 }
             }
 
-            $campaign->update([
-                'status' => $directories->isEmpty() ? 'completed' : 'active',
-                'start_date' => now(),
-            ]);
+            if ($created > 0) {
+                $campaign->update([
+                    'status' => 'active',
+                    'start_date' => $campaign->start_date ?? $firstPublicationAt,
+                ]);
+            } elseif ($existingItems === 0) {
+                $campaign->update(['status' => 'draft']);
+            }
 
             return [
                 'created' => $created,
