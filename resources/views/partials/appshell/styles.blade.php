@@ -70,6 +70,17 @@
     .ap-scroll::-webkit-scrollbar { width: 5px; }
     .ap-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 999px; }
 
+    /* ── Yardımcıda sayfalar (giriş / kayıt / firma ekle) cihazda tek sütun ── */
+    /* Bu sayfalar masaüstü Tailwind düzenlerini kullanır; izleyici genişken
+       sm:/lg: kırılımları tetiklenir ve çok sütunlu form 430px çerçeveye sığmaz,
+       üst üste biner. Cihaz içinde tek sütuna indirgenir. (ap-* sınıflarını etkilemez) */
+    .ap-shell-content { padding: 2px 0 8px; }
+    .ap-shell-content [class*="max-w-"] { max-width: 100% !important; }
+    .ap-shell-content .grid { grid-template-columns: 1fr !important; }
+    .ap-shell-content [class*="sticky"] { position: static !important; top: auto !important; }
+    .ap-shell-content .text-4xl { font-size: 28px !important; }
+    .ap-shell-content .text-3xl { font-size: 24px !important; }
+
     /* ── Bölüm başlığı ───────────────────────────────────────────────── */
     .ap-sec { padding: 16px 16px 6px; }
     .ap-sec__head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
