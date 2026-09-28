@@ -10,6 +10,7 @@ use BackedEnum;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\FileUpload;
+use App\Support\UploadFileName;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -57,7 +58,7 @@ class CompanyOfferingResource extends Resource
                 TextInput::make('price')->label('Fiyat (TL)')->numeric()->minValue(0),
                 TextInput::make('sort_order')->label('Sıralama')->numeric()->default(0)->minValue(0),
             ]),
-            FileUpload::make('image_path')->label('Görsel')->image()->disk('public')->directory('company-offerings')->maxSize(4096),
+            FileUpload::make('image_path')->label('Görsel')->image()->disk('public')->directory('company-offerings')->maxSize(4096)->getUploadedFileNameForStorageUsing(fn ($file) => UploadFileName::seoFriendly($file->getClientOriginalName())),
             Select::make('status')->label('Durum')->options(['active' => 'Yayında', 'draft' => 'Taslak'])->default('active')->required(),
         ]);
     }

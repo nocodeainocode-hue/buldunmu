@@ -9,6 +9,7 @@ use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\DateTimePicker;
+use App\Support\UploadFileName;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -106,7 +107,7 @@ class PostForm
                         ]),
                         Textarea::make('excerpt')->label('Ozet')->rows(2)->columnSpanFull(),
                         RichEditor::make('content')->label('Icerik')->required()->columnSpanFull(),
-                        FileUpload::make('image')->label('Gorsel')->image()->disk('public')->directory('posts'),
+                        FileUpload::make('image')->label('Gorsel')->image()->disk('public')->directory('posts')->getUploadedFileNameForStorageUsing(fn ($file) => UploadFileName::seoFriendly($file->getClientOriginalName())),
                     ]),
                 Section::make('Editoryal Güven')
                     ->collapsible()

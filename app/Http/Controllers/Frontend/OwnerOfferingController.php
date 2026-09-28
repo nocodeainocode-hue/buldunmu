@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Frontend\Concerns\AuthorizesOwnedCompany;
 use App\Models\Company;
 use App\Models\CompanyOffering;
+use App\Support\UploadFileName;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -46,7 +47,7 @@ class OwnerOfferingController extends Controller
         $data['directory_id'] = $company->directory_id;
 
         if ($request->hasFile('image')) {
-            $data['image_path'] = $request->file('image')->store('company-offerings/'.$company->id, 'public');
+            $data['image_path'] = $request->file('image')->storeAs('company-offerings/'.$company->id, UploadFileName::seoFriendly($request->file('image')->getClientOriginalName()), 'public');
         }
 
         $company->offerings()->create($data);
@@ -63,7 +64,7 @@ class OwnerOfferingController extends Controller
         $data['sort_order'] ??= 0;
 
         if ($request->hasFile('image')) {
-            $newPath = $request->file('image')->store('company-offerings/'.$company->id, 'public');
+            $newPath = $request->file('image')->storeAs('company-offerings/'.$company->id, UploadFileName::seoFriendly($request->file('image')->getClientOriginalName()), 'public');
             $data['image_path'] = $newPath;
         }
 

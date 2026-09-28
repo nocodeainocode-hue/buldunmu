@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Companies\Schemas;
 
+use App\Support\UploadFileName;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
@@ -172,7 +173,8 @@ class CompanyForm
                                                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                                                     ->imageResizeMode('cover')
                                                     ->imageResizeTargetWidth('300')
-                                                    ->imageResizeTargetHeight('300'),
+                                                    ->imageResizeTargetHeight('300')
+                                                    ->getUploadedFileNameForStorageUsing(fn ($file) => UploadFileName::seoFriendly($file->getClientOriginalName())),
                                                 FileUpload::make('cover_image')
                                                     ->label('Kapak Görseli')
                                                     ->image()
@@ -182,7 +184,8 @@ class CompanyForm
                                                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                                                     ->imageResizeMode('cover')
                                                     ->imageResizeTargetWidth('1200')
-                                                    ->imageResizeTargetHeight('400'),
+                                                    ->imageResizeTargetHeight('400')
+                                                    ->getUploadedFileNameForStorageUsing(fn ($file) => UploadFileName::seoFriendly($file->getClientOriginalName())),
                                             ]),
                                     ]),
                                 Section::make('Fotoğraf Galerisi')
@@ -203,6 +206,7 @@ class CompanyForm
                                                     ->imageResizeTargetWidth('1200')
                                                     ->imageResizeTargetHeight('900')
                                                     ->imagePreviewHeight('200')
+                                                    ->getUploadedFileNameForStorageUsing(fn ($file) => UploadFileName::seoFriendly($file->getClientOriginalName()))
                                                     ->required(),
                                                 TextInput::make('alt_text')
                                                     ->label('Alternatif Metin (SEO)')
