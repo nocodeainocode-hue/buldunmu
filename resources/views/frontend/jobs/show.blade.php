@@ -13,6 +13,8 @@
     @include('frontend.departures.job')
 @elseif($directory?->template === 'signal-station')
     @include('frontend.signal.job')
+@elseif($directory?->template === 'ilan-board')
+    @include('frontend.ilan.job')
 @elseif(\App\View\Helpers\ThemeHelper::isPhoneShell($directory ?? null))
     @include('frontend.phone.job')
 @else

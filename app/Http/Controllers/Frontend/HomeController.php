@@ -54,7 +54,7 @@ class HomeController extends Controller
             ->get();
 
         $layout = ThemeHelper::layoutFile($directory);
-        $featuredOfferings = in_array($layout, ['classifieds-board', 'acid-poster', 'cinematic-atlas', 'departure-board', 'pull-drawer', 'radar-scope', 'index-rally', 'story-reels', 'pocket-stories', 'swipe-cards'], true)
+        $featuredOfferings = in_array($layout, ['classifieds-board', 'acid-poster', 'cinematic-atlas', 'departure-board', 'ilan-board', 'pull-drawer', 'radar-scope', 'index-rally', 'story-reels', 'pocket-stories', 'swipe-cards'], true)
             ? CompanyOffering::active()
                 ->with('company')
                 ->whereHas('company', fn ($query) => $query->active()->premium())

@@ -373,6 +373,66 @@ class NewDirectoryThemesTest extends TestCase
         }
     }
 
+    public function test_ilan_board_has_its_own_inner_pages_and_keeps_business_features(): void
+    {
+        $host = parse_url(config('app.url'), PHP_URL_HOST) ?: 'localhost';
+        $directory = Directory::create([
+            'name' => 'Borsa Testi', 'slug' => 'borsa-testi', 'domain' => $host,
+            'status' => 'active', 'template' => 'ilan-board',
+        ]);
+        $city = City::create(['name' => 'İzmir', 'slug' => 'izmir']);
+        $category = Category::create(['name' => 'Mobilya', 'slug' => 'mobilya', 'status' => 'active']);
+        $company = Company::create([
+            'name' => 'Özgün Atölye', 'category_id' => $category->id, 'city_id' => $city->id,
+            'directory_id' => $directory->id, 'status' => 'active', 'is_premium' => true, 'is_verified' => true,
+            'phone' => '0232 111 22 33', 'description' => str_repeat('Özgün mobilya ve tasarım hizmeti sunuyoruz. ', 3),
+        ]);
+        CompanyOffering::create([
+            'company_id' => $company->id, 'directory_id' => $directory->id,
+            'type' => 'product', 'name' => 'Ahşap Masa', 'status' => 'active',
+        ]);
+        $job = JobPosting::create([
+            'company_id' => $company->id, 'directory_id' => $directory->id,
+            'title' => 'Mobilya Ustası', 'description' => 'Ekibimize çalışma arkadaşı arıyoruz.',
+            'employment_type' => 'full_time', 'status' => 'published',
+            'published_at' => now(), 'admin_published' => true,
+        ]);
+        $post = Post::create([
+            'title' => 'Mobilya Seçme Rehberi', 'slug' => 'mobilya-secme-rehberi',
+            'content' => '<p>Ahşap mobilya seçerken malzemeye dikkat edin.</p>',
+            'status' => 'published', 'published_at' => now(), 'directory_id' => $directory->id,
+        ]);
+        $post->directories()->attach($directory->id);
+
+        // Ana sayfa + firma detayı (ortak td-* parçaları ilan temasına bağlanır)
+        $this->get('/')->assertOk()->assertSee('theme-ilan-board', false)
+            ->assertSee('Özgün Atölye')->assertSee(route('search'), false);
+
+        $this->get('/firma/'.$company->slug)->assertOk()->assertSee('ib-detail', false)
+            ->assertSee('ib-detail__head', false)->assertSee('Kayıt ', false)
+            ->assertSee('Ahşap Masa')->assertSee('id="yorumlar"', false)
+            ->assertSee(route('companies.reviews.store', $company->slug), false);
+
+        foreach ([
+            // [imza, ham mı (class/URL) yoksa kaçırılmış metin mi]
+            '/firmalar' => ['ib-filters', false],
+            '/ara?q=Özgün' => ['ib-items', false],
+            '/kategori/mobilya' => ['ib-catnav', false],
+            '/sehir/izmir' => ['ib-filters', false],
+            '/is-ilanlari' => ['Personel', false],
+            '/is-ilanlari/'.$job->slug => ['Görev tanımı', false],
+            '/blog' => ['ib-items', false],
+            '/blog/'.$post->slug => ['ib-prose', false],
+            '/iletisim' => ['ib-form', false],
+            '/hakkimizda' => ['ib-prose', false],
+            '/gizlilik-politikasi' => ['ib-box', false],
+            '/kullanim-sartlari' => ['ib-prose', false],
+            '/paketler' => ['ib-plan', false],
+        ] as $url => [$expected, $escaped]) {
+            $this->get($url)->assertOk()->assertSee('ib-band', false)->assertSee($expected, $escaped);
+        }
+    }
+
     public function test_three_new_homepages_render_search_and_company_links(): void
     {
         $host = parse_url(config('app.url'), PHP_URL_HOST) ?: 'localhost';

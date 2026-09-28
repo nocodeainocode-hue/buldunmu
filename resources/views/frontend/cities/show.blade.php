@@ -30,6 +30,8 @@
     @include('frontend.departures.city')
 @elseif($directory?->template === 'signal-station')
     @include('frontend.signal.city')
+@elseif($directory?->template === 'ilan-board')
+    @include('frontend.ilan.city')
 @elseif(\App\View\Helpers\ThemeHelper::isPhoneShell($directory ?? null))
     @include('frontend.phone.city')
 @else

@@ -83,6 +83,8 @@
     @include('frontend.companies.themes.departure-board')
 @elseif($directory?->template === 'signal-station')
     @include('frontend.companies.themes.signal-station')
+@elseif($directory?->template === 'ilan-board')
+    @include('frontend.companies.themes.ilan-board')
 @elseif($directory?->template === 'story-reels')
     @include('frontend.companies.themes.story-reels')
 @elseif($directory?->template === 'pocket-stories')

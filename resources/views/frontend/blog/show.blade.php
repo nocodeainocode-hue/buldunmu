@@ -18,6 +18,8 @@
     @include('frontend.departures.post')
 @elseif($directory?->template === 'signal-station')
     @include('frontend.signal.post')
+@elseif($directory?->template === 'ilan-board')
+    @include('frontend.ilan.post')
 @elseif(\App\View\Helpers\ThemeHelper::isPhoneShell($directory ?? null))
     @include('frontend.phone.post')
 @else

@@ -82,6 +82,9 @@
     @if($activeLayout === 'signal-station')
         @include('partials.signal.styles')
     @endif
+    @if($activeLayout === 'ilan-board')
+        @include('partials.ilan.styles')
+    @endif
     @if(in_array($activeLayout, \App\View\Helpers\ThemeHelper::PHONE_SHELL, true))
         @include('partials.phone.styles')
     @endif
@@ -275,7 +278,7 @@
             @include('partials.mobile-shell')
         @else
             @yield('content')
-            @if(request()->routeIs('home') && !in_array($activeLayout, [...$mobileShellLayouts, ...\App\View\Helpers\ThemeHelper::PHONE_SHELL, 'classifieds-board', 'acid-poster', 'cinematic-atlas', 'departure-board']) && isset($homeJobs) && $homeJobs->isNotEmpty())
+            @if(request()->routeIs('home') && !in_array($activeLayout, [...$mobileShellLayouts, ...\App\View\Helpers\ThemeHelper::PHONE_SHELL, 'classifieds-board', 'acid-poster', 'cinematic-atlas', 'departure-board', 'signal-station', 'ilan-board']) && isset($homeJobs) && $homeJobs->isNotEmpty())
                 @include('partials.home-jobs')
             @endif
         @endif
