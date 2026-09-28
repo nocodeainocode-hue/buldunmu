@@ -178,8 +178,8 @@
     .ap-tab { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 2px; border-radius: 12px; font-size: 10px; font-weight: 600; color: var(--text_muted); text-decoration: none; }
     .ap-tab__ico { font-size: 19px; line-height: 1; }
     .ap-tab.is-active { color: var(--primary); }
-    .ap-tab--cta { color: var(--btn_text, #fff); }
-    .ap-tab--cta .ap-tab__ico { display: grid; place-items: center; width: 38px; height: 38px; margin-top: -14px; border-radius: 50%; background: var(--primary); font-size: 22px; box-shadow: 0 6px 16px rgba(79,70,229,.4); }
+    .ap-tab--cta { color: var(--primary); }
+    .ap-tab--cta .ap-tab__ico { display: grid; place-items: center; width: 38px; height: 38px; margin-top: -14px; border-radius: 50%; background: var(--primary); color: var(--btn_text, #fff); font-size: 22px; box-shadow: 0 6px 16px rgba(67,56,202,.4); }
 
     /* ── Detay ───────────────────────────────────────────────────────── */
     .ap-detail__cover { position: relative; aspect-ratio: 4/3; background: var(--primary_light); overflow: hidden; }

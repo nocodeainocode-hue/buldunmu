@@ -1,14 +1,22 @@
 {{-- Elegant Premium · lüks editöryal tasarım sistemi (.el) --}}
 <style>
     /* ── Kabuk ───────────────────────────────────────────────────────── */
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&display=swap');
+
+    /* Üst menü (global header) · Elegant için iri, okunur ve markaya bağlı */
+    html.theme-elegant header { font-family: var(--font_body, Jost, sans-serif); }
+    html.theme-elegant header nav > a,
+    html.theme-elegant header nav .group > button { font-size: 16px; font-weight: 500; letter-spacing: .01em; }
+    html.theme-elegant header .text-xl { font-family: var(--font_heading, 'Cormorant Garamond', serif); font-weight: 600; font-size: 26px; }
+
     .el {
         color: var(--text);
         background: var(--bg);
         font-family: var(--font_body, Jost, sans-serif);
-        font-size: 15px;
-        line-height: 1.65;
-        font-weight: 300;
-        letter-spacing: .01em;
+        font-size: 16px;
+        line-height: 1.7;
+        font-weight: 400;
+        letter-spacing: .006em;
     }
     .el * { box-sizing: border-box; }
     .el a { color: inherit; }
@@ -16,7 +24,7 @@
     .el p { margin: 0; }
     .el-wrap { width: min(100% - 40px, var(--page_width, 1120px)); margin-inline: auto; }
     .el-page { padding-block: 40px 72px; }
-    .el-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font_body, Jost, sans-serif); font-size: 11px; font-weight: 500; letter-spacing: .34em; text-transform: uppercase; color: var(--accent); }
+    .el-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font_body, Jost, sans-serif); font-size: 12.5px; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; color: var(--accent); }
     .el-eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--accent); display: inline-block; }
     .el-hair { height: 1px; background: var(--border); border: 0; margin: 0; }
 
@@ -35,7 +43,7 @@
     .el-band h1 small { display: block; margin-top: 14px; font-family: var(--font_body, Jost, sans-serif); font-size: 12px; font-weight: 400; letter-spacing: .28em; text-transform: uppercase; color: var(--text_muted); }
     .el-band .el-eyebrow { margin-bottom: 18px; }
     .el-band__desc { margin-top: 18px; max-width: 62ch; font-size: 16px; color: var(--text_muted); font-weight: 300; line-height: 1.7; }
-    .el-crumb { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--text_muted); }
+    .el-crumb { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--text_muted); }
     .el-crumb a { text-decoration: none; color: var(--text_muted); }
     .el-crumb a:hover { color: var(--accent); }
     .el-crumb .el-crumb__sep { opacity: .5; }
@@ -55,7 +63,7 @@
 
     /* ── Filtre şeridi ───────────────────────────────────────────────── */
     .el-filters { display: flex; flex-wrap: wrap; align-items: end; gap: 14px; padding: 20px 22px; margin-bottom: 28px; border: 1px solid var(--border); border-radius: 2px; background: var(--bg_card); }
-    .el-filters label { display: flex; flex-direction: column; gap: 6px; font-size: 10.5px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--text_muted); }
+    .el-filters label { display: flex; flex-direction: column; gap: 6px; font-size: 11.5px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--text_muted); }
     .el-filters :is(input,select) { min-width: 190px; padding: 11px 13px; border: 1px solid var(--border); border-radius: 1px; background: var(--bg); color: var(--text); font: inherit; font-size: 14px; }
     .el-filters :is(input,select):focus { outline: none; border-color: var(--accent); }
     .el-filters a { font-size: 12.5px; letter-spacing: .06em; color: var(--primary); text-decoration: none; padding-bottom: 12px; border-bottom: 1px solid transparent; }

@@ -28,7 +28,7 @@
         <p style="margin-top:8px;font-size:13.5px;color:var(--text_muted);line-height:1.6">{{ $company->short_description ?: $company->name . ' işletmesinin hizmetleri, iletişim ve konum bilgileri.' }}</p>
         <div class="ap-actions">
             @if($company->phone)<a class="ap-btn" href="tel:{{ $phoneClean }}">Ara</a>@endif
-            @if($company->whatsapp)<a class="ap-btn" style="background:var(--secondary);border-color:var(--secondary)" href="https://wa.me/{{ $whatsappClean }}" target="_blank" rel="noopener noreferrer">WhatsApp</a>@endif
+            @if($company->whatsapp)<a class="ap-btn" style="background:#1faa54;border-color:#1faa54" href="https://wa.me/{{ $whatsappClean }}" target="_blank" rel="noopener noreferrer">WhatsApp</a>@endif
             @if($company->website)<a class="ap-btn ap-btn--ghost" href="{{ $company->website }}" target="_blank" rel="noopener noreferrer">Site ↗</a>@endif
         </div>
     </div>
