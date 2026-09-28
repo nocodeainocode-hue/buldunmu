@@ -1,0 +1,30 @@
+name: Campaign Scheduler Audit
+
+on:
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read server scheduler status
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script: |
+            cd /var/www/firmarehberi
+            printf 'server_utc='; date -u +'%Y-%m-%dT%H:%M:%SZ'
+            printf 'app_schedule:\n'; php artisan schedule:list
+            printf 'cron_service='; systemctl is-active cron 2>/dev/null || true
+            printf 'crond_service='; systemctl is-active crond 2>/dev/null || true
+            for user in root www-data; do
+              printf '%s_schedule_entries:\n' "$user"
+              crontab -u "$user" -l 2>/dev/null | grep -E 'artisan (schedule:run|listings:publish-daily)' || true
+            done
+            printf 'system_schedule_entries:\n'
+            grep -R -E 'artisan (schedule:run|listings:publish-daily)' /etc/crontab /etc/cron.d 2>/dev/null || true
+            printf 'campaign_counts:\n'
+            php artisan tinker --execute='echo json_encode(["campaigns" => \App\Models\Campaign::selectRaw("status, count(*) as total")->groupBy("status")->pluck("total", "status")->toArray(), "items" => \App\Models\CampaignItem::selectRaw("status, count(*) as total")->groupBy("status")->pluck("total", "status")->toArray(), "due" => \App\Models\CampaignItem::where("status", "scheduled")->where("scheduled_for", "<=", now())->count()], JSON_THROW_ON_ERROR);'
