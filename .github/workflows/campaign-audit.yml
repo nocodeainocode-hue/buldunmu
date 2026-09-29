@@ -28,5 +28,9 @@ jobs:
             grep -R -E 'artisan (schedule:run|listings:publish-daily)' /etc/crontab /etc/cron.d 2>/dev/null || true
             printf 'www_data_scheduler_probe:\n'
             runuser -u www-data -- php artisan schedule:run
+            printf 'www_data_publisher_probe:\n'
+            runuser -u www-data -- php artisan listings:publish-daily
+            printf 'recent_cron_executions:\n'
+            journalctl -u cron --since '-10 minutes' --no-pager 2>/dev/null | grep -F '/var/www/firmarehberi' | tail -5 || true
             printf 'campaign_counts:\n'
             php artisan tinker --execute='echo json_encode(["campaigns" => \App\Models\Campaign::selectRaw("status, count(*) as total")->groupBy("status")->pluck("total", "status")->toArray(), "items" => \App\Models\CampaignItem::selectRaw("status, count(*) as total")->groupBy("status")->pluck("total", "status")->toArray(), "due" => \App\Models\CampaignItem::where("status", "scheduled")->where("scheduled_for", "<=", now())->count()], JSON_THROW_ON_ERROR);'
