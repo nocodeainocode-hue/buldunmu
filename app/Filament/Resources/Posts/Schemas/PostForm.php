@@ -87,6 +87,7 @@ class PostForm
                                     'local' => 'Yerel Hizmet Arama',
                                     'transactional' => 'Firma ile İletişim',
                                 ])
+                                ->default('informational')
                                 ->required(),
                         ]),
                         TextInput::make('primary_query')
@@ -139,7 +140,7 @@ class PostForm
                     ]),
                 Section::make('Yayin')->schema([
                     Grid::make(2)->schema([
-                        Select::make('status')->label('Durum')->options(['draft'=>'Taslak','published'=>'Yayinda'])->default('draft'),
+                        Select::make('status')->label('Durum')->options(['draft'=>'Taslak','published'=>'Yayında'])->default('published')->required(),
                         DateTimePicker::make('published_at')->label('Yayin Tarihi')->default(now()),
                     ]),
                     Toggle::make('is_indexable')

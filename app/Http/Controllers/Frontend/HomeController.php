@@ -10,6 +10,7 @@ use App\Models\CompanyOffering;
 use App\Models\JobPosting;
 use App\Models\Post;
 use App\Models\SiteSetting;
+use App\Support\AtlasData;
 use App\View\Helpers\ThemeHelper;
 use Illuminate\Http\Request;
 
@@ -64,10 +65,10 @@ class HomeController extends Controller
             : collect();
         $viewName = 'frontend.home.' . (view()->exists('frontend.home.' . $layout) ? $layout : 'default');
 
-        return view($viewName, compact(
+        return view($viewName, array_merge(compact(
             'settings', 'categories', 'cities', 'premiumCompanies', 'latestCompanies', 'openCompanies', 'trustedCompanies',
             'mapCompanies', 'posts', 'directory', 'homeJobs', 'featuredOfferings'
-        ));
+        ), $layout === 'turkey-atlas' ? AtlasData::forCurrentDirectory() : []));
     }
 
     private function navigationCities($directory)

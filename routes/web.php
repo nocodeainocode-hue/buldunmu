@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Frontend\BlogController;
+use App\Http\Controllers\Frontend\AtlasController;
 use App\Http\Controllers\Frontend\CategoryController;
 use App\Http\Controllers\Frontend\CityController;
 use App\Http\Controllers\Frontend\CompanyController;
@@ -24,6 +25,7 @@ use Illuminate\Support\Facades\Route;
 
 // Ana sayfa
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/harita/firmalar', [AtlasController::class, 'companies'])->name('atlas.companies');
 
 // Firma listeleme
 Route::get('/firmalar', [CompanyController::class, 'index'])->name('companies.index');
