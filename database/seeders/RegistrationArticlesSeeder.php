@@ -11,7 +11,12 @@ class RegistrationArticlesSeeder extends Seeder
 {
     public function run(): void
     {
-        foreach (require database_path('content/registration_articles.php') as $domain => $article) {
+        $articles = array_merge(
+            require database_path('content/registration_articles.php'),
+            require database_path('content/registration_articles_more.php'),
+        );
+
+        foreach ($articles as $domain => $article) {
             $directory = Directory::where('domain', $domain)->first();
 
             if (! $directory) {

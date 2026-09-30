@@ -14,7 +14,14 @@ class RegistrationArticlesTest extends TestCase
 
     public function test_each_article_is_published_only_on_its_directory_and_seeding_is_repeatable(): void
     {
-        $articles = require database_path('content/registration_articles.php');
+        $articles = array_merge(
+            require database_path('content/registration_articles.php'),
+            require database_path('content/registration_articles_more.php'),
+        );
+
+        $this->assertCount(20, $articles);
+        $this->assertCount(20, array_unique(array_column($articles, 'slug')));
+        $this->assertCount(20, array_unique(array_column($articles, 'primary_query')));
 
         foreach ($articles as $domain => $article) {
             Directory::create([
@@ -26,7 +33,7 @@ class RegistrationArticlesTest extends TestCase
         }
 
         $this->seed(RegistrationArticlesSeeder::class);
-        $this->assertSame(5, Post::count());
+        $this->assertSame(20, Post::count());
 
         foreach ($articles as $domain => $article) {
             $directory = Directory::where('domain', $domain)->firstOrFail();
@@ -51,7 +58,7 @@ class RegistrationArticlesTest extends TestCase
         $editedPost->update(['title' => 'Editörün güncellediği başlık']);
         $this->seed(RegistrationArticlesSeeder::class);
 
-        $this->assertSame(5, Post::count());
+        $this->assertSame(20, Post::count());
         $this->assertSame('Editörün güncellediği başlık', $editedPost->fresh()->title);
     }
 }
