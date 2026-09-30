@@ -28,7 +28,6 @@ class RegistrationArticlesSeeder extends Seeder
             if (! $post) {
                 $post = Post::create([
                     ...$article,
-                    'directory_id' => $directory->id,
                     'status' => 'published',
                     'published_at' => now(),
                     'is_indexable' => true,

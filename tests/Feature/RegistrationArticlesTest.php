@@ -33,6 +33,7 @@ class RegistrationArticlesTest extends TestCase
             $post = Post::where('slug', $article['slug'])->firstOrFail();
 
             $this->assertSame('published', $post->status);
+            $this->assertNull($post->directory_id);
             $this->assertTrue($post->is_indexable);
             $this->assertNotNull($post->published_at);
             $this->assertSame([$directory->id], $post->directories()->pluck('directories.id')->all());
