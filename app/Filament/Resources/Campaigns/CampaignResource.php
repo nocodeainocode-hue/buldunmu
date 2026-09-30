@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class CampaignResource extends Resource
 {
@@ -26,6 +27,14 @@ class CampaignResource extends Resource
     protected static ?int $navigationSort = 5;
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->withCount([
+            'items',
+            'items as published_items_count' => fn (Builder $query) => $query->where('status', 'published'),
+        ]);
+    }
 
     public static function form(Schema $schema): Schema
     {

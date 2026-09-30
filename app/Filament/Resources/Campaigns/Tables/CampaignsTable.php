@@ -9,6 +9,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
@@ -53,9 +54,9 @@ class CampaignsTable
                         'cancelled' => 'danger',
                         default => 'gray',
                     }),
-                TextColumn::make('items_count')
-                    ->label('Planlanan')
-                    ->counts('items'),
+                ViewColumn::make('publication_progress')
+                    ->label('Yayın İlerlemesi')
+                    ->view('filament.tables.columns.campaign-progress'),
                 TextColumn::make('start_date')
                     ->label('Başlangıç')
                     ->dateTime('d.m.Y H:i', timezone: 'Europe/Istanbul')
