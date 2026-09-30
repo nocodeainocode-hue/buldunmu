@@ -22,6 +22,7 @@ jobs:
             npm ci
             npm run build
             php artisan migrate --force
+            php artisan db:seed --class=RegistrationArticlesSeeder --force
             php artisan optimize:clear
             php artisan filament:optimize
             php artisan storage:link
