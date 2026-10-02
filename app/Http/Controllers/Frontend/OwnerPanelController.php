@@ -47,7 +47,7 @@ class OwnerPanelController extends Controller
                 'category_id' => $validated['category_id'],
                 'city_id' => $validated['city_id'],
                 'district_id' => $validated['district_id'] ?? null,
-                'phone' => $validated['phone'] ?? null,
+                'phone' => $validated['phone'],
                 'whatsapp' => $validated['whatsapp'] ?? null,
                 'email' => $validated['company_email'] ?? null,
                 'website' => $validated['website'] ?? null,
@@ -200,7 +200,7 @@ class OwnerPanelController extends Controller
 
         $validated = $request->validate([
             'company_name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:30',
+            'phone' => 'required|string|max:30',
             'whatsapp' => 'nullable|string|max:30',
             'company_email' => 'nullable|email|max:255',
             'website' => 'nullable|url|max:255',

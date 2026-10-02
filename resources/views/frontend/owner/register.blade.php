@@ -70,8 +70,8 @@
                         <select id="district_select" name="district_id" class="mt-1.5 w-full rounded-lg border px-4 py-3" style="border-color:var(--border);background:var(--bg);"></select>
                     </label>
 
-                    <label class="block text-sm font-bold" style="color:var(--text);">Telefon
-                        <input name="phone" value="{{ old('phone') }}" inputmode="tel" autocomplete="tel" placeholder="05xx xxx xx xx" class="mt-1.5 w-full rounded-lg border px-4 py-3" style="border-color:var(--border);background:var(--bg);">
+                    <label class="block text-sm font-bold" style="color:var(--text);">Telefon *
+                        <input name="phone" type="tel" value="{{ old('phone') }}" required inputmode="tel" autocomplete="tel" placeholder="05xx xxx xx xx" class="mt-1.5 w-full rounded-lg border px-4 py-3" style="border-color:var(--border);background:var(--bg);">
                         @error('phone')<span class="mt-1 block text-xs text-red-600">{{ $message }}</span>@enderror
                     </label>
 

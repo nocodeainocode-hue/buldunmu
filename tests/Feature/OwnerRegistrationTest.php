@@ -49,8 +49,38 @@ class OwnerRegistrationTest extends TestCase
             ->assertOk()
             ->assertSee('1. Firma bilgileri')
             ->assertSee('2. Panel hesabı')
+            ->assertSee('Telefon *')
+            ->assertSee('name="phone" type="tel" value="" required', false)
             ->assertSee('Kredi kartı gerekmez. Kayıt ücretsizdir.')
             ->assertSee('Bilgileriniz kontrolünüzde');
+    }
+
+    public function test_registration_requires_a_phone_even_when_whatsapp_is_provided(): void
+    {
+        $directory = Directory::create([
+            'name' => 'Buldun mu?',
+            'slug' => 'buldun-mu',
+            'domain' => 'buldunmu.test',
+            'status' => 'active',
+        ]);
+        $category = Category::create(['name' => 'Diş Kliniği', 'slug' => 'dis-klinigi', 'status' => 'active']);
+        $city = City::create(['name' => 'Tekirdağ', 'slug' => 'tekirdag']);
+
+        $this->withServerVariables(['HTTP_HOST' => $directory->domain])
+            ->post('http://buldunmu.test/firma-kayit', [
+                'name' => 'Ayşe Yılmaz',
+                'email' => 'ayse@example.test',
+                'password' => 'guvenli-parola',
+                'password_confirmation' => 'guvenli-parola',
+                'company_name' => 'Ayşe Diş Kliniği',
+                'category_id' => $category->id,
+                'city_id' => $city->id,
+                'whatsapp' => '0555 111 22 33',
+            ])
+            ->assertSessionHasErrors('phone');
+
+        $this->assertDatabaseCount('users', 0);
+        $this->assertDatabaseCount('companies', 0);
     }
 
     public function test_registration_creates_a_pending_company_owned_only_in_the_current_directory(): void
