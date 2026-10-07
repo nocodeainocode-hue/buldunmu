@@ -4,12 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       phase:
-        description: Probe token file locations or apply the 43-domain batch
+        description: Probe, apply the 43-domain batch, or report its saved results
         required: true
         type: choice
         options:
           - probe
           - apply
+          - report
       token_path:
         description: Existing server-side token file path (required for apply)
         required: false
@@ -40,6 +41,12 @@ jobs:
               grep -RIl --include='*.ini' --include='*.env' -E '^(dns_cloudflare_api_token|CLOUDFLARE_API_TOKEN)[[:space:]]*=' /root /etc/letsencrypt /var/www/firmarehberi 2>/dev/null || true
               python3 scripts/cloudflare_onboard.py ops/cloudflare-domains-2026-10.txt --origin-ip 45.143.4.26
               php artisan directories:onboard-batch
+              exit 0
+            fi
+            if [ "$PHASE" = report ]; then
+              php artisan directories:onboard-batch --apply
+              echo 'Saved nameservers for registrar setup:'
+              cat output/cloudflare-nameservers.csv
               exit 0
             fi
             if [ "$PHASE" != apply ] || [ -z "$TOKEN_PATH" ] || [ ! -f "$TOKEN_PATH" ]; then
