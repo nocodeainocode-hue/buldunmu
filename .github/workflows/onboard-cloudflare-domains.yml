@@ -1,0 +1,53 @@
+name: Onboard Cloudflare domains
+
+on:
+  workflow_dispatch:
+    inputs:
+      phase:
+        description: Probe token file locations or apply the 43-domain batch
+        required: true
+        type: choice
+        options:
+          - probe
+          - apply
+      token_path:
+        description: Existing server-side token file path (required for apply)
+        required: false
+        type: string
+
+jobs:
+  onboard:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run on application server
+        uses: appleboy/ssh-action@v1
+        env:
+          PHASE: ${{ inputs.phase }}
+          TOKEN_PATH: ${{ inputs.token_path }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          envs: PHASE,TOKEN_PATH
+          script: |
+            set -eu
+            cd /var/www/firmarehberi
+            git pull --ff-only origin main
+            if [ "$PHASE" = probe ]; then
+              echo 'Token assignment files (paths only):'
+              grep -RIl --include='*.ini' --include='*.env' -E '^(dns_cloudflare_api_token|CLOUDFLARE_API_TOKEN)[[:space:]]*=' /root /etc/letsencrypt /var/www/firmarehberi 2>/dev/null || true
+              python3 scripts/cloudflare_onboard.py ops/cloudflare-domains-2026-10.txt --origin-ip 45.143.4.26
+              php artisan directories:onboard-batch
+              exit 0
+            fi
+            if [ "$PHASE" != apply ] || [ -z "$TOKEN_PATH" ] || [ ! -f "$TOKEN_PATH" ]; then
+              echo 'Apply requires a valid server-side token_path.' >&2
+              exit 1
+            fi
+            export CLOUDFLARE_ACCOUNT_ID=50b810a01ff23a6bfbf1c4d75e8b6fe2
+            python3 scripts/cloudflare_onboard.py ops/cloudflare-domains-2026-10.txt --origin-ip 45.143.4.26 --token-file "$TOKEN_PATH" --apply
+            php artisan directories:onboard-batch --apply
+            echo 'Nameservers for registrar setup:'
+            cat output/cloudflare-nameservers.csv
