@@ -38,3 +38,5 @@ Thumbs.db
 /.wrongstack/*
 !/.wrongstack/project.json
 /output/
+__pycache__/
+*.pyc
