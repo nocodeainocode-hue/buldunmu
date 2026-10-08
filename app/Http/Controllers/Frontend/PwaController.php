@@ -58,6 +58,15 @@ class PwaController extends Controller
         $logo    = ($directory->logo ?? null) ?: ($settings->logo ?? null);
         $favicon = ($directory->favicon ?? null) ?: ($settings->favicon ?? null);
 
+        if ($logo && str_starts_with($logo, 'directories/branding/2026-10/')) {
+            return array_map(fn (int $size): array => [
+                'src' => asset('storage/'.dirname($logo)."/icon-{$size}.png"),
+                'sizes' => "{$size}x{$size}",
+                'type' => 'image/png',
+                'purpose' => 'any maskable',
+            ], [192, 512]);
+        }
+
         if ($logo) {
             $src  = asset('storage/' . $logo);
             $mime = $this->mimeFromPath($logo);

@@ -30,13 +30,13 @@
 
     @php $dirFavicon = ($directory->favicon ?? null) ?: ($settings->favicon ?? null); @endphp
     @if($dirFavicon)
-        <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $dirFavicon) }}">
+        <link rel="icon" type="{{ match(strtolower(pathinfo($dirFavicon, PATHINFO_EXTENSION))) { 'svg' => 'image/svg+xml', 'png' => 'image/png', 'webp' => 'image/webp', default => 'image/x-icon' } }}" href="{{ asset('storage/' . $dirFavicon) }}">
     @endif
 
     {{-- Apple touch icon (iOS home screen) --}}
     @php $dirLogo = ($directory->logo ?? null) ?: ($settings->logo ?? null); @endphp
     @if($dirLogo)
-        <link rel="apple-touch-icon" href="{{ asset('storage/' . $dirLogo) }}">
+        <link rel="apple-touch-icon" href="{{ asset('storage/' . (str_starts_with($dirLogo, 'directories/branding/2026-10/') ? dirname($dirLogo).'/icon-180.png' : $dirLogo)) }}">
         <link rel="apple-touch-startup-image" href="{{ asset('storage/' . $dirLogo) }}">
     @endif
 

@@ -24,6 +24,7 @@ jobs:
             php artisan migrate --force
             php artisan db:seed --class=RegistrationArticlesSeeder --force
             php artisan db:seed --class=DirectoryArticlesOctober2026Seeder --force
+            php artisan directories:install-branding --apply
             php artisan optimize:clear
             php artisan filament:optimize
             php artisan storage:link

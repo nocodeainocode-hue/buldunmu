@@ -2,11 +2,21 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.6.7',
-    'name' => 'Genel Paketler ve Cepte Hikâyeler',
+    'number' => '1.6.8',
+    'name' => 'Rehber Marka Kimlikleri',
     'released_at' => '2026-10-08',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.6.8',
+            'name' => 'Rehber Marka Kimlikleri',
+            'released_at' => '2026-10-08',
+            'changes' => [
+                '83 rehber için markaya uygun SVG logolar, koyu zemin sürümleri ve faviconlar hazırlandı.',
+                'Logo setlerini domainlerle eşleştiren, mevcut logo yollarını yedekleyen toplu yükleme komutu eklendi.',
+                'Telefon ana ekranı ve PWA için kare PNG simgeleri tanımlandı.',
+            ],
+        ],
         [
             'number' => '1.6.7',
             'name' => 'Genel Paketler ve Cepte Hikâyeler',

@@ -1,0 +1,583 @@
+[
+  {
+    "domain": "81ilfirmalar.com.tr",
+    "name": "81 İl Firmalar",
+    "directory": "81ilfirmalar",
+    "motif": "atlas",
+    "accent": "#1D4ED8"
+  },
+  {
+    "domain": "alternatifbul.com.tr",
+    "name": "Alternatif Bul",
+    "directory": "alternatifbul",
+    "motif": "fork",
+    "accent": "#0F766E"
+  },
+  {
+    "domain": "ankarakobi.com.tr",
+    "name": "Ankara KOBİ",
+    "directory": "ankarakobi",
+    "motif": "ankara",
+    "accent": "#B45309"
+  },
+  {
+    "domain": "aradiginisletme.com.tr",
+    "name": "Aradığın İşletme",
+    "directory": "aradiginisletme",
+    "motif": "search",
+    "accent": "#4338CA"
+  },
+  {
+    "domain": "bizbul.com.tr",
+    "name": "Biz Bul",
+    "directory": "bizbul",
+    "motif": "dialog",
+    "accent": "#047857"
+  },
+  {
+    "domain": "buldora.com.tr",
+    "name": "Buldora",
+    "directory": "buldora",
+    "motif": "door",
+    "accent": "#BE123C"
+  },
+  {
+    "domain": "buldunmu.com.tr",
+    "name": "Buldun mu?",
+    "directory": "buldunmu",
+    "motif": "found",
+    "accent": "#2563EB"
+  },
+  {
+    "domain": "bulmino.com.tr",
+    "name": "Bulmino",
+    "directory": "bulmino",
+    "motif": "monogram:bm",
+    "accent": "#7C3AED"
+  },
+  {
+    "domain": "bulnex.com.tr",
+    "name": "Bulnex",
+    "directory": "bulnex",
+    "motif": "monogram:bn",
+    "accent": "#0369A1"
+  },
+  {
+    "domain": "bulvera.com.tr",
+    "name": "Bulvera",
+    "directory": "bulvera",
+    "motif": "monogram:bv",
+    "accent": "#0F766E"
+  },
+  {
+    "domain": "cityesnaf.com.tr",
+    "name": "City Esnaf",
+    "directory": "cityesnaf",
+    "motif": "skyline",
+    "accent": "#B45309"
+  },
+  {
+    "domain": "esnafagi.com.tr",
+    "name": "Esnaf Ağı",
+    "directory": "esnafagi",
+    "motif": "network",
+    "accent": "#0F766E"
+  },
+  {
+    "domain": "esnafharita.com.tr",
+    "name": "Esnaf Harita",
+    "directory": "esnafharita",
+    "motif": "map",
+    "accent": "#166534"
+  },
+  {
+    "domain": "esnafmeydani.com.tr",
+    "name": "Esnaf Meydanı",
+    "directory": "esnafmeydani",
+    "motif": "square",
+    "accent": "#C2410C"
+  },
+  {
+    "domain": "esnafpuani.com.tr",
+    "name": "Esnaf Puanı",
+    "directory": "esnafpuani",
+    "motif": "star",
+    "accent": "#A16207"
+  },
+  {
+    "domain": "esnafpusulasi.com.tr",
+    "name": "Esnaf Pusulası",
+    "directory": "esnafpusulasi",
+    "motif": "compass",
+    "accent": "#B45309"
+  },
+  {
+    "domain": "esnaftamyanimda.com.tr",
+    "name": "Esnaf Tam Yanımda",
+    "directory": "esnaftamyanimda",
+    "motif": "neighbor",
+    "accent": "#BE123C"
+  },
+  {
+    "domain": "esnafy.com.tr",
+    "name": "Esnafy",
+    "directory": "esnafy",
+    "motif": "monogram:e",
+    "accent": "#0F766E"
+  },
+  {
+    "domain": "firmaendeksi.com.tr",
+    "name": "Firma Endeksi",
+    "directory": "firmaendeksi",
+    "motif": "index",
+    "accent": "#1D4ED8"
+  },
+  {
+    "domain": "firmafeneri.com.tr",
+    "name": "Firma Feneri",
+    "directory": "firmafeneri",
+    "motif": "beacon",
+    "accent": "#B45309"
+  },
+  {
+    "domain": "firmahatti.com.tr",
+    "name": "Firma Hattı",
+    "directory": "firmahatti",
+    "motif": "phone",
+    "accent": "#0369A1"
+  },
+  {
+    "domain": "firmahub.com.tr",
+    "name": "Firma Hub",
+    "directory": "firmahub",
+    "motif": "hub",
+    "accent": "#4338CA"
+  },
+  {
+    "domain": "firmakiyasla.com.tr",
+    "name": "Firma Kıyasla",
+    "directory": "firmakiyasla",
+    "motif": "compare",
+    "accent": "#0F766E"
+  },
+  {
+    "domain": "firmakonum.com.tr",
+    "name": "Firma Konum",
+    "directory": "firmakonum",
+    "motif": "pin",
+    "accent": "#2563EB"
+  },
+  {
+    "domain": "firmakonumbul.com.tr",
+    "name": "Firma Konum Bul",
+    "directory": "firmakonumbul",
+    "motif": "target",
+    "accent": "#047857"
+  },
+  {
+    "domain": "firmalarimiz.com.tr",
+    "name": "Firmalarımız",
+    "directory": "firmalarimiz",
+    "motif": "buildings",
+    "accent": "#B45309"
+  },
+  {
+    "domain": "firmasor.com.tr",
+    "name": "Firma Sor",
+    "directory": "firmasor",
+    "motif": "question",
+    "accent": "#7C3AED"
+  },
+  {
+    "domain": "firmatoplulugu.com.tr",
+    "name": "Firma Topluluğu",
+    "directory": "firmatoplulugu",
+    "motif": "people",
+    "accent": "#4338CA"
+  },
+  {
+    "domain": "firmavitrin.com.tr",
+    "name": "Firma Vitrin",
+    "directory": "firmavitrin",
+    "motif": "window",
+    "accent": "#BE123C"
+  },
+  {
+    "domain": "firmayeri.com.tr",
+    "name": "Firma Yeri",
+    "directory": "firmayeri",
+    "motif": "place",
+    "accent": "#0F766E"
+  },
+  {
+    "domain": "firmayorum.com.tr",
+    "name": "Firma Yorum",
+    "directory": "firmayorum",
+    "motif": "review",
+    "accent": "#C2410C"
+  },
+  {
+    "domain": "firmio.com.tr",
+    "name": "Firmio",
+    "directory": "firmio",
+    "motif": "monogram:f",
+    "accent": "#4338CA"
+  },
+  {
+    "domain": "firmondo.com.tr",
+    "name": "Firmondo",
+    "directory": "firmondo",
+    "motif": "globe",
+    "accent": "#0369A1"
+  },
+  {
+    "domain": "guvenilirfirmalar.com.tr",
+    "name": "Güvenilir Firmalar",
+    "directory": "guvenilirfirmalar",
+    "motif": "shield",
+    "accent": "#047857"
+  },
+  {
+    "domain": "hizmetharitasi.com.tr",
+    "name": "Hizmet Haritası",
+    "directory": "hizmetharitasi",
+    "motif": "map",
+    "accent": "#0369A1"
+  },
+  {
+    "domain": "hizmetto.com.tr",
+    "name": "Hizmetto",
+    "directory": "hizmetto",
+    "motif": "monogram:ht",
+    "accent": "#C2410C"
+  },
+  {
+    "domain": "hizmetyakinda.com.tr",
+    "name": "Hizmet Yakında",
+    "directory": "hizmetyakinda",
+    "motif": "radar",
+    "accent": "#BE123C"
+  },
+  {
+    "domain": "hizmetyanimda.com.tr",
+    "name": "Hizmet Yanımda",
+    "directory": "hizmetyanimda",
+    "motif": "neighbor",
+    "accent": "#047857"
+  },
+  {
+    "domain": "isletmebulutu.com.tr",
+    "name": "İşletme Bulutu",
+    "directory": "isletmebulutu",
+    "motif": "cloud",
+    "accent": "#2563EB"
+  },
+  {
+    "domain": "isletmebulvar.com.tr",
+    "name": "İşletme Bulvarı",
+    "directory": "isletmebulvar",
+    "motif": "avenue",
+    "accent": "#4338CA"
+  },
+  {
+    "domain": "isletmelistesi.com.tr",
+    "name": "İşletme Listesi",
+    "directory": "isletmelistesi",
+    "motif": "list",
+    "accent": "#0F766E"
+  },
+  {
+    "domain": "isletmepusulasi.com.tr",
+    "name": "İşletme Pusulası",
+    "directory": "isletmepusulasi",
+    "motif": "compass",
+    "accent": "#1D4ED8"
+  },
+  {
+    "domain": "istanbulfirmarehberi.com.tr",
+    "name": "İstanbul Firma Rehberi",
+    "directory": "istanbulfirmarehberi",
+    "motif": "istanbul",
+    "accent": "#1D4ED8"
+  },
+  {
+    "domain": "izmirisletmeleri.com.tr",
+    "name": "İzmir İşletmeleri",
+    "directory": "izmirisletmeleri",
+    "motif": "izmir",
+    "accent": "#0F766E"
+  },
+  {
+    "domain": "kayitlikobi.com.tr",
+    "name": "Kayıtlı KOBİ",
+    "directory": "kayitlikobi",
+    "motif": "register",
+    "accent": "#B45309"
+  },
+  {
+    "domain": "kentigo.com.tr",
+    "name": "Kentigo",
+    "directory": "kentigo",
+    "motif": "monogram:k",
+    "accent": "#0369A1"
+  },
+  {
+    "domain": "kentiva.com.tr",
+    "name": "Kentiva",
+    "directory": "kentiva",
+    "motif": "monogram:kv",
+    "accent": "#7C3AED"
+  },
+  {
+    "domain": "kentlist.com.tr",
+    "name": "Kent List",
+    "directory": "kentlist",
+    "motif": "citylist",
+    "accent": "#4338CA"
+  },
+  {
+    "domain": "kobibirligi.com.tr",
+    "name": "KOBİ Birliği",
+    "directory": "kobibirligi",
+    "motif": "union",
+    "accent": "#1D4ED8"
+  },
+  {
+    "domain": "kobiflow.com.tr",
+    "name": "KOBİ Flow",
+    "directory": "kobiflow",
+    "motif": "flow",
+    "accent": "#0F766E"
+  },
+  {
+    "domain": "kobiharita.com.tr",
+    "name": "KOBİ Harita",
+    "directory": "kobiharita",
+    "motif": "atlas",
+    "accent": "#047857"
+  },
+  {
+    "domain": "kobilocal.com.tr",
+    "name": "KOBİ Local",
+    "directory": "kobilocal",
+    "motif": "local",
+    "accent": "#B45309"
+  },
+  {
+    "domain": "kobimercek.com.tr",
+    "name": "KOBİ Mercek",
+    "directory": "kobimercek",
+    "motif": "lens",
+    "accent": "#0369A1"
+  },
+  {
+    "domain": "kobiva.com.tr",
+    "name": "Kobiva",
+    "directory": "kobiva",
+    "motif": "monogram:kb",
+    "accent": "#2563EB"
+  },
+  {
+    "domain": "kobivitrin.com.tr",
+    "name": "KOBİ Vitrin",
+    "directory": "kobivitrin",
+    "motif": "window",
+    "accent": "#4338CA"
+  },
+  {
+    "domain": "komsufirma.com.tr",
+    "name": "Komşu Firma",
+    "directory": "komsufirma",
+    "motif": "neighbor",
+    "accent": "#B45309"
+  },
+  {
+    "domain": "kuaforrehberi.com.tr",
+    "name": "Kuaför Rehberi",
+    "directory": "kuaforrehberi",
+    "motif": "scissors",
+    "accent": "#BE123C"
+  },
+  {
+    "domain": "localbul.com.tr",
+    "name": "Local Bul",
+    "directory": "localbul",
+    "motif": "search",
+    "accent": "#0F766E"
+  },
+  {
+    "domain": "localhizmet.com.tr",
+    "name": "Local Hizmet",
+    "directory": "localhizmet",
+    "motif": "service",
+    "accent": "#0369A1"
+  },
+  {
+    "domain": "prestijli.com.tr",
+    "name": "Prestijli",
+    "directory": "prestijli",
+    "motif": "diamond",
+    "accent": "#6D28D9"
+  },
+  {
+    "domain": "secmedenonce.com.tr",
+    "name": "Seçmeden Önce",
+    "directory": "secmedenonce",
+    "motif": "select",
+    "accent": "#C2410C"
+  },
+  {
+    "domain": "sehirvitrini.com.tr",
+    "name": "Şehir Vitrini",
+    "directory": "sehirvitrini",
+    "motif": "skyline",
+    "accent": "#0F766E"
+  },
+  {
+    "domain": "sektorbazaar.com.tr",
+    "name": "Sektör Bazaar",
+    "directory": "sektorbazaar",
+    "motif": "market",
+    "accent": "#B45309"
+  },
+  {
+    "domain": "sektorbul.com.tr",
+    "name": "Sektör Bul",
+    "directory": "sektorbul",
+    "motif": "sectors",
+    "accent": "#1D4ED8"
+  },
+  {
+    "domain": "servicebul.com.tr",
+    "name": "Service Bul",
+    "directory": "servicebul",
+    "motif": "service",
+    "accent": "#047857"
+  },
+  {
+    "domain": "tekirdagfirmarehberi.com.tr",
+    "name": "Tekirdağ Firma Rehberi",
+    "directory": "tekirdagfirmarehberi",
+    "motif": "tekirdag",
+    "accent": "#0369A1"
+  },
+  {
+    "domain": "tescilliesnaf.com.tr",
+    "name": "Tescilli Esnaf",
+    "directory": "tescilliesnaf",
+    "motif": "seal",
+    "accent": "#166534"
+  },
+  {
+    "domain": "trakyafirmalar.com.tr",
+    "name": "Trakya Firmalar",
+    "directory": "trakyafirmalar",
+    "motif": "thrace",
+    "accent": "#B45309"
+  },
+  {
+    "domain": "ustaharita.com.tr",
+    "name": "Usta Harita",
+    "directory": "ustaharita",
+    "motif": "toolpin",
+    "accent": "#C2410C"
+  },
+  {
+    "domain": "ustarotasi.com.tr",
+    "name": "Usta Rotası",
+    "directory": "ustarotasi",
+    "motif": "route",
+    "accent": "#B45309"
+  },
+  {
+    "domain": "vipfirma.com.tr",
+    "name": "VIP Firma",
+    "directory": "vipfirma",
+    "motif": "diamond",
+    "accent": "#1D4ED8"
+  },
+  {
+    "domain": "yakino.com.tr",
+    "name": "Yakino",
+    "directory": "yakino",
+    "motif": "monogram:y",
+    "accent": "#047857"
+  },
+  {
+    "domain": "yakindafirma.com.tr",
+    "name": "Yakında Firma",
+    "directory": "yakindafirma",
+    "motif": "radar",
+    "accent": "#2563EB"
+  },
+  {
+    "domain": "yereldurak.com.tr",
+    "name": "Yerel Durak",
+    "directory": "yereldurak",
+    "motif": "stop",
+    "accent": "#B45309"
+  },
+  {
+    "domain": "yerelgo.com.tr",
+    "name": "Yerel Go",
+    "directory": "yerelgo",
+    "motif": "go",
+    "accent": "#0F766E"
+  },
+  {
+    "domain": "yerelhizmetim.com.tr",
+    "name": "Yerel Hizmetim",
+    "directory": "yerelhizmetim",
+    "motif": "service",
+    "accent": "#4338CA"
+  },
+  {
+    "domain": "yerelio.com.tr",
+    "name": "Yerelio",
+    "directory": "yerelio",
+    "motif": "monogram:yl",
+    "accent": "#7C3AED"
+  },
+  {
+    "domain": "yerelix.com.tr",
+    "name": "Yerelix",
+    "directory": "yerelix",
+    "motif": "monogram:yx",
+    "accent": "#0F766E"
+  },
+  {
+    "domain": "yerelkatalog.com.tr",
+    "name": "Yerel Katalog",
+    "directory": "yerelkatalog",
+    "motif": "book",
+    "accent": "#B45309"
+  },
+  {
+    "domain": "yerelpuan.com.tr",
+    "name": "Yerel Puan",
+    "directory": "yerelpuan",
+    "motif": "review",
+    "accent": "#047857"
+  },
+  {
+    "domain": "yerelrehber360.com.tr",
+    "name": "Yerel Rehber 360",
+    "directory": "yerelrehber360",
+    "motif": "orbit",
+    "accent": "#1D4ED8"
+  },
+  {
+    "domain": "yerelspot.com.tr",
+    "name": "Yerel Spot",
+    "directory": "yerelspot",
+    "motif": "spot",
+    "accent": "#BE123C"
+  },
+  {
+    "domain": "yerelustalar.com.tr",
+    "name": "Yerel Ustalar",
+    "directory": "yerelustalar",
+    "motif": "tools",
+    "accent": "#C2410C"
+  }
+]
