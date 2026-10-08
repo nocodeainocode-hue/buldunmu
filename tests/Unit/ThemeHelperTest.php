@@ -82,7 +82,7 @@ class ThemeHelperTest extends TestCase
         $expectedLayouts = [
             'premium-showcase' => 'verified',
             'landing' => 'quick-quote',
-            'split-hero' => 'quick-quote',
+            'split-hero' => 'split-hero',
             'magazine' => 'editorial',
             'comparison' => 'decision-desk',
             'city-focused' => 'city-journal',
