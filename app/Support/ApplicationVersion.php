@@ -19,6 +19,11 @@ class ApplicationVersion
         return config('version.released_at');
     }
 
+    public static function history(): array
+    {
+        return (array) config('version.history', []);
+    }
+
     public static function commit(): ?string
     {
         if ($configured = config('version.commit')) {

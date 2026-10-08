@@ -11,6 +11,13 @@ class PackagePageTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        MembershipPlan::withoutGlobalScope('directory')->whereNull('directory_id')->delete();
+    }
+
     public function test_packages_page_loads(): void
     {
         $dir = Directory::create(['name' => 'Test', 'slug' => 'test', 'domain' => 'packages.test', 'status' => 'active']);
@@ -48,7 +55,7 @@ class PackagePageTest extends TestCase
         $response->assertOk()->assertSee('Genel Premium');
     }
 
-    public function test_active_directory_plans_replace_global_plans(): void
+    public function test_global_plans_are_shown_even_when_directory_has_active_specific_plans(): void
     {
         $dir = Directory::create(['name' => 'Özel', 'slug' => 'ozel', 'domain' => 'ozel.test', 'status' => 'active']);
         MembershipPlan::create(['name' => 'Genel Premium', 'slug' => 'genel-premium', 'price' => 500, 'directory_id' => null, 'is_active' => true]);
@@ -60,8 +67,8 @@ class PackagePageTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertSee('Rehbere Özel')
-            ->assertDontSee('Genel Premium');
+            ->assertSee('Genel Premium')
+            ->assertDontSee('Rehbere Özel');
     }
 
     public function test_inactive_directory_plans_do_not_block_global_fallback(): void

@@ -13,11 +13,11 @@
                 @foreach($plans as $plan)
                     @php
                         $ibFeatures = is_array($plan->features) ? $plan->features : [];
-                        $ibPopular = $loop->index === 1;
+                        $ibPopular = $plan->slug === 'gold';
                     @endphp
                     <article class="ib-plan {{ $ibPopular ? 'ib-plan--featured' : '' }}">
                         <span class="ib-plan__cat">Paket {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }} · {{ match ($plan->billing_period) { 'monthly' => 'Aylık', 'yearly' => 'Yıllık', 'onetime' => 'Tek seferlik', default => $plan->billing_period } }}</span>
-                        @if($ibPopular)<span class="ib-plan__badge">En çok tercih edilen</span>@endif
+                        @if($ibPopular)<span class="ib-plan__badge">En Popüler</span>@endif
                         <h2>{{ $plan->name }}</h2>
                         <p class="ib-plan__price">
                             @if($plan->price > 0)
@@ -39,7 +39,7 @@
                     </article>
                 @endforeach
             </div>
-            <p class="ib-note" style="margin-top:18px">Paket içerikleri firmadan firmaya değişebilir; güncel koşullar için <a href="{{ route('pages.contact') }}" style="color:var(--primary);font-weight:700">iletişim ekranına</a> yazın.</p>
+            <p class="ib-note" style="margin-top:18px">Paketler hakkında sorularınız için <a href="{{ route('pages.contact') }}" style="color:var(--primary);font-weight:700">iletişim ekranına</a> yazın.</p>
         @endif
     </div>
 </div>

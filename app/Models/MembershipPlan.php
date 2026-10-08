@@ -35,14 +35,13 @@ class MembershipPlan extends Model
             return $query->whereNull('directory_id');
         }
 
-        $hasDirectoryPlans = (clone $query)
-            ->where('directory_id', $directory->id)
+        $hasGlobalPlans = (clone $query)
+            ->whereNull('directory_id')
             ->active()
             ->exists();
 
-        return $query->where(
-            'directory_id',
-            $hasDirectoryPlans ? $directory->id : null
-        );
+        return $hasGlobalPlans
+            ? $query->whereNull('directory_id')
+            : $query->where('directory_id', $directory->id);
     }
 }

@@ -20,7 +20,8 @@
                     : 'Ücretsiz';
                 $phPeriod = match($plan->billing_period) { 'monthly' => 'Aylık', 'yearly' => 'Yıllık', 'onetime' => 'Tek seferlik', default => $plan->billing_period };
             @endphp
-            <article class="ph-plan {{ $loop->iteration === 2 && $plans->count() > 2 ? 'ph-plan--featured' : '' }}">
+            <article class="ph-plan {{ $plan->slug === 'gold' ? 'ph-plan--featured' : '' }}">
+                @if($plan->slug === 'gold')<span class="ph-eyebrow">En Popüler</span>@endif
                 <span class="ph-eyebrow">Paket {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }} · {{ $phPeriod ?: 'Tek seferlik' }}</span>
                 <h2>{{ $plan->name }}</h2>
                 <div class="ph-plan__price">{{ $phPriceText }}</div>
@@ -40,7 +41,7 @@
     </div>
 @endif
 
-<div class="ph-note">Paket içeriğini birlikte şekillendirelim: hangi şehirde, hangi kategoride görünmek istediğini yaz, sana uygun sınıfı önerelim.</div>
+<div class="ph-note">Paketler hakkında sorularınız varsa iletişim sayfasından bize yazabilirsiniz.</div>
 
 <div class="ph-cta">
     <h2>Sormak istediklerin?</h2>

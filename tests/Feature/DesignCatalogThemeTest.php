@@ -93,7 +93,7 @@ class DesignCatalogThemeTest extends TestCase
             '/blog/'.$post->slug => 'Mobilya Seçme Rehberi',
             '/is-ilanlari' => 'Açık pozisyonlar',
             '/is-ilanlari/'.$job->slug => 'Görev tanımı',
-            '/paketler' => 'Başlangıç',
+            '/paketler' => 'Gold',
             '/hakkimizda' => 'Hakkımızda',
             '/iletisim' => 'Mesajı gönder',
             '/gizlilik-politikasi' => 'Gizlilik Politikası',

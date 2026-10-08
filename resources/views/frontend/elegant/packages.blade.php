@@ -13,10 +13,10 @@
                 @foreach($plans as $plan)
                     @php
                         $elFeatures = is_array($plan->features) ? $plan->features : [];
-                        $elPopular = $loop->index === 1;
+                        $elPopular = $plan->slug === 'gold';
                     @endphp
                     <article class="el-plan {{ $elPopular ? 'el-plan--featured' : '' }}">
-                        @if($elPopular)<span class="el-plan__badge">En çok tercih edilen</span>@endif
+                        @if($elPopular)<span class="el-plan__badge">En Popüler</span>@endif
                         <span class="el-plan__cat">{{ match ($plan->billing_period) { 'monthly' => 'Aylık', 'yearly' => 'Yıllık', 'onetime' => 'Tek seferlik', default => $plan->billing_period } }}</span>
                         <h2>{{ $plan->name }}</h2>
                         <p class="el-plan__price">
@@ -39,7 +39,7 @@
                     </article>
                 @endforeach
             </div>
-            <p class="el-note" style="margin-top:34px">Paket içerikleri firmadan firmaya değişebilir; güncel koşullar için <a href="{{ route('pages.contact') }}" style="color:var(--primary);border-bottom:1px solid var(--accent);text-decoration:none">iletişim ekranına</a> yazın.</p>
+            <p class="el-note" style="margin-top:34px">Paketler hakkında sorularınız için <a href="{{ route('pages.contact') }}" style="color:var(--primary);border-bottom:1px solid var(--accent);text-decoration:none">iletişim ekranına</a> yazın.</p>
         @endif
     </div>
 </div>

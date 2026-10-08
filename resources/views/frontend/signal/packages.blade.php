@@ -13,11 +13,11 @@
                 @foreach($plans as $plan)
                     @php
                         $sigFeatures = is_array($plan->features) ? $plan->features : [];
-                        $sigPopular = $loop->index === 1;
+                        $sigPopular = $plan->slug === 'gold';
                     @endphp
                     <article class="sig-plan {{ $sigPopular ? 'sig-plan--featured' : '' }}">
                         <span class="sig-plan__cat">Paket {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }} · {{ match ($plan->billing_period) { 'monthly' => 'Aylık', 'yearly' => 'Yıllık', 'onetime' => 'Tek seferlik', default => $plan->billing_period } }}</span>
-                        @if($sigPopular)<span class="sig-plan__badge">Önerilen</span>@endif
+                        @if($sigPopular)<span class="sig-plan__badge">En Popüler</span>@endif
                         <h2>{{ $plan->name }}</h2>
                         <p class="sig-plan__price">
                             @if($plan->price > 0)
@@ -39,7 +39,7 @@
                     </article>
                 @endforeach
             </div>
-            <p class="sig-note" style="margin-top:22px">Paket içerikleri firmadan firmaya değişebilir; güncel koşullar için <a href="{{ route('pages.contact') }}" style="color:var(--primary);font-weight:800">iletişim ekranına</a> yazın.</p>
+            <p class="sig-note" style="margin-top:22px">Paketler hakkında sorularınız için <a href="{{ route('pages.contact') }}" style="color:var(--primary);font-weight:800">iletişim ekranına</a> yazın.</p>
         @endif
     </div>
 </div>

@@ -11,10 +11,10 @@
         @foreach($plans as $plan)
             @php
                 $apFeatures = is_array($plan->features) ? $plan->features : [];
-                $apPopular = $loop->index === 1;
+                $apPopular = $plan->slug === 'gold';
             @endphp
             <article class="ap-plan {{ $apPopular ? 'ap-plan--featured' : '' }}">
-                @if($apPopular)<span class="ap-plan__badge">En çok tercih edilen</span>@endif
+                @if($apPopular)<span class="ap-plan__badge">En Popüler</span>@endif
                 <h2>{{ $plan->name }}</h2>
                 <p class="ap-plan__price">
                     @if($plan->price > 0)
@@ -36,5 +36,5 @@
             </article>
         @endforeach
     </div>
-    <div class="ap-note">Paket içerikleri firmadan firmaya değişebilir; güncel koşullar için <a href="{{ route('pages.contact') }}" style="color:var(--primary);font-weight:700">iletişim ekranına</a> yazın.</div>
+    <div class="ap-note">Paketler hakkında sorularınız için <a href="{{ route('pages.contact') }}" style="color:var(--primary);font-weight:700">iletişim ekranına</a> yazın.</div>
 @endif

@@ -37,8 +37,8 @@ class MembershipPlanTest extends TestCase
         MembershipPlan::create(['name' => 'Aktif', 'slug' => 'aktif', 'price' => 100, 'directory_id' => $dir->id, 'is_active' => true, 'sort_order' => 1]);
         MembershipPlan::create(['name' => 'Pasif', 'slug' => 'pasif', 'price' => 200, 'directory_id' => $dir->id, 'is_active' => false, 'sort_order' => 2]);
 
-        $this->assertEquals(2, MembershipPlan::count());
-        $this->assertEquals(1, MembershipPlan::active()->count());
+        $this->assertEquals(2, MembershipPlan::where('directory_id', $dir->id)->count());
+        $this->assertEquals(1, MembershipPlan::where('directory_id', $dir->id)->active()->count());
     }
 
     public function test_belongs_to_directory(): void

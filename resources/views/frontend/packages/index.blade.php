@@ -51,7 +51,7 @@
             @foreach($plans as $plan)
                 @php
                     $features = is_array($plan->features) ? $plan->features : [];
-                    $isPopular = $loop->index === 1;
+                    $isPopular = $plan->slug === 'gold';
                 @endphp
                 <div class="relative flex flex-col rounded-2xl border p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg {{ $isPopular ? 'ring-2' : '' }}"
                      style="border-color:var(--border);background:var(--bg_card);{{ $isPopular ? '--tw-ring-color: var(--primary);' : '' }}">
@@ -85,7 +85,7 @@
                         <ul class="mb-8 flex-1 space-y-3">
                             @foreach($features as $feature)
                                 <li class="flex items-start gap-2 text-sm" style="color:var(--text);">
-                                    <svg class="mt-0.5 h-4 w-4 shrink-0" style="color:var(--primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                    @if($feature['included'] ?? true)<svg class="mt-0.5 h-4 w-4 shrink-0" style="color:var(--primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>@else<span class="w-4 shrink-0 text-center" style="color:var(--text_muted);">—</span>@endif
                                     <span>
                                         <strong>{{ $feature['title'] ?? '' }}</strong>
                                         @if(!empty($feature['description']))

@@ -13,11 +13,11 @@
                 @foreach($plans as $plan)
                     @php
                         $depFeatures = is_array($plan->features) ? $plan->features : [];
-                        $depPopular = $loop->index === 1;
+                        $depPopular = $plan->slug === 'gold';
                     @endphp
                     <article class="dep-plan {{ $depPopular ? 'dep-plan--featured' : '' }}">
                         <div class="dep-plan__head">
-                            <span class="dep-code" style="color:var(--amber-deep)">Bilet sınıfı {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}{{ $depPopular ? ' · önerilen' : '' }}</span>
+                            <span class="dep-code" style="color:var(--amber-deep)">Bilet sınıfı {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}{{ $depPopular ? ' · En Popüler' : '' }}</span>
                             <h2>{{ $plan->name }}</h2>
                             <p class="dep-code" style="margin-top:8px">{{ match ($plan->billing_period) { 'monthly' => 'Aylık', 'yearly' => 'Yıllık', 'onetime' => 'Tek seferlik', default => $plan->billing_period } }}</p>
                         </div>
@@ -41,7 +41,7 @@
                     </article>
                 @endforeach
             </div>
-            <p class="dep-code" style="margin-top:22px">Paket içerikleri firmadan firmaya değişebilir; güncel koşullar için <a href="{{ route('pages.contact') }}" style="color:var(--amber-deep)">iletişim peronuna</a> yazın.</p>
+            <p class="dep-code" style="margin-top:22px">Paketler hakkında sorularınız için <a href="{{ route('pages.contact') }}" style="color:var(--amber-deep)">iletişim peronuna</a> yazın.</p>
         @endif
     </div>
 </div>

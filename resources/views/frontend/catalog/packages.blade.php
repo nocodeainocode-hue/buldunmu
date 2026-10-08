@@ -14,11 +14,11 @@
                 @foreach($plans as $plan)
                     @php
                         $katFeatures = is_array($plan->features) ? $plan->features : [];
-                        $katPopular = $loop->index === 1;
+                        $katPopular = $plan->slug === 'gold';
                     @endphp
                     <article class="kat-plan {{ $katPopular ? 'kat-plan--featured' : '' }}">
                         <span class="kat-plan__cat">Paket {{ str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT) }} · {{ match ($plan->billing_period) { 'monthly' => 'Aylık', 'yearly' => 'Yıllık', 'onetime' => 'Tek seferlik', default => $plan->billing_period } }}</span>
-                        @if($katPopular)<span class="kat-plan__badge">Önerilen</span>@endif
+                        @if($katPopular)<span class="kat-plan__badge">En Popüler</span>@endif
                         <h2>{{ $plan->name }}</h2>
                         <p class="kat-plan__price">
                             @if($plan->price > 0)
@@ -40,7 +40,7 @@
                     </article>
                 @endforeach
             </div>
-            <p class="kat-note" style="margin-top:34px">Paket içerikleri firmadan firmaya değişebilir; güncel koşullar için <a href="{{ route('pages.contact') }}" style="color:var(--secondary)">iletişim sayfasına</a> yazın.</p>
+            <p class="kat-note" style="margin-top:34px">Paketler hakkında sorularınız için <a href="{{ route('pages.contact') }}" style="color:var(--secondary)">iletişim sayfasına</a> yazın.</p>
         @endif
     </div>
 </div>
