@@ -4,13 +4,15 @@ on:
   workflow_dispatch:
     inputs:
       phase:
-        description: Probe, apply the 43-domain batch, or report its saved results
+        description: Probe, apply DNS, report, or install the origin for a delegated group
         required: true
         type: choice
         options:
           - probe
           - apply
           - report
+          - origin-first
+          - origin-remaining
       token_path:
         description: Existing server-side token file path (required for apply)
         required: false
@@ -32,10 +34,19 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
           envs: PHASE,TOKEN_PATH
+          command_timeout: 45m
           script: |
             set -eu
             cd /var/www/firmarehberi
             git pull --ff-only origin main
+            if [ "$PHASE" = origin-first ]; then
+              bash scripts/install_directory_origin.sh first
+              exit 0
+            fi
+            if [ "$PHASE" = origin-remaining ]; then
+              bash scripts/install_directory_origin.sh remaining
+              exit 0
+            fi
             if [ "$PHASE" = probe ]; then
               echo 'Token assignment files (paths only):'
               grep -RIl --include='*.ini' --include='*.env' -E '^(dns_cloudflare_api_token|CLOUDFLARE_API_TOKEN)[[:space:]]*=' /root /etc/letsencrypt /var/www/firmarehberi 2>/dev/null || true

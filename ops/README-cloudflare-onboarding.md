@@ -54,9 +54,16 @@ The first command previews the names and themes. The second is idempotent and
 does not modify any existing directory. Each new directory
 gets its own site settings record. Keep them passive until their hostnames work.
 
-The NS change alone does not make a new directory site ready. For each new
-domain, configure Nginx for apex and `www`, issue a valid origin certificate
-with the Nginx Certbot authenticator, and confirm HTTPS at the origin. Then
-turn on Cloudflare proxy and Full (strict), verify both public hostnames, and
-activate the directory. Keep the new records DNS only until the origin
-certificate is valid to avoid 526 errors.
+The NS change alone does not make a new directory site ready. After delegation
+is visible at the `.tr` registry, run the `origin-first` or `origin-remaining`
+phase of the onboarding workflow. These phases use Certbot's Cloudflare DNS
+authenticator to issue an apex and `www` certificate for each domain, add a
+separate Nginx site without touching existing sites, test and reload Nginx,
+activate its directory, and verify direct HTTPS at the origin. The script is
+safe to rerun after a partial failure. Run `origin-first` only for the first
+29 domains and `origin-remaining` only after the last 14 are delegated.
+
+DNS records remain DNS only while origin setup proceeds. Once direct HTTPS
+works, Cloudflare proxy and Full (strict) can be enabled and the public site
+checked. Cloudflare's Full (strict) mode requires a valid origin certificate
+for the requested hostname.
