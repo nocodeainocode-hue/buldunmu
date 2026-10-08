@@ -27,7 +27,7 @@
                     <div style="flex:1 1 320px;min-width:0;display:flex;flex-direction:column;justify-content:center">
                         <p style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--text_muted)">{{ $elLead->author_name ?: 'Editör' }} · {{ $elLead->published_at?->format('d.m.Y') }}</p>
                         <h2 style="font-size:34px;font-weight:500;margin-top:12px"><a href="{{ route('blog.show', $elLead->slug) }}" style="text-decoration:none;color:var(--primary)">{{ $elLead->title }}</a></h2>
-                        <p style="margin-top:14px;font-size:16px;color:var(--text_muted);font-weight:300;line-height:1.7">{{ $elLead->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($elLead->content), 220) }}</p>
+                        <p style="margin-top:14px;font-size:16px;color:var(--text_muted);font-weight:400;line-height:1.7">{{ $elLead->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($elLead->content), 220) }}</p>
                         <p style="margin-top:22px"><a class="el-btn el-btn--gold" href="{{ route('blog.show', $elLead->slug) }}">Yazıyı okuyun</a></p>
                     </div>
                 </div>

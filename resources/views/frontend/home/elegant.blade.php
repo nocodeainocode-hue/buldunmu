@@ -11,11 +11,11 @@
         <div class="el-wrap" style="position:relative;padding-block:88px 76px;">
             <span class="el-eyebrow" style="color:var(--accent)">{{ $settings->site_name ?? 'Elegant Rehber' }}</span>
             <h1 style="margin-top:22px;color:#fff;font-size:clamp(38px,6vw,68px);font-weight:500;line-height:1.05;max-width:16ch">{{ $settings->homepage_title ?? 'Zarafetle keşfedin' }}</h1>
-            <p style="margin-top:22px;max-width:56ch;font-size:18px;font-weight:300;line-height:1.7;color:rgba(243,237,224,.82)">{{ $settings->homepage_subtitle ?? 'Seçkin işletmeleri tek bir zarif rehberde bir araya getiriyoruz.' }}</p>
+            <p style="margin-top:22px;max-width:56ch;font-size:18px;font-weight:400;line-height:1.7;color:rgba(243,237,224,.82)">{{ $settings->homepage_subtitle ?? 'Seçkin işletmeleri tek bir zarif rehberde bir araya getiriyoruz.' }}</p>
             <form action="{{ route('search') }}" method="GET" role="search" class="el-find" style="margin-top:36px;max-width:720px">
                 <label for="el-search" class="sr-only">Firma veya hizmet ara</label>
                 <input id="el-search" name="q" placeholder="Firma, hizmet veya şehir yazın" style="background:#fff;border-color:#fff;color:var(--text)">
-                <button class="el-btn el-btn--gold" style="border-color:var(--accent)">Keşfet</button>
+                <button class="el-btn el-btn--gold" style="border-color:var(--accent);color:var(--accent)">Keşfet</button>
             </form>
         </div>
     </section>

@@ -18,7 +18,7 @@
             </nav>
             <span class="el-kicker">Kayıt {{ $elCodePrefix }}-{{ $elCodeSerial }} · {{ $cityName }}{{ $districtName ? ' / ' . $districtName : '' }}</span>
             <h1>{{ $company->name }}@if($company->hasActivePremium()) <span style="font-size:14px;font-family:var(--font_body);letter-spacing:.18em;text-transform:uppercase;color:var(--accent);vertical-align:middle">Seçkin</span>@endif</h1>
-            <p style="margin-top:16px;font-size:16px;font-weight:300;color:var(--text_muted);max-width:64ch;line-height:1.7">{{ $company->short_description ?: $company->name . ' işletmesinin hizmetlerini, iletişim ve konum bilgilerini tek zarif sayfada görüntüleyin.' }}</p>
+            <p style="margin-top:16px;font-size:16px;font-weight:400;color:var(--text_muted);max-width:64ch;line-height:1.7">{{ $company->short_description ?: $company->name . ' işletmesinin hizmetlerini, iletişim ve konum bilgilerini tek zarif sayfada görüntüleyin.' }}</p>
             <div class="el-detail__actions">
                 @if($company->phone)<a class="el-btn" href="tel:{{ $phoneClean }}">Telefon edin</a>@endif
                 @if($company->whatsapp)<a class="el-btn el-btn--gold" href="https://wa.me/{{ $whatsappClean }}" target="_blank" rel="noopener noreferrer">WhatsApp</a>@endif
