@@ -17,6 +17,8 @@
     @include('frontend.cinema.packages')
 @elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'departure-board')
     @include('frontend.departures.packages')
+@elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'board-v2')
+    @include('frontend.board.packages')
 @elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'design-catalog')
     @include('frontend.catalog.packages')
 @elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'signal-station')

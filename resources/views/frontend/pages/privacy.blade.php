@@ -15,6 +15,8 @@
 @section('content')
 @if((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'departure-board')
     @include('frontend.departures.info', ['pageTitle' => 'Gizlilik Politikası', 'pageDescription' => 'Verilerinizin panoda nasıl işlendiğine ilişkin bilgiler.', 'fallbackParagraphs' => ['Bu sayfa, '.($settings->site_name ?? 'sitemiz').' tarafından toplanan bilgilerin nasıl kullanıldığını açıklar.', 'Kişisel verileriniz üçüncü kişilerle paylaşılmaz; hizmet kalitesini artırmak için kullanılır.']])
+@elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'board-v2')
+    @include('frontend.board.info', ['pageTitle' => 'Gizlilik Politikası', 'pageDescription' => 'Verilerinizin nasıl işlendiğine ilişkin bilgiler.', 'fallbackParagraphs' => ['Bu sayfa, '.($settings->site_name ?? 'sitemiz').' tarafından toplanan bilgilerin nasıl kullanıldığını açıklar.', 'Kişisel verileriniz üçüncü kişilerle paylaşılmaz; hizmet kalitesini artırmak için kullanılır.']])
 @elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'design-catalog')
     @include('frontend.catalog.info', ['pageTitle' => 'Gizlilik Politikası', 'pageDescription' => 'Verilerinizin nasıl işlendiğine ilişkin bilgiler.', 'fallbackParagraphs' => ['Bu sayfa, '.($settings->site_name ?? 'sitemiz').' tarafından toplanan bilgilerin nasıl kullanıldığını açıklar.', 'Kişisel verileriniz üçüncü kişilerle paylaşılmaz; hizmet kalitesini artırmak için kullanılır.']])
 @elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'signal-station')

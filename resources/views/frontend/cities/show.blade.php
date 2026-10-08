@@ -28,6 +28,8 @@
     @include('frontend.cinema.city')
 @elseif($directory?->template === 'departure-board')
     @include('frontend.departures.city')
+@elseif($directory?->template === 'board-v2')
+    @include('frontend.board.city')
 @elseif($directory?->template === 'design-catalog')
     @include('frontend.catalog.city')
 @elseif($directory?->template === 'signal-station')

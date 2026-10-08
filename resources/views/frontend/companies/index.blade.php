@@ -33,6 +33,8 @@
     @include('frontend.cinema.companies')
 @elseif($directory?->template === 'departure-board')
     @include('frontend.departures.companies')
+@elseif($directory?->template === 'board-v2')
+    @include('frontend.board.companies')
 @elseif($directory?->template === 'design-catalog')
     @include('frontend.catalog.companies')
 @elseif($directory?->template === 'signal-station')

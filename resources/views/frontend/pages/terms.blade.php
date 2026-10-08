@@ -15,6 +15,8 @@
 @section('content')
 @if((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'departure-board')
     @include('frontend.departures.info', ['pageTitle' => 'Kullanım Şartları', 'pageDescription' => 'Panoyu kullanırken geçerli olan koşullar.', 'fallbackParagraphs' => [($settings->site_name ?? 'Sitemiz').' kalkış panosunun kullanım şartları bu sayfada açıklanır.', 'Firma bilgileri düzenli olarak güncellenir; doğruluk konusunda garanti verilmez.']])
+@elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'board-v2')
+    @include('frontend.board.info', ['pageTitle' => 'Kullanım Şartları', 'pageDescription' => 'Panoyu kullanırken geçerli olan koşullar.', 'fallbackParagraphs' => [($settings->site_name ?? 'Sitemiz').' panosunun kullanım şartları bu sayfada açıklanır.', 'Firma bilgileri düzenli olarak güncellenir; doğruluk konusunda garanti verilmez.']])
 @elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'design-catalog')
     @include('frontend.catalog.info', ['pageTitle' => 'Kullanım Şartları', 'pageDescription' => 'Kataloğu kullanırken geçerli olan koşullar.', 'fallbackParagraphs' => [($settings->site_name ?? 'Sitemiz').' kataloğunun kullanım şartları bu sayfada açıklanır.', 'Firma bilgileri düzenli olarak güncellenir; doğruluk konusunda garanti verilmez.']])
     @elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'signal-station')

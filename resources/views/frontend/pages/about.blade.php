@@ -15,6 +15,8 @@
 @section('content')
 @if((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'departure-board')
     @include('frontend.departures.info', ['pageTitle' => 'Hakkımızda', 'pageDescription' => 'Bu peronun arkasındaki ekip ve servis hikâyesi.', 'fallbackParagraphs' => [($settings->site_name ?? 'Firma Rehberi').' Türkiye genelindeki işletmeleri tek bir kalkış panosunda toplayır.', 'Amacımız, aradığınız işletmeye üç hamlede ulaşmanızı sağlamaktır.']])
+@elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'board-v2')
+    @include('frontend.board.info', ['pageTitle' => 'Hakkımızda', 'pageDescription' => 'Bu panonun arkasındaki ekip ve hikâye.', 'fallbackParagraphs' => [($settings->site_name ?? 'Firma Rehberi').' mahalledeki işletmeleri tek panoda toplar.', 'Amacımız, aradığınız işletmeye birkaç dokunuşta ulaşmanızı sağlamaktır.']])
 @elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'design-catalog')
     @include('frontend.catalog.info', ['pageTitle' => 'Hakkımızda', 'pageDescription' => 'Bu kataloğun arkasındaki ekip ve hikâye.', 'fallbackParagraphs' => [($settings->site_name ?? 'Firma Rehberi').' Türkiye genelindeki işletmeleri tek bir katalogda toplar.', 'Amacımız, aradığınız işletmeye birkaç dokunuşta ulaşmanızı sağlamaktır.']])
 @elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'signal-station')

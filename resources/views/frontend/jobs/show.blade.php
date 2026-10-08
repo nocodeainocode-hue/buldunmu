@@ -11,6 +11,8 @@
     @include('frontend.cinema.job')
 @elseif($directory?->template === 'departure-board')
     @include('frontend.departures.job')
+@elseif($directory?->template === 'board-v2')
+    @include('frontend.board.job')
 @elseif($directory?->template === 'design-catalog')
     @include('frontend.catalog.job')
 @elseif($directory?->template === 'signal-station')

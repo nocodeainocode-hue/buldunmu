@@ -25,6 +25,8 @@
     @include('frontend.cinema.blog')
 @elseif($directory?->template === 'departure-board')
     @include('frontend.departures.blog')
+@elseif($directory?->template === 'board-v2')
+    @include('frontend.board.blog')
 @elseif($directory?->template === 'design-catalog')
     @include('frontend.catalog.blog')
 @elseif($directory?->template === 'signal-station')
