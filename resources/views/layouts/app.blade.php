@@ -94,6 +94,9 @@
         @include('partials.appshell.styles')
     @elseif(in_array($activeLayout, \App\View\Helpers\ThemeHelper::PHONE_SHELL, true))
         @include('partials.phone.styles')
+        @if($activeLayout === 'pocket-stories')
+            @include('partials.phone.pocket-stories-styles')
+        @endif
     @endif
 
     {{-- Dynamic Google Fonts per template --}}

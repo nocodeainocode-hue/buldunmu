@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @php
-    // Cep teması · pocket: gündüz paleti, halkalar + ızgara kartlar
-    $phCompanies = \App\Models\Company::active()->when($directory, fn ($q) => $q->where('directory_id', $directory->id))->count();
+    // Cepte Hikâyeler: ortak ve bu rehbere özel firmalar aynı sayaçta.
+    $phCompanies = \App\Models\Company::active()->count();
     $phJobs = \App\Models\JobPosting::visible()->when($directory, fn ($q) => $q->where('directory_id', $directory->id))->count();
     $phPosts = \App\Models\Post::publishedForDirectory($directory ?? null)->count();
     $phCategories = \App\Models\Category::active()->visibleForDirectory($directory ?? null)->count();
@@ -16,9 +16,9 @@
 @include('partials.phone.device-start')
 
     <section class="ph-hero">
-        <span class="ph-eyebrow">{{ $directory?->name ?? ($settings->site_name ?? 'Cep Rehberi') }} · cepte</span>
-        <h1 class="ph-h1">Cebindeki şehir rehberi</h1>
-        <p class="ph-lead">Halkalara dokun, kategoriyi seç, firmayı aç. Aradığın şey tek ekranda.</p>
+        <span class="ph-eyebrow">{{ $directory?->name ?? ($settings->site_name ?? 'Cep Rehberi') }} · Yerel rehber</span>
+        <h1 class="ph-h1">Şehrin iyi adresleri, bir arada.</h1>
+        <p class="ph-lead">İhtiyacınıza uygun işletmeleri, hizmetleri ve yerel önerileri kolayca keşfedin.</p>
         <form class="ph-search" action="{{ route('search') }}" method="GET">
             <input type="text" name="q" aria-label="Firma veya hizmet ara" placeholder="Firma, hizmet veya semt" required>
             <button type="submit">Ara</button>
@@ -28,8 +28,8 @@
     <section class="ph-section" style="padding-top:6px">
         <div class="ph-section__head">
             <div>
-                <span class="ph-eyebrow">Kategori halkaları</span>
-                <h2 class="ph-h2">Neye ihtiyacın var?</h2>
+                <span class="ph-eyebrow">Keşfet</span>
+                <h2 class="ph-h2">Neye ihtiyacınız var?</h2>
             </div>
             <a class="ph-section__more" href="{{ route('companies.index') }}">Tümü ›</a>
         </div>

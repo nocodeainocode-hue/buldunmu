@@ -193,10 +193,9 @@ class NewDirectoryThemesTest extends TestCase
     {
         $data = $this->seedPhoneTheme('pocket-stories', 'cepte-hikayeler', 'Cepte Hikâyeler');
         $company = $data['company'];
-
         $this->get('/')->assertOk()->assertSee('theme-pocket-stories', false)
             ->assertSee('ph-tabbar', false)->assertSee('ph-grid', false)
-            ->assertSee('Cebindeki şehir rehberi')->assertSee('Özgün Atölye')->assertSee('Ahşap Masa')
+            ->assertSee('Şehrin iyi adresleri, bir arada.')->assertSee('Özgün Atölye')->assertSee('Ahşap Masa')
             ->assertSee(route('search'), false);
 
         $this->get('/firma/'.$company->slug)->assertOk()->assertSee('ph-detail', false)

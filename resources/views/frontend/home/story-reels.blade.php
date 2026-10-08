@@ -2,7 +2,7 @@
 
 @php
     // Cep teması · reels: sayaçlar kiracıya göre, akış controller verisinden
-    $phCompanies = \App\Models\Company::active()->when($directory, fn ($q) => $q->where('directory_id', $directory->id))->count();
+    $phCompanies = \App\Models\Company::active()->count();
     $phJobs = \App\Models\JobPosting::visible()->when($directory, fn ($q) => $q->where('directory_id', $directory->id))->count();
     $phPosts = \App\Models\Post::publishedForDirectory($directory ?? null)->count();
     $phCategories = \App\Models\Category::active()->visibleForDirectory($directory ?? null)->count();

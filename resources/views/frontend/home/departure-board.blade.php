@@ -2,7 +2,7 @@
 
 @php
     // Pano sayacları kiracıya (directory) göre sayılır; vitrin satırları controller verisinden gelir.
-    $depCompanies = \App\Models\Company::active()->when($directory, fn ($query) => $query->where('directory_id', $directory->id))->count();
+    $depCompanies = \App\Models\Company::active()->count();
     $depJobs = \App\Models\JobPosting::visible()->when($directory, fn ($query) => $query->where('directory_id', $directory->id))->count();
     $depPosts = \App\Models\Post::publishedForDirectory($directory ?? null)->count();
     $depCategories = \App\Models\Category::active()->visibleForDirectory($directory ?? null)->count();
