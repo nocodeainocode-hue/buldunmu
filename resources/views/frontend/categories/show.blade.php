@@ -28,6 +28,8 @@
     @include('frontend.cinema.category')
 @elseif($directory?->template === 'departure-board')
     @include('frontend.departures.category')
+@elseif($directory?->template === 'design-catalog')
+    @include('frontend.catalog.category')
 @elseif($directory?->template === 'signal-station')
     @include('frontend.signal.category')
     @elseif($directory?->template === 'ilan-board')

@@ -16,6 +16,8 @@
     @include('frontend.cinema.post')
 @elseif($directory?->template === 'departure-board')
     @include('frontend.departures.post')
+@elseif($directory?->template === 'design-catalog')
+    @include('frontend.catalog.post')
 @elseif($directory?->template === 'signal-station')
     @include('frontend.signal.post')
 @elseif($directory?->template === 'ilan-board')

@@ -17,6 +17,8 @@
     @include('frontend.cinema.contact')
 @elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'departure-board')
     @include('frontend.departures.contact')
+@elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'design-catalog')
+    @include('frontend.catalog.contact')
 @elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'signal-station')
     @include('frontend.signal.contact')
 @elseif((app()->bound('currentDirectory') ? app('currentDirectory')?->template : null) === 'ilan-board')

@@ -81,6 +81,8 @@
     @include('frontend.companies.themes.cinematic-atlas')
 @elseif($directory?->template === 'departure-board')
     @include('frontend.companies.themes.departure-board')
+@elseif($directory?->template === 'design-catalog')
+    @include('frontend.companies.themes.design-catalog')
 @elseif($directory?->template === 'signal-station')
     @include('frontend.companies.themes.signal-station')
 @elseif($directory?->template === 'ilan-board')
