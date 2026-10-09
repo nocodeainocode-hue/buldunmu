@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ClaimInvite;
 use App\Support\BotDetector;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ClaimInviteController extends Controller
 {
@@ -16,10 +17,18 @@ class ClaimInviteController extends Controller
 
         $invite = ClaimInvite::with('company')->where('token', $token)->first();
 
-        abort_unless(
-            $invite && $invite->company && (int) $invite->directory_id === (int) app('currentDirectory')->id,
-            404
-        );
+        if (! $invite || ! $invite->company || (int) $invite->directory_id !== (int) app('currentDirectory')->id) {
+            // Neden 404 verildiğini sistem kaydında görebilmek için (kişisel veri yok).
+            Log::info('Davet bağlantısı açılamadı.', [
+                'token' => $token,
+                'davet_var' => (bool) $invite,
+                'firma_var' => (bool) $invite?->company,
+                'davet_rehberi' => $invite?->directory_id,
+                'istek_rehberi' => app('currentDirectory')->id,
+            ]);
+
+            abort(404);
+        }
 
         // Bir daha yazılmasını istemeyen firma da bağlantıya erişebilir, yalnızca takip yapılmaz.
         if ($invite->status !== 'opted_out' && ! BotDetector::isBot($request->userAgent())) {

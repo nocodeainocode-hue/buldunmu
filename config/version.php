@@ -2,11 +2,20 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.11.0',
-    'name' => 'Sahiplenme Davetleri',
+    'number' => '1.11.1',
+    'name' => 'Rehber Çözümleme Düzeltmesi',
     'released_at' => '2026-10-10',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.11.1',
+            'name' => 'Rehber Çözümleme Düzeltmesi',
+            'released_at' => '2026-10-10',
+            'changes' => [
+                'Düzeltme: aynı adrese (slug) sahip firma birden fazla rehberde varsa sahiplenme, yorum ve firma paneli sayfaları başka rehberin kaydını bulup 404 verebiliyordu. Rehber artık rota modelleri çözülmeden önce belirleniyor.',
+                'Davet bağlantısı açılamazsa nedeni sistem kaydına yazılıyor.',
+            ],
+        ],
         [
             'number' => '1.11.0',
             'name' => 'Sahiplenme Davetleri',

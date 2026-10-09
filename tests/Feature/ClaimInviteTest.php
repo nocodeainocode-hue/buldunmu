@@ -195,4 +195,31 @@ class ClaimInviteTest extends TestCase
 
         $this->assertSame(1, ClaimInvite::count());
     }
+
+    public function test_link_leads_all_the_way_to_the_claim_page(): void
+    {
+        $this->company('Ayşe Klinik', '0532 123 45 67');
+        $this->generate();
+        $invite = ClaimInvite::firstOrFail();
+
+        $this->host()->withHeader('User-Agent', 'Mozilla/5.0 Chrome/130')
+            ->followingRedirects()
+            ->get('http://buldunmu.test/s/'.$invite->token)
+            ->assertOk()
+            ->assertSee('Ayşe Klinik profilini sahiplenin');
+    }
+
+    public function test_claim_page_picks_the_company_of_the_current_directory_when_slugs_repeat(): void
+    {
+        $other = Directory::create(['name' => 'Diğer', 'slug' => 'diger', 'domain' => 'diger.test', 'status' => 'active']);
+        // Başka rehberdeki aynı adresli kayıt daha düşük kimlikle oluşur.
+        $foreign = $this->company('Ayşe Klinik', '0532 111 22 33', ['directory_id' => $other->id, 'slug' => 'ayse-klinik']);
+        $own = $this->company('Ayşe Klinik', '0532 123 45 67', ['slug' => 'ayse-klinik']);
+
+        $this->assertSame($foreign->slug, $own->slug);
+
+        $this->host()->get('http://buldunmu.test/firma/'.$own->slug.'/sahiplen')
+            ->assertOk()
+            ->assertSee('name="claim_company_id" value="'.$own->id.'"', false);
+    }
 }

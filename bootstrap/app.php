@@ -13,6 +13,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->trustProxies(at: '*');
+        // Rehber, rota modelleri (ör. {company:slug}) çözülmeden önce belirlenmeli; aksi halde aynı adresli
+        // başka rehber kaydı bulunabilir.
+        $middleware->prependToPriorityList(
+            before: \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            prepend: \App\Http\Middleware\SetCurrentDirectory::class,
+        );
         $middleware->alias([
             'honeypot' => \App\Http\Middleware\Honeypot::class,
             'admin' => \App\Http\Middleware\EnsureAdmin::class,
