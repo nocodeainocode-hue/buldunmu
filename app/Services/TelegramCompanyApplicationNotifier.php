@@ -10,7 +10,8 @@ use Illuminate\Support\Str;
 
 class TelegramCompanyApplicationNotifier
 {
-    public function send(ListingRequest $listing): void
+    /** @param string|null $stage null = standart, 'partial' = yarım kalan, 'completed' = yarım başvuru tamamlandı */
+    public function send(ListingRequest $listing, ?string $stage = null): void
     {
         $token = config('services.telegram.bot_token');
         $chatId = config('services.telegram.chat_id');
@@ -25,7 +26,7 @@ class TelegramCompanyApplicationNotifier
 
         $response = Http::timeout(5)->post("https://api.telegram.org/bot{$token}/sendMessage", [
             'chat_id' => $chatId,
-            'text' => $this->message($listing),
+            'text' => $this->message($listing, $stage),
         ]);
 
         if (! $response->successful() || $response->json('ok') !== true) {
@@ -37,7 +38,7 @@ class TelegramCompanyApplicationNotifier
         }
     }
 
-    private function message(ListingRequest $listing): string
+    private function message(ListingRequest $listing, ?string $stage = null): string
     {
         $directory = $listing->directory_id
             ? Directory::withoutGlobalScope('directory')->find($listing->directory_id)
@@ -53,12 +54,32 @@ class TelegramCompanyApplicationNotifier
         $directoryName = Str::limit(trim(preg_replace('/\s+/u', ' ', $directory?->name ?? 'Bilinmiyor')), 120);
         $adminUrl = rtrim(config('services.telegram.admin_url'), '/');
 
-        return implode("\n", [
-            'Yeni firma başvurusu',
+        $title = match ($stage) {
+            'partial' => 'Yarım kalan firma başvurusu (2. adım bekleniyor)',
+            'completed' => 'Firma başvurusu tamamlandı',
+            default => 'Yeni firma başvurusu',
+        };
+
+        $lines = [
+            $title,
             'Rehber: '.$directoryName,
             'Firma: '.$companyName,
             'Talep: '.$type,
-            'Başvuru: '.$adminUrl.'/listing-requests/'.$listing->id.'/open',
-        ]);
+        ];
+
+        // Yarım kalan başvuruda telefon, geri dönüş için asıl bilgidir.
+        if ($stage === 'partial') {
+            $lines[] = 'Telefon: '.Str::limit(trim((string) $listing->phone), 40);
+            if (filled($listing->whatsapp)) {
+                $lines[] = 'WhatsApp: '.Str::limit(trim((string) $listing->whatsapp), 40);
+            }
+            if (filled($listing->utm_source)) {
+                $lines[] = 'Kaynak: '.Str::limit($listing->utm_source.' / '.($listing->utm_campaign ?: '-'), 80);
+            }
+        }
+
+        $lines[] = 'Başvuru: '.$adminUrl.'/listing-requests/'.$listing->id.'/open';
+
+        return implode("\n", $lines);
     }
 }

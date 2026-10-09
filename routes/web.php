@@ -57,6 +57,7 @@ Route::post('/firma-ekle', [ListingRequestController::class, 'store'])->name('li
 // Firma sahibi hesabı ve firma paneli
 Route::get('/firma-kayit', [OwnerPanelController::class, 'register'])->middleware('guest')->name('owner.register');
 Route::post('/firma-kayit', [OwnerPanelController::class, 'storeRegistration'])->middleware('guest')->name('owner.register.store');
+Route::post('/firma-kayit/on-basvuru', [OwnerPanelController::class, 'saveLead'])->middleware(['guest', 'throttle:30,1'])->name('owner.register.lead');
 Route::get('/panel/giris', [OwnerPanelController::class, 'login'])->middleware('guest')->name('owner.login');
 Route::get('/giris', [OwnerPanelController::class, 'login'])->middleware('guest')->name('login');
 Route::post('/panel/giris', [OwnerPanelController::class, 'authenticate'])->middleware('guest')->name('owner.login.store');

@@ -26,11 +26,30 @@ class ListingRequestObserver
         // synchronous (no queue worker required).
         DB::afterCommit(function () use ($listing) {
             try {
-                app(TelegramCompanyApplicationNotifier::class)->send($listing);
+                app(TelegramCompanyApplicationNotifier::class)->send($listing, $listing->is_partial ? 'partial' : null);
             } catch (Throwable $e) {
                 // Never include the exception message: an HTTP error may contain
                 // the bot token in its URL.
                 Log::warning('Yeni firma başvurusu Telegram bildirimi gönderilemedi.', [
+                    'listing_request_id' => $listing->id,
+                    'exception' => $e::class,
+                ]);
+            }
+        });
+    }
+
+    /** Yarım kalan başvuru 2. adımla tamamlandığında yöneticiye bir kez daha haber verir. */
+    public function updated(ListingRequest $listing): void
+    {
+        if (! $listing->wasChanged('is_partial') || $listing->is_partial) {
+            return;
+        }
+
+        DB::afterCommit(function () use ($listing) {
+            try {
+                app(TelegramCompanyApplicationNotifier::class)->send($listing, 'completed');
+            } catch (Throwable $e) {
+                Log::warning('Tamamlanan firma başvurusu Telegram bildirimi gönderilemedi.', [
                     'listing_request_id' => $listing->id,
                     'exception' => $e::class,
                 ]);

@@ -83,6 +83,7 @@
 
                 <button type="button" data-next-step class="mt-6 flex w-full items-center justify-center gap-2 rounded-lg px-5 py-3.5 font-black text-white transition hover:opacity-90" style="background:var(--primary);">Devam Et <span aria-hidden="true">→</span></button>
                 <p class="mt-3 text-center text-xs" style="color:var(--text_muted);">Kredi kartı gerekmez. Kayıt ücretsizdir.</p>
+                <p class="mt-1 text-center text-xs" style="color:var(--text_muted);">Devam ettiğinizde firma bilgileriniz başvuru olarak kaydedilir; sizinle iletişime geçebiliriz.</p>
             </section>
 
             <section data-registration-step="2">
@@ -172,14 +173,32 @@ document.addEventListener('DOMContentLoaded', () => {
         return true;
     };
 
-    form.querySelector('[data-next-step]').addEventListener('click', () => {
-        if (firstStepIsValid()) showStep(2);
-    });
+    // 1. adım geçildiğinde bilgileri "yarım başvuru" olarak kaydeder; başarısız olsa bile akış devam eder.
+    const sendLead = () => {
+        const data = new FormData();
+        data.append('_token', form.querySelector('input[name=_token]')?.value || '');
+        ['company_name', 'category_id', 'requested_category', 'city_id', 'district_id', 'phone', 'whatsapp'].forEach((name) => {
+            const field = form.elements[name];
+            if (field && field.value !== '') data.append(name, field.value);
+        });
+        fetch(@json(route('owner.register.lead')), {
+            method: 'POST', body: data, keepalive: true,
+            headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        }).catch(() => {});
+    };
+
+    const goToSecondStep = () => {
+        if (!firstStepIsValid()) return;
+        sendLead();
+        showStep(2);
+    };
+
+    form.querySelector('[data-next-step]').addEventListener('click', goToSecondStep);
     form.querySelector('[data-previous-step]').addEventListener('click', () => showStep(1));
     form.addEventListener('submit', (event) => {
         if (currentStep === 1) {
             event.preventDefault();
-            if (firstStepIsValid()) showStep(2);
+            goToSecondStep();
         }
     });
 

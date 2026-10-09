@@ -70,6 +70,15 @@ class Attribution
         return array_filter($fields);
     }
 
+    /** Başvuru kaydına yazılacak kaynak alanları (UTM ve yönlendiren site). */
+    public function forListing(Request $request): array
+    {
+        return array_intersect_key(
+            $this->forUser($request),
+            array_flip(['utm_source', 'utm_medium', 'utm_campaign', 'referrer_host']),
+        );
+    }
+
     private function clean(mixed $value): ?string
     {
         if (! is_string($value) || trim($value) === '') {

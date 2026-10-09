@@ -52,7 +52,7 @@ class ListingRequestsTable
                 TextColumn::make('phone')
                     ->label('Telefon')
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->copyable(),
                 TextColumn::make('email')
                     ->label('E-posta')
                     ->searchable()
@@ -67,7 +67,9 @@ class ListingRequestsTable
                 TextColumn::make('status')
                     ->label('Durum')
                     ->badge()
+                    ->state(fn (ListingRequest $record): string => $record->is_partial ? 'partial' : $record->status)
                     ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'partial' => 'Yarım kaldı (2. adım yok)',
                         'new' => 'Yeni',
                         'reviewed' => 'İncelendi',
                         'approved' => 'Onaylandı',
@@ -75,6 +77,7 @@ class ListingRequestsTable
                         default => $state,
                     })
                     ->color(fn (string $state): string => match ($state) {
+                        'partial' => 'danger',
                         'new' => 'warning',
                         'reviewed' => 'info',
                         'approved' => 'success',
@@ -88,6 +91,11 @@ class ListingRequestsTable
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
+                \Filament\Tables\Filters\TernaryFilter::make('is_partial')
+                    ->label('Yarım kalanlar')
+                    ->placeholder('Hepsi')
+                    ->trueLabel('Yalnızca yarım kalan (telefon alındı)')
+                    ->falseLabel('Tamamlanan başvurular'),
                 SelectFilter::make('status')
                     ->label('Durum')
                     ->options([
@@ -168,7 +176,7 @@ class ListingRequestsTable
                                 : "\"{$company->name}\" firması başarıyla eklendi.")
                             ->send();
                     })
-                    ->visible(fn ($record) => $record->status === 'new' || $record->status === 'reviewed'),
+                    ->visible(fn ($record) => ! $record->is_partial && ($record->status === 'new' || $record->status === 'reviewed')),
 
                 Action::make('reject')
                     ->label('Reddet')
@@ -184,7 +192,7 @@ class ListingRequestsTable
                             ->warning()
                             ->send();
                     })
-                    ->visible(fn ($record) => $record->status === 'new' || $record->status === 'reviewed'),
+                    ->visible(fn ($record) => ! $record->is_partial && ($record->status === 'new' || $record->status === 'reviewed')),
 
                 EditAction::make(),
             ])

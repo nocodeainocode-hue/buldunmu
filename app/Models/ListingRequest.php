@@ -20,6 +20,11 @@ class ListingRequest extends Model
         'company_name', 'contact_name', 'phone', 'whatsapp',
         'email', 'website', 'category_id', 'city_id', 'district_id',
         'requested_category', 'message', 'status', 'directory_id', 'claim_company_id', 'source',
+        'is_partial', 'lead_token', 'utm_source', 'utm_medium', 'utm_campaign', 'referrer_host',
+    ];
+
+    protected $casts = [
+        'is_partial' => 'boolean',
     ];
 
     public function category()

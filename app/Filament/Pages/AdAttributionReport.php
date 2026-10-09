@@ -44,7 +44,7 @@ class AdAttributionReport extends Page
             ->groupByRaw("{$source}, COALESCE(NULLIF(users.utm_medium, ''), '-'), COALESCE(NULLIF(users.utm_campaign, ''), '-')")
             ->orderByDesc('signups');
 
-        return $query->get()->map(fn ($row) => [
+        $rows = $query->get()->map(fn ($row) => [
             'source' => $row->source,
             'medium' => $row->medium,
             'campaign' => $row->campaign,
@@ -54,7 +54,33 @@ class AdAttributionReport extends Page
             'whatsapp' => (int) $row->whatsapp,
             'page_rate' => $row->signups > 0 ? (int) round($row->page_view / $row->signups * 100) : 0,
             'whatsapp_rate' => $row->signups > 0 ? (int) round($row->whatsapp / $row->signups * 100) : 0,
-        ])->all();
+            'partial' => 0,
+        ])->keyBy(fn ($row) => $row['source'].'|'.$row['medium'].'|'.$row['campaign']);
+
+        // Yarım kalan başvurular (2. adım yapılmadı): hangi reklamdan telefon alındığını gösterir.
+        $partialSource = "COALESCE(NULLIF(utm_source, ''), NULLIF(referrer_host, ''), 'Doğrudan')";
+        $partials = DB::table('listing_requests')
+            ->where('is_partial', true)
+            ->when($this->days > 0, fn ($q) => $q->where('created_at', '>=', now()->subDays($this->days)))
+            ->when($this->directoryId, fn ($q) => $q->where('directory_id', $this->directoryId))
+            ->selectRaw("{$partialSource} as source")
+            ->selectRaw("COALESCE(NULLIF(utm_medium, ''), '-') as medium")
+            ->selectRaw("COALESCE(NULLIF(utm_campaign, ''), '-') as campaign")
+            ->selectRaw('COUNT(*) as partial')
+            ->groupByRaw("{$partialSource}, COALESCE(NULLIF(utm_medium, ''), '-'), COALESCE(NULLIF(utm_campaign, ''), '-')")
+            ->get();
+
+        foreach ($partials as $partial) {
+            $key = $partial->source.'|'.$partial->medium.'|'.$partial->campaign;
+            $row = $rows->get($key) ?? [
+                'source' => $partial->source, 'medium' => $partial->medium, 'campaign' => $partial->campaign,
+                'signups' => 0, 'popup' => 0, 'page_view' => 0, 'whatsapp' => 0, 'page_rate' => 0, 'whatsapp_rate' => 0, 'partial' => 0,
+            ];
+            $row['partial'] = (int) $partial->partial;
+            $rows->put($key, $row);
+        }
+
+        return $rows->sortByDesc(fn ($row) => $row['signups'] * 1000 + $row['partial'])->values()->all();
     }
 
     /** @return array<int, string> */

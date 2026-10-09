@@ -22,7 +22,7 @@
         </label>
     </div>
 
-    <x-filament::section heading="Reklamdan kayda, kayıttan kampanyaya" description="Kayıt: firma kayıt formunu tamamlayan kullanıcı. Diğer sütunlar o kayıtların kaçının ilgili adıma ulaştığını gösterir.">
+    <x-filament::section heading="Reklamdan kayda, kayıttan kampanyaya" description="Yarım kalan: 1. adımı geçip (telefonu alınmış) 2. adımı tamamlamayan başvuru. Kayıt: formu tamamlayan kullanıcı. Sonraki sütunlar kayıtların kaçının ilgili adıma ulaştığını gösterir.">
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead>
@@ -30,6 +30,7 @@
                         <th class="p-2">Kaynak</th>
                         <th class="p-2">Ortam</th>
                         <th class="p-2">Reklam / kampanya</th>
+                        <th class="p-2 text-right">Yarım kalan</th>
                         <th class="p-2 text-right">Kayıt</th>
                         <th class="p-2 text-right">Popup gördü</th>
                         <th class="p-2 text-right">Kampanya sayfası</th>
@@ -42,13 +43,14 @@
                             <td class="p-2 font-semibold">{{ $row['source'] }}</td>
                             <td class="p-2">{{ $row['medium'] }}</td>
                             <td class="p-2">{{ $row['campaign'] }}</td>
+                            <td class="p-2 text-right text-amber-600">{{ $row['partial'] }}</td>
                             <td class="p-2 text-right font-bold">{{ $row['signups'] }}</td>
                             <td class="p-2 text-right">{{ $row['popup'] }}</td>
                             <td class="p-2 text-right">{{ $row['page_view'] }} <span class="text-xs text-gray-500">(%{{ $row['page_rate'] }})</span></td>
                             <td class="p-2 text-right">{{ $row['whatsapp'] }} <span class="text-xs text-gray-500">(%{{ $row['whatsapp_rate'] }})</span></td>
                         </tr>
                     @empty
-                        <tr><td colspan="7" class="p-6 text-center text-gray-500">Bu dönemde firma kaydı yok.</td></tr>
+                        <tr><td colspan="8" class="p-6 text-center text-gray-500">Bu dönemde firma kaydı yok.</td></tr>
                     @endforelse
                 </tbody>
             </table>

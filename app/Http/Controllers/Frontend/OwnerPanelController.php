@@ -16,6 +16,8 @@ use App\Services\Attribution;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
@@ -69,7 +71,7 @@ class OwnerPanelController extends Controller
                 'status' => 'active',
             ]);
 
-            ListingRequest::create([
+            $application = [
                 'company_name' => $company->name,
                 'contact_name' => $user->name,
                 'phone' => $company->phone,
@@ -84,15 +86,100 @@ class OwnerPanelController extends Controller
                 'claim_company_id' => $company->id,
                 'source' => 'owner_registration',
                 'status' => 'new',
-            ]);
+            ];
+
+            // 1. adımda alınmış yarım başvuru varsa aynı kayıt tamamlanır (ikinci kayıt açılmaz).
+            $lead = $this->findLead($request, $directory->id);
+
+            if ($lead) {
+                $lead->update($application + ['is_partial' => false, 'lead_token' => null]);
+            } else {
+                ListingRequest::create($application + app(Attribution::class)->forListing($request));
+            }
 
             return $user;
         });
 
+        $request->session()->forget('registration_lead_token');
         Auth::login($user);
         $request->session()->regenerate();
 
         return redirect()->route('owner.dashboard')->with('success', 'Firma profiliniz oluşturuldu. Yayına alınmadan önce kısa bir inceleme yapılacaktır.');
+    }
+
+    /**
+     * Kayıt formunun 1. adımı geçildiğinde çağrılır: firma ve telefon bilgisi "yarım başvuru" olarak
+     * saklanır; kişi 2. adımı doldurmasa bile geri dönülebilir. Aynı kişi geri gelirse kayıt güncellenir.
+     */
+    public function saveLead(Request $request)
+    {
+        $directory = $this->directory();
+        $categoryIsOther = $request->input('category_id') === 'other';
+
+        $validator = Validator::make($request->all(), [
+            'company_name' => 'required|string|max:255',
+            'phone' => ['required', 'string', 'max:30', fn ($attribute, $value, $fail) => strlen(preg_replace('/\D+/', '', (string) $value)) >= 10 ?: $fail('Telefon geçersiz.')],
+            'whatsapp' => 'nullable|string|max:30',
+            'category_id' => $categoryIsOther
+                ? ['required', Rule::in(['other'])]
+                : ['nullable', Rule::exists('categories', 'id')->where(fn ($query) => $query->whereNull('directory_id')->orWhere('directory_id', $directory->id))],
+            'requested_category' => 'nullable|string|max:120',
+            'city_id' => ['nullable', Rule::exists('cities', 'id')->where(fn ($query) => $query->whereNull('directory_id')->orWhere('directory_id', $directory->id))],
+            'district_id' => ['nullable', 'integer', Rule::exists('districts', 'id')->where('city_id', $request->input('city_id'))],
+        ]);
+
+        // Sinyal uç noktası: hata durumunda istisna fırlatmadan 422 döner (form akışı bundan etkilenmez).
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Geçersiz bilgi.'], 422);
+        }
+
+        $data = $validator->validated();
+        $token = $request->session()->get('registration_lead_token') ?: Str::random(40);
+        $request->session()->put('registration_lead_token', $token);
+
+        $lead = $this->findLead($request, $directory->id, $data['phone']);
+
+        $fields = [
+            'company_name' => trim($data['company_name']),
+            'phone' => trim($data['phone']),
+            'whatsapp' => $data['whatsapp'] ?? null,
+            'category_id' => $categoryIsOther ? null : ($data['category_id'] ?? null),
+            'requested_category' => $data['requested_category'] ?? null,
+            'city_id' => $data['city_id'] ?? null,
+            'district_id' => $data['district_id'] ?? null,
+        ];
+
+        if ($lead) {
+            $lead->update($fields + ['lead_token' => $token]);
+        } else {
+            ListingRequest::create($fields + [
+                'directory_id' => $directory->id,
+                'source' => 'owner_registration',
+                'status' => 'new',
+                'is_partial' => true,
+                'lead_token' => $token,
+            ] + app(Attribution::class)->forListing($request));
+        }
+
+        return response()->noContent();
+    }
+
+    /** Oturumdaki (ya da aynı telefonla son 24 saatteki) tamamlanmamış başvuruyu bulur. */
+    private function findLead(Request $request, int $directoryId, ?string $phone = null): ?ListingRequest
+    {
+        $query = ListingRequest::withoutGlobalScope('directory')
+            ->where('is_partial', true)
+            ->where('directory_id', $directoryId);
+
+        $token = $request->session()->get('registration_lead_token');
+
+        if ($token && ($lead = (clone $query)->where('lead_token', $token)->first())) {
+            return $lead;
+        }
+
+        return $phone
+            ? (clone $query)->where('phone', trim($phone))->where('created_at', '>=', now()->subDay())->latest('id')->first()
+            : null;
     }
 
     public function login()
