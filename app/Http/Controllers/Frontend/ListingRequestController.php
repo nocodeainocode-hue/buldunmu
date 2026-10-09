@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Rules\TurkishPhone;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\City;
@@ -50,8 +51,8 @@ class ListingRequestController extends Controller
         $validated = $request->validate([
             'company_name' => 'required|string|max:255',
             'contact_name' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:30',
-            'whatsapp' => 'nullable|string|max:30',
+            'phone' => ['nullable', 'string', 'max:30', new TurkishPhone],
+            'whatsapp' => ['nullable', 'string', 'max:30', new TurkishPhone],
             'email' => 'nullable|email|max:255',
             'website' => 'nullable|url|max:255',
             'claim_company_id' => 'nullable|integer',

@@ -27,6 +27,7 @@
             <table class="w-full text-sm">
                 <thead>
                     <tr class="border-b text-left text-xs uppercase tracking-wide text-gray-500 dark:border-white/10">
+                        <th class="p-2">Rehber</th>
                         <th class="p-2">Kaynak</th>
                         <th class="p-2">Ortam</th>
                         <th class="p-2">Reklam / kampanya</th>
@@ -40,7 +41,8 @@
                 <tbody>
                     @forelse($rows as $row)
                         <tr class="border-b dark:border-white/10">
-                            <td class="p-2 font-semibold">{{ $row['source'] }}</td>
+                            <td class="p-2 font-semibold">{{ $row['directory'] }}</td>
+                            <td class="p-2">{{ $row['source'] }}</td>
                             <td class="p-2">{{ $row['medium'] }}</td>
                             <td class="p-2">{{ $row['campaign'] }}</td>
                             <td class="p-2 text-right text-amber-600">{{ $row['partial'] }}</td>
@@ -50,7 +52,39 @@
                             <td class="p-2 text-right">{{ $row['whatsapp'] }} <span class="text-xs text-gray-500">(%{{ $row['whatsapp_rate'] }})</span></td>
                         </tr>
                     @empty
-                        <tr><td colspan="8" class="p-6 text-center text-gray-500">Bu dönemde firma kaydı yok.</td></tr>
+                        <tr><td colspan="9" class="p-6 text-center text-gray-500">Bu dönemde firma kaydı yok.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </x-filament::section>
+
+    @php $partialLeads = $this->getPartialLeads(); @endphp
+    <x-filament::section heading="Yarım kalan başvurular" description="1. adımı geçip kaydı tamamlamayanlar. Telefonla geri dönüş için son 25 kayıt; satıra tıklayınca Firma Talepleri kaydı açılır.">
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="border-b text-left text-xs uppercase tracking-wide text-gray-500 dark:border-white/10">
+                        <th class="p-2">Tarih</th>
+                        <th class="p-2">Rehber</th>
+                        <th class="p-2">Firma</th>
+                        <th class="p-2">Telefon</th>
+                        <th class="p-2">WhatsApp</th>
+                        <th class="p-2">Kaynak</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($partialLeads as $lead)
+                        <tr class="border-b dark:border-white/10">
+                            <td class="p-2 whitespace-nowrap">{{ $lead['created_at'] }}</td>
+                            <td class="p-2 font-semibold">{{ $lead['directory'] }}@if($lead['domain'])<span class="block text-xs font-normal text-gray-500">{{ $lead['domain'] }}</span>@endif</td>
+                            <td class="p-2"><a href="{{ $lead['url'] }}" class="font-semibold text-primary-600 underline">{{ $lead['company'] }}</a></td>
+                            <td class="p-2 whitespace-nowrap font-mono">{{ $lead['phone'] }}</td>
+                            <td class="p-2 whitespace-nowrap font-mono">{{ $lead['whatsapp'] ?: '-' }}</td>
+                            <td class="p-2">{{ $lead['source'] }}</td>
+                        </tr>
+                    @empty
+                        <tr><td colspan="6" class="p-6 text-center text-gray-500">Bu dönemde yarım kalan başvuru yok.</td></tr>
                     @endforelse
                 </tbody>
             </table>

@@ -53,12 +53,12 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Telefon</label>
-                    <input type="text" name="phone" value="{{ old('phone', $claimCompany?->phone) }}"
+                    <input type="tel" inputmode="tel" pattern="[0-9+()\s.\-]{10,20}" title="Geçerli bir telefon numarası girin, örn. 0532 123 45 67" name="phone" value="{{ old('phone', $claimCompany?->phone) }}"
                         class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">WhatsApp</label>
-                    <input type="text" name="whatsapp" value="{{ old('whatsapp', $claimCompany?->whatsapp) }}"
+                    <input type="tel" inputmode="tel" pattern="[0-9+()\s.\-]{10,20}" title="Geçerli bir telefon numarası girin, örn. 0532 123 45 67" name="whatsapp" value="{{ old('whatsapp', $claimCompany?->whatsapp) }}"
                         class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400">
                 </div>
                 <div>

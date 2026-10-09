@@ -207,4 +207,32 @@ class OwnerPartialLeadTest extends TestCase
         $this->assertSame(0, $rows['google']['signups']);
         $this->assertSame(1, $rows['Doğrudan']['partial']);
     }
+
+    public function test_report_names_the_directory_and_lists_who_to_call(): void
+    {
+        $this->lead();
+
+        $this->actingAs(User::factory()->create(['is_admin' => true]));
+        Filament::setCurrentPanel(Filament::getPanel('admin'));
+
+        $page = Livewire::test(AdAttributionReport::class)->instance();
+        $row = collect($page->getRows())->first();
+
+        $this->assertSame('Buldun mu?', $row['directory']);
+        $this->assertSame(1, $row['partial']);
+
+        $leads = $page->getPartialLeads();
+        $this->assertCount(1, $leads);
+        $this->assertSame('Ayşe Diş Kliniği', $leads[0]['company']);
+        $this->assertSame('0282 000 00 00', $leads[0]['phone']);
+        $this->assertSame('Buldun mu?', $leads[0]['directory']);
+        $this->assertSame('buldunmu.test', $leads[0]['domain']);
+        $this->assertStringContainsString('/listing-requests/', $leads[0]['url']);
+
+        $this->get('/admin/ad-attribution-report')
+            ->assertOk()
+            ->assertSee('Yarım kalan başvurular')
+            ->assertSee('Buldun mu?')
+            ->assertSee('0282 000 00 00');
+    }
 }

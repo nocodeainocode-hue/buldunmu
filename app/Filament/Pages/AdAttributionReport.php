@@ -31,21 +31,26 @@ class AdAttributionReport extends Page
 
         $query = DB::table('users')
             ->leftJoin('owner_campaign_events as e', 'e.user_id', '=', 'users.id')
+            ->leftJoin('directories as d', 'd.id', '=', 'users.signup_directory_id')
             ->whereNotNull('users.signup_directory_id')
             ->when($this->days > 0, fn ($q) => $q->where('users.created_at', '>=', now()->subDays($this->days)))
             ->when($this->directoryId, fn ($q) => $q->where('users.signup_directory_id', $this->directoryId))
             ->selectRaw("{$source} as source")
+            ->selectRaw('users.signup_directory_id as directory_id')
+            ->selectRaw("COALESCE(d.name, '-') as directory_name")
             ->selectRaw("COALESCE(NULLIF(users.utm_medium, ''), '-') as medium")
             ->selectRaw("COALESCE(NULLIF(users.utm_campaign, ''), '-') as campaign")
             ->selectRaw('COUNT(DISTINCT users.id) as signups')
             ->selectRaw("COUNT(DISTINCT CASE WHEN e.event = 'popup_shown' THEN users.id END) as popup")
             ->selectRaw("COUNT(DISTINCT CASE WHEN e.event = 'page_view' THEN users.id END) as page_view")
             ->selectRaw("COUNT(DISTINCT CASE WHEN e.event = 'whatsapp_click' THEN users.id END) as whatsapp")
-            ->groupByRaw("{$source}, COALESCE(NULLIF(users.utm_medium, ''), '-'), COALESCE(NULLIF(users.utm_campaign, ''), '-')")
+            ->groupByRaw("{$source}, users.signup_directory_id, COALESCE(d.name, '-'), COALESCE(NULLIF(users.utm_medium, ''), '-'), COALESCE(NULLIF(users.utm_campaign, ''), '-')")
             ->orderByDesc('signups');
 
         $rows = $query->get()->map(fn ($row) => [
             'source' => $row->source,
+            'directory_id' => (int) $row->directory_id,
+            'directory' => $row->directory_name,
             'medium' => $row->medium,
             'campaign' => $row->campaign,
             'signups' => (int) $row->signups,
@@ -55,25 +60,29 @@ class AdAttributionReport extends Page
             'page_rate' => $row->signups > 0 ? (int) round($row->page_view / $row->signups * 100) : 0,
             'whatsapp_rate' => $row->signups > 0 ? (int) round($row->whatsapp / $row->signups * 100) : 0,
             'partial' => 0,
-        ])->keyBy(fn ($row) => $row['source'].'|'.$row['medium'].'|'.$row['campaign']);
+        ])->keyBy(fn ($row) => $row['source'].'|'.$row['directory_id'].'|'.$row['medium'].'|'.$row['campaign']);
 
         // Yarım kalan başvurular (2. adım yapılmadı): hangi reklamdan telefon alındığını gösterir.
-        $partialSource = "COALESCE(NULLIF(utm_source, ''), NULLIF(referrer_host, ''), 'Doğrudan')";
-        $partials = DB::table('listing_requests')
-            ->where('is_partial', true)
-            ->when($this->days > 0, fn ($q) => $q->where('created_at', '>=', now()->subDays($this->days)))
-            ->when($this->directoryId, fn ($q) => $q->where('directory_id', $this->directoryId))
+        $partialSource = "COALESCE(NULLIF(lr.utm_source, ''), NULLIF(lr.referrer_host, ''), 'Doğrudan')";
+        $partials = DB::table('listing_requests as lr')
+            ->leftJoin('directories as d', 'd.id', '=', 'lr.directory_id')
+            ->where('lr.is_partial', true)
+            ->when($this->days > 0, fn ($q) => $q->where('lr.created_at', '>=', now()->subDays($this->days)))
+            ->when($this->directoryId, fn ($q) => $q->where('lr.directory_id', $this->directoryId))
             ->selectRaw("{$partialSource} as source")
-            ->selectRaw("COALESCE(NULLIF(utm_medium, ''), '-') as medium")
-            ->selectRaw("COALESCE(NULLIF(utm_campaign, ''), '-') as campaign")
+            ->selectRaw('lr.directory_id as directory_id')
+            ->selectRaw("COALESCE(d.name, '-') as directory_name")
+            ->selectRaw("COALESCE(NULLIF(lr.utm_medium, ''), '-') as medium")
+            ->selectRaw("COALESCE(NULLIF(lr.utm_campaign, ''), '-') as campaign")
             ->selectRaw('COUNT(*) as partial')
-            ->groupByRaw("{$partialSource}, COALESCE(NULLIF(utm_medium, ''), '-'), COALESCE(NULLIF(utm_campaign, ''), '-')")
+            ->groupByRaw("{$partialSource}, lr.directory_id, COALESCE(d.name, '-'), COALESCE(NULLIF(lr.utm_medium, ''), '-'), COALESCE(NULLIF(lr.utm_campaign, ''), '-')")
             ->get();
 
         foreach ($partials as $partial) {
-            $key = $partial->source.'|'.$partial->medium.'|'.$partial->campaign;
+            $key = $partial->source.'|'.(int) $partial->directory_id.'|'.$partial->medium.'|'.$partial->campaign;
             $row = $rows->get($key) ?? [
-                'source' => $partial->source, 'medium' => $partial->medium, 'campaign' => $partial->campaign,
+                'source' => $partial->source, 'directory_id' => (int) $partial->directory_id, 'directory' => $partial->directory_name,
+                'medium' => $partial->medium, 'campaign' => $partial->campaign,
                 'signups' => 0, 'popup' => 0, 'page_view' => 0, 'whatsapp' => 0, 'page_rate' => 0, 'whatsapp_rate' => 0, 'partial' => 0,
             ];
             $row['partial'] = (int) $partial->partial;
@@ -81,6 +90,34 @@ class AdAttributionReport extends Page
         }
 
         return $rows->sortByDesc(fn ($row) => $row['signups'] * 1000 + $row['partial'])->values()->all();
+    }
+
+    /**
+     * Son yarım kalan başvurular: kimi, hangi rehberden ve hangi telefonla arayacağınızı gösterir.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public function getPartialLeads(): array
+    {
+        return DB::table('listing_requests as lr')
+            ->leftJoin('directories as d', 'd.id', '=', 'lr.directory_id')
+            ->where('lr.is_partial', true)
+            ->when($this->days > 0, fn ($q) => $q->where('lr.created_at', '>=', now()->subDays($this->days)))
+            ->when($this->directoryId, fn ($q) => $q->where('lr.directory_id', $this->directoryId))
+            ->orderByDesc('lr.id')
+            ->limit(25)
+            ->get(['lr.id', 'lr.company_name', 'lr.phone', 'lr.whatsapp', 'lr.created_at', 'd.name as directory_name', 'd.domain as directory_domain', 'lr.utm_source', 'lr.utm_campaign'])
+            ->map(fn ($lead) => [
+                'id' => $lead->id,
+                'company' => $lead->company_name,
+                'phone' => $lead->phone,
+                'whatsapp' => $lead->whatsapp,
+                'directory' => $lead->directory_name ?? '-',
+                'domain' => $lead->directory_domain,
+                'source' => $lead->utm_source ? $lead->utm_source.($lead->utm_campaign ? ' / '.$lead->utm_campaign : '') : 'Doğrudan',
+                'created_at' => \Illuminate\Support\Carbon::parse($lead->created_at)->timezone('Europe/Istanbul')->format('d.m.Y H:i'),
+                'url' => \App\Filament\Resources\ListingRequests\ListingRequestResource::getUrl('edit', ['record' => $lead->id]),
+            ])->all();
     }
 
     /** @return array<int, string> */

@@ -12,10 +12,12 @@ use App\Models\ListingRequest;
 use App\Models\OwnerCampaignEvent;
 use App\Models\SiteSetting;
 use App\Models\User;
+use App\Rules\TurkishPhone;
 use App\Services\Attribution;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -118,8 +120,8 @@ class OwnerPanelController extends Controller
 
         $validator = Validator::make($request->all(), [
             'company_name' => 'required|string|max:255',
-            'phone' => ['required', 'string', 'max:30', fn ($attribute, $value, $fail) => strlen(preg_replace('/\D+/', '', (string) $value)) >= 10 ?: $fail('Telefon geçersiz.')],
-            'whatsapp' => 'nullable|string|max:30',
+            'phone' => ['required', 'string', 'max:30', new TurkishPhone],
+            'whatsapp' => ['nullable', 'string', 'max:30', new TurkishPhone],
             'category_id' => $categoryIsOther
                 ? ['required', Rule::in(['other'])]
                 : ['nullable', Rule::exists('categories', 'id')->where(fn ($query) => $query->whereNull('directory_id')->orWhere('directory_id', $directory->id))],
@@ -130,6 +132,9 @@ class OwnerPanelController extends Controller
 
         // Sinyal uç noktası: hata durumunda istisna fırlatmadan 422 döner (form akışı bundan etkilenmez).
         if ($validator->fails()) {
+            // Sinyal sessiz çalıştığı için başarısızlık izlenebilsin: yalnızca alan adları loglanır (kişisel veri yok).
+            Log::info('Ön başvuru doğrulaması başarısız.', ['directory_id' => $directory->id, 'alanlar' => array_keys($validator->errors()->toArray())]);
+
             return response()->json(['message' => 'Geçersiz bilgi.'], 422);
         }
 
@@ -337,8 +342,8 @@ class OwnerPanelController extends Controller
         $this->authorizeCompany($company);
 
         $validated = $request->validate([
-            'phone' => 'nullable|string|max:30',
-            'whatsapp' => 'nullable|string|max:30',
+            'phone' => ['nullable', 'string', 'max:30', new TurkishPhone],
+            'whatsapp' => ['nullable', 'string', 'max:30', new TurkishPhone],
             'email' => 'nullable|email|max:255',
             'website' => 'nullable|url|max:255',
             'address' => 'nullable|string|max:1000',
@@ -376,8 +381,8 @@ class OwnerPanelController extends Controller
 
         $validated = $request->validate([
             'company_name' => 'required|string|max:255',
-            'phone' => 'required|string|max:30',
-            'whatsapp' => 'nullable|string|max:30',
+            'phone' => ['required', 'string', 'max:30', new TurkishPhone],
+            'whatsapp' => ['nullable', 'string', 'max:30', new TurkishPhone],
             'company_email' => 'nullable|email|max:255',
             'website' => 'nullable|url|max:255',
             'address' => 'nullable|string|max:1000',

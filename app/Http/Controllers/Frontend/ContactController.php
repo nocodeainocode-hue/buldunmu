@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Rules\TurkishPhone;
 use App\Http\Controllers\Controller;
 use App\Models\ContactMessage;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class ContactController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
-            'phone' => 'nullable|string|max:30',
+            'phone' => ['nullable', 'string', 'max:30', new TurkishPhone],
             'subject' => 'nullable|string|max:255',
             'message' => 'required|string|max:5000',
             'captcha' => 'required|integer',

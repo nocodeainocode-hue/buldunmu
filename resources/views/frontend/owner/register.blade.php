@@ -71,12 +71,12 @@
                     </label>
 
                     <label class="block text-sm font-bold" style="color:var(--text);">Telefon *
-                        <input name="phone" type="tel" value="{{ old('phone') }}" required inputmode="tel" autocomplete="tel" placeholder="05xx xxx xx xx" class="mt-1.5 w-full rounded-lg border px-4 py-3" style="border-color:var(--border);background:var(--bg);">
+                        <input name="phone" type="tel" value="{{ old('phone') }}" required inputmode="tel" autocomplete="tel" placeholder="05xx xxx xx xx" pattern="[0-9+()\s.\-]{10,20}" title="Geçerli bir telefon numarası girin, örn. 0532 123 45 67" class="mt-1.5 w-full rounded-lg border px-4 py-3" style="border-color:var(--border);background:var(--bg);">
                         @error('phone')<span class="mt-1 block text-xs text-red-600">{{ $message }}</span>@enderror
                     </label>
 
                     <label class="block text-sm font-bold" style="color:var(--text);">WhatsApp
-                        <input name="whatsapp" value="{{ old('whatsapp') }}" inputmode="tel" placeholder="05xx xxx xx xx" class="mt-1.5 w-full rounded-lg border px-4 py-3" style="border-color:var(--border);background:var(--bg);">
+                        <input name="whatsapp" value="{{ old('whatsapp') }}" inputmode="tel" placeholder="05xx xxx xx xx" pattern="[0-9+()\s.\-]{10,20}" title="Geçerli bir telefon numarası girin, örn. 0532 123 45 67" class="mt-1.5 w-full rounded-lg border px-4 py-3" style="border-color:var(--border);background:var(--bg);">
                         @error('whatsapp')<span class="mt-1 block text-xs text-red-600">{{ $message }}</span>@enderror
                     </label>
                 </div>

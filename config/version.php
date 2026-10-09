@@ -2,11 +2,21 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.8.0',
-    'name' => 'Reklam Ölçümü ve Kampanya Hunisi',
+    'number' => '1.8.1',
+    'name' => 'Telefon Doğrulama ve Rapor İyileştirmeleri',
     'released_at' => '2026-10-09',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.8.1',
+            'name' => 'Telefon Doğrulama ve Rapor İyileştirmeleri',
+            'released_at' => '2026-10-09',
+            'changes' => [
+                'Telefon ve WhatsApp alanları artık Türkiye numarası biçimini doğrular (kayıt, ön başvuru, firma ekleme, firma düzenleme ve iletişim formları); "abcd" gibi değerler tarayıcıda ve sunucuda reddedilir.',
+                'Reklam Kaynakları raporuna Rehber sütunu ve "Yarım kalan başvurular" listesi (firma, telefon, rehber, kaynak) eklendi.',
+                'Ön başvuru doğrulama hataları artık sistem kaydına yazılır.',
+            ],
+        ],
         [
             'number' => '1.8.0',
             'name' => 'Reklam Ölçümü ve Kampanya Hunisi',
