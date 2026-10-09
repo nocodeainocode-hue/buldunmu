@@ -14,4 +14,15 @@ class ApplicationVersionTest extends TestCase
 
         $this->assertSame('v1.2.3 · abcdef1', ApplicationVersion::label());
     }
+
+    public function test_latest_history_entry_matches_the_current_version(): void
+    {
+        $latest = ApplicationVersion::history()[0] ?? null;
+
+        $this->assertNotNull($latest);
+        $this->assertSame(config('version.number'), $latest['number']);
+        $this->assertSame(config('version.name'), $latest['name']);
+        $this->assertSame(config('version.released_at'), $latest['released_at']);
+        $this->assertNotEmpty($latest['changes']);
+    }
 }

@@ -2,11 +2,28 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.6.8',
-    'name' => 'Rehber Marka Kimlikleri',
-    'released_at' => '2026-10-08',
+    'number' => '1.7.0',
+    'name' => 'Reklam Sistemi ve Yeni Temalar',
+    'released_at' => '2026-10-09',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.7.0',
+            'name' => 'Reklam Sistemi ve Yeni Temalar',
+            'released_at' => '2026-10-09',
+            'changes' => [
+                'Banner reklam sistemi eklendi: Gelir > Reklamlar bölümünden sayfa üstü ve sayfa altı konumlarına reklam, görsel, metin ve bağlantı girilir.',
+                'Reklam önceliği: ücretli reklamveren, hedefi en dar kendi reklamımız, genel kendi reklamımız. Şehir, kategori ve rehber bazında hedefleme yapılabilir.',
+                'Gösterim ve tıklama sayıları günlük olarak izlenir; tıklamalar UTM parametreleriyle reklamverene yönlendirilir. Bağlantılar "sponsored nofollow" ve "Reklam" etiketlidir.',
+                'Reklam önbelleği Laravel 13 ile uyumlu hale getirildi (aktif reklamlı sayfalarda görülen 500 hatası giderildi).',
+                'Yönetim panelindeki tarih alanları Türkiye saatiyle girilir ve gösterilir; veritabanı UTC olarak kalır.',
+                'Yeni temalar: Tasarım Kataloğu (dergi tarzı tam alt sayfa ailesiyle) ve Mahalle Panosu v2 (liste/galeri görünümlü ilan panosu).',
+                'Split Screen teması bölünmüş ekran ana sayfası ve yeni teal/mercan paletiyle yeniden tasarlandı.',
+                'Elegant Premium okunabilirliği artırıldı: daha yüksek kontrast, daha büyük yazılar, Playfair Display başlıklar ve düğme renk hatası düzeltildi.',
+                'Toplu Firma Merkezi\'ne rehber seçiminde "Tümünü seç" ve "Temizle" düğmeleri eklendi.',
+                'Firmalara rehbere özgü açıklama üreten companies:fill-descriptions komutu eklendi.',
+            ],
+        ],
         [
             'number' => '1.6.8',
             'name' => 'Rehber Marka Kimlikleri',
