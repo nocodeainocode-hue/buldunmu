@@ -219,7 +219,7 @@
                 <h2 class="mb-4 text-2xl font-black" style="color:var(--text);">{{ $company->name }} — {{ $cityName }} {{ $categoryName }}</h2>
                 <div class="prose max-w-none leading-7" style="color:var(--text_muted);">
                     @if($company->description)
-                        {!! $company->description !!}
+                        {!! \App\Support\HtmlSanitizer::clean($company->description) !!}
                     @else
                         <p><strong>{{ $company->name }}</strong>, {{ $cityName }}{{ $districtName ? ' / ' . $districtName : '' }} bölgesinde hizmet veren bir <strong>{{ $categoryName }}</strong> firmasıdır.</p>
 
@@ -468,6 +468,7 @@
                 {{-- Review Form --}}
                 <form action="{{ route('companies.reviews.store', $company->slug) }}" method="POST" class="grid gap-4 sm:grid-cols-2">
                     @csrf
+@include('partials.honeypot')
                     <input name="name" value="{{ old('name') }}" placeholder="Adınız Soyadınız" required class="rounded-xl border px-4 py-3 text-sm" style="border-color:var(--border);background:var(--bg);">
                     <input name="email" value="{{ old('email') }}" placeholder="E-posta (isteğe bağlı)" type="email" class="rounded-xl border px-4 py-3 text-sm" style="border-color:var(--border);background:var(--bg);">
                     <select name="rating" required class="rounded-xl border px-4 py-3 text-sm" style="border-color:var(--border);background:var(--bg);">

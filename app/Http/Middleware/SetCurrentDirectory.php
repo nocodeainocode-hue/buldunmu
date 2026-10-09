@@ -24,12 +24,12 @@ class SetCurrentDirectory
             $host = strtolower($request->getHost());
             $rootHost = str_starts_with($host, 'www.') ? substr($host, 4) : $host;
 
-            $directory = Directory::whereIn('domain', [$host, $rootHost, 'www.'.$rootHost])
-                ->where('status', 'active')
-                ->where(fn ($query) => $query
-                    ->whereNull('expires_at')
-                    ->orWhere('expires_at', '>', now()))
-                ->first();
+            $directory = \App\Support\ModelCache::remember('directories', 'host.'.$host, (int) config('performance.directory_ttl', 60), fn () => Directory::whereIn('domain', [$host, $rootHost, 'www.'.$rootHost])->first());
+
+            // Durum ve bitiş tarihi önbellekten sonra denetlenir: süre dolan rehber hemen kapanır.
+            if ($directory && ($directory->status !== 'active' || ($directory->expires_at && ! $directory->expires_at->isFuture()))) {
+                $directory = null;
+            }
 
             if (! $directory && app()->environment('production')) {
                 abort(404);

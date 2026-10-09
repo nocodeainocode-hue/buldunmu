@@ -25,6 +25,14 @@ class Directory extends Model
 
     protected static function booted(): void
     {
+        $flush = function (Directory $directory): void {
+            \App\Support\ModelCache::bump('directories');
+            \App\Support\ModelCache::bump('settings');
+            \App\Support\ModelCache::bump('dir.'.$directory->id);
+        };
+        static::saved($flush);
+        static::deleted($flush);
+
         static::created(function (Directory $directory): void {
             SiteSetting::withoutGlobalScope('directory')->firstOrCreate(
                 ['directory_id' => $directory->id],

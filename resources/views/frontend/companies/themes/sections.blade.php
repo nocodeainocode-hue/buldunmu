@@ -2,7 +2,7 @@
     <div class="td-section-head"><span class="td-index">01</span><h2>{{ $company->name }} hakkında</h2></div>
     <div class="td-prose">
         @if($company->description)
-            {!! $company->description !!}
+            {!! \App\Support\HtmlSanitizer::clean($company->description) !!}
         @else
             <p><strong>{{ $company->name }}</strong>, {{ $cityName }}{{ $districtName ? ' / '.$districtName : '' }} bölgesinde hizmet veren bir {{ $categoryName }} firmasıdır. İletişim ve konum bilgilerini bu sayfada bulabilirsiniz.</p>
         @endif
@@ -82,6 +82,7 @@
     <h3 class="td-form-title">Yorum bırak</h3>
     <form class="td-review-form" action="{{ route('companies.reviews.store', $company->slug) }}" method="POST">
         @csrf
+@include('partials.honeypot')
         <input name="name" value="{{ old('name') }}" placeholder="Adınız Soyadınız" aria-label="Adınız Soyadınız" required>
         <input name="email" value="{{ old('email') }}" type="email" placeholder="E-posta (isteğe bağlı)" aria-label="E-posta">
         <select name="rating" required aria-label="Puanınız"><option value="">Puanınız</option>@for($i=5;$i>=1;$i--)<option value="{{ $i }}" @selected(old('rating') == $i)>{{ $i }} yıldız</option>@endfor</select>

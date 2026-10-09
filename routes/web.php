@@ -37,7 +37,7 @@ Route::get('/firmalar', [CompanyController::class, 'index'])->name('companies.in
 
 // Firma detay
 Route::get('/firma/{slug}', [CompanyController::class, 'show'])->name('companies.show');
-Route::post('/firma/{company:slug}/yorum', [CompanyReviewController::class, 'store'])->name('companies.reviews.store');
+Route::post('/firma/{company:slug}/yorum', [CompanyReviewController::class, 'store'])->middleware(['throttle:6,1', 'honeypot'])->name('companies.reviews.store');
 Route::get('/firma/{company:slug}/sahiplen', [ListingRequestController::class, 'claim'])->name('companies.claim');
 
 Route::get('/is-ilanlari', [JobPostingController::class, 'index'])->name('jobs.index');
@@ -52,15 +52,15 @@ Route::get('/sehir/{slug}', [CityController::class, 'show'])->name('cities.show'
 
 // Firma ekleme talebi
 Route::get('/firma-ekle', [ListingRequestController::class, 'create'])->name('listing.create');
-Route::post('/firma-ekle', [ListingRequestController::class, 'store'])->name('listing.store');
+Route::post('/firma-ekle', [ListingRequestController::class, 'store'])->middleware(['throttle:10,1', 'honeypot'])->name('listing.store');
 
 // Firma sahibi hesabı ve firma paneli
 Route::get('/firma-kayit', [OwnerPanelController::class, 'register'])->middleware('guest')->name('owner.register');
-Route::post('/firma-kayit', [OwnerPanelController::class, 'storeRegistration'])->middleware('guest')->name('owner.register.store');
+Route::post('/firma-kayit', [OwnerPanelController::class, 'storeRegistration'])->middleware(['guest', 'throttle:10,1', 'honeypot'])->name('owner.register.store');
 Route::post('/firma-kayit/on-basvuru', [OwnerPanelController::class, 'saveLead'])->middleware(['guest', 'throttle:30,1'])->name('owner.register.lead');
 Route::get('/panel/giris', [OwnerPanelController::class, 'login'])->middleware('guest')->name('owner.login');
 Route::get('/giris', [OwnerPanelController::class, 'login'])->middleware('guest')->name('login');
-Route::post('/panel/giris', [OwnerPanelController::class, 'authenticate'])->middleware('guest')->name('owner.login.store');
+Route::post('/panel/giris', [OwnerPanelController::class, 'authenticate'])->middleware(['guest', 'throttle:20,1'])->name('owner.login.store');
 Route::middleware('auth')->group(function (): void {
     Route::get('/panel', [OwnerPanelController::class, 'dashboard'])->name('owner.dashboard');
     Route::get('/panel/kampanyalar', [OwnerPanelController::class, 'campaigns'])->name('owner.campaigns');
@@ -82,7 +82,7 @@ Route::middleware('auth')->group(function (): void {
 });
 
 // İletişim
-Route::post('/iletisim', [ContactController::class, 'store'])->name('contact.store');
+Route::post('/iletisim', [ContactController::class, 'store'])->middleware('throttle:6,1')->name('contact.store');
 
 // Üyelik Paketleri
 Route::get('/paketler', [PaketController::class, 'index'])->name('packages.index');
@@ -161,9 +161,10 @@ Route::post('/admin/tenant/switch', function () {
     session()->save();
 
     return redirect()->back();
-})->name('filament.admin.tenant.switch')->middleware(['web', 'auth']);
+})->name('filament.admin.tenant.switch')->middleware(['web', 'auth', 'admin']);
 
 // Campaign CSV export
-Route::get('/admin/campaigns/{campaign}/export-csv', function (Campaign $campaign) {
-    return CampaignReportService::exportCsv($campaign);
-})->name('filament.admin.campaigns.export-csv')->middleware(['web', 'auth']);
+Route::get('/admin/campaigns/{campaign}/export-csv', function (int $campaign) {
+    // Model, admin denetiminden sonra çözülür: yetkisiz kullanıcı kayıt varlığını öğrenemez.
+    return CampaignReportService::exportCsv(Campaign::findOrFail($campaign));
+})->name('filament.admin.campaigns.export-csv')->middleware(['web', 'auth', 'admin']);

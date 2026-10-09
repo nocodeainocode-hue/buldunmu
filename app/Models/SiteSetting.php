@@ -21,9 +21,21 @@ class SiteSetting extends Model
         'campaign_price' => 'decimal:2',
     ];
 
+    protected static function booted(): void
+    {
+        static::saved(fn () => \App\Support\ModelCache::bump('settings'));
+        static::deleted(fn () => \App\Support\ModelCache::bump('settings'));
+    }
+
     public static function getSettings()
     {
         $directory = app()->bound('currentDirectory') ? app('currentDirectory') : null;
+
+        return \App\Support\ModelCache::remember('settings', 'dir.'.($directory?->id ?? 'global'), (int) config('performance.directory_ttl', 60), fn () => static::loadSettings($directory));
+    }
+
+    private static function loadSettings($directory)
+    {
         $query = static::withoutGlobalScope('directory');
 
         if ($directory) {

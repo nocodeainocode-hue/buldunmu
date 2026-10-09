@@ -2,11 +2,26 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.8.1',
-    'name' => 'Telefon Doğrulama ve Rapor İyileştirmeleri',
+    'number' => '1.9.0',
+    'name' => 'Güvenlik ve Hız Güncellemesi',
     'released_at' => '2026-10-09',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.9.0',
+            'name' => 'Güvenlik ve Hız Güncellemesi',
+            'released_at' => '2026-10-09',
+            'changes' => [
+                'Güvenlik: firma açıklamasına yazılan HTML artık izinli etiket listesiyle temizleniyor (kaydederken ve gösterirken); script, iframe, olay öznitelikleri ve javascript: bağlantıları engellendi.',
+                'Güvenlik: kampanya CSV indirme ve rehber değiştirme rotaları yalnızca yöneticiye açıldı.',
+                'Güvenlik: giriş (5 hatalı denemede kilit), kayıt, yorum, firma ekleme ve iletişim formlarına deneme sınırı; kayıt, yorum ve firma ekleme formlarına görünmez bot tuzağı eklendi.',
+                'Güvenlik: tüm sayfalara X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy ve (https üzerinde) HSTS başlıkları eklendi.',
+                'Hız: ana sayfa verisi, site ayarları ve rehber çözümleme kısa süreli önbelleğe alındı; firma/rehber/ayar kaydedilince otomatik tazelenir.',
+                'Hız: sayfa görüntüleme ve firma görüntülenme sayaçları yanıt gönderildikten sonra yazılıyor; botlar ve hatalı sayfalar sayılmıyor.',
+                'Hız: Google Fonts artık sayfayı bloklamadan yükleniyor; kullanılmayan yazı tipi paketi kaldırıldı.',
+                'Bakım: eski sayfa görüntüleme kayıtlarını (180 gün) her gece temizleyen pageviews:prune komutu eklendi.',
+            ],
+        ],
         [
             'number' => '1.8.1',
             'name' => 'Telefon Doğrulama ve Rapor İyileştirmeleri',

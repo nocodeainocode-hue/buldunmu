@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Company;
 use App\Models\PageView;
+use App\Support\BotDetector;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,28 +35,39 @@ class TrackPageView
             return $response;
         }
 
-        // Determine company_id from route parameter
-        $companyId = $this->resolveCompanyId($request);
+        // Botlar ve hata sayfaları istatistiği şişirmesin
+        if (! $response->isSuccessful() || BotDetector::isBot($request->userAgent())) {
+            return $response;
+        }
 
         // Resolve directory_id from the app container (set by SetCurrentDirectory middleware)
-        $directoryId = null;
-        if (app()->bound('currentDirectory')) {
-            $directoryId = app('currentDirectory')->id;
-        }
+        $directoryId = app()->bound('currentDirectory') ? app('currentDirectory')->id : null;
+        $companyId = null;
+        $routeName = $request->route()?->getName();
+        $routeSlug = $routeName === 'companies.show' ? $request->route('slug') : null;
+        $visit = [
+            'path'               => '/' . ltrim($path, '/'),
+            'ip_hash'            => hash('sha256', (string) $request->ip()),
+            'user_agent_summary' => $this->summarizeUserAgent($request->userAgent()),
+            'directory_id'       => $directoryId,
+            'created_at'         => now(),
+        ];
 
-        // Fire-and-forget: don't block the response for analytics
-        try {
-            PageView::create([
-                'path'               => '/' . ltrim($path, '/'),
-                'ip_hash'            => hash('sha256', $request->ip()),
-                'user_agent_summary' => $this->summarizeUserAgent($request->userAgent()),
-                'company_id'         => $companyId,
-                'directory_id'       => $directoryId,
-                'created_at'         => now(),
-            ]);
-        } catch (\Throwable) {
-            // Silently ignore logging failures — never break the user experience
-        }
+        // Yanıt ziyaretçiye gönderildikten sonra yazılır: sayfa hızını etkilemez
+        app()->terminating(function () use ($visit, $routeSlug): void {
+            try {
+                if (is_string($routeSlug)) {
+                    $visit['company_id'] = Company::withoutGlobalScopes()
+                        ->where('slug', $routeSlug)
+                        ->when($visit['directory_id'], fn ($q) => $q->where('directory_id', $visit['directory_id']))
+                        ->value('id');
+                }
+
+                PageView::create($visit);
+            } catch (\Throwable) {
+                // Silently ignore logging failures — never break the user experience
+            }
+        });
 
         return $response;
     }

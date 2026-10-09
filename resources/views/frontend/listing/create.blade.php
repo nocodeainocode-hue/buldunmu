@@ -36,6 +36,7 @@
 
         <form action="{{ route('listing.store') }}" method="POST" class="space-y-6">
             @csrf
+@include('partials.honeypot')
             @if($isClaim)
                 <input type="hidden" name="claim_company_id" value="{{ $claimCompany->id }}">
             @endif

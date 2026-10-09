@@ -118,7 +118,7 @@ class DirectoryInfrastructureTest extends TestCase
 
     public function test_tenant_switch_rejects_an_unknown_directory_id(): void
     {
-        $this->actingAs(User::factory()->create())
+        $this->actingAs(User::factory()->create(['is_admin' => true]))
             ->from('/admin')
             ->post('/admin/tenant/switch', ['directory_id' => 999999])
             ->assertRedirect('/admin')

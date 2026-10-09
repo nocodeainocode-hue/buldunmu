@@ -115,7 +115,8 @@
     @if($fontsUrl)
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="{{ $fontsUrl }}" rel="stylesheet">
+    <link rel="preload" as="style" href="{{ $fontsUrl }}" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="{{ $fontsUrl }}" rel="stylesheet"></noscript>
     @endif
 
     @if(request()->routeIs('home'))

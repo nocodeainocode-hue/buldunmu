@@ -11,6 +11,7 @@ use App\Models\JobPosting;
 use App\Models\Post;
 use App\Models\SiteSetting;
 use App\Support\AtlasData;
+use App\Support\ModelCache;
 use App\View\Helpers\ThemeHelper;
 use Illuminate\Http\Request;
 
@@ -18,8 +19,24 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $settings = SiteSetting::getSettings();
         $directory = app()->bound('currentDirectory') ? app('currentDirectory') : null;
+
+        // Ana sayfanın ağır sorguları rehber başına kısa süre önbellekte tutulur; firma kaydedilince sürüm değişir.
+        $data = ModelCache::remember('dir.'.($directory?->id ?? 'global'), 'home', (int) config('performance.home_ttl', 90), fn () => $this->homeData($directory));
+        extract($data);
+
+        $layout = ThemeHelper::layoutFile($directory);
+        $viewName = 'frontend.home.' . (view()->exists('frontend.home.' . $layout) ? $layout : 'default');
+
+        return view($viewName, array_merge(compact(
+            'settings', 'categories', 'cities', 'premiumCompanies', 'latestCompanies', 'openCompanies', 'trustedCompanies',
+            'mapCompanies', 'posts', 'directory', 'homeJobs', 'featuredOfferings'
+        ), $layout === 'turkey-atlas' ? AtlasData::forCurrentDirectory() : []));
+    }
+
+    private function homeData($directory): array
+    {
+        $settings = SiteSetting::getSettings();
         $categories = Category::active()->withCount('companies')->orderByDesc('companies_count')->take(12)->get();
         $cities = $this->navigationCities($directory);
         $companyIncludes = ['category', 'city', 'district'];
@@ -63,12 +80,11 @@ class HomeController extends Controller
                 ->take(4)
                 ->get()
             : collect();
-        $viewName = 'frontend.home.' . (view()->exists('frontend.home.' . $layout) ? $layout : 'default');
 
-        return view($viewName, array_merge(compact(
+        return compact(
             'settings', 'categories', 'cities', 'premiumCompanies', 'latestCompanies', 'openCompanies', 'trustedCompanies',
-            'mapCompanies', 'posts', 'directory', 'homeJobs', 'featuredOfferings'
-        ), $layout === 'turkey-atlas' ? AtlasData::forCurrentDirectory() : []));
+            'mapCompanies', 'posts', 'homeJobs', 'featuredOfferings'
+        );
     }
 
     private function navigationCities($directory)

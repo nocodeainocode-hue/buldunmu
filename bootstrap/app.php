@@ -13,7 +13,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->trustProxies(at: '*');
+        $middleware->alias([
+            'honeypot' => \App\Http\Middleware\Honeypot::class,
+            'admin' => \App\Http\Middleware\EnsureAdmin::class,
+        ]);
         $middleware->web(append: [
+            \App\Http\Middleware\SecurityHeaders::class,
             \App\Http\Middleware\SetCurrentDirectory::class,
             \App\Http\Middleware\CaptureAttribution::class,
             \App\Http\Middleware\TrackPageView::class,

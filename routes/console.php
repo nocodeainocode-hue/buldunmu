@@ -10,3 +10,6 @@ Artisan::command('inspire', function () {
 
 // Check due campaign listings throughout the day; the command enforces the daily limit.
 Schedule::command('listings:publish-daily')->everyFiveMinutes()->withoutOverlapping(30);
+
+// Eski sayfa görüntüleme kayıtlarını her gece temizle.
+Schedule::command('pageviews:prune')->dailyAt('03:30')->withoutOverlapping(60);

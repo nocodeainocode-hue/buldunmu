@@ -20,6 +20,7 @@
     <div class="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <form id="owner-registration-form" action="{{ route('owner.register.store') }}" method="POST" class="rounded-lg border p-5 sm:p-7" style="border-color:var(--border);background:var(--bg_card);box-shadow:var(--card_shadow);" data-initial-step="{{ $initialStep }}">
             @csrf
+@include('partials.honeypot')
 
             <div class="mb-7" aria-label="Kayıt adımları">
                 <div class="mb-3 flex items-center justify-between text-xs font-black">

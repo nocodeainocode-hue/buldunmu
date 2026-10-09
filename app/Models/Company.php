@@ -23,6 +23,14 @@ class Company extends Model
 
     protected static function booted(): void
     {
+        $flush = function (self $company): void {
+            if ($company->directory_id) {
+                \App\Support\ModelCache::bump('dir.'.$company->directory_id);
+            }
+        };
+        static::saved($flush);
+        static::deleted($flush);
+
         static::creating(function (self $company) {
             $company->slug = app(CompanySlugService::class)->generate($company, $company->slug);
         });
@@ -261,7 +269,25 @@ class Company extends Model
 
     public function incrementViewCount(): void
     {
-        $this->increment('view_count');
+        // Yanıt gönderildikten sonra ve olay (cache bump) tetiklemeden, yalnızca insan ziyaretlerinde.
+        if (\App\Support\BotDetector::isBot(request()->userAgent())) {
+            return;
+        }
+
+        $id = $this->getKey();
+        app()->terminating(function () use ($id): void {
+            try {
+                static::withoutGlobalScopes()->whereKey($id)->increment('view_count');
+            } catch (\Throwable) {
+                // sayaç hatası ziyaretçiyi etkilemesin
+            }
+        });
+    }
+
+    /** Açıklama yalnızca güvenli HTML etiketleriyle saklanır (firma sahibi girdisi). */
+    public function setDescriptionAttribute($value): void
+    {
+        $this->attributes['description'] = $value === null ? null : \App\Support\HtmlSanitizer::clean((string) $value);
     }
 
     public function allowSlugChange(): self

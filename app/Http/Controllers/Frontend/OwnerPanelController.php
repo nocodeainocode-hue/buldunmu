@@ -17,6 +17,7 @@ use App\Services\Attribution;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -199,9 +200,21 @@ class OwnerPanelController extends Controller
             'password' => 'required|string',
         ]);
 
+        $throttleKey = Str::lower($credentials['email']).'|'.$request->ip();
+
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+
+            throw ValidationException::withMessages(['email' => "Çok fazla deneme yaptınız. {$seconds} saniye sonra tekrar deneyin."]);
+        }
+
         if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+            RateLimiter::hit($throttleKey, 300);
+
             throw ValidationException::withMessages(['email' => 'E-posta veya şifre hatalı.']);
         }
+
+        RateLimiter::clear($throttleKey);
 
         $request->session()->regenerate();
 

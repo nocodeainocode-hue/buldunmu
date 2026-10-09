@@ -151,7 +151,7 @@ class ListingRequestDirectoryTest extends TestCase
             ->post('http://profil.test/firma-ekle', [
                 'claim_company_id' => $company->id,
                 'company_name' => 'Örnek Klinik',
-                'phone' => '0212 111 11 11',
+                'phone' => '0212 345 67 89',
                 'website' => 'https://ornekklinik.test',
                 'category_id' => $category->id,
                 'city_id' => $city->id,
@@ -164,7 +164,7 @@ class ListingRequestDirectoryTest extends TestCase
         $updatedCompany = $claim->approveToCompany();
 
         $this->assertSame($company->id, $updatedCompany->id);
-        $this->assertSame('0212 111 11 11', $updatedCompany->fresh()->phone);
+        $this->assertSame('0212 345 67 89', $updatedCompany->fresh()->phone);
         $this->assertSame('https://ornekklinik.test', $updatedCompany->fresh()->website);
         $this->assertSame(1, Company::withoutGlobalScope('directory')->count());
         $this->assertSame('approved', $claim->fresh()->status);
@@ -202,7 +202,7 @@ class ListingRequestDirectoryTest extends TestCase
             ->post('http://yerel-profil.test/firma-ekle', [
                 'claim_company_id' => $sharedCompany->id,
                 'company_name' => 'Ortak Elektrik',
-                'phone' => '0282 222 22 22',
+                'phone' => '0282 234 56 78',
                 'category_id' => $category->id,
                 'city_id' => $city->id,
             ]);
