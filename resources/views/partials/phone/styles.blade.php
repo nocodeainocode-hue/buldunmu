@@ -78,17 +78,30 @@
         --ph-title-weight: 900; --ph-title-case: uppercase;
     }
 
+    html.theme-social-feed {
+        --ph-wall: #ebe5f7; --ph-wall2: #f6f4fb; --ph-bezel: #e3dcf1;
+        --ph-bg: #f6f4fb; --ph-screen: #faf8ff; --ph-card: #ffffff; --ph-card2: #f3e8ff;
+        --ph-ink: #151022; --ph-muted: #6f6a80; --ph-line: #e7e2f2;
+        --ph-primary: #7c3aed; --ph-primary2: #db2777; --ph-accent: #f59e0b; --ph-ok: #16a34a; --ph-btn-fg: #ffffff;
+        --ph-nav: rgba(250,248,255,.94); --ph-tab: rgba(255,255,255,.96);
+        --ph-radius: 20px; --ph-radius-sm: 14px; --ph-pill: 999px;
+        --ph-shadow: 0 8px 24px rgba(124,58,237,.10);
+        --ph-font: "Plus Jakarta Sans", "Segoe UI", sans-serif; --ph-num: "Plus Jakarta Sans", sans-serif;
+        --ph-title-weight: 800; --ph-title-case: none;
+    }
+
     /* ── Kabuk: global chrome gizle + gövde zemini ───────────────────── */
     html.theme-story-reels body > header, html.theme-story-reels body > footer,
     html.theme-pocket-stories body > header, html.theme-pocket-stories body > footer,
     html.theme-swipe-cards body > header, html.theme-swipe-cards body > footer,
     html.theme-pull-drawer body > header, html.theme-pull-drawer body > footer,
     html.theme-radar-scope body > header, html.theme-radar-scope body > footer,
-    html.theme-index-rally body > header, html.theme-index-rally body > footer { display: none !important; }
+    html.theme-index-rally body > header, html.theme-index-rally body > footer,
+    html.theme-social-feed body > header, html.theme-social-feed body > footer { display: none !important; }
     html[class*="theme-story-reels"] body, html.theme-pocket-stories body, html.theme-swipe-cards body,
-    html.theme-pull-drawer body, html.theme-radar-scope body, html.theme-index-rally body { background: var(--ph-bg); }
+    html.theme-pull-drawer body, html.theme-radar-scope body, html.theme-index-rally body, html.theme-social-feed body { background: var(--ph-bg); }
     html.theme-story-reels body > main, html.theme-pocket-stories body > main, html.theme-swipe-cards body > main,
-    html.theme-pull-drawer body > main, html.theme-radar-scope body > main, html.theme-index-rally body > main { padding: 0; background: transparent; }
+    html.theme-pull-drawer body > main, html.theme-radar-scope body > main, html.theme-index-rally body > main, html.theme-social-feed body > main { padding: 0; background: transparent; }
 
     /* ── Cihaz çerçevesi ─────────────────────────────────────────────── */
     .ph { color: var(--ph-ink); font-family: var(--ph-font); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; }

@@ -51,7 +51,7 @@
     <style>
         {!! \App\View\Helpers\ThemeHelper::cssVariables($directory ?? null) !!}
         @php
-            $mobileShellLayouts = ['pocket-directory', 'social-feed', 'chat-directory'];
+            $mobileShellLayouts = ['pocket-directory', 'chat-directory'];
             $activeLayout = \App\View\Helpers\ThemeHelper::layoutFile($directory ?? null);
             $classifiedsSubpage = $activeLayout === 'classifieds-board' && !request()->routeIs('home', 'companies.show');
             $cinematicSubpage = $activeLayout === 'cinematic-atlas' && !request()->routeIs('home', 'companies.show');

@@ -189,13 +189,44 @@ class NewDirectoryThemesTest extends TestCase
         $this->assertPhoneShellPages($data);
     }
 
+    public function test_social_feed_keeps_compact_mobile_shell_on_every_public_page(): void
+    {
+        $data = $this->seedPhoneTheme('social-feed', 'akis-rehberi', 'Akış Rehberi');
+        $company = $data['company'];
+
+        $this->get('/')->assertOk()->assertSee('theme-social-feed', false)
+            ->assertSee('ph-tabbar', false)->assertSee('ph-rings', false)
+            ->assertSee('Özgün Atölye')->assertSee(route('search'), false);
+
+        $this->get('/firma/'.$company->slug)->assertOk()->assertSee('ph-detail', false)
+            ->assertSee('ph-tabbar', false)->assertSee('Ahşap Masa');
+
+        $this->assertPhoneShellPages($data);
+    }
+
     public function test_pocket_stories_keeps_mobile_shell_on_every_public_page(): void
     {
         $data = $this->seedPhoneTheme('pocket-stories', 'cepte-hikayeler', 'Cepte Hikâyeler');
         $company = $data['company'];
+        Company::create([
+            'name' => 'Ortak Fırın', 'category_id' => $company->category_id,
+            'city_id' => $company->city_id, 'directory_id' => null, 'status' => 'active',
+        ]);
+        $otherDirectory = Directory::create([
+            'name' => 'Başka Rehber', 'slug' => 'baska-rehber',
+            'domain' => 'baska-rehber.example', 'status' => 'active',
+        ]);
+        Company::create([
+            'name' => 'Diğer Firmanın Kaydı', 'category_id' => $company->category_id,
+            'city_id' => $company->city_id, 'directory_id' => $otherDirectory->id, 'status' => 'active',
+        ]);
+
         $this->get('/')->assertOk()->assertSee('theme-pocket-stories', false)
             ->assertSee('ph-tabbar', false)->assertSee('ph-grid', false)
-            ->assertSee('Şehrin iyi adresleri, bir arada.')->assertSee('Özgün Atölye')->assertSee('Ahşap Masa')
+            ->assertSee('Şehrin iyi adresleri, bir arada.')->assertSee('Özgün Atölye')->assertSee('Ortak Fırın')
+            ->assertSee('<b>2</b><span>Firma</span>', false)
+            ->assertDontSee('Diğer Firmanın Kaydı')
+            ->assertSee('Ahşap Masa')
             ->assertSee(route('search'), false);
 
         $this->get('/firma/'.$company->slug)->assertOk()->assertSee('ph-detail', false)
@@ -611,7 +642,7 @@ class NewDirectoryThemesTest extends TestCase
         // Ana sayfa: editöryal tasarım sistemi + lüks serif font (registry → Google Fonts)
         $this->get('/')->assertOk()->assertSee('theme-elegant', false)
             ->assertSee('el-stats', false)->assertSee('el-cta', false)
-            ->assertSee('Cormorant')->assertSee('Özgün Atölye')
+            ->assertSee('Playfair')->assertSee('Özgün Atölye')
             ->assertSee(route('search'), false);
 
         // Firma detayı: el-detail kabuğu + ortak td-* bölümleri + index,follow

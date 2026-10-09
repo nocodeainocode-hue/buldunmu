@@ -95,7 +95,7 @@
     @include('frontend.companies.themes.mobile-app')
 @elseif($directory?->template === 'story-reels')
     @include('frontend.companies.themes.story-reels')
-@elseif($directory?->template === 'pocket-stories')
+@elseif(in_array($directory?->template, ['pocket-stories', 'social-feed'], true))
     @include('frontend.companies.themes.pocket-stories')
 @elseif($directory?->template === 'swipe-cards')
     @include('frontend.companies.themes.swipe-cards')

@@ -154,7 +154,7 @@ class ThemeHelperTest extends TestCase
 
     public function test_phone_shell_constant_lists_every_device_frame_theme(): void
     {
-        $expected = ['story-reels', 'pocket-stories', 'swipe-cards', 'pull-drawer', 'radar-scope', 'index-rally', 'mobile-app'];
+        $expected = ['story-reels', 'pocket-stories', 'swipe-cards', 'pull-drawer', 'radar-scope', 'index-rally', 'social-feed', 'mobile-app'];
         $this->assertSame($expected, ThemeHelper::PHONE_SHELL);
 
         foreach ($expected as $template) {

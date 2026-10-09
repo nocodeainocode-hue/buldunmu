@@ -1,7 +1,7 @@
 {{-- CEP · ortak firma listesi (tema varyantına göre kart dili değişir) --}}
 @php
     $phVariant = match($directory?->template) {
-        'pocket-stories' => 'pocket',
+        'pocket-stories', 'social-feed' => 'pocket',
         'swipe-cards' => 'swipe',
         'pull-drawer' => 'drawer',
         'radar-scope' => 'blip',
