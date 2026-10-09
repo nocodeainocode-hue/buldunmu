@@ -99,6 +99,6 @@ class DirectoryArticlesOctober2026Seeder extends Seeder
             }
         });
 
-        $this->command?->info(class_basename(static::class).": {$created} eklendi, {$skipped} mevcut yazı korundu; toplam 83 rehber.");
+        $this->command?->info(class_basename(static::class).": {$created} eklendi, {$skipped} mevcut yazı korundu; toplam ".count($articles).' rehber.');
     }
 }
