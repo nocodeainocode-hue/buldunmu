@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Cache;
 
 class AdCampaign extends Model
 {
+    public const CACHE_KEY = 'ads.active.v2';
+
     public const PLACEMENTS = [
         'top' => 'Sayfa üstü (ince şerit)',
         'bottom' => 'Sayfa altı (büyük kart)',
@@ -30,7 +32,10 @@ class AdCampaign extends Model
 
     protected static function booted(): void
     {
-        $flush = fn () => Cache::forget('ads.active');
+        $flush = function () {
+            Cache::forget(self::CACHE_KEY);
+            Cache::forget('ads.active'); // eski sürüm
+        };
 
         static::saved($flush);
         static::deleted($flush);

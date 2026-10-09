@@ -73,6 +73,38 @@ class AdSystemTest extends TestCase
         $this->assertNull($server->pick('top', $national));
     }
 
+    public function test_cache_holds_plain_arrays_never_model_objects(): void
+    {
+        // Üretim hatası: Laravel 13 önbellekten nesne okumayı engeller (__PHP_Incomplete_Class).
+        Cache::flush();
+        $directory = $this->directory();
+        $ad = $this->ad(['name' => 'Önbellek', 'headline' => 'Önbellekli reklam']);
+
+        $server = app(AdServer::class);
+        $this->assertSame($ad->id, $server->pick('top', $directory)->id);
+
+        $cached = Cache::get(AdCampaign::CACHE_KEY);
+        $this->assertIsArray($cached);
+        $this->assertIsArray($cached[0]);
+        $this->assertStringNotContainsString('O:', serialize($cached));
+
+        // İkinci okuma önbellekten gelir ve hedefleme alanları (json) hâlâ doğru çözülür.
+        $again = app(AdServer::class)->pick('top', $directory);
+        $this->assertSame(['top', 'bottom'], $again->placements);
+        $this->assertTrue($again->isLive());
+    }
+
+    public function test_old_object_cache_entry_cannot_break_the_page(): void
+    {
+        Cache::flush();
+        $this->directory();
+        $this->ad(['headline' => 'Sağlam Reklam']);
+        // Eski sürümün bıraktığı bozuk kaydı taklit et.
+        Cache::put('ads.active', 'bozuk-eski-kayit', 60);
+
+        $this->get('/')->assertOk()->assertSee('Sağlam Reklam');
+    }
+
     public function test_paused_expired_future_and_other_placement_ads_are_ignored(): void
     {
         Cache::flush();

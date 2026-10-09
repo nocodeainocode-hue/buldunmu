@@ -126,10 +126,22 @@ class AdServer
         return ['city' => $company?->city?->slug, 'category' => $company?->category?->slug];
     }
 
-    /** @return Collection<int, AdCampaign> */
+    /**
+     * Laravel 13 önbellekten nesne geri okumayı engeller (cache.serializable_classes = false),
+     * bu yüzden önbelleğe Eloquent modeli değil yalnızca ham öznitelik dizileri konur.
+     * Anahtar sürümlüdür: eski (nesne içeren) kayıtlar otomatik devre dışı kalır.
+     *
+     * @return Collection<int, AdCampaign>
+     */
     private function active(): Collection
     {
-        return Cache::remember('ads.active', 60, fn () => AdCampaign::where('status', 'active')->get());
+        $rows = Cache::remember(
+            AdCampaign::CACHE_KEY,
+            60,
+            fn () => AdCampaign::where('status', 'active')->get()->map(fn (AdCampaign $ad) => $ad->getAttributes())->all(),
+        );
+
+        return AdCampaign::hydrate($rows);
     }
 
     /** @param Collection<int, AdCampaign> $group */
