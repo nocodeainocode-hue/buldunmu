@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Campaign;
 use App\Models\CampaignItem;
+use App\Models\City;
 use App\Models\Directory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -32,15 +33,23 @@ class CampaignPlanService
                 ];
             }
 
+            $company = $campaign->company;
+            $citySlug = $company->city_id
+                ? City::withoutGlobalScope('directory')->whereKey($company->city_id)->value('slug')
+                : null;
+
+            // Firmaya uymayan rehberler elenir (ör. Ankara firması Tekirdağ'a odaklı rehbere eklenmez);
+            // uygun olanlar arasından kampanya hedefi kadarı seçilir.
             $directories = Directory::query()
                 ->where('status', 'active')
                 ->whereKeyNot($campaign->directory_id)
                 ->orderBy('id')
-                ->limit($campaign->total_directories)
-                ->get();
+                ->get()
+                ->filter(fn (Directory $directory) => self::directoryFitsCity($directory, $citySlug))
+                ->take($campaign->total_directories)
+                ->values();
 
             $created = 0;
-            $company = $campaign->company;
             $dailyLimit = max(1, $campaign->daily_limit);
             $firstPublicationAt = $campaign->start_date?->isFuture()
                 ? $campaign->start_date->copy()
@@ -87,5 +96,19 @@ class CampaignPlanService
                 'already_generated' => false,
             ];
         });
+    }
+
+    /**
+     * Ulusal rehberler her firmaya uygundur. Şehir odaklı rehberler yalnızca kendi şehirlerindeki
+     * firmaları alır; öne çıkan şehir listeli rehber, "diğer iller" grubunu açtıysa herkese açıktır.
+     */
+    public static function directoryFitsCity(Directory $directory, ?string $citySlug): bool
+    {
+        return match ($directory->geography_mode) {
+            'local' => $citySlug !== null && $citySlug === $directory->primary_city_slug,
+            'custom' => (bool) $directory->group_other_cities
+                || ($citySlug !== null && in_array($citySlug, $directory->featured_city_slugs ?? [], true)),
+            default => true,
+        };
     }
 }

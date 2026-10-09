@@ -9,8 +9,10 @@ use App\Models\Company;
 use App\Models\CompanyOwner;
 use App\Models\District;
 use App\Models\ListingRequest;
+use App\Models\OwnerCampaignEvent;
 use App\Models\SiteSetting;
 use App\Models\User;
+use App\Services\Attribution;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -34,12 +36,15 @@ class OwnerPanelController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        $user = DB::transaction(function () use ($validated, $directory): User {
+        $user = DB::transaction(function () use ($validated, $directory, $request): User {
             $user = User::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'password' => $validated['password'],
             ]);
+
+            // Reklam/kaynak bilgisi (UTM, tıklama kimliği, yönlendiren site) ve kayıt olunan rehber.
+            $user->forceFill(app(Attribution::class)->forUser($request) + ['signup_directory_id' => $directory->id])->save();
 
             $company = Company::create([
                 'name' => $validated['company_name'],
@@ -119,17 +124,101 @@ class OwnerPanelController extends Controller
             ->wherePivot('directory_id', $directory->id)
             ->with(['category', 'city'])
             ->get();
-        $showCampaignPopup = $user->campaign_popup_seen_at === null;
         $campaignSettings = SiteSetting::getSettings();
+        $showCampaignPopup = $this->shouldShowCampaignPopup($user);
 
         if ($showCampaignPopup) {
-            $user->forceFill(['campaign_popup_seen_at' => now()])->save();
+            if ($user->campaign_popup_seen_at === null) {
+                $user->forceFill(['campaign_popup_seen_at' => now()])->save();
+            }
+
+            $this->recordCampaignEvent($user, $directory->id, 'popup_shown', 'popup');
         }
 
         return view('frontend.owner.dashboard', compact('directory', 'companies', 'showCampaignPopup', 'campaignSettings'));
     }
 
-    public function campaigns()
+    public function campaigns(Request $request)
+    {
+        $user = Auth::user();
+        $context = $this->campaignContext();
+
+        $from = in_array($request->query('from'), OwnerCampaignEvent::SOURCES, true) ? $request->query('from') : 'direct';
+        $this->recordCampaignEvent($user, $context['directory']->id, 'page_view', $from, dedupeMinutes: 10);
+
+        return view('frontend.owner.campaigns', [
+            'directory' => $context['directory'],
+            'companies' => $context['companies'],
+            'whatsapp' => $context['whatsapp'],
+            'message' => $context['message'],
+            'settings' => $context['settings'],
+            'campaignTitle' => $context['title'],
+            'whatsappUrl' => route('owner.campaigns.whatsapp'),
+        ]);
+    }
+
+    /** WhatsApp tıklamasını sayar ve hazır mesajla wa.me'ye yönlendirir. */
+    public function campaignWhatsapp()
+    {
+        $context = $this->campaignContext();
+
+        if ($context['whatsapp'] === '') {
+            return redirect()->route('owner.campaigns');
+        }
+
+        $this->recordCampaignEvent(Auth::user(), $context['directory']->id, 'whatsapp_click', 'direct');
+
+        return redirect()->away('https://wa.me/'.$context['whatsapp'].'?text='.urlencode($context['message']));
+    }
+
+    /** Tarayıcıdan gelen hafif olay bildirimi (şimdilik yalnızca popup kapatma). */
+    public function campaignEvent(Request $request)
+    {
+        // Ölçüm sinyali: yalnızca bilinen olay kabul edilir. İstisna fırlatmadan doğrudan 422 döner.
+        if ($request->input('event') !== 'popup_dismiss') {
+            return response()->json(['message' => 'Geçersiz olay.'], 422);
+        }
+
+        $this->recordCampaignEvent(Auth::user(), $this->directory()->id, 'popup_dismiss', 'popup', dedupeMinutes: 60);
+
+        return response()->noContent();
+    }
+
+    /** Popup: ilk girişte; etkileşim olmadıysa 2 gün sonra bir kez daha (toplam en fazla 2). */
+    private function shouldShowCampaignPopup(User $user): bool
+    {
+        $seenAt = $user->campaign_popup_seen_at;
+        $total = max(OwnerCampaignEvent::where('user_id', $user->id)->where('event', 'popup_shown')->count(), $seenAt ? 1 : 0);
+
+        if ($total === 0) {
+            return true;
+        }
+
+        if ($total >= 2 || ! $seenAt || $seenAt->gt(now()->subDays(2))) {
+            return false;
+        }
+
+        return ! OwnerCampaignEvent::where('user_id', $user->id)->whereIn('event', ['page_view', 'whatsapp_click'])->exists();
+    }
+
+    private function recordCampaignEvent(User $user, ?int $directoryId, string $event, ?string $source, int $dedupeMinutes = 0): void
+    {
+        if ($dedupeMinutes > 0 && OwnerCampaignEvent::where('user_id', $user->id)->where('event', $event)
+            ->where('created_at', '>=', now()->subMinutes($dedupeMinutes))->exists()) {
+            return;
+        }
+
+        OwnerCampaignEvent::create([
+            'user_id' => $user->id,
+            'directory_id' => $directoryId,
+            'event' => $event,
+            'source' => $source,
+            'created_at' => now(),
+        ]);
+    }
+
+    /** @return array{directory: \App\Models\Directory, companies: \Illuminate\Support\Collection, whatsapp: string, message: string, settings: SiteSetting, title: string} */
+    private function campaignContext(): array
     {
         $directory = $this->directory();
         $companies = Auth::user()->ownedCompanies()
@@ -137,16 +226,16 @@ class OwnerPanelController extends Controller
             ->orderBy('name')
             ->get(['companies.id', 'companies.name']);
         $settings = SiteSetting::getSettings();
-        $campaignTitle = $settings->campaign_title ?: '100 Firma Rehberinde Yayın Projesi';
+        $title = $settings->campaign_title ?: '100 Firma Rehberinde Yayın Projesi';
         $whatsapp = preg_replace('/\D+/', '', (string) ($settings->campaign_whatsapp ?: $settings->whatsapp));
         $message = sprintf(
             'Merhaba, %s rehberindeki %s firma profilim için %s hakkında bilgi almak istiyorum.',
             $directory->name,
             $companies->pluck('name')->join(', ') ?: 'firma profilim',
-            $campaignTitle
+            $title
         );
 
-        return view('frontend.owner.campaigns', compact('directory', 'companies', 'whatsapp', 'message', 'settings', 'campaignTitle'));
+        return compact('directory', 'companies', 'whatsapp', 'message', 'settings', 'title');
     }
 
     public function edit(Company $company)

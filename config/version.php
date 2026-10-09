@@ -2,11 +2,24 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.7.1',
-    'name' => 'Firma Adı Düzeltmesi',
+    'number' => '1.8.0',
+    'name' => 'Reklam Ölçümü ve Kampanya Hunisi',
     'released_at' => '2026-10-09',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.8.0',
+            'name' => 'Reklam Ölçümü ve Kampanya Hunisi',
+            'released_at' => '2026-10-09',
+            'changes' => [
+                'Firma kaydında reklam kaynağı (UTM, Google/Meta tıklama kimliği, yönlendiren site) 30 gün saklanır ve kayıt sırasında kullanıcıya yazılır.',
+                'Gelir > Reklam Kaynakları sayfası eklendi: hangi reklamdan kaç kayıt geldiği, kaçının popup\'ı gördüğü, kampanya sayfasına girdiği ve WhatsApp\'a tıkladığı görülür.',
+                'Kampanya popup\'ı yenilendi: firma adıyla kişiselleştirme, rehber başına fiyat, kısa fayda listesi, Esc/dışarı tıklama ile kapatma. Etkileşim olmayan kullanıcılara 2 gün sonra bir kez daha gösterilir.',
+                'Firma panelinde küçük düğmenin yerine kampanya bannerı eklendi.',
+                'Kampanya sayfası genişletildi: nasıl işler (3 adım), sık sorulan sorular, mobilde sabit WhatsApp çubuğu. WhatsApp tıklamaları sayılır.',
+                'Kampanya planı artık firmanın şehrine uygun rehberleri seçer: şehir odaklı rehberlere yalnızca kendi şehrinin firmaları eklenir.',
+            ],
+        ],
         [
             'number' => '1.7.1',
             'name' => 'Firma Adı Düzeltmesi',

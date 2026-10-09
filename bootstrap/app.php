@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->trustProxies(at: '*');
         $middleware->web(append: [
             \App\Http\Middleware\SetCurrentDirectory::class,
+            \App\Http\Middleware\CaptureAttribution::class,
             \App\Http\Middleware\TrackPageView::class,
             \App\Http\Middleware\CacheHeaders::class,
         ]);

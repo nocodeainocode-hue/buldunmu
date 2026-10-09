@@ -63,6 +63,8 @@ Route::post('/panel/giris', [OwnerPanelController::class, 'authenticate'])->midd
 Route::middleware('auth')->group(function (): void {
     Route::get('/panel', [OwnerPanelController::class, 'dashboard'])->name('owner.dashboard');
     Route::get('/panel/kampanyalar', [OwnerPanelController::class, 'campaigns'])->name('owner.campaigns');
+    Route::get('/panel/kampanyalar/whatsapp', [OwnerPanelController::class, 'campaignWhatsapp'])->name('owner.campaigns.whatsapp');
+    Route::post('/panel/kampanyalar/olay', [OwnerPanelController::class, 'campaignEvent'])->name('owner.campaigns.event');
     Route::get('/panel/firma/{company:slug}/duzenle', [OwnerPanelController::class, 'edit'])->name('owner.company.edit');
     Route::put('/panel/firma/{company:slug}', [OwnerPanelController::class, 'update'])->name('owner.company.update');
     Route::get('/panel/firma/{company:slug}/vitrin', [OwnerOfferingController::class, 'index'])->name('owner.offerings.index');
