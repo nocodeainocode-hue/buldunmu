@@ -2,11 +2,20 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.7.0',
-    'name' => 'Reklam Sistemi ve Yeni Temalar',
+    'number' => '1.7.1',
+    'name' => 'Firma Adı Düzeltmesi',
     'released_at' => '2026-10-09',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.7.1',
+            'name' => 'Firma Adı Düzeltmesi',
+            'released_at' => '2026-10-09',
+            'changes' => [
+                'İçe aktarılan firma adı ve adreslerinde görünen HTML kaçışları (&#8211; gibi) düzeltildi; slug içindeki "8211" kalıntısı temizlenir.',
+                'companies:repair-entities komutu eklendi: mevcut firmaları onarır, bu adla üretilmiş açıklamaları yeniler, elle yazılanlara dokunmaz.',
+            ],
+        ],
         [
             'number' => '1.7.0',
             'name' => 'Reklam Sistemi ve Yeni Temalar',
