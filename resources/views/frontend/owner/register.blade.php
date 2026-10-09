@@ -12,9 +12,9 @@
 
 <div class="ph-owner-form mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
     <div class="mx-auto mb-8 max-w-3xl text-center">
-        <span class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-black" style="background:var(--primary_light);color:var(--primary);"><span aria-hidden="true">✓</span> Ücretsiz firma kaydı</span>
-        <h1 class="mt-4 text-3xl font-black sm:text-4xl" style="color:var(--text);">Müşteriler firmanızı kolayca bulsun</h1>
-        <p class="mx-auto mt-3 max-w-2xl text-sm leading-6 sm:text-base" style="color:var(--text_muted);">İki kısa adımda firma profilinizi oluşturun. Bilgilerinizi daha sonra panelinizden dilediğiniz zaman tamamlayabilirsiniz.</p>
+        <span class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-black" style="background:var(--primary_light);color:var(--primary);"><span aria-hidden="true">✓</span> {{ $content['badge'] }}</span>
+        <h1 class="mt-4 text-3xl font-black sm:text-4xl" style="color:var(--text);">{{ $content['headline'] }}</h1>
+        <p class="mx-auto mt-3 max-w-2xl text-sm leading-6 sm:text-base" style="color:var(--text_muted);">{{ $content['subheadline'] }}</p>
     </div>
 
     <div class="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
@@ -45,6 +45,9 @@
                     </label>
 
                     <label class="block text-sm font-bold" style="color:var(--text);">Kategori *
+                        @if($categories->count() > 12)
+                            <input id="category_search" type="search" placeholder="Kategori ara… (örn. su arıtma)" autocomplete="off" class="mt-1.5 w-full rounded-lg border px-4 py-2.5 text-sm" style="border-color:var(--border);background:var(--bg);">
+                        @endif
                         <select id="category_select" name="category_id" required class="mt-1.5 w-full rounded-lg border px-4 py-3" style="border-color:var(--border);background:var(--bg);">
                             <option value="">Kategori seçin</option>
                             @foreach($categories as $category)<option value="{{ $category->id }}" @selected(old('category_id') == $category->id)>{{ $category->name }}</option>@endforeach
@@ -67,7 +70,7 @@
                         @error('city_id')<span class="mt-1 block text-xs text-red-600">{{ $message }}</span>@enderror
                     </label>
 
-                    <label class="block text-sm font-bold" style="color:var(--text);">İlçe
+                    <label class="block text-sm font-bold" style="color:var(--text);">İlçe <span class="font-normal" style="color:var(--text_muted);">(isteğe bağlı)</span>
                         <select id="district_select" name="district_id" class="mt-1.5 w-full rounded-lg border px-4 py-3" style="border-color:var(--border);background:var(--bg);"></select>
                     </label>
 
@@ -76,7 +79,14 @@
                         @error('phone')<span class="mt-1 block text-xs text-red-600">{{ $message }}</span>@enderror
                     </label>
 
-                    <label class="block text-sm font-bold" style="color:var(--text);">WhatsApp
+                    <div class="block text-sm font-bold" style="color:var(--text);">
+                        <span>WhatsApp</span>
+                        <label class="mt-1.5 flex items-center gap-2 rounded-lg border px-4 py-3 font-semibold" style="border-color:var(--border);background:var(--bg);cursor:pointer;">
+                            <input type="checkbox" id="same_whatsapp" class="h-4 w-4" @checked(! old('whatsapp') || old('whatsapp') === old('phone'))>
+                            <span>Bu numara WhatsApp'ta da var</span>
+                        </label>
+                    </div>
+                    <label id="whatsapp_field" class="block text-sm font-bold sm:col-span-2" style="color:var(--text);" hidden>Farklı WhatsApp numarası
                         <input name="whatsapp" value="{{ old('whatsapp') }}" inputmode="tel" placeholder="05xx xxx xx xx" pattern="[0-9+()\s.\-]{10,20}" title="Geçerli bir telefon numarası girin, örn. 0532 123 45 67" class="mt-1.5 w-full rounded-lg border px-4 py-3" style="border-color:var(--border);background:var(--bg);">
                         @error('whatsapp')<span class="mt-1 block text-xs text-red-600">{{ $message }}</span>@enderror
                     </label>
@@ -116,7 +126,7 @@
 
                 <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row">
                     <button type="button" data-previous-step class="rounded-lg border px-5 py-3.5 font-black" style="border-color:var(--border);color:var(--text);">Geri</button>
-                    <button type="submit" class="flex-1 rounded-lg px-5 py-3.5 font-black text-white transition hover:opacity-90" style="background:var(--primary);">Ücretsiz Profilimi Oluştur</button>
+                    <button type="submit" class="flex-1 rounded-lg px-5 py-3.5 font-black text-white transition hover:opacity-90" style="background:var(--primary);">{{ $content['button_text'] }}</button>
                 </div>
                 <p class="mt-4 text-center text-xs leading-5" style="color:var(--text_muted);">Kaydı tamamlayarak <a href="{{ route('pages.terms') }}" class="font-bold underline">kullanım şartlarını</a> ve <a href="{{ route('pages.privacy') }}" class="font-bold underline">gizlilik politikasını</a> kabul etmiş olursunuz. Profiliniz kısa bir incelemenin ardından yayınlanır.</p>
             </section>
@@ -127,13 +137,29 @@
         </form>
 
         <aside class="space-y-4 lg:sticky lg:top-24">
+            <div class="rounded-lg border p-5" style="border-color:var(--border);background:var(--bg_card);" aria-live="polite">
+                <p class="text-xs font-black uppercase tracking-widest" style="color:var(--primary);">Profil önizlemesi</p>
+                <div class="mt-3 rounded-lg border p-4" style="border-color:var(--border);background:var(--bg);">
+                    <p id="preview-name" class="text-base font-black" style="color:var(--text);" data-empty="Firma adınız">Firma adınız</p>
+                    <p id="preview-meta" class="mt-1 text-xs" style="color:var(--text_muted);" data-empty="Kategori · Şehir">Kategori · Şehir</p>
+                    <div class="mt-3 flex gap-2 text-xs font-black">
+                        <span class="rounded-lg px-3 py-2 text-white" style="background:var(--primary);">Ara <span id="preview-phone" class="font-semibold"></span></span>
+                        <span id="preview-whatsapp" class="rounded-lg border px-3 py-2" style="border-color:var(--border);color:var(--text);" hidden>WhatsApp</span>
+                    </div>
+                </div>
+                <p class="mt-2 text-xs" style="color:var(--text_muted);">Ziyaretçiler firmanızı böyle görecek. Yazdıkça güncellenir.</p>
+            </div>
+
             <div class="rounded-lg border p-5" style="border-color:var(--border);background:var(--bg_card);">
                 <p class="text-xs font-black uppercase tracking-widest" style="color:var(--primary);">Firma hesabınızla</p>
                 <ul class="mt-4 space-y-4">
-                    <li class="flex gap-3"><span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg font-black" style="background:var(--primary_light);color:var(--primary);">✓</span><span><strong class="block text-sm" style="color:var(--text);">Bilgileriniz kontrolünüzde</strong><small class="mt-0.5 block leading-5" style="color:var(--text_muted);">Telefon, adres ve hizmetlerinizi panelden güncelleyin.</small></span></li>
-                    <li class="flex gap-3"><span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg font-black" style="background:var(--primary_light);color:var(--primary);">✓</span><span><strong class="block text-sm" style="color:var(--text);">Doğrudan ulaşılabilir olun</strong><small class="mt-0.5 block leading-5" style="color:var(--text_muted);">Ziyaretçiler telefon ve WhatsApp üzerinden size ulaşsın.</small></span></li>
-                    <li class="flex gap-3"><span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg font-black" style="background:var(--primary_light);color:var(--primary);">✓</span><span><strong class="block text-sm" style="color:var(--text);">Profilinizi zamanla güçlendirin</strong><small class="mt-0.5 block leading-5" style="color:var(--text_muted);">Görsel, açıklama ve çalışma saatlerini sonradan ekleyin.</small></span></li>
+                    @foreach($content['benefits'] as $benefit)
+                    <li class="flex gap-3"><span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg font-black" style="background:var(--primary_light);color:var(--primary);">✓</span><span><strong class="block text-sm" style="color:var(--text);">{{ $benefit['title'] }}</strong>@if(! empty($benefit['text']))<small class="mt-0.5 block leading-5" style="color:var(--text_muted);">{{ $benefit['text'] }}</small>@endif</span></li>
+                    @endforeach
                 </ul>
+                @if($companyCount)
+                    <p class="mt-4 border-t pt-4 text-xs font-bold" style="border-color:var(--border);color:var(--text_muted);">Bu rehberde <span style="color:var(--text);">{{ number_format($companyCount, 0, ',', '.') }}</span> firma yayında.</p>
+                @endif
             </div>
 
             <div class="rounded-lg border p-5 text-center" style="border-color:var(--border);background:var(--bg);">
@@ -175,6 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 1. adım geçildiğinde bilgileri "yarım başvuru" olarak kaydeder; başarısız olsa bile akış devam eder.
     const sendLead = () => {
+        if (typeof syncWhatsapp === 'function') syncWhatsapp();
         const data = new FormData();
         data.append('_token', form.querySelector('input[name=_token]')?.value || '');
         ['company_name', 'category_id', 'requested_category', 'city_id', 'district_id', 'phone', 'whatsapp'].forEach((name) => {
@@ -226,6 +253,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
     category.addEventListener('change', refreshRequestedCategory);
     refreshRequestedCategory();
+
+    // Adım 1 sadeleştirme: WhatsApp = telefon, kategori araması ve canlı profil önizlemesi.
+    const phoneInput = form.elements['phone'];
+    const whatsappInput = form.elements['whatsapp'];
+    const sameWhatsapp = document.getElementById('same_whatsapp');
+    const whatsappField = document.getElementById('whatsapp_field');
+    const syncWhatsapp = () => {
+        whatsappField.hidden = sameWhatsapp.checked;
+        if (sameWhatsapp.checked) whatsappInput.value = phoneInput.value;
+    };
+    sameWhatsapp.addEventListener('change', syncWhatsapp);
+    phoneInput.addEventListener('input', () => { if (sameWhatsapp.checked) whatsappInput.value = phoneInput.value; });
+    syncWhatsapp();
+
+    const categorySearch = document.getElementById('category_search');
+    if (categorySearch) {
+        const allOptions = [...category.options].map(option => ({ value: option.value, label: option.text }));
+        const fold = (text) => text.toLocaleLowerCase('tr').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ı/g, 'i');
+        categorySearch.addEventListener('input', () => {
+            const needle = fold(categorySearch.value.trim());
+            const selected = category.value;
+            category.innerHTML = '';
+            allOptions.filter(option => option.value === '' || option.value === 'other' || option.value === selected || fold(option.label).includes(needle))
+                .forEach(option => category.add(new Option(option.label, option.value, false, option.value === selected)));
+            category.value = selected;
+            if (needle && category.options.length === 3 && !selected) category.selectedIndex = 1;
+            category.dispatchEvent(new Event('change'));
+        });
+    }
+
+    const previewName = document.getElementById('preview-name');
+    const previewMeta = document.getElementById('preview-meta');
+    const previewPhone = document.getElementById('preview-phone');
+    const previewWhatsapp = document.getElementById('preview-whatsapp');
+    const updatePreview = () => {
+        previewName.textContent = form.elements['company_name'].value.trim() || previewName.dataset.empty;
+        const categoryText = category.value && category.value !== 'other' ? category.options[category.selectedIndex].text : (category.value === 'other' ? requestedCategory.value.trim() : '');
+        const cityText = city.value ? city.options[city.selectedIndex].text : '';
+        previewMeta.textContent = [categoryText, cityText].filter(Boolean).join(' · ') || previewMeta.dataset.empty;
+        previewPhone.textContent = phoneInput.value.trim();
+        previewWhatsapp.hidden = !(sameWhatsapp.checked ? phoneInput.value.trim() : whatsappInput.value.trim());
+    };
+    form.addEventListener('input', updatePreview);
+    form.addEventListener('change', updatePreview);
+    updatePreview();
     showStep(currentStep, false);
 });
 </script>

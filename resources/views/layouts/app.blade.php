@@ -468,7 +468,6 @@
             });
         })();
     </script>
-    @include('partials.google-ads-consent')
     @stack('scripts')
 </body>
 </html>

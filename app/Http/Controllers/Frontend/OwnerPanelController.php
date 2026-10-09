@@ -14,6 +14,7 @@ use App\Models\SiteSetting;
 use App\Models\User;
 use App\Rules\TurkishPhone;
 use App\Services\Attribution;
+use App\Support\RegisterPageContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -26,9 +27,14 @@ use Illuminate\Validation\ValidationException;
 
 class OwnerPanelController extends Controller
 {
-    public function register()
+    public function register(Request $request)
     {
-        return view('frontend.owner.register', $this->catalog());
+        $directory = app()->bound('currentDirectory') ? app('currentDirectory') : null;
+
+        return view('frontend.owner.register', $this->catalog() + [
+            'content' => RegisterPageContent::resolve($request, $directory),
+            'companyCount' => RegisterPageContent::companyCount($directory),
+        ]);
     }
 
     public function storeRegistration(Request $request)

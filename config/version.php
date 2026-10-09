@@ -2,11 +2,22 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.9.1',
-    'name' => 'Google Ads Firma Kaydı Ölçümü',
-    'released_at' => '2026-10-09',
+    'number' => '1.10.0',
+    'name' => 'Kayıt Sayfası Dönüşüm Güncellemesi',
+    'released_at' => '2026-10-10',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.10.0',
+            'name' => 'Kayıt Sayfası Dönüşüm Güncellemesi',
+            'released_at' => '2026-10-10',
+            'changes' => [
+                'Firma kayıt sayfası başlığı, alt başlığı, fayda maddeleri ve düğme metni reklam adresindeki ?v=anahtar ile değiştirilebiliyor; {rehber}, {sehir} ve {kategori} yer tutucuları destekleniyor. Varyantlar yönetim panelinde Gelir > Kayıt Sayfası Varyantları altında düzenlenir.',
+                'Kayıt formu adım 1 sadeleştirildi: "Bu numara WhatsApp\'ta da var" tek tıkla, ilçe isteğe bağlı olarak işaretlendi, uzun kategori listesine arama kutusu eklendi.',
+                'Kayıt sayfasına yazdıkça güncellenen canlı profil önizlemesi ve (yeterince firma varsa) rehberdeki yayın sayısı eklendi.',
+                'Google Ads çerez tercihi banner\'ı kaldırıldı.',
+            ],
+        ],
         [
             'number' => '1.9.1',
             'name' => 'Google Ads Firma Kaydı Ölçümü',
