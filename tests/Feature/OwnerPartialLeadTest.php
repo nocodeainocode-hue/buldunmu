@@ -157,12 +157,11 @@ class OwnerPartialLeadTest extends TestCase
         $this->assertStringContainsString('Firma başvurusu tamamlandı', $texts[1]);
     }
 
-    public function test_registration_page_tells_visitors_their_details_are_saved_and_posts_step_one(): void
+    public function test_registration_page_posts_step_one_to_the_lead_endpoint(): void
     {
         $this->withServerVariables(['HTTP_HOST' => 'buldunmu.test'])
             ->get('http://buldunmu.test/firma-kayit')
             ->assertOk()
-            ->assertSee('firma bilgileriniz başvuru olarak kaydedilir', false)
             ->assertSee('on-basvuru', false)
             ->assertSee('goToSecondStep', false);
     }

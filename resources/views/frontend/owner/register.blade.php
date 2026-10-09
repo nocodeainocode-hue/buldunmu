@@ -83,7 +83,6 @@
 
                 <button type="button" data-next-step class="mt-6 flex w-full items-center justify-center gap-2 rounded-lg px-5 py-3.5 font-black text-white transition hover:opacity-90" style="background:var(--primary);">Devam Et <span aria-hidden="true">→</span></button>
                 <p class="mt-3 text-center text-xs" style="color:var(--text_muted);">Kredi kartı gerekmez. Kayıt ücretsizdir.</p>
-                <p class="mt-1 text-center text-xs" style="color:var(--text_muted);">Devam ettiğinizde firma bilgileriniz başvuru olarak kaydedilir; sizinle iletişime geçebiliriz.</p>
             </section>
 
             <section data-registration-step="2">
