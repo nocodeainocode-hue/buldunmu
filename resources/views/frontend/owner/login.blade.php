@@ -4,7 +4,7 @@
 @section('robots', 'noindex,follow')
 
 @section('content')
-<div class="mx-auto max-w-md px-4 py-14 sm:px-6">
+<div class="ph-owner-form mx-auto max-w-md px-4 py-14 sm:px-6">
     <div class="rounded-3xl border p-7" style="border-color:var(--border);background:var(--bg_card);box-shadow:var(--card_shadow);">
         <p class="text-xs font-black uppercase tracking-widest" style="color:var(--primary);">Firma paneli</p>
         <h1 class="mt-2 text-3xl font-black" style="color:var(--text);">Profilinize giriş yapın</h1>

@@ -82,7 +82,7 @@
         --ph-wall: #ebe5f7; --ph-wall2: #f6f4fb; --ph-bezel: #e3dcf1;
         --ph-bg: #f6f4fb; --ph-screen: #faf8ff; --ph-card: #ffffff; --ph-card2: #f3e8ff;
         --ph-ink: #151022; --ph-muted: #6f6a80; --ph-line: #e7e2f2;
-        --ph-primary: #7c3aed; --ph-primary2: #db2777; --ph-accent: #f59e0b; --ph-ok: #16a34a; --ph-btn-fg: #ffffff;
+        --ph-primary: #7c3aed; --ph-primary2: #7c3aed; --ph-accent: #7c3aed; --ph-ok: #16a34a; --ph-btn-fg: #ffffff;
         --ph-nav: rgba(250,248,255,.94); --ph-tab: rgba(255,255,255,.96);
         --ph-radius: 20px; --ph-radius-sm: 14px; --ph-pill: 999px;
         --ph-shadow: 0 8px 24px rgba(124,58,237,.10);
@@ -471,4 +471,40 @@
         .ph-appbar, .ph-tabbar, .ph-notch { display: none !important; }
         .ph-device { border: 0; height: auto; width: 100%; box-shadow: none; }
     }
+
+    /* ── Akış Rehberi: düz renk, gradyansız ─────────────────────────── */
+    html.theme-social-feed .ph-wrap { background: var(--ph-wall2); }
+    html.theme-social-feed .ph-device::after { display: none; }
+    html.theme-social-feed .ph-card__media,
+    html.theme-social-feed .ph-reel__media--ph,
+    html.theme-social-feed .ph-deck__media,
+    html.theme-social-feed .ph-detail__cover { background: var(--ph-card2); opacity: 1; }
+    html.theme-social-feed .ph-card__initial { color: var(--ph-primary); }
+    html.theme-social-feed .ph-detail__cover::after { display: none; }
+    html.theme-social-feed .ph-ring__av { background: var(--ph-primary); }
+    html.theme-social-feed .ph-stats b { background: none; color: var(--ph-primary); -webkit-text-fill-color: currentColor; }
+    html.theme-social-feed .ph-hero::before { display: none; }
+    html.theme-social-feed .ph-plan--featured { background: var(--ph-card); }
+    html.theme-social-feed .ph-appbar { backdrop-filter: none; background: var(--ph-card); }
+    html.theme-social-feed .ph-appbar__mark { border-radius: 9px; }
+    html.theme-social-feed .ph-appbar__btn--go { background: transparent; border-color: var(--ph-line); color: var(--ph-primary); font-weight: 700; }
+    html.theme-social-feed .ph-tab--cta .ph-tab__ico { background: var(--ph-primary); }
+    html.theme-social-feed .ph-btn,
+    html.theme-social-feed .ph-cta,
+    html.theme-social-feed .ph-search button,
+    html.theme-social-feed .ph-chip.is-on,
+    html.theme-social-feed .ph-quick a:first-child,
+    html.theme-social-feed .ph-pagination [aria-current="page"],
+    html.theme-social-feed .ph-pagination .current { background: var(--ph-primary); }
+    html.theme-social-feed .ph-card, html.theme-social-feed .ph-search { box-shadow: none; }
+
+    /* ── Cep kabuğunda firma kayıt/giriş formları: masaüstü kırılımlarını kapat ── */
+    .ph-shell-content .ph-owner-form { max-width: none; padding: 18px 16px 28px; }
+    .ph-shell-content .ph-owner-form [class*="grid-cols-"] { grid-template-columns: minmax(0, 1fr) !important; }
+    .ph-shell-content .ph-owner-form [class*="col-span-"] { grid-column: auto !important; }
+    .ph-shell-content .ph-owner-form [class*="sm:flex-row"] { flex-direction: column-reverse !important; }
+    .ph-shell-content .ph-owner-form aside { position: static !important; }
+    .ph-shell-content .ph-owner-form h1 { font-size: 24px; line-height: 1.2; }
+    .ph-shell-content .ph-owner-form form { padding: 18px; }
+    .ph-shell-content .ph-owner-form input, .ph-shell-content .ph-owner-form select, .ph-shell-content .ph-owner-form textarea { font-size: 16px; }
 </style>

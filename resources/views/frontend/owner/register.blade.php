@@ -10,7 +10,7 @@
     $initialStep = $accountErrors ? 2 : 1;
 @endphp
 
-<div class="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
+<div class="ph-owner-form mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
     <div class="mx-auto mb-8 max-w-3xl text-center">
         <span class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-black" style="background:var(--primary_light);color:var(--primary);"><span aria-hidden="true">✓</span> Ücretsiz firma kaydı</span>
         <h1 class="mt-4 text-3xl font-black sm:text-4xl" style="color:var(--text);">Müşteriler firmanızı kolayca bulsun</h1>
