@@ -2,11 +2,21 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.10.0',
-    'name' => 'Kayıt Sayfası Dönüşüm Güncellemesi',
+    'number' => '1.11.0',
+    'name' => 'Sahiplenme Davetleri',
     'released_at' => '2026-10-10',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.11.0',
+            'name' => 'Sahiplenme Davetleri',
+            'released_at' => '2026-10-10',
+            'changes' => [
+                'Gelir > Sahiplenme Davetleri: rehber, şehir ve kategoriye göre firmalar için kısa bağlantılı davet partisi oluşturulur (yalnızca cep numaraları, daha önce davet edilmemiş ve sahibi olmayan firmalar).',
+                'Her satırda tek tıkla hazır mesajla WhatsApp açma, gönderildi işaretleme, mesajı görme ve "bir daha yazma" listesi.',
+                'Davet bağlantısı (/s/kod) tıklamayı kaydeder, botları saymaz ve firmanın sahiplenme sayfasına utm_source=davet ile yönlendirir; sahiplenme talebi verilince davet "Sahiplendi" olur.',
+            ],
+        ],
         [
             'number' => '1.10.0',
             'name' => 'Kayıt Sayfası Dönüşüm Güncellemesi',

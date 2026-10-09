@@ -6,6 +6,7 @@ use App\Rules\TurkishPhone;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\City;
+use App\Models\ClaimInvite;
 use App\Models\Company;
 use App\Models\District;
 use App\Models\ListingRequest;
@@ -103,12 +104,30 @@ class ListingRequestController extends Controller
         $validated['status'] = 'new';
         $validated['source'] = $claimCompany ? 'claim' : 'manual';
 
-        ListingRequest::create($validated);
+        $listingRequest = ListingRequest::create($validated);
 
         if ($claimCompany) {
+            $this->markInviteClaimed($request, $claimCompany, $listingRequest);
+
             return redirect()->route('companies.claim', $claimCompany->slug)->with('success', 'Profil sahiplenme talebiniz alındı. İnceleme sonrası bilgileriniz güncellenecektir.');
         }
 
         return redirect()->route('listing.create')->with('success', 'Firma ekleme talebiniz başarıyla gönderildi. İncelendikten sonra size dönüş yapılacaktır.');
+    }
+
+    /** Davet linkiyle gelen firma sahiplenme talebi verdiyse daveti "sahiplendi" yapar. */
+    private function markInviteClaimed(Request $request, Company $company, ListingRequest $listingRequest): void
+    {
+        $token = $request->session()->get('claim_invite');
+
+        if (! $token) {
+            return;
+        }
+
+        $invite = ClaimInvite::where('token', $token)->where('company_id', $company->id)->first();
+
+        if ($invite && $invite->status !== 'opted_out') {
+            $invite->forceFill(['status' => 'claimed', 'claimed_at' => now(), 'listing_request_id' => $listingRequest->id])->save();
+        }
     }
 }

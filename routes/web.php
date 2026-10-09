@@ -5,6 +5,7 @@ use App\Http\Controllers\Frontend\AdController;
 use App\Http\Controllers\Frontend\AtlasController;
 use App\Http\Controllers\Frontend\CategoryController;
 use App\Http\Controllers\Frontend\CityController;
+use App\Http\Controllers\Frontend\ClaimInviteController;
 use App\Http\Controllers\Frontend\CompanyController;
 use App\Http\Controllers\Frontend\CompanyReviewController;
 use App\Http\Controllers\Frontend\ContactController;
@@ -23,6 +24,9 @@ use App\Models\Campaign;
 use App\Models\ListingRequest;
 use App\Services\CampaignReportService;
 use Illuminate\Support\Facades\Route;
+
+// Sahiplenme daveti kısa linki
+Route::get('/s/{token}', [ClaimInviteController::class, 'open'])->middleware('throttle:120,1')->name('claim-invite.open');
 
 // Reklam: tıklama yönlendirme ve gösterim işareti
 Route::get('/r/{ad}', [AdController::class, 'click'])->name('ad.click');
@@ -162,6 +166,10 @@ Route::post('/admin/tenant/switch', function () {
 
     return redirect()->back();
 })->name('filament.admin.tenant.switch')->middleware(['web', 'auth', 'admin']);
+
+// Sahiplenme daveti: gönderildi işaretle ve WhatsApp'a git (yalnızca yönetici)
+Route::get('/admin/claim-invites/{invite}/send', [ClaimInviteController::class, 'send'])
+    ->name('filament.admin.claim-invites.send')->middleware(['web', 'auth', 'admin']);
 
 // Campaign CSV export
 Route::get('/admin/campaigns/{campaign}/export-csv', function (int $campaign) {
