@@ -507,4 +507,7 @@
     .ph-shell-content .ph-owner-form h1 { font-size: 24px; line-height: 1.2; }
     .ph-shell-content .ph-owner-form form { padding: 18px; }
     .ph-shell-content .ph-owner-form input, .ph-shell-content .ph-owner-form select, .ph-shell-content .ph-owner-form textarea { font-size: 16px; }
+    html.theme-social-feed .ph-btn { color: #fff; }
+    html.theme-social-feed .ph-cta .ph-btn { background: #fff; color: var(--ph-primary); font-weight: 800; }
+    html.theme-social-feed .ph-cta h2, html.theme-social-feed .ph-cta p { color: #fff; }
 </style>
