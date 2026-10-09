@@ -2,11 +2,20 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.11.2',
-    'name' => 'Kompakt Çerez Tercihi',
+    'number' => '1.12.0',
+    'name' => 'Yeni Rehber Makaleleri',
     'released_at' => '2026-10-10',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.12.0',
+            'name' => 'Yeni Rehber Makaleleri',
+            'released_at' => '2026-10-10',
+            'changes' => [
+                'İşletme sahiplerinin aradığı konularda 10 yeni uzun makale yayına hazırlandı (bilgi tutarlılığı, hizmet açıklaması, iş fotoğrafı, ilçe bazlı arama, çalışma saatleri, hizmet bölgesi, sezonluk takvim, sık sorulan sorular, ilk 14 gün planı, güven sinyalleri).',
+                'Her makale tek bir rehberde yayınlanır, yaklaşık 600-700 kelimedir, kaynak bağlantıları içerir ve kesin sonuç vaat etmez; deploy sırasında tekrarlanabilir şekilde eklenir, editör değişiklikleri korunur.',
+            ],
+        ],
         [
             'number' => '1.11.2',
             'name' => 'Kompakt Çerez Tercihi',

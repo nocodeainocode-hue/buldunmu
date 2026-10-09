@@ -6,6 +6,8 @@ use RuntimeException;
 
 class LongFormMarketingArticlesSeeder extends DirectoryArticlesOctober2026Seeder
 {
+    protected const CONTENT_DIR = 'content/deep_marketing_articles';
+
     public static function bodyWordCount(string $content): int
     {
         preg_match_all('/<p>(.*?)<\/p>/su', $content, $paragraphs);
@@ -18,7 +20,7 @@ class LongFormMarketingArticlesSeeder extends DirectoryArticlesOctober2026Seeder
 
     public static function articles(): array
     {
-        $root = database_path('content/deep_marketing_articles');
+        $root = database_path(static::CONTENT_DIR);
         $manifest = json_decode(file_get_contents($root.'/manifest.json'), true, 512, JSON_THROW_ON_ERROR);
         $articles = [];
 

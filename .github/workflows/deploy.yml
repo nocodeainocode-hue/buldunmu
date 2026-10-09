@@ -26,6 +26,7 @@ jobs:
             php artisan db:seed --class=DirectoryArticlesOctober2026Seeder --force
             php artisan db:seed --class=DirectoryMarketingArticlesSeeder --force
             php artisan db:seed --class=LongFormMarketingArticlesSeeder --force
+            php artisan db:seed --class=LongFormMarketingArticlesVol2Seeder --force
             php artisan directories:install-branding --apply
             php artisan optimize:clear
             php artisan filament:optimize
