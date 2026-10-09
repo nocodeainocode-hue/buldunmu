@@ -107,7 +107,12 @@ class OwnerPanelController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect()->route('owner.dashboard')->with('success', 'Firma profiliniz oluşturuldu. Yayına alınmadan önce kısa bir inceleme yapılacaktır.');
+        return redirect()->route('owner.dashboard')
+            ->with('success', 'Firma profiliniz oluşturuldu. Yayına alınmadan önce kısa bir inceleme yapılacaktır.')
+            ->with('google_ads_registration', [
+                'directory_id' => $directory->id,
+                'transaction_id' => (string) Str::uuid(),
+            ]);
     }
 
     /**

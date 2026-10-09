@@ -2,11 +2,21 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.9.0',
-    'name' => 'Güvenlik ve Hız Güncellemesi',
+    'number' => '1.9.1',
+    'name' => 'Google Ads Firma Kaydı Ölçümü',
     'released_at' => '2026-10-09',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.9.1',
+            'name' => 'Google Ads Firma Kaydı Ölçümü',
+            'released_at' => '2026-10-09',
+            'changes' => [
+                '81 İl Firmalar için Google etiketi ve reklam çerezi tercihleri eklendi; kişiselleştirilmiş reklamlar kapalıdır.',
+                'Firma kaydı dönüşümü yalnızca başarılı başvurunun ardından bir kez gönderilir; panel ziyaretleri kayıt sayılmaz.',
+                'Etiket ve dönüşüm yapılandırması rehber alan adına göre ayrıldı.',
+            ],
+        ],
         [
             'number' => '1.9.0',
             'name' => 'Güvenlik ve Hız Güncellemesi',

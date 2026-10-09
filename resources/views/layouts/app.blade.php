@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="tr" class="scroll-smooth {{ \App\View\Helpers\ThemeHelper::templateClass($directory ?? null) }}">
 <head>
+    @php
+        $adsTracking = (config('tracking.google_ads', []))[$directory->domain ?? ''] ?? [];
+        $adsTagId = $adsTracking['tag_id'] ?? '';
+        $adsTagEnabled = preg_match('/^AW-[0-9]+$/', $adsTagId) === 1;
+        $adsClickIds = array_filter(
+            request()->only(['gclid', 'gbraid', 'wbraid']),
+            fn ($value) => is_string($value) && preg_match('/^[a-zA-Z0-9_-]{1,512}$/', $value),
+        );
+        $adsPageLocation = url()->current().($adsClickIds ? '?'.http_build_query($adsClickIds) : '');
+    @endphp
+    @include('partials.google-ads-head')
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -457,6 +468,7 @@
             });
         })();
     </script>
+    @include('partials.google-ads-consent')
     @stack('scripts')
 </body>
 </html>
