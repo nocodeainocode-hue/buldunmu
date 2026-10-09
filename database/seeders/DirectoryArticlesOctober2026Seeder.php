@@ -11,9 +11,11 @@ use RuntimeException;
 
 class DirectoryArticlesOctober2026Seeder extends Seeder
 {
+    protected const CONTENT_FILE = 'content/directory_articles_2026_10.json';
+
     public static function articles(): array
     {
-        $rows = json_decode(file_get_contents(database_path('content/directory_articles_2026_10.json')), true, 512, JSON_THROW_ON_ERROR);
+        $rows = json_decode(file_get_contents(database_path(static::CONTENT_FILE)), true, 512, JSON_THROW_ON_ERROR);
         $articles = [];
 
         foreach ($rows as $row) {
@@ -51,7 +53,7 @@ class DirectoryArticlesOctober2026Seeder extends Seeder
 
     public function run(): void
     {
-        $articles = self::articles();
+        $articles = static::articles();
         $created = 0;
         $skipped = 0;
 
@@ -79,7 +81,7 @@ class DirectoryArticlesOctober2026Seeder extends Seeder
             }
 
             foreach ($articles as $domain => $article) {
-                // Preserve the article already added in the panel and subsequent editor changes.
+                // Preserve published articles and subsequent editor changes on repeated imports.
                 if (Post::where('slug', $article['slug'])->exists()) {
                     $skipped++;
 
@@ -97,6 +99,6 @@ class DirectoryArticlesOctober2026Seeder extends Seeder
             }
         });
 
-        $this->command?->info("Ekim yazıları: {$created} eklendi, {$skipped} mevcut yazı korundu; toplam 83 rehber.");
+        $this->command?->info(class_basename(static::class).": {$created} eklendi, {$skipped} mevcut yazı korundu; toplam 83 rehber.");
     }
 }
