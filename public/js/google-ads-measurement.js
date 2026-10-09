@@ -5,7 +5,9 @@
 
     let choice = null;
     try { choice = localStorage.getItem('fr_ads_consent_v1'); } catch (_) {}
+    const settings = document.getElementById('ads-consent-settings');
     banner.hidden = choice === 'granted' || choice === 'denied';
+    settings.hidden = !banner.hidden;
 
     let conversion = null;
     try { conversion = JSON.parse(script.dataset.registration); } catch (_) {}
@@ -32,11 +34,13 @@
                 analytics_storage: 'denied'
             });
             banner.hidden = true;
+            settings.hidden = false;
             recordRegistration();
         });
     });
-    document.getElementById('ads-consent-settings').addEventListener('click', () => {
+    settings.addEventListener('click', () => {
         banner.hidden = false;
+        settings.hidden = true;
         banner.querySelector('button').focus();
     });
 })();

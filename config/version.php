@@ -2,11 +2,19 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.11.1',
-    'name' => 'Rehber Çözümleme Düzeltmesi',
+    'number' => '1.11.2',
+    'name' => 'Kompakt Çerez Tercihi',
     'released_at' => '2026-10-10',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.11.2',
+            'name' => 'Kompakt Çerez Tercihi',
+            'released_at' => '2026-10-10',
+            'changes' => [
+                'Google Ads çerez tercihi, sayfanın altında köşede küçük tek satırlık bir kutu olarak geri geldi; seçimden sonra yalnızca küçük bir "Çerez tercihleri" bağlantısı kalır.',
+            ],
+        ],
         [
             'number' => '1.11.1',
             'name' => 'Rehber Çözümleme Düzeltmesi',

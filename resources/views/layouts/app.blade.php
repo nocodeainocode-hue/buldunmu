@@ -469,5 +469,6 @@
         })();
     </script>
     @stack('scripts')
+    @include('partials.google-ads-consent')
 </body>
 </html>
