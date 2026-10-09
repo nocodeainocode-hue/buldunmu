@@ -62,6 +62,9 @@
             $phoneSubpage = in_array($activeLayout, \App\View\Helpers\ThemeHelper::PHONE_SHELL, true) && $activeLayout !== 'mobile-app' && !request()->routeIs('home', 'companies.show');
             // Mobil Uygulama: kendi .ap cihaz kabuğu (home/detay hariç iç sayfalar çerçeveye sarılır)
             $appSubpage = $activeLayout === 'mobile-app' && !request()->routeIs('home', 'companies.show');
+            // Reklam konumları: cihaz çerçeveli temalarda ve firma paneli/giriş sayfalarında gösterilmez
+            $adsEnabled = !in_array($activeLayout, [...$mobileShellLayouts, ...\App\View\Helpers\ThemeHelper::PHONE_SHELL], true)
+                && !request()->routeIs('owner.*', 'login', 'offline');
         @endphp
         @if(in_array($activeLayout, $mobileShellLayouts))
         html.theme-{{ $directory->template }} body > header,
@@ -269,6 +272,9 @@
     </header>
 
     <main class="flex-1">
+        @if($adsEnabled)
+            @include('partials.ads.slot', ['placement' => 'top'])
+        @endif
         @if($classifiedsSubpage)
             @include('partials.classifieds.header')
             <div class="board-shell-content">@yield('content')</div>
@@ -311,6 +317,9 @@
             @if(request()->routeIs('home') && !in_array($activeLayout, [...$mobileShellLayouts, ...\App\View\Helpers\ThemeHelper::PHONE_SHELL, 'classifieds-board', 'acid-poster', 'cinematic-atlas', 'departure-board', 'signal-station', 'design-catalog', 'board-v2', 'split-hero', 'ilan-board']) && isset($homeJobs) && $homeJobs->isNotEmpty())
                 @include('partials.home-jobs')
             @endif
+        @endif
+        @if($adsEnabled)
+            @include('partials.ads.slot', ['placement' => 'bottom'])
         @endif
     </main>
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Frontend\BlogController;
+use App\Http\Controllers\Frontend\AdController;
 use App\Http\Controllers\Frontend\AtlasController;
 use App\Http\Controllers\Frontend\CategoryController;
 use App\Http\Controllers\Frontend\CityController;
@@ -22,6 +23,10 @@ use App\Models\Campaign;
 use App\Models\ListingRequest;
 use App\Services\CampaignReportService;
 use Illuminate\Support\Facades\Route;
+
+// Reklam: tıklama yönlendirme ve gösterim işareti
+Route::get('/r/{ad}', [AdController::class, 'click'])->name('ad.click');
+Route::get('/ad/g/{ad}', [AdController::class, 'impression'])->middleware('throttle:240,1')->name('ad.impression');
 
 // Ana sayfa
 Route::get('/', [HomeController::class, 'index'])->name('home');

@@ -63,7 +63,7 @@ class TrackPageView
     {
         $skipPrefixes = [
             'admin', 'livewire', '_debugbar', 'telescope',
-            'horizon', 'api', 'sanctum', 'broadcasting',
+            'horizon', 'api', 'sanctum', 'broadcasting', 'r/', 'ad/',
         ];
 
         foreach ($skipPrefixes as $prefix) {
