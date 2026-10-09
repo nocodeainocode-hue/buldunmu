@@ -16,6 +16,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Page;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -75,7 +76,18 @@ class ImportCompanies extends Page
                         ->multiple()
                         ->searchable()
                         ->preload()
-                        ->required(),
+                        ->required()
+                        ->hintActions([
+                            Actions\Action::make('selectAllDirectories')
+                                ->label('Tümünü seç')
+                                ->icon('heroicon-m-check-circle')
+                                ->action(fn (Set $set) => $set('directoryIds', Directory::orderBy('name')->pluck('id')->all())),
+                            Actions\Action::make('clearDirectories')
+                                ->label('Temizle')
+                                ->icon('heroicon-m-x-circle')
+                                ->color('gray')
+                                ->action(fn (Set $set) => $set('directoryIds', [])),
+                        ]),
                     Select::make('duplicateStrategy')
                         ->label('Tekrar bulunan firma')
                         ->options([
