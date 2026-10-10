@@ -2,11 +2,20 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.12.0',
-    'name' => 'Yeni Rehber Makaleleri',
+    'number' => '1.13.0',
+    'name' => 'Kayıtlı Firma Sahipleri',
     'released_at' => '2026-10-10',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.13.0',
+            'name' => 'Kayıtlı Firma Sahipleri',
+            'released_at' => '2026-10-10',
+            'changes' => [
+                'Firma Yönetimi > Kayıtlı Firma Sahipleri: kayıt formunun 2. adımını tamamlayıp hesap açan firma sahipleri; firma, rehber, yetkili, e-posta, telefon, WhatsApp, kategori, şehir, kaynak ve kayıt zamanıyla listelenir.',
+                'Sekmeler (Tümü, Onay bekleyen, Bugün), arama (firma, kişi, e-posta, telefon), rehber filtresi, ayrıntı penceresi, WhatsApp ve firmayı açma düğmeleri; menüde onay bekleyen sayısı rozeti.',
+            ],
+        ],
         [
             'number' => '1.12.0',
             'name' => 'Yeni Rehber Makaleleri',
