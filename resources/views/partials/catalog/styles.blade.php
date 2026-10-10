@@ -71,7 +71,7 @@
     /* ── Ana sayfa · kapak ───────────────────────────────────────────── */
     .kat-hero { padding-block: clamp(34px, 6vw, 84px) clamp(28px, 4vw, 52px); }
     .kat-hero__grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: clamp(28px, 5vw, 72px); align-items: end; }
-    @media (max-width: 980px) { .kat-hero__grid { grid-template-columns: 1fr; } }
+    @media (max-width: 980px) { .kat-hero__grid { grid-template-columns: minmax(0,1fr); } }
     .kat-kicker { display: inline-flex; align-items: center; gap: 12px; color: var(--secondary); font-size: 11px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; }
     .kat-kicker::before { content: ""; width: 34px; height: 1px; background: currentColor; }
     .kat-hero h1 { margin-top: 22px; font-size: clamp(44px, 7.4vw, 104px); line-height: .96; letter-spacing: -.045em; }
@@ -159,7 +159,7 @@
     .kat-cities a:hover .kat-cities__name { color: var(--secondary); padding-left: 8px; font-style: italic; }
     .kat-cities__n { margin-left: auto; font-size: 12px; font-weight: 600; letter-spacing: .1em; color: var(--text_muted); font-variant-numeric: tabular-nums; }
     @media (max-width: 900px) { .kat-cities { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; } }
-    @media (max-width: 560px) { .kat-cities { grid-template-columns: 1fr; } }
+    @media (max-width: 560px) { .kat-cities { grid-template-columns: minmax(0,1fr); } }
 
     /* ── Yazılar ─────────────────────────────────────────────────────── */
     .kat-journal { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 34px; }
@@ -170,7 +170,7 @@
     .kat-article h3 { font-size: 26px; line-height: 1.08; }
     .kat-article:hover h3 { color: var(--secondary); }
     .kat-article p { font-size: 14.5px; color: var(--text_muted); }
-    @media (max-width: 900px) { .kat-journal { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) { .kat-journal { grid-template-columns: minmax(0,1fr); } }
 
     /* ── Satır listesi (firma / yazı / ilan) ─────────────────────────── */
     .kat-entries { border-top: 1px solid var(--text); }
@@ -206,7 +206,7 @@
     .kat-band h1 { margin-top: 18px; font-size: clamp(40px, 6.6vw, 92px); line-height: .96; letter-spacing: -.04em; max-width: 18ch; }
     .kat-band__lede { margin-top: 20px; max-width: 60ch; font-size: 17.5px; color: var(--text_muted); }
     .kat-band__folio { font-family: var(--font_heading, Fraunces, serif); font-size: clamp(80px, 12vw, 180px); font-weight: 300; line-height: .8; color: transparent; -webkit-text-stroke: 1px var(--border); letter-spacing: -.05em; user-select: none; }
-    @media (max-width: 760px) { .kat-band__grid { grid-template-columns: 1fr; } .kat-band__folio { display: none; } }
+    @media (max-width: 760px) { .kat-band__grid { grid-template-columns: minmax(0,1fr); } .kat-band__folio { display: none; } }
 
     /* ── Filtre ──────────────────────────────────────────────────────── */
     .kat-filters { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px 22px; padding-block: 22px; margin-bottom: 8px; border-bottom: 1px solid var(--border); }
@@ -217,7 +217,7 @@
 
     /* ── İki sütun & paneller ────────────────────────────────────────── */
     .kat-cols { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: clamp(26px, 4vw, 56px); align-items: start; padding-top: 18px; }
-    @media (max-width: 980px) { .kat-cols { grid-template-columns: 1fr; } }
+    @media (max-width: 980px) { .kat-cols { grid-template-columns: minmax(0,1fr); } }
     .kat-side { display: grid; gap: 26px; }
     @media (min-width: 981px) { .kat-side { position: sticky; top: 22px; } }
     .kat-panel { border-top: 2px solid var(--text); background: transparent; }
@@ -259,11 +259,11 @@
     .kat-lead p { color: var(--text_muted); }
     .kat-lead__fig { aspect-ratio: 4/3; overflow: hidden; background: var(--primary); }
     .kat-lead__fig img { width: 100%; height: 100%; object-fit: cover; }
-    @media (max-width: 800px) { .kat-lead { grid-template-columns: 1fr; } .kat-lead__fig { order: -1; } }
+    @media (max-width: 800px) { .kat-lead { grid-template-columns: minmax(0,1fr); } .kat-lead__fig { order: -1; } }
 
     /* ── Paketler ────────────────────────────────────────────────────── */
     .kat-plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; padding-top: 30px; }
-    @media (max-width: 900px) { .kat-plans { grid-template-columns: 1fr; max-width: 480px; margin-inline: auto; } }
+    @media (max-width: 900px) { .kat-plans { grid-template-columns: minmax(0,1fr); max-width: 480px; margin-inline: auto; } }
     .kat-plan { position: relative; display: flex; flex-direction: column; gap: 16px; padding: 30px 28px; background: var(--bg_card); border: 1px solid var(--border); }
     .kat-plan--featured { background: var(--primary); color: #eef2ec; border-color: var(--primary); transform: translateY(-14px); }
     .kat-plan--featured .kat-plan__cat, .kat-plan--featured small { color: rgba(238,242,236,.7); }
@@ -282,7 +282,7 @@
 
     /* ── Form / not ──────────────────────────────────────────────────── */
     .kat-form { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 28px; }
-    @media (max-width: 600px) { .kat-form { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) { .kat-form { grid-template-columns: minmax(0,1fr); } }
     .kat-form label { display: flex; flex-direction: column; gap: 6px; font-size: 10.5px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--text_muted); }
     .kat-form .kat-wide { grid-column: 1 / -1; }
     .kat-form :is(input, select, textarea) { padding: 8px 2px; border: 0; border-bottom: 1px solid var(--text); border-radius: 0; background: transparent; color: var(--text); font-family: var(--font_heading, Fraunces, serif); font-size: 20px; letter-spacing: 0; text-transform: none; outline: none; }
@@ -308,7 +308,7 @@
     .kat-cta__actions { display: flex; flex-wrap: wrap; gap: 12px; }
     .kat-cta .kat-btn--ghost { color: #fff !important; border-color: rgba(255,255,255,.5); }
     .kat-cta .kat-btn--ghost:hover { background: #fff; color: var(--primary) !important; }
-    @media (max-width: 800px) { .kat-cta__grid { grid-template-columns: 1fr; } }
+    @media (max-width: 800px) { .kat-cta__grid { grid-template-columns: minmax(0,1fr); } }
     .kat-footer { background: #15130f; color: #cfc6b4; padding-top: 60px; }
     .kat-footer a { text-decoration: none; }
     .kat-footer a:hover { color: var(--accent); }
@@ -321,7 +321,7 @@
     .kat-footer__word { overflow: hidden; border-top: 1px solid #2c2820; padding-block: 18px 0; font-family: var(--font_heading, Fraunces, serif); font-size: clamp(60px, 15vw, 220px); font-weight: 300; line-height: .85; letter-spacing: -.06em; white-space: nowrap; color: #24211a; user-select: none; }
     .kat-footer__legal { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding-block: 20px; border-top: 1px solid #2c2820; font-size: 12px; letter-spacing: .08em; color: #8a8271; }
     @media (max-width: 860px) { .kat-footer__grid { grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 520px) { .kat-footer__grid { grid-template-columns: 1fr; } }
+    @media (max-width: 520px) { .kat-footer__grid { grid-template-columns: minmax(0,1fr); } }
 
     /* ── Firma profili ───────────────────────────────────────────────── */
     .kat-detail__cover { position: relative; aspect-ratio: 21/7; max-height: 420px; width: 100%; overflow: hidden; background: var(--primary); border-bottom: 1px solid var(--text); }
@@ -333,7 +333,7 @@
     .kat-detail__title .kat-band__lede { margin-top: 16px; }
     .kat-detail__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 24px; }
     .kat-detail__flag { padding: 8px 14px; background: var(--accent); color: #1b1813; font-size: 10.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
-    @media (max-width: 700px) { .kat-detail__title { grid-template-columns: 1fr; gap: 20px; } .kat-detail__logo { width: 96px; height: 96px; font-size: 46px; } }
+    @media (max-width: 700px) { .kat-detail__title { grid-template-columns: minmax(0,1fr); gap: 20px; } .kat-detail__logo { width: 96px; height: 96px; font-size: 46px; } }
     .kat-colophon { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-bottom: 1px solid var(--text); margin: 0; }
     .kat-colophon > div { padding: 18px 20px; border-left: 1px solid var(--border); }
     .kat-colophon > div:first-child { border-left: 0; padding-left: 0; }
@@ -343,7 +343,7 @@
     .kat-colophon dd a:hover { color: var(--secondary); border-color: var(--secondary); }
     @media (max-width: 800px) { .kat-colophon { grid-template-columns: 1fr 1fr; } .kat-colophon > div:nth-child(3) { border-left: 0; padding-left: 0; } .kat-colophon > div:nth-child(n+3) { border-top: 1px solid var(--border); } }
     .kat-detail__body { display: grid; grid-template-columns: minmax(0, 1fr) 350px; gap: clamp(26px, 4vw, 56px); align-items: start; padding-block: 40px 20px; }
-    @media (max-width: 980px) { .kat-detail__body { grid-template-columns: 1fr; } }
+    @media (max-width: 980px) { .kat-detail__body { grid-template-columns: minmax(0,1fr); } }
     .kat-detail__main, .kat-detail__side { display: grid; gap: 30px; }
     @media (min-width: 981px) { .kat-detail__side { position: sticky; top: 22px; } }
 
@@ -361,7 +361,7 @@
     .kat-detail .td-prose ul { padding-left: 22px; list-style: disc; }
     .kat-detail .td-share { margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border); }
     .kat-detail .td-card-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-    @media (max-width: 620px) { .kat-detail .td-card-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 620px) { .kat-detail .td-card-grid { grid-template-columns: minmax(0,1fr); } }
     .kat-detail .td-card { display: flex; flex-direction: column; gap: 6px; padding: 16px; border: 1px solid var(--border); background: var(--bg_card); text-decoration: none; transition: border-color .2s ease, box-shadow .2s ease; }
     .kat-detail .td-card:hover { border-color: var(--text); box-shadow: 4px 4px 0 var(--text); }
     .kat-detail .td-card-image { width: 100%; aspect-ratio: 4/3; object-fit: cover; margin-bottom: 6px; }

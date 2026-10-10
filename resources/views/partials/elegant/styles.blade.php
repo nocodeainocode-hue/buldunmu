@@ -73,7 +73,7 @@
 
     /* ── Sütunlar ────────────────────────────────────────────────────── */
     .el-cols { display: grid; grid-template-columns: 260px minmax(0,1fr); gap: 40px; align-items: start; }
-    @media (max-width: 900px) { .el-cols { grid-template-columns: 1fr; gap: 28px; } }
+    @media (max-width: 900px) { .el-cols { grid-template-columns: minmax(0,1fr); gap: 28px; } }
     .el-side { display: grid; gap: 32px; }
     @media (min-width: 901px) { .el-side { position: sticky; top: 24px; } }
 
@@ -106,7 +106,7 @@
     /* ── Vitrin kart ızgarası ────────────────────────────────────────── */
     .el-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 28px; }
     @media (max-width: 1000px) { .el-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
-    @media (max-width: 600px) { .el-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) { .el-grid { grid-template-columns: minmax(0,1fr); } }
     .el-card { position: relative; display: flex; flex-direction: column; gap: 10px; padding: 26px 22px 22px; border: 1px solid var(--border); border-top: 2px solid var(--accent); background: var(--bg_card); text-decoration: none; transition: box-shadow .22s ease, transform .22s ease; }
     .el-card:hover { box-shadow: var(--card_shadow, 0 2px 18px rgba(31,58,86,.07)); transform: translateY(-2px); }
     .el-card__logo { width: 56px; height: 56px; display: grid; place-items: center; border: 1px solid var(--border); border-radius: 50%; background: var(--bg); color: var(--primary); font-family: var(--font_heading, 'Playfair Display', serif); font-size: 24px; overflow: hidden; }
@@ -160,7 +160,7 @@
 
     /* ── Paket planları ──────────────────────────────────────────────── */
     .el-plans { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 24px; align-items: stretch; }
-    @media (max-width: 900px) { .el-plans { grid-template-columns: 1fr; max-width: 420px; margin-inline: auto; } }
+    @media (max-width: 900px) { .el-plans { grid-template-columns: minmax(0,1fr); max-width: 420px; margin-inline: auto; } }
     .el-plan { display: flex; flex-direction: column; gap: 16px; padding: 34px 26px; border: 1px solid var(--border); background: var(--bg_card); }
     .el-plan--featured { border-color: var(--accent); border-width: 1px; box-shadow: 0 0 0 1px var(--accent); }
     .el-plan__badge { align-self: center; font-family: var(--font_body, Jost, sans-serif); font-size: 12.5px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: #1b1810; background: var(--accent); padding: 4px 12px; }
@@ -175,7 +175,7 @@
 
     /* ── Form ────────────────────────────────────────────────────────── */
     .el-form { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    @media (max-width: 560px) { .el-form { grid-template-columns: 1fr; } }
+    @media (max-width: 560px) { .el-form { grid-template-columns: minmax(0,1fr); } }
     .el-form label { display: flex; flex-direction: column; gap: 7px; font-family: var(--font_body, Jost, sans-serif); font-size: 12.5px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--text_muted); }
     .el-form .el-wide { grid-column: 1 / -1; }
     .el-form :is(input,select,textarea) { padding: 12px 14px; border: 1px solid var(--border); border-radius: 1px; background: var(--bg); color: var(--text); font-family: var(--font_body, Jost, sans-serif); font-weight: 400; font-size: 16px; letter-spacing: 0; text-transform: none; }
@@ -213,7 +213,7 @@
     .el-meta dd a { color: var(--primary); text-decoration: none; }
     .el-meta dd a:hover { color: var(--accent_text, var(--accent)); }
     .el-detail__body { display: grid; grid-template-columns: minmax(0,1fr) 320px; gap: 44px; align-items: start; }
-    @media (max-width: 980px) { .el-detail__body { grid-template-columns: 1fr; gap: 32px; } }
+    @media (max-width: 980px) { .el-detail__body { grid-template-columns: minmax(0,1fr); gap: 32px; } }
     .el-detail__main { display: grid; gap: 40px; }
     .el-detail__side { display: grid; gap: 28px; }
     @media (min-width: 981px) { .el-detail__side { position: sticky; top: 24px; } }
@@ -232,7 +232,7 @@
     .el-detail .td-prose ul li::marker { color: var(--accent_text, var(--accent)); }
     .el-detail .td-share { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); }
     .el-detail .td-card-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
-    @media (max-width: 620px) { .el-detail .td-card-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 620px) { .el-detail .td-card-grid { grid-template-columns: minmax(0,1fr); } }
     .el-detail .td-card { display: flex; flex-direction: column; gap: 5px; padding: 16px; border: 1px solid var(--border); background: var(--bg); text-decoration: none; transition: border-color .16s ease; }
     .el-detail .td-card:hover { border-color: var(--accent); }
     .el-detail .td-card-image { width: 100%; aspect-ratio: 16/9; object-fit: cover; margin-bottom: 8px; }
@@ -281,7 +281,7 @@
     /* ── Home: numaralı kategori dizini ──────────────────────────────── */
     .el-catdir { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 0 44px; }
     @media (max-width: 820px) { .el-catdir { grid-template-columns: repeat(2, minmax(0,1fr)); } }
-    @media (max-width: 520px) { .el-catdir { grid-template-columns: 1fr; } }
+    @media (max-width: 520px) { .el-catdir { grid-template-columns: minmax(0,1fr); } }
     .el-catdir__item { display: flex; align-items: baseline; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--border); text-decoration: none; color: var(--text); transition: color .16s ease, padding-left .16s ease; }
     .el-catdir__item:hover { color: var(--primary); padding-left: 6px; }
     .el-catdir__name { flex: 1 1 auto; min-width: 0; font-family: var(--font_heading, 'Playfair Display', serif); font-size: 22px; font-weight: 500; }
@@ -290,7 +290,7 @@
     /* ── Home: şehir ızgarası ────────────────────────────────────────── */
     .el-citygrid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
     @media (max-width: 820px) { .el-citygrid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
-    @media (max-width: 460px) { .el-citygrid { grid-template-columns: 1fr; } }
+    @media (max-width: 460px) { .el-citygrid { grid-template-columns: minmax(0,1fr); } }
     .el-citygrid__item { background: var(--bg_card); padding: 22px 18px; text-decoration: none; display: flex; flex-direction: column; gap: 6px; transition: background .16s ease; }
     .el-citygrid__item:hover { background: var(--primary_light); }
 </style>

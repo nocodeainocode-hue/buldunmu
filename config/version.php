@@ -2,11 +2,19 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.13.0',
-    'name' => 'Kayıtlı Firma Sahipleri',
+    'number' => '1.13.1',
+    'name' => 'Mobil Taşma Düzeltmesi',
     'released_at' => '2026-10-10',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.13.1',
+            'name' => 'Mobil Taşma Düzeltmesi',
+            'released_at' => '2026-10-10',
+            'changes' => [
+                'Düzeltme: blog yazılarında ve liste sayfalarında, yan paneldeki uzun bir yazı başlığı telefonda sütunu ekrandan geniş yapıp sayfayı yana taşırabiliyordu. Tek sütuna düşen ızgaralar tüm temalarda taşmayacak şekilde düzeltildi.',
+            ],
+        ],
         [
             'number' => '1.13.0',
             'name' => 'Kayıtlı Firma Sahipleri',

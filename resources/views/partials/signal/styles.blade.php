@@ -56,7 +56,7 @@
 
     /* ── Sütunlar ────────────────────────────────────────────────────── */
     .sig-cols { display: grid; grid-template-columns: minmax(0,1fr) 320px; gap: 26px; align-items: start; }
-    @media (max-width: 940px) { .sig-cols { grid-template-columns: 1fr; } }
+    @media (max-width: 940px) { .sig-cols { grid-template-columns: minmax(0,1fr); } }
     .sig-side { display: grid; gap: 18px; }
     @media (min-width: 941px) { .sig-side { position: sticky; top: 22px; } }
 
@@ -80,7 +80,7 @@
 
     /* ── Firma kartları ──────────────────────────────────────────────── */
     .sig-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
-    @media (max-width: 560px) { .sig-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 560px) { .sig-grid { grid-template-columns: minmax(0,1fr); } }
     .sig-card { display: flex; flex-direction: column; gap: 10px; padding: 16px; border: 1px solid var(--border); border-radius: .125rem; background: var(--bg_card); text-decoration: none; transition: border-color .16s ease, transform .16s ease, box-shadow .16s ease; }
     .sig-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 12px 26px rgba(16,43,60,.1); }
     .sig-card__top { display: flex; align-items: center; gap: 12px; }
@@ -113,7 +113,7 @@
     .sig-promo .sig-btn { margin-top: 14px; }
     .sig-detail .sig-card__vip { align-self: center; }
     .sig-lead { display: grid; grid-template-columns: minmax(0,1.4fr) minmax(0,1fr); gap: 0; }
-    @media (max-width: 640px) { .sig-lead { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { .sig-lead { grid-template-columns: minmax(0,1fr); } }
     .sig-lead__body { padding: 22px; }
     .sig-lead__body h2 { font-size: clamp(20px,2.6vw,28px); margin: 12px 0; }
     .sig-lead__body p { color: var(--text_muted); }
@@ -133,7 +133,7 @@
 
     /* ── Paket planları ──────────────────────────────────────────────── */
     .sig-plans { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px; }
-    @media (max-width: 900px) { .sig-plans { grid-template-columns: 1fr; max-width: 460px; margin-inline: auto; } }
+    @media (max-width: 900px) { .sig-plans { grid-template-columns: minmax(0,1fr); max-width: 460px; margin-inline: auto; } }
     .sig-plan { display: flex; flex-direction: column; gap: 14px; padding: 24px; border: 1px solid var(--border); border-radius: .125rem; background: var(--bg_card); box-shadow: var(--card_shadow); }
     .sig-plan--featured { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary); }
     .sig-plan__badge { align-self: flex-start; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #fff; background: var(--secondary); padding: 3px 9px; border-radius: .125rem; }
@@ -148,7 +148,7 @@
 
     /* ── Form (iletişim) ─────────────────────────────────────────────── */
     .sig-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    @media (max-width: 560px) { .sig-form { grid-template-columns: 1fr; } }
+    @media (max-width: 560px) { .sig-form { grid-template-columns: minmax(0,1fr); } }
     .sig-form label { display: flex; flex-direction: column; gap: 7px; font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--text_muted); }
     .sig-form .sig-wide { grid-column: 1 / -1; }
     .sig-form :is(input,select,textarea) { padding: 12px 14px; border: 1px solid var(--border); border-radius: .125rem; background: var(--bg); color: var(--text); font: inherit; font-size: 14.5px; text-transform: none; letter-spacing: 0; }
@@ -186,7 +186,7 @@
     .sig-meta dd a { color: var(--primary); text-decoration: none; }
     .sig-meta dd a:hover { text-decoration: underline; }
     .sig-detail__body { display: grid; grid-template-columns: minmax(0,1fr) 340px; gap: 26px; align-items: start; padding-block: 34px 20px; }
-    @media (max-width: 980px) { .sig-detail__body { grid-template-columns: 1fr; } }
+    @media (max-width: 980px) { .sig-detail__body { grid-template-columns: minmax(0,1fr); } }
     .sig-detail__main { display: grid; gap: 18px; }
     .sig-detail__side { display: grid; gap: 18px; }
     @media (min-width: 981px) { .sig-detail__side { position: sticky; top: 22px; } }
@@ -205,7 +205,7 @@
     .sig-detail .td-prose ul { padding-left: 22px; list-style: disc; }
     .sig-detail .td-share { margin-top: 18px; padding-top: 14px; border-top: 1px dashed var(--border); }
     .sig-detail .td-card-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
-    @media (max-width: 620px) { .sig-detail .td-card-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 620px) { .sig-detail .td-card-grid { grid-template-columns: minmax(0,1fr); } }
     .sig-detail .td-card { display: flex; flex-direction: column; gap: 5px; padding: 14px; border: 1px solid var(--border); border-radius: .125rem; background: var(--bg); text-decoration: none; transition: border-color .16s ease; }
     .sig-detail .td-card:hover { border-color: var(--primary); }
     .sig-detail .td-card-image { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: .125rem; margin-bottom: 6px; }

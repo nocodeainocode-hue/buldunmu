@@ -83,6 +83,6 @@
     .board-page .bp-faq { border-bottom:1px dotted #cbc9d2; padding:11px 0; }
     .board-page .bp-faq summary { cursor:pointer; font-weight:800; }
     .board-page .bp-faq p { padding-top:8px; color:#626277; }
-    @media(max-width:850px) { .board-page .bp-columns { grid-template-columns:1fr; } .board-page .bp-side { grid-template-columns:repeat(2,minmax(0,1fr)); } }
-    @media(max-width:650px) { .board-shell .bs-wrap,.board-page .bp-wrap { width:min(100% - 24px,1460px); } .board-shell .bs-mainhead .bs-wrap { grid-template-columns:1fr; } .board-shell .bs-nav { justify-content:flex-start; } .board-shell .bs-search { grid-column:auto; } .board-page .bp-side { grid-template-columns:1fr; } .board-page .bp-row { grid-template-columns:36px minmax(0,1fr); } .board-page .bp-initial { width:36px; height:36px; } .board-page .bp-tag { grid-column:2; width:max-content; } .board-page .bp-filter { display:grid; grid-template-columns:1fr; } }
+    @media(max-width:850px) { .board-page .bp-columns { grid-template-columns: minmax(0,1fr); } .board-page .bp-side { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media(max-width:650px) { .board-shell .bs-wrap,.board-page .bp-wrap { width:min(100% - 24px,1460px); } .board-shell .bs-mainhead .bs-wrap { grid-template-columns: minmax(0,1fr); } .board-shell .bs-nav { justify-content:flex-start; } .board-shell .bs-search { grid-column:auto; } .board-page .bp-side { grid-template-columns: minmax(0,1fr); } .board-page .bp-row { grid-template-columns:36px minmax(0,1fr); } .board-page .bp-initial { width:36px; height:36px; } .board-page .bp-tag { grid-column:2; width:max-content; } .board-page .bp-filter { display:grid; grid-template-columns: minmax(0,1fr); } }
 </style>

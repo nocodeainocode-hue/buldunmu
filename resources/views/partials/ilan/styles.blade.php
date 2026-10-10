@@ -45,7 +45,7 @@
 
     /* ── Sütunlar: sol kategori rayı + içerik ────────────────────────── */
     .ib-cols { display: grid; grid-template-columns: 230px minmax(0,1fr); gap: 14px; align-items: start; }
-    @media (max-width: 900px) { .ib-cols { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) { .ib-cols { grid-template-columns: minmax(0,1fr); } }
     .ib-side { display: grid; gap: 12px; }
     @media (min-width: 901px) { .ib-side { position: sticky; top: 12px; } }
     @media (max-width: 900px) { .ib-side { grid-template-columns: repeat(2, minmax(0,1fr)); } }
@@ -101,7 +101,7 @@
     /* ── Kart ızgarası (vitrin) ──────────────────────────────────────── */
     .ib-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
     @media (max-width: 1020px) { .ib-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
-    @media (max-width: 620px) { .ib-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 620px) { .ib-grid { grid-template-columns: minmax(0,1fr); } }
     .ib-card { display: flex; flex-direction: column; gap: 8px; padding: 12px; border: 1px solid var(--border); border-radius: var(--border_radius, .25rem); background: var(--bg_card); text-decoration: none; transition: border-color .12s ease, box-shadow .12s ease; }
     .ib-card:hover { border-color: var(--primary); box-shadow: 0 4px 12px rgba(28,96,150,.12); }
     .ib-card__top { display: flex; align-items: center; gap: 10px; }
@@ -133,7 +133,7 @@
 
     /* ── Paket planları ──────────────────────────────────────────────── */
     .ib-plans { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
-    @media (max-width: 900px) { .ib-plans { grid-template-columns: 1fr; max-width: 440px; margin-inline: auto; } }
+    @media (max-width: 900px) { .ib-plans { grid-template-columns: minmax(0,1fr); max-width: 440px; margin-inline: auto; } }
     .ib-plan { display: flex; flex-direction: column; gap: 12px; padding: 18px; border: 1px solid var(--border); border-radius: var(--border_radius, .25rem); background: var(--bg_card); }
     .ib-plan--featured { border-color: var(--primary); border-width: 2px; }
     .ib-plan__badge { align-self: flex-start; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #fff; background: var(--secondary); padding: 2px 8px; border-radius: 2px; }
@@ -148,7 +148,7 @@
 
     /* ── Form (iletişim) ─────────────────────────────────────────────── */
     .ib-form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    @media (max-width: 560px) { .ib-form { grid-template-columns: 1fr; } }
+    @media (max-width: 560px) { .ib-form { grid-template-columns: minmax(0,1fr); } }
     .ib-form label { display: flex; flex-direction: column; gap: 5px; font-size: 12px; font-weight: 700; color: var(--text_muted); }
     .ib-form .ib-wide { grid-column: 1 / -1; }
     .ib-form :is(input,select,textarea) { padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--border_radius, .25rem); background: var(--bg); color: var(--text); font: inherit; font-size: 13.5px; }
@@ -184,7 +184,7 @@
     .ib-jobbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px 14px; border: 1px solid var(--border); border-left: 4px solid var(--secondary); border-radius: var(--border_radius, .25rem); background: var(--bg_card); margin-bottom: 12px; }
     .ib-jobbar h1 { font-size: 19px; color: var(--primary_hover); }
     .ib-detail__body { display: grid; grid-template-columns: minmax(0,1fr) 300px; gap: 14px; align-items: start; }
-    @media (max-width: 980px) { .ib-detail__body { grid-template-columns: 1fr; } }
+    @media (max-width: 980px) { .ib-detail__body { grid-template-columns: minmax(0,1fr); } }
     .ib-detail__main { display: grid; gap: 12px; }
     .ib-detail__side { display: grid; gap: 12px; }
     @media (min-width: 981px) { .ib-detail__side { position: sticky; top: 12px; } }
@@ -208,7 +208,7 @@
     .ib-detail .td-prose ul { padding-left: 22px; list-style: disc; }
     .ib-detail .td-share { margin-top: 14px; padding: 12px 14px 0; border-top: 1px solid var(--border); }
     .ib-detail .td-card-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
-    @media (max-width: 620px) { .ib-detail .td-card-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 620px) { .ib-detail .td-card-grid { grid-template-columns: minmax(0,1fr); } }
     .ib-detail .td-card { display: flex; flex-direction: column; gap: 4px; padding: 10px; border: 1px solid var(--border); border-radius: var(--border_radius, .25rem); background: var(--bg); text-decoration: none; transition: border-color .12s ease; }
     .ib-detail .td-card:hover { border-color: var(--primary); }
     .ib-detail .td-card-image { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: var(--border_radius, .25rem); margin-bottom: 5px; }

@@ -219,7 +219,7 @@
     .ap-detail .td-prose :is(h2,h3) { margin: 14px 0 8px; font-size: 16px; font-weight: 800; }
     .ap-detail .td-prose ul { padding-left: 22px; list-style: disc; }
     .ap-detail .td-share { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
-    .ap-detail .td-card-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .ap-detail .td-card-grid { display: grid; grid-template-columns: minmax(0,1fr); gap: 10px; }
     .ap-detail .td-card { display: flex; flex-direction: column; gap: 4px; padding: 12px; border: 1px solid var(--border); border-radius: 14px; background: var(--bg); text-decoration: none; }
     .ap-detail .td-card:hover { border-color: var(--primary); }
     .ap-detail .td-card-image { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 12px; margin-bottom: 6px; }
