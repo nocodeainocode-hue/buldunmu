@@ -1,12 +1,13 @@
 # Yerelix tasarım yenilemesi
 
-Sürüm: **1.14.0 — Yerelix Tasarım Yenilemesi**
+Sürüm: **1.14.1 — Yerelix Okunabilirlik Güncellemesi** (ilk tasarım: 1.14.0)
 
 Yerelix’in canlı sayfasında görülen Gökyüzü Adaları tasarımının yerine, yönetim panelinden de seçilebilen **Yerelix · Yerel Rehber** (`local-ledger`) teması hazırlandı.
 
 ## Yeni görünüm
 
-- Sıcak beyaz zemin, koyu yeşil vurgu ve Manrope yazı karakteri.
+- Sıcak beyaz zemin, koyu yeşil vurgu ve Arial yazı karakteri.
+- Açıklamalarda 17–18 px, menü/düğmelerde 16 px, küçük etiketlerde en az 14 px; mobilde de aynı okunabilirlik düzeni.
 - İlk ekranda firma/hizmet/şehir araması ve şehir sayfaları.
 - Hizmet kategorileri, firma vitrini, şehir listesi ve blog yazıları.
 - Görünür ücretsiz firma kayıt bağlantıları ve işletme sahipleri için tanıtım alanı.

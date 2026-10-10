@@ -2,11 +2,21 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.14.0',
-    'name' => 'Yerelix Tasarım Yenilemesi',
+    'number' => '1.14.1',
+    'name' => 'Yerelix Okunabilirlik Güncellemesi',
     'released_at' => '2026-10-11',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.14.1',
+            'name' => 'Yerelix Okunabilirlik Güncellemesi',
+            'released_at' => '2026-10-11',
+            'changes' => [
+                'Yerelix temasında Arial yazı karakteri; sıkışık harf aralıkları ve aşırı kalın başlıklar düzeltildi.',
+                'Açıklamalar 17–18 px, menü ve düğmeler 16 px, küçük etiketler en az 14 px olacak şekilde büyütüldü; mobilde metinleri küçülten kurallar kaldırıldı.',
+                'Firma ve blog başlıkları 22 px; daha rahat satır aralıkları, tablet menüsü ve mobil kayıt düğmesi düzeni.',
+            ],
+        ],
         [
             'number' => '1.14.0',
             'name' => 'Yerelix Tasarım Yenilemesi',
