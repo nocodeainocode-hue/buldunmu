@@ -2,11 +2,21 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.13.1',
-    'name' => 'Mobil Taşma Düzeltmesi',
-    'released_at' => '2026-10-10',
+    'number' => '1.14.0',
+    'name' => 'Yerelix Tasarım Yenilemesi',
+    'released_at' => '2026-10-11',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.14.0',
+            'name' => 'Yerelix Tasarım Yenilemesi',
+            'released_at' => '2026-10-11',
+            'changes' => [
+                'Yerelix için sıcak beyaz ve koyu yeşil renklerle yeni Yerel Rehber teması: belirgin arama, şehir rehberleri, hizmet kategorileri, firma vitrini ve blog alanı.',
+                'Masaüstü ve mobilde sade gezinme, görünür ücretsiz firma kayıt çağrıları; alt sayfalarda ortak renk ve yazı karakterleri.',
+                'Tema yalnızca yerelix.com.tr rehberine uygulanır; tekrarlanan yüklemelerde mevcut tema düzenlemeleri korunur.',
+            ],
+        ],
         [
             'number' => '1.13.1',
             'name' => 'Mobil Taşma Düzeltmesi',

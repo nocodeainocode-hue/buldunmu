@@ -106,6 +106,9 @@
     @if($activeLayout === 'board-v2')
         @include('partials.board.styles')
     @endif
+    @if($activeLayout === 'local-ledger')
+        @include('partials.local-ledger.styles')
+    @endif
     @if($activeLayout === 'ilan-board')
         @include('partials.ilan.styles')
     @endif
@@ -212,6 +215,9 @@
         </div>
     </div>
 
+    @if($activeLayout === 'local-ledger')
+        @include('partials.local-ledger.header')
+    @else
     <header class="sticky top-0 z-50 border-b backdrop-blur" style="background-color:color-mix(in srgb,var(--bg_card) 92%,transparent);border-color:var(--border);box-shadow:var(--card_shadow);">
         <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width:var(--page_width,1280px);">
             <div class="flex h-16 items-center justify-between">
@@ -282,6 +288,7 @@
             </div>
         </div>
     </header>
+    @endif
 
     <main class="flex-1">
         @if($adsEnabled)

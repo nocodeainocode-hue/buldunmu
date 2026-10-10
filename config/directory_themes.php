@@ -40,7 +40,7 @@ return [
     'yereldurak.com.tr' => 'paper-trail',
     'yerelhizmetim.com.tr' => 'craft-market',
     'yerelio.com.tr' => 'premium-showcase',
-    'yerelix.com.tr' => 'orbit-directory',
+    'yerelix.com.tr' => 'local-ledger',
     'yerelrehber360.com.tr' => 'city-pulse',
     'yerelustalar.com.tr' => 'usta-pro',
 ];

@@ -29,6 +29,7 @@ jobs:
             php artisan db:seed --class=LongFormMarketingArticlesVol2Seeder --force
             php artisan db:seed --class=LongFormMarketingArticlesVol3Seeder --force
             php artisan db:seed --class=DirectorySeoStoriesSeeder --force
+            php artisan db:seed --class=YerelixThemeSeeder --force
             php artisan directories:install-branding --apply
             php artisan optimize:clear
             php artisan filament:optimize
