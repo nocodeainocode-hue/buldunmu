@@ -2,11 +2,20 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.14.1',
-    'name' => 'Yerelix Okunabilirlik Güncellemesi',
+    'number' => '1.14.2',
+    'name' => 'İlçe Adı Düzeltmesi',
     'released_at' => '2026-10-11',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.14.2',
+            'name' => 'İlçe Adı Düzeltmesi',
+            'released_at' => '2026-10-11',
+            'changes' => [
+                'Düzeltme: açık ilçe veri kaynağındaki yazım hataları giderildi; noktasız ı yerine i yazılan ilçe adları (Sarioğlan, Hacilar, Akkişla gibi 460 kadar ad) ve bozuk birleşik nokta işaretleri doğru yazıma çevrildi. Merkez ilçeler şehrin doğru yazımlı adını alır.',
+                'Yeni catalog:fix-district-names komutu mevcut ilçe adlarını düzeltir (--dry-run ile önce listeler, adresleri değiştirmez); catalog:sync-districts artık yeni eklediği adları da düzelterek yazar.',
+            ],
+        ],
         [
             'number' => '1.14.1',
             'name' => 'Yerelix Okunabilirlik Güncellemesi',

@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\City;
 use App\Models\District;
+use App\Support\DistrictNameFixes;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -56,7 +57,7 @@ class SyncTurkeyDistricts extends Command
                         'slug' => Str::slug($districtName),
                         'directory_id' => null,
                     ],
-                    ['name' => $districtName],
+                    ['name' => DistrictNameFixes::fix($city, $districtName)],
                 );
 
                 $synced++;
