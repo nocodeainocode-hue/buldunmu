@@ -21,9 +21,7 @@ class PwaController extends Controller
 
         $name        = $directory->name ?? $settings->site_name ?? 'Firma Rehberi';
         $shortName   = mb_substr($name, 0, 12);
-        $description = $directory->meta_description
-            ?? $settings->meta_description
-            ?? 'Türkiye genelinde firma, kategori ve şehir araması için sade rehber deneyimi.';
+        $description = \App\Support\DirectoryBlurb::footer($directory, $settings);
 
         $icons = $this->buildIcons($directory, $settings);
 

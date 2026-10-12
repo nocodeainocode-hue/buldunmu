@@ -357,7 +357,7 @@
                             <span class="text-xl font-black" style="color:white;">{{ $footerName }}</span>
                         @endif
                     </a>
-                    <p class="mt-3 max-w-xs text-sm leading-6" style="color:#94a3b8;">{{ $directory->meta_description ?? $settings->meta_description ?? 'Türkiye genelinde firma, kategori ve şehir araması için sade rehber deneyimi.' }}</p>
+                    <p class="mt-3 max-w-xs text-sm leading-6" style="color:#94a3b8;">{{ \App\Support\DirectoryBlurb::footer($directory ?? null, $settings ?? null) }}</p>
                 </div>
                 <div>
                     <h3 class="mb-4 text-xs font-black uppercase tracking-widest" style="color:white;">Linkler</h3>

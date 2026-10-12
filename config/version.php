@@ -2,11 +2,20 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.14.2',
-    'name' => 'İlçe Adı Düzeltmesi',
-    'released_at' => '2026-10-11',
+    'number' => '1.14.3',
+    'name' => 'Rehbere Özgü Footer Açıklaması',
+    'released_at' => '2026-10-12',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.14.3',
+            'name' => 'Rehbere Özgü Footer Açıklaması',
+            'released_at' => '2026-10-12',
+            'changes' => [
+                'Footer ve uygulama (PWA) açıklaması artık tüm rehberlerde aynı sabit cümle değil: rehberin adından, odağından (usta, esnaf, KOBİ, kurumsal, hizmet, işletme, yerel, kuaför) ve şehir kapsamından üretilen, rehbere özgü bir cümle gösterilir.',
+                'Rehbere ya da site ayarlarına yazılan açıklama her zaman öncelikli kalır; yazılmamışsa otomatik cümle kullanılır.',
+            ],
+        ],
         [
             'number' => '1.14.2',
             'name' => 'İlçe Adı Düzeltmesi',
