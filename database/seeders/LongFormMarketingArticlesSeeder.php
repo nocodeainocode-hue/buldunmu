@@ -7,6 +7,7 @@ use RuntimeException;
 class LongFormMarketingArticlesSeeder extends DirectoryArticlesOctober2026Seeder
 {
     protected const CONTENT_DIR = 'content/deep_marketing_articles';
+    protected const EXPECTED_COUNT = 10;
 
     public static function bodyWordCount(string $content): int
     {
@@ -46,10 +47,11 @@ class LongFormMarketingArticlesSeeder extends DirectoryArticlesOctober2026Seeder
                 'search_intent' => 'informational',
             ];
         }
-        if (count($articles) !== 10
-            || count(array_unique(array_column($articles, 'slug'))) !== 10
-            || count(array_unique(array_column($articles, 'primary_query'))) !== 10) {
-            throw new RuntimeException('10 ayrı rehber, makale adresi ve sorgu bulunmalı.');
+        $expected = static::EXPECTED_COUNT;
+        if (count($articles) !== $expected
+            || count(array_unique(array_column($articles, 'slug'))) !== $expected
+            || count(array_unique(array_column($articles, 'primary_query'))) !== $expected) {
+            throw new RuntimeException("{$expected} ayrı rehber, makale adresi ve sorgu bulunmalı.");
         }
 
         return $articles;

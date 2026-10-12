@@ -135,4 +135,21 @@ class DirectorySeoTest extends TestCase
             ->assertDontSee('og:image', false)
             ->assertSee('<meta name="twitter:card" content="summary">', false);
     }
+
+    public function test_quotes_and_ampersands_in_titles_are_escaped_exactly_once(): void
+    {
+        $directory = Directory::create(['name' => 'Kobiva', 'slug' => 'kobiva', 'domain' => 'kobiva.test', 'status' => 'active']);
+        $post = \App\Models\Post::create([
+            'title' => "Kobi'nin \"Rehberi\" & Notlar", 'slug' => 'kobinin-rehberi', 'excerpt' => "Kobi'nin \"özel\" rehberi & notları.",
+            'content' => '<p>İçerik</p>', 'status' => 'published', 'published_at' => now(), 'is_indexable' => true,
+        ]);
+        $post->directories()->attach($directory->id);
+
+        $html = (string) $this->withServerVariables(['HTTP_HOST' => 'kobiva.test'])->get('http://kobiva.test/blog/kobinin-rehberi')->assertOk()->getContent();
+
+        $this->assertStringContainsString('<title>Kobi&#039;nin &quot;Rehberi&quot; &amp; Notlar</title>', $html);
+        $this->assertStringContainsString('content="Kobi&#039;nin &quot;özel&quot; rehberi &amp; notları."', $html);
+        $this->assertStringNotContainsString('&amp;quot;', $html);
+        $this->assertStringNotContainsString('&amp;#039;', $html);
+    }
 }

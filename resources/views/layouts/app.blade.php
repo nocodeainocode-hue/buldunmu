@@ -19,13 +19,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $homeSeo['title'] ?? ($__env->yieldContent('title') ?: ($settings->site_name ?? 'Firma Rehberi')) }}</title>
-    <meta name="description" content="{{ $homeSeo['description'] ?? ($__env->yieldContent('meta_description') ?: ($settings->meta_description ?? '')) }}">
+    <title>{!! $homeSeo ? e($homeSeo['title']) : $__env->yieldContent('title', $settings->site_name ?? 'Firma Rehberi') !!}</title>
+    <meta name="description" content="{!! $homeSeo ? e($homeSeo['description']) : $__env->yieldContent('meta_description', $settings->meta_description ?? '') !!}">
     <meta name="robots" content="@yield('robots', 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1')">
     @php
         $seoName = $directory->name ?? $settings->site_name ?? 'Firma Rehberi';
-        $seoTitle = $homeSeo['title'] ?? trim($__env->yieldContent('title') ?: $seoName);
-        $seoDescription = $homeSeo['description'] ?? trim($__env->yieldContent('meta_description') ?: ($directory->meta_description ?? $settings->meta_description ?? ''));
+        $seoTitle = $homeSeo['title'] ?? html_entity_decode(trim($__env->yieldContent('title') ?: $seoName), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $seoDescription = $homeSeo['description'] ?? html_entity_decode(trim($__env->yieldContent('meta_description') ?: ($directory->meta_description ?? $settings->meta_description ?? '')), ENT_QUOTES | ENT_HTML5, 'UTF-8');
         $seoCanonical = trim($__env->yieldContent('canonical') ?: url()->current());
     @endphp
     <link rel="canonical" href="{{ $seoCanonical }}">

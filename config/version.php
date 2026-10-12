@@ -2,11 +2,21 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.17.0',
-    'name' => 'Canlı Vitrin Teması',
-    'released_at' => '2026-10-12',
+    'number' => '1.18.0',
+    'name' => 'Yeni Rehber Makaleleri ve Başlık Düzeltmesi',
+    'released_at' => '2026-10-13',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.18.0',
+            'name' => 'Yeni Rehber Makaleleri ve Başlık Düzeltmesi',
+            'released_at' => '2026-10-13',
+            'changes' => [
+                'Rehber önem listesindeki ilk 20 rehber için (Kobiva, Buldun mu?, Yerelio, Buldora, Firmondo, Seçmeden Önce, Yerelix, Esnaf Pusulası…) 20 yeni yararlı makale hazırlandı; her biri en az 500 kelime, yalnızca kendi rehberinde yayınlanır ve tekrar çalıştırılabilir (LongFormMarketingArticlesVol4Seeder).',
+                'Makale başlıkları en fazla 60 karakter (arama sonuçlarında kesilmez), meta açıklamaları 120-155 karakterdir; testlerle denetlenir.',
+                'Düzeltme: sayfa başlığı (title) ve meta açıklamasında tırnak, kesme işareti ve & karakterleri iki kez kaçırılıyordu (&amp;quot; gibi görünüyordu); tek kez kaçırılacak şekilde düzeltildi (og:title ve og:description dahil).',
+            ],
+        ],
         [
             'number' => '1.17.0',
             'name' => 'Canlı Vitrin Teması',
