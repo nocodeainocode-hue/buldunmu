@@ -2,11 +2,20 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.16.0',
-    'name' => 'Reklamsız Premium Profil',
+    'number' => '1.17.0',
+    'name' => 'Canlı Vitrin Teması',
     'released_at' => '2026-10-12',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.17.0',
+            'name' => 'Canlı Vitrin Teması',
+            'released_at' => '2026-10-12',
+            'changes' => [
+                'Yeni tema: Canlı Vitrin · Sarı Liste (sun-listing). Sarı vurgulu iri başlık, yuvarlak arama çubuğu (hizmet/işletme + şehir), gerçek sayılarla özet, zengin öne çıkan firma kartları (açık/kapalı, öne çıkan, puan, kısa açıklama, ara/incele), dört adım, hızlı kategori, avantajlar, rehber yazıları, şehir bağlantıları ve firma ekleme bandı; mobilde yüzen "Firma Bul" düğmesi.',
+                'Tema, rehber ayarlarından seçilir; iç sayfalar mevcut düzende açılır ve yeni üst menüyü kullanır. Özet sayıları (aktif firma, kategori, şehir) yalnızca gerçek ve yeterince büyükse gösterilir.',
+            ],
+        ],
         [
             'number' => '1.16.0',
             'name' => 'Reklamsız Premium Profil',

@@ -118,6 +118,9 @@
     @if($activeLayout === 'local-ledger')
         @include('partials.local-ledger.styles')
     @endif
+    @if($activeLayout === 'sun-listing')
+        @include('partials.sun-listing.styles')
+    @endif
     @if($activeLayout === 'ilan-board')
         @include('partials.ilan.styles')
     @endif
@@ -226,6 +229,8 @@
 
     @if($activeLayout === 'local-ledger')
         @include('partials.local-ledger.header')
+    @elseif($activeLayout === 'sun-listing')
+        @include('partials.sun-listing.header')
     @else
     <header class="sticky top-0 z-50 border-b backdrop-blur" style="background-color:color-mix(in srgb,var(--bg_card) 92%,transparent);border-color:var(--border);box-shadow:var(--card_shadow);">
         <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width:var(--page_width,1280px);">

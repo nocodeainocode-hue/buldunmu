@@ -25,6 +25,8 @@ class HomeController extends Controller
         // Ana sayfanın ağır sorguları rehber başına kısa süre önbellekte tutulur; firma kaydedilince sürüm değişir.
         $data = ModelCache::remember('dir.'.($directory?->id ?? 'global'), 'home', (int) config('performance.home_ttl', 90), fn () => $this->homeData($directory));
         extract($data);
+        // Dağıtımdan hemen sonra eski (önbellekteki) veride bu alan bulunmayabilir.
+        $totalCompanies = $totalCompanies ?? null;
 
         // Başlık ve H1 boşsa rehbere özgü, aranabilir metin üretilir (editör yazdıysa o korunur).
         $homeSeo = $directory ? DirectorySeo::home($directory, $settings) : null;
@@ -39,13 +41,14 @@ class HomeController extends Controller
 
         return view($viewName, array_merge(compact(
             'settings', 'categories', 'cities', 'premiumCompanies', 'latestCompanies', 'openCompanies', 'trustedCompanies',
-            'mapCompanies', 'posts', 'directory', 'homeJobs', 'featuredOfferings', 'homeSeo'
+            'mapCompanies', 'posts', 'directory', 'homeJobs', 'featuredOfferings', 'homeSeo', 'totalCompanies'
         ), $layout === 'turkey-atlas' ? AtlasData::forCurrentDirectory() : []));
     }
 
     private function homeData($directory): array
     {
         $settings = SiteSetting::getSettings();
+        $totalCompanies = Company::active()->count();
         $categories = Category::active()->withCount('companies')->orderByDesc('companies_count')->take(12)->get();
         $cities = $this->navigationCities($directory);
         $companyIncludes = ['category', 'city', 'district'];
@@ -92,7 +95,7 @@ class HomeController extends Controller
 
         return compact(
             'settings', 'categories', 'cities', 'premiumCompanies', 'latestCompanies', 'openCompanies', 'trustedCompanies',
-            'mapCompanies', 'posts', 'homeJobs', 'featuredOfferings'
+            'mapCompanies', 'posts', 'homeJobs', 'featuredOfferings', 'totalCompanies'
         );
     }
 
