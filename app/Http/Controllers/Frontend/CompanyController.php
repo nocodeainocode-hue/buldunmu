@@ -91,7 +91,10 @@ class CompanyController extends Controller
         $storyTemplates = ['elegant', 'city-focused', 'category-mega', 'corporate', 'bold', 'premium-showcase', 'map-directory', 'local-map-landing', 'map-first'];
         $detailVariant = in_array($template, $storyTemplates) ? 'seo-story' : 'compact-local';
 
-        $similarCompanies = Company::active()
+        // Premium firmanın profilinde başka firma tanıtımı (benzer, aynı kategori, yakın) ve reklam gösterilmez.
+        $adFree = $company->hasActivePremium();
+
+        $similarCompanies = $adFree ? collect() : Company::active()
             ->where('id', '!=', $company->id)
             ->where(function ($q) use ($company) {
                 $q->where('category_id', $company->category_id)
@@ -102,7 +105,7 @@ class CompanyController extends Controller
             ->take(6)
             ->get();
 
-        $sameCategoryCompanies = Company::active()
+        $sameCategoryCompanies = $adFree ? collect() : Company::active()
             ->where('id', '!=', $company->id)
             ->where('category_id', $company->category_id)
             ->with(['category', 'city'])
@@ -111,7 +114,7 @@ class CompanyController extends Controller
             ->get();
 
         // Nearby companies (same district or city)
-        $nearbyCompanies = Company::active()
+        $nearbyCompanies = $adFree ? collect() : Company::active()
             ->where('id', '!=', $company->id)
             ->when($company->district_id, fn ($q) => $q->where('district_id', $company->district_id))
             ->when(! $company->district_id, fn ($q) => $q->where('city_id', $company->city_id))

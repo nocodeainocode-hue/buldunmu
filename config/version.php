@@ -2,11 +2,20 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.15.0',
-    'name' => 'Ana Sayfa SEO Başlıkları',
+    'number' => '1.16.0',
+    'name' => 'Reklamsız Premium Profil',
     'released_at' => '2026-10-12',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.16.0',
+            'name' => 'Reklamsız Premium Profil',
+            'released_at' => '2026-10-12',
+            'changes' => [
+                'Premium (süresi dolmamış) firmaların profilinde artık başka firma tanıtımı (Benzer Firmalar, Aynı Kategori, Yakın Çevre) ve reklam gösterilmez; süresi biten Premium normal profil gibi davranır.',
+                'Premium üyelik paketlerinin özelliklerine "Reklamsız profil" maddesi eklendi (adında premium geçen paketlere bir kez eklenir; Üyelik Paketleri ekranından düzenlenebilir).',
+            ],
+        ],
         [
             'number' => '1.15.0',
             'name' => 'Ana Sayfa SEO Başlıkları',

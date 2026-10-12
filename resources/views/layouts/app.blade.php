@@ -82,7 +82,9 @@
             $appSubpage = $activeLayout === 'mobile-app' && !request()->routeIs('home', 'companies.show');
             // Reklam konumları: cihaz çerçeveli temalarda ve firma paneli/giriş sayfalarında gösterilmez
             $adsEnabled = !in_array($activeLayout, [...$mobileShellLayouts, ...\App\View\Helpers\ThemeHelper::PHONE_SHELL], true)
-                && !request()->routeIs('owner.*', 'login', 'offline');
+                && !request()->routeIs('owner.*', 'login', 'offline')
+                // Premium firma profilinde reklam gösterilmez (Reklamsız profil).
+                && !(request()->routeIs('companies.show') && isset($company) && $company instanceof \App\Models\Company && $company->hasActivePremium());
         @endphp
         @if(in_array($activeLayout, $mobileShellLayouts))
         html.theme-{{ $directory->template }} body > header,
