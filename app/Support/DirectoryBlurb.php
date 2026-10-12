@@ -107,7 +107,7 @@ class DirectoryBlurb
         ]);
     }
 
-    private static function focus(Directory $directory): string
+    public static function focus(Directory $directory): string
     {
         $haystack = Str::of(($directory->domain ?? '').' '.$directory->name)->ascii()->lower()->toString();
 

@@ -2,11 +2,21 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.14.3',
-    'name' => 'Rehbere Özgü Footer Açıklaması',
+    'number' => '1.15.0',
+    'name' => 'Ana Sayfa SEO Başlıkları',
     'released_at' => '2026-10-12',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.15.0',
+            'name' => 'Ana Sayfa SEO Başlıkları',
+            'released_at' => '2026-10-12',
+            'changes' => [
+                'Tüm rehberlerde ana sayfa başlığı (title), H1 ve meta açıklaması artık yalnızca marka adı ya da slogan değil: rehberin odağından (usta, esnaf, KOBİ, kurumsal, hizmet, işletme, yerel, kuaför, genel firma) ve şehir kapsamından üretilen, aranabilir ve rehbere özgü metin gösterilir. Başlık en fazla 60, açıklama 120-155 karakterdir.',
+                'Editörün bilinçli yazdığı başlık (en az 25 karakter) ve açıklama (en az 110 karakter) olduğu gibi korunur; yalnızca marka adı, oluşturma sırasında yazılan varsayılan başlık ya da kısa slogan olanlar yenilenir.',
+                'Rehberin logosu ya da kapak görseli varsa sosyal medya paylaşımında görsel (og:image, twitter:image) çıkar ve paylaşım kartı büyük görselli olur.',
+            ],
+        ],
         [
             'number' => '1.14.3',
             'name' => 'Rehbere Özgü Footer Açıklaması',

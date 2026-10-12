@@ -2,6 +2,9 @@
 <html lang="tr" class="scroll-smooth {{ \App\View\Helpers\ThemeHelper::templateClass($directory ?? null) }}">
 <head>
     @php
+        // Ana sayfa başlık/açıklama/H1: denetleyiciden gelir; yoksa burada üretilir. Editör yazdıysa o korunur.
+        $homeSeo = $homeSeo ?? ((($directory ?? null) && request()->routeIs('home')) ? \App\Support\DirectorySeo::home($directory, $settings ?? null) : null);
+        $ogImage = ($directory ?? null) ? \App\Support\DirectorySeo::ogImage($directory, $settings ?? null) : null;
         $adsTracking = (config('tracking.google_ads', []))[$directory->domain ?? ''] ?? [];
         $adsTagId = $adsTracking['tag_id'] ?? '';
         $adsTagEnabled = preg_match('/^AW-[0-9]+$/', $adsTagId) === 1;
@@ -16,13 +19,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', $settings->site_name ?? 'Firma Rehberi')</title>
-    <meta name="description" content="@yield('meta_description', $settings->meta_description ?? '')">
+    <title>{{ $homeSeo['title'] ?? ($__env->yieldContent('title') ?: ($settings->site_name ?? 'Firma Rehberi')) }}</title>
+    <meta name="description" content="{{ $homeSeo['description'] ?? ($__env->yieldContent('meta_description') ?: ($settings->meta_description ?? '')) }}">
     <meta name="robots" content="@yield('robots', 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1')">
     @php
         $seoName = $directory->name ?? $settings->site_name ?? 'Firma Rehberi';
-        $seoTitle = trim($__env->yieldContent('title') ?: $seoName);
-        $seoDescription = trim($__env->yieldContent('meta_description') ?: ($directory->meta_description ?? $settings->meta_description ?? ''));
+        $seoTitle = $homeSeo['title'] ?? trim($__env->yieldContent('title') ?: $seoName);
+        $seoDescription = $homeSeo['description'] ?? trim($__env->yieldContent('meta_description') ?: ($directory->meta_description ?? $settings->meta_description ?? ''));
         $seoCanonical = trim($__env->yieldContent('canonical') ?: url()->current());
     @endphp
     <link rel="canonical" href="{{ $seoCanonical }}">
@@ -31,7 +34,11 @@
     <meta property="og:description" content="{{ $seoDescription }}">
     <meta property="og:url" content="{{ $seoCanonical }}">
     <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary">
+    @if($ogImage)
+    <meta property="og:image" content="{{ $ogImage }}">
+    <meta name="twitter:image" content="{{ $ogImage }}">
+    @endif
+    <meta name="twitter:card" content="{{ $ogImage ? 'summary_large_image' : 'summary' }}">
     <meta name="twitter:title" content="{{ $seoTitle }}">
     <meta name="twitter:description" content="{{ $seoDescription }}">
 

@@ -11,6 +11,7 @@ use App\Models\JobPosting;
 use App\Models\Post;
 use App\Models\SiteSetting;
 use App\Support\AtlasData;
+use App\Support\DirectorySeo;
 use App\Support\ModelCache;
 use App\View\Helpers\ThemeHelper;
 use Illuminate\Http\Request;
@@ -25,12 +26,20 @@ class HomeController extends Controller
         $data = ModelCache::remember('dir.'.($directory?->id ?? 'global'), 'home', (int) config('performance.home_ttl', 90), fn () => $this->homeData($directory));
         extract($data);
 
+        // Başlık ve H1 boşsa rehbere özgü, aranabilir metin üretilir (editör yazdıysa o korunur).
+        $homeSeo = $directory ? DirectorySeo::home($directory, $settings) : null;
+
+        if ($homeSeo && $homeSeo['title_generated']) {
+            // Ana sayfa görünümleri H1 olarak homepage_title'ı yazar; yalnızca bellekte değişir, kaydedilmez.
+            $settings->homepage_title = $homeSeo['h1'];
+        }
+
         $layout = ThemeHelper::layoutFile($directory);
         $viewName = 'frontend.home.' . (view()->exists('frontend.home.' . $layout) ? $layout : 'default');
 
         return view($viewName, array_merge(compact(
             'settings', 'categories', 'cities', 'premiumCompanies', 'latestCompanies', 'openCompanies', 'trustedCompanies',
-            'mapCompanies', 'posts', 'directory', 'homeJobs', 'featuredOfferings'
+            'mapCompanies', 'posts', 'directory', 'homeJobs', 'featuredOfferings', 'homeSeo'
         ), $layout === 'turkey-atlas' ? AtlasData::forCurrentDirectory() : []));
     }
 
