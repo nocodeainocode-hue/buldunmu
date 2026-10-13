@@ -2,11 +2,20 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.18.0',
-    'name' => 'Yeni Rehber Makaleleri ve Başlık Düzeltmesi',
+    'number' => '1.18.1',
+    'name' => 'Firma Haritası Düzeltmesi',
     'released_at' => '2026-10-13',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.18.1',
+            'name' => 'Firma Haritası Düzeltmesi',
+            'released_at' => '2026-10-13',
+            'changes' => [
+                'Düzeltme: firma detayındaki Konum bölümünde Google arama/yer bağlantıları çerçeveye konulunca "google.com bağlanmayı reddetti" görünüyordu. Artık her bağlantıdan koordinat bulunup gömülebilir harita adresi üretilir; koordinat yoksa adresle arama yapılır.',
+                'Konum bilgisi hiç yoksa harita bölümü çizilmez, kırık çerçeve görünmez. Yer bağlantılarındaki !3d/!4d koordinat biçimi de artık okunur.',
+            ],
+        ],
         [
             'number' => '1.18.0',
             'name' => 'Yeni Rehber Makaleleri ve Başlık Düzeltmesi',

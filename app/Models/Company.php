@@ -135,6 +135,11 @@ class Company extends Model
             return self::validatedCoordinates((float) $matches[2], (float) $matches[1]);
         }
 
+        // Yer bağlantılarındaki !3d<enlem>!4d<boylam> biçimi
+        if (preg_match('/!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)/', $decoded, $matches)) {
+            return self::validatedCoordinates((float) $matches[1], (float) $matches[2]);
+        }
+
         if (preg_match('/[?&](?:q|query)=(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)/', $decoded, $matches)) {
             return self::validatedCoordinates((float) $matches[1], (float) $matches[2]);
         }
@@ -146,19 +151,45 @@ class Company extends Model
         return null;
     }
 
+    /**
+     * Firma sayfasındaki harita çerçevesi (iframe) için gömülebilir adres.
+     * Google, arama/yer bağlantılarının (maps/search, maps/place, kısa bağlantılar) çerçevelenmesini reddeder;
+     * bu yüzden koordinat ya da adres bulunup anahtar gerektirmeyen "output=embed" adresi üretilir.
+     * Gösterilecek bir konum yoksa null döner (harita bölümü hiç çizilmez, kırık çerçeve çıkmaz).
+     */
     public function googleMapsEmbedSrc(): ?string
     {
-        if (blank($this->google_maps_url)) {
-            return null;
-        }
-
-        $value = html_entity_decode($this->google_maps_url, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $value = html_entity_decode((string) $this->google_maps_url, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
         if (preg_match('/\bsrc=["\']([^"\']+)["\']/i', $value, $srcMatch)) {
-            return html_entity_decode($srcMatch[1], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $value = html_entity_decode($srcMatch[1], ENT_QUOTES | ENT_HTML5, 'UTF-8');
         }
 
-        return $value;
+        // Zaten gömülebilir adres (paylaş > haritayı yerleştir ya da output=embed) olduğu gibi kullanılır.
+        if ($value !== '' && (str_contains($value, '/maps/embed') || str_contains($value, 'output=embed'))) {
+            return $value;
+        }
+
+        $coordinates = self::coordinatesFromGoogleMapsInput($value)
+            ?? ($this->latitude !== null && $this->longitude !== null && (float) $this->latitude !== 0.0
+                ? ['latitude' => (float) $this->latitude, 'longitude' => (float) $this->longitude]
+                : null);
+
+        if ($coordinates) {
+            return 'https://www.google.com/maps?q='.$coordinates['latitude'].','.$coordinates['longitude'].'&z=16&output=embed';
+        }
+
+        // Koordinat yoksa adresle arama: pin, adresin bulunabildiği yere konur.
+        $query = collect([$this->address, $this->district?->name, $this->city?->name])
+            ->map(fn ($part) => trim((string) $part))
+            ->filter()
+            ->implode(', ');
+
+        if ($query !== '' && filled($this->address)) {
+            return 'https://www.google.com/maps?q='.rawurlencode($query).'&z=15&output=embed';
+        }
+
+        return null;
     }
 
     protected static function validatedCoordinates(float $latitude, float $longitude): ?array
