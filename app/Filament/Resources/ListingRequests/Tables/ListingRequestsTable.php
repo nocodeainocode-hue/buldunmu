@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Directory;
 use App\Models\ListingRequest;
 use Filament\Actions\Action;
+use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -14,6 +15,7 @@ use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Collection;
 
 class ListingRequestsTable
 {
@@ -178,6 +180,61 @@ class ListingRequestsTable
                     })
                     ->visible(fn ($record) => ! $record->is_partial && ($record->status === 'new' || $record->status === 'reviewed')),
 
+                Action::make('approve_partial')
+                    ->label('Firma Olarak Ekle')
+                    ->icon('heroicon-o-building-office-2')
+                    ->color('success')
+                    ->modalHeading('Yarım Kalan Başvuruyu Firma Olarak Ekle')
+                    ->modalDescription(fn (ListingRequest $record): string => "{$record->company_name} firması, ".($record->directory?->name ?? 'seçili rehber').' rehberine yayında olarak eklenecek. Başvuru sahibi kaydı tamamlamamıştı; bilgileri (telefon, kategori, şehir) kontrol edin.')
+                    ->form([
+                        Select::make('category_id')
+                            ->label('Yayın Kategorisi')
+                            ->options(fn (ListingRequest $record): array => Category::withoutGlobalScope('directory')
+                                ->where('status', 'active')
+                                ->where(function ($query) use ($record): void {
+                                    $query->whereNull('directory_id');
+
+                                    if ($record->directory_id) {
+                                        $query->orWhere('directory_id', $record->directory_id);
+                                    }
+                                })
+                                ->orderBy('name')
+                                ->pluck('name', 'id')
+                                ->all())
+                            ->searchable()
+                            ->preload()
+                            ->required()
+                            ->default(fn (ListingRequest $record): ?int => $record->requested_category ? null : $record->category_id)
+                            ->helperText(fn (ListingRequest $record): ?string => $record->requested_category
+                                ? "Başvuru sahibinin yazdığı alan: {$record->requested_category}"
+                                : null),
+                    ])
+                    ->action(function (ListingRequest $record, array $data) {
+                        $record->update(['category_id' => (int) $data['category_id']]);
+                        $company = $record->approveToCompany();
+
+                        Notification::make()
+                            ->title('Firma eklendi!')
+                            ->success()
+                            ->body("\"{$company->name}\" firması eklendi ve başvuru kapatıldı.")
+                            ->send();
+                    })
+                    ->visible(fn ($record) => $record->is_partial && in_array($record->status, ['new', 'reviewed'], true) && filled($record->directory_id)),
+
+                Action::make('close_partial')
+                    ->label('Kapat')
+                    ->icon('heroicon-o-archive-box-x-mark')
+                    ->color('gray')
+                    ->requiresConfirmation()
+                    ->modalHeading('Yarım Kalan Başvuruyu Kapat')
+                    ->modalDescription('Bu başvuru ilgilenilmeyecek olarak kapatılır ve bekleyen listesinden çıkar. Kayıt silinmez, "Reddedildi" olarak durur.')
+                    ->action(function (ListingRequest $record) {
+                        $record->update(['status' => 'rejected']);
+
+                        Notification::make()->title('Yarım kalan başvuru kapatıldı.')->success()->send();
+                    })
+                    ->visible(fn ($record) => $record->is_partial && in_array($record->status, ['new', 'reviewed'], true)),
+
                 Action::make('reject')
                     ->label('Reddet')
                     ->icon('heroicon-o-x-circle')
@@ -198,6 +255,18 @@ class ListingRequestsTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+                    BulkAction::make('close_partials')
+                        ->label('Seçili yarım başvuruları kapat')
+                        ->icon('heroicon-o-archive-box-x-mark')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records): void {
+                            $closed = $records->filter(fn (ListingRequest $record) => $record->is_partial && in_array($record->status, ['new', 'reviewed'], true))
+                                ->each->update(['status' => 'rejected'])
+                                ->count();
+
+                            Notification::make()->title($closed.' yarım başvuru kapatıldı.')->success()->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
                     DeleteBulkAction::make(),
                 ]),
             ]);

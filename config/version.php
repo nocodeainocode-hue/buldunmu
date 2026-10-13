@@ -2,11 +2,20 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.18.4',
-    'name' => 'Boş Firma Formu',
+    'number' => '1.18.5',
+    'name' => 'Yarım Başvuru İşlemleri',
     'released_at' => '2026-10-13',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.18.5',
+            'name' => 'Yarım Başvuru İşlemleri',
+            'released_at' => '2026-10-13',
+            'changes' => [
+                'Firma Talepleri menüsündeki rozet yalnızca yeni (kayıt formunun 2. adımını tamamlamış) başvuruları sayar; yarım kalanlar rozete eklenmez.',
+                'Yarım kalan başvuruların satırında yeni işlemler: "Firma Olarak Ekle" (kategori seçilir, firma yayında eklenir ve başvuru kapanır) ve "Kapat" (ilgilenilmeyecek olarak kapatır). Toplu işlem: "Seçili yarım başvuruları kapat" (tamamlanmış başvurulara dokunmaz).',
+            ],
+        ],
         [
             'number' => '1.18.4',
             'name' => 'Boş Firma Formu',
