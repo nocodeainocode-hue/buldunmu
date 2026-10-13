@@ -2,11 +2,19 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.18.1',
-    'name' => 'Firma Haritası Düzeltmesi',
+    'number' => '1.18.2',
+    'name' => 'Firma Talepleri Rozeti',
     'released_at' => '2026-10-13',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.18.2',
+            'name' => 'Firma Talepleri Rozeti',
+            'released_at' => '2026-10-13',
+            'changes' => [
+                'Menüde Firma Talepleri üzerindeki bekleyen sayısı artık yalnızca kayıt formunun 2. adımını tamamlamış yeni başvuruları gösterir; yarım kalan başvurular listede görünmeye devam eder ama rozete eklenmez.',
+            ],
+        ],
         [
             'number' => '1.18.1',
             'name' => 'Firma Haritası Düzeltmesi',
