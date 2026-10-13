@@ -27,10 +27,9 @@ class ListingRequestResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        // Yalnızca tamamlanmış (2. adımı geçmiş) ve henüz incelenmemiş başvurular sayılır; yarım kalanlar (is_partial) listede görünür ama rozete eklenmez.
-        $count = static::getModel()::where('status', 'new')
-            ->where(fn ($query) => $query->whereNull('is_partial')->orWhere('is_partial', false))
-            ->count();
+        // Henüz incelenmemiş tüm başvurular sayılır: 1. adımı geçip kaydı tamamlamayanlar (is_partial) dahil,
+        // çünkü yönetici onları da firma olarak ekleyip sonuçlandırıyor.
+        $count = static::getModel()::where('status', 'new')->count();
 
         return $count ? (string) $count : null;
     }

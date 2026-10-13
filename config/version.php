@@ -2,11 +2,19 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.18.2',
-    'name' => 'Firma Talepleri Rozeti',
+    'number' => '1.18.3',
+    'name' => 'Firma Talepleri Rozeti Düzeltmesi',
     'released_at' => '2026-10-13',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.18.3',
+            'name' => 'Firma Talepleri Rozeti Düzeltmesi',
+            'released_at' => '2026-10-13',
+            'changes' => [
+                'Menüde Firma Talepleri üzerindeki bekleyen sayısı, kayıt formunun 1. adımında kalan (yarım) başvurular dahil incelenmemiş tüm başvuruları yeniden sayar; önceki sürümdeki kısıtlama geri alındı.',
+            ],
+        ],
         [
             'number' => '1.18.2',
             'name' => 'Firma Talepleri Rozeti',
