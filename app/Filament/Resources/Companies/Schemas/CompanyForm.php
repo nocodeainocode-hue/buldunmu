@@ -239,7 +239,7 @@ class CompanyForm
                                                     ->required()
                                                     ->placeholder('örn: Su Arıtma Cihazı Montajı'),
                                             ])
-                                            ->defaultItems(3)
+                                            ->defaultItems(0)
                                             ->addActionLabel('Hizmet Ekle')
                                             ->collapsible()
                                             ->itemLabel(fn (array $state): ?string => $state['title'] ?? 'Yeni Hizmet')
@@ -261,7 +261,7 @@ class CompanyForm
                                                     ->placeholder('Telefon, WhatsApp ve e-posta ile hızlı ulaşım.')
                                                     ->rows(2),
                                             ])
-                                            ->defaultItems(3)
+                                            ->defaultItems(0)
                                             ->addActionLabel('Özellik Ekle')
                                             ->collapsible()
                                             ->itemLabel(fn (array $state): ?string => $state['title'] ?? 'Yeni Özellik')

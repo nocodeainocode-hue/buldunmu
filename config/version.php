@@ -2,11 +2,19 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.18.3',
-    'name' => 'Firma Talepleri Rozeti Düzeltmesi',
+    'number' => '1.18.4',
+    'name' => 'Boş Firma Formu',
     'released_at' => '2026-10-13',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.18.4',
+            'name' => 'Boş Firma Formu',
+            'released_at' => '2026-10-13',
+            'changes' => [
+                'Yönetim panelinde yeni firma eklerken Hizmet Maddeleri ve Öne Çıkan Özellikler alanları artık boş satırlarla açılmaz; gerekirse Hizmet Ekle ve Özellik Ekle düğmeleriyle eklenir.',
+            ],
+        ],
         [
             'number' => '1.18.3',
             'name' => 'Firma Talepleri Rozeti Düzeltmesi',
