@@ -2,11 +2,20 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.19.1',
-    'name' => 'Rehbere Özel Kategori Listesi',
+    'number' => '1.19.2',
+    'name' => 'Panelde Rehbere Göre Kategori Durumu',
     'released_at' => '2026-10-15',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.19.2',
+            'name' => 'Panelde Rehbere Göre Kategori Durumu',
+            'released_at' => '2026-10-15',
+            'changes' => [
+                'Kategoriler listesi üstten seçili rehbere göre durum gösterir: o rehberde gizlenmiş kategori "Aktif" yerine "Bu rehberde gizli" yazar.',
+                'Seçili rehber için "Görünenler / Gizlenenler" filtresi ve satırda "Bu rehberde gizle / göster" işlemi eklendi.',
+            ],
+        ],
         [
             'number' => '1.19.1',
             'name' => 'Rehbere Özel Kategori Listesi',
