@@ -2,11 +2,21 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.19.0',
-    'name' => 'İletişim Formu Spam Koruması',
-    'released_at' => '2026-10-14',
+    'number' => '1.19.1',
+    'name' => 'Rehbere Özel Kategori Listesi',
+    'released_at' => '2026-10-15',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.19.1',
+            'name' => 'Rehbere Özel Kategori Listesi',
+            'released_at' => '2026-10-15',
+            'changes' => [
+                'Yeni komut: directory:set-categories. Bir rehberde yalnızca verilen kategorileri verilen sırayla gösterir, diğerlerini o rehberde gizler (silmez); eksik kategorileri oluşturur ve yeni açılanları diğer rehberlerde gizler.',
+                'Rehbere ait firmalar ada (berber, nail, epilasyon, spa…) ve eski kategoriye göre yeni kategorilere taşınır; eşleşmeyenlere dokunulmaz ve listelenir. Varsayılan kuru çalıştırmadır, --apply ile uygulanır.',
+                'kuaforrehberi.com.tr için: Unisex Kuaför, Kadın Kuaför, Erkek Kuaför, Spa Merkezi, Epilasyon, Tırnak Salonu, Güzellik Merkezi.',
+            ],
+        ],
         [
             'number' => '1.19.0',
             'name' => 'İletişim Formu Spam Koruması',
