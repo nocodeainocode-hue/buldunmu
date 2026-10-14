@@ -12,6 +12,7 @@
             @if(session('error'))<div class="bd-note-box" style="margin-bottom:16px;border-left-color:var(--accent)">{{ session('error') }}</div>@endif
             <form class="bd-form" action="{{ route('contact.store') }}" method="POST">
                 @csrf
+@include('partials.contact-guard')
                 <label>Adın *<input type="text" name="name" required value="{{ old('name') }}"></label>
                 <label>E-posta<input type="email" name="email" value="{{ old('email') }}"></label>
                 <label class="bd-wide">Konu
@@ -23,7 +24,7 @@
                     </select>
                 </label>
                 <label class="bd-wide">Mesajın *<textarea name="message" rows="6" required>{{ old('message') }}</textarea></label>
-                <label>{{ $a }} + {{ $b }} = ? *<input type="text" name="captcha" required inputmode="numeric"></label>
+                <label>{{ $captchaLabel }} = ? *<input type="text" name="captcha" required inputmode="numeric"></label>
                 <div class="bd-wide"><button class="bd-btn bd-btn--hot" type="submit">Mesajı gönder →</button></div>
             </form>
         </div>

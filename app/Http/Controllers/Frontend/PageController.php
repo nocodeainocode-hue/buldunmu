@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Support\FormGuard;
 use App\Http\Controllers\Controller;
 use App\Models\SiteSetting;
 use App\Support\PageContent;
@@ -26,14 +27,14 @@ class PageController extends Controller
     }
     public function contact()
     {
-        // Matematik CAPTCHA
-        $a = rand(1, 10);
-        $b = rand(1, 10);
-        session(['captcha_result' => $a + $b]);
+        // İmzalı, tek kullanımlık işlem sorusu (oturuma bağlı değil)
+        $challenge = FormGuard::challenge();
+        $captchaLabel = $challenge['label'];
+        $captchaToken = $challenge['token'];
 
         $settings = SiteSetting::getSettings();
         $content = $this->getPageContent('contact');
-        return view('frontend.pages.contact', compact('settings', 'content', 'a', 'b'));
+        return view('frontend.pages.contact', compact('settings', 'content', 'captchaLabel', 'captchaToken'));
     }
     public function privacy()
     {

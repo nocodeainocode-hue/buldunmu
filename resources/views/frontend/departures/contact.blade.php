@@ -20,6 +20,7 @@
 
             <form class="dep-contact-form" action="{{ route('contact.store') }}" method="POST">
                 @csrf
+@include('partials.contact-guard')
                 <label>Adınız *<input type="text" name="name" required value="{{ old('name') }}"></label>
                 <label>E-posta<input type="email" name="email" value="{{ old('email') }}"></label>
                 <label class="wide">Konu
@@ -31,7 +32,7 @@
                     </select>
                 </label>
                 <label class="wide">Mesajınız *<textarea name="message" rows="6" required>{{ old('message') }}</textarea></label>
-                <label>{{ $a }} + {{ $b }} = ? *<input type="text" name="captcha" required inputmode="numeric" style="max-width:150px"></label>
+                <label>{{ $captchaLabel }} = ? *<input type="text" name="captcha" required inputmode="numeric" style="max-width:150px"></label>
                 <div class="wide"><button class="dep-btn" type="submit">Mesajı gönder →</button></div>
             </form>
         </article>

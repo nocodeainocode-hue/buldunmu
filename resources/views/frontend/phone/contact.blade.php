@@ -22,6 +22,7 @@
 
         <form class="ph-filter" style="padding:0; border:0" action="{{ route('contact.store') }}" method="POST">
             @csrf
+@include('partials.contact-guard')
             <label class="ph-field">Adınız *<input name="name" required value="{{ old('name') }}" autocomplete="name"></label>
             <label class="ph-field">E-posta<input name="email" type="email" value="{{ old('email') }}" autocomplete="email"></label>
             <label class="ph-field">Telefon<input name="phone" type="tel" value="{{ old('phone') }}" autocomplete="tel"></label>
@@ -34,7 +35,7 @@
                 </select>
             </label>
             <label class="ph-field">Mesajınız *<textarea name="message" rows="6" required>{{ old('message') }}</textarea></label>
-            <label class="ph-field">{{ $a }} + {{ $b }} = ? *<input name="captcha" required inputmode="numeric" autocomplete="off"></label>
+            <label class="ph-field">{{ $captchaLabel }} = ? *<input name="captcha" required inputmode="numeric" autocomplete="off"></label>
             <button class="ph-btn ph-btn--wide" type="submit">Mesajı gönder →</button>
         </form>
     </div>

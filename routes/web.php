@@ -86,7 +86,7 @@ Route::middleware('auth')->group(function (): void {
 });
 
 // İletişim
-Route::post('/iletisim', [ContactController::class, 'store'])->middleware('throttle:6,1')->name('contact.store');
+Route::post('/iletisim', [ContactController::class, 'store'])->middleware(['throttle:3,1', 'honeypot'])->name('contact.store');
 
 // Üyelik Paketleri
 Route::get('/paketler', [PaketController::class, 'index'])->name('packages.index');

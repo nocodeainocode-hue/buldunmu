@@ -2,11 +2,21 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.18.5',
-    'name' => 'Yarım Başvuru İşlemleri',
-    'released_at' => '2026-10-13',
+    'number' => '1.19.0',
+    'name' => 'İletişim Formu Spam Koruması',
+    'released_at' => '2026-10-14',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.19.0',
+            'name' => 'İletişim Formu Spam Koruması',
+            'released_at' => '2026-10-14',
+            'changes' => [
+                'İletişim formundaki güvenlik sorusu artık oturuma bağlı değil: toplama, çıkarma ve çarpma karışık, imzalı ve tek kullanımlık; bot cevabı hesaplasa da belirteci yeniden kullanamaz.',
+                'İletişim formuna gizli alan (honeypot) ve zaman tuzağı eklendi; çok hızlı gönderimler, dolu gizli alan, aynı mesajın tekrarı ve saatlik sınırı aşan gönderimler sessizce elenir.',
+                'Çok bağlantılı ya da bilinen spam kalıplarını içeren mesajlar "Spam" durumuyla kaydedilir (silinmez, menü rozetine eklenmez); İletişim Mesajları listesinde Durum filtresiyle ayrıştırılır.',
+            ],
+        ],
         [
             'number' => '1.18.5',
             'name' => 'Yarım Başvuru İşlemleri',

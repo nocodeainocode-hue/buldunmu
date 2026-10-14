@@ -54,6 +54,7 @@
 
         <form action="{{ route('contact.store') }}" method="POST" class="space-y-4 mt-6">
             @csrf
+@include('partials.contact-guard')
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Adınız *</label>
@@ -79,7 +80,7 @@
                 <textarea name="message" rows="5" required class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200">{{ old('message') }}</textarea>
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">{{ $a }} + {{ $b }} = ? *</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">{{ $captchaLabel }} = ? *</label>
                 <input type="text" name="captcha" required class="w-32 px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200" placeholder="?">
                 <p class="text-xs text-gray-400 mt-1">Spam koruması için lütfen işlemi cevaplayın.</p>
             </div>

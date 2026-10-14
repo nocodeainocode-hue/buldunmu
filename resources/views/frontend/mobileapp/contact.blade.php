@@ -12,6 +12,7 @@
 @endif
 <form class="ap-form" action="{{ route('contact.store') }}" method="POST">
     @csrf
+@include('partials.contact-guard')
     <label>Adınız *<input type="text" name="name" required value="{{ old('name') }}"></label>
     <label>E-posta<input type="email" name="email" value="{{ old('email') }}"></label>
     <label>Konu
@@ -23,6 +24,6 @@
         </select>
     </label>
     <label>Mesajınız *<textarea name="message" rows="5" required>{{ old('message') }}</textarea></label>
-    <label>{{ $a }} + {{ $b }} = ? *<input type="text" name="captcha" required inputmode="numeric"></label>
+    <label>{{ $captchaLabel }} = ? *<input type="text" name="captcha" required inputmode="numeric"></label>
     <button class="ap-btn ap-btn--block" type="submit">Mesajı gönder</button>
 </form>

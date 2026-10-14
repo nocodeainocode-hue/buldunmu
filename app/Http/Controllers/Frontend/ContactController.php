@@ -5,10 +5,15 @@ namespace App\Http\Controllers\Frontend;
 use App\Rules\TurkishPhone;
 use App\Http\Controllers\Controller;
 use App\Models\ContactMessage;
+use App\Support\FormGuard;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\RateLimiter;
 
 class ContactController extends Controller
 {
+    private const SUCCESS = 'Mesajınız başarıyla gönderildi. En kısa sürede size dönüş yapılacaktır.';
+
     public function store(Request $request)
     {
         abort_unless(app()->bound('currentDirectory'), 404);
@@ -20,24 +25,35 @@ class ContactController extends Controller
             'subject' => 'nullable|string|max:255',
             'message' => 'required|string|max:5000',
             'captcha' => 'required|integer',
+            'captcha_token' => 'nullable|string',
         ]);
 
-        // Matematik CAPTCHA doğrulaması
-        $captchaResult = session('captcha_result');
-        if ((int) $validated['captcha'] !== $captchaResult) {
-            session()->forget('captcha_result');
+        $guard = FormGuard::verify($validated['captcha_token'] ?? null, $validated['captcha']);
+        unset($validated['captcha'], $validated['captcha_token']);
 
+        if ($guard === FormGuard::WRONG) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Güvenlik sorusu yanlış. Lütfen tekrar deneyin.');
+                ->with('error', 'Güvenlik sorusu yanlış ya da süresi dolmuş. Lütfen sayfayı yenileyip tekrar deneyin.');
         }
-        session()->forget('captcha_result');
 
-        $validated['status'] = 'new';
+        // Bot izlenimi veren gönderimler (çok hızlı, saatlik sınır, aynı metin) sessizce başarılı gösterilir.
+        $ip = $request->ip();
+        $duplicateKey = 'contact-dup:'.sha1($ip.'|'.mb_strtolower(trim($validated['message'])));
+
+        if ($guard === FormGuard::TOO_FAST
+            || RateLimiter::tooManyAttempts('contact-hourly:'.$ip, 10)
+            || ! Cache::add($duplicateKey, 1, 3600)) {
+            return redirect()->back()->with('success', self::SUCCESS);
+        }
+
+        RateLimiter::hit('contact-hourly:'.$ip, 3600);
+
+        $validated['status'] = FormGuard::looksLikeSpam($validated['name'], $validated['message']) ? 'spam' : 'new';
         $validated['directory_id'] = app('currentDirectory')->id;
 
         ContactMessage::create($validated);
 
-        return redirect()->back()->with('success', 'Mesajınız başarıyla gönderildi. En kısa sürede size dönüş yapılacaktır.');
+        return redirect()->back()->with('success', self::SUCCESS);
     }
 }

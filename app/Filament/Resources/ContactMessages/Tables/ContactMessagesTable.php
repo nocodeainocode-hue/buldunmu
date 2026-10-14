@@ -36,10 +36,10 @@ class ContactMessagesTable
                     ->label('Durum')
                     ->badge()
                     ->formatStateUsing(fn ($state) => match ($state) {
-                        'new' => 'Yeni','read' => 'Okundu','replied' => 'Yanıtlandı',default => $state
+                        'new' => 'Yeni','read' => 'Okundu','replied' => 'Yanıtlandı','spam' => 'Spam',default => $state
                     })
                     ->color(fn ($state) => match ($state) {
-                        'new' => 'danger','read' => 'info','replied' => 'success',default => 'gray'
+                        'new' => 'danger','read' => 'info','replied' => 'success','spam' => 'warning',default => 'gray'
                     }),
                 TextColumn::make('created_at')
                     ->label('Tarih')
@@ -54,6 +54,9 @@ class ContactMessagesTable
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
+                SelectFilter::make('status')
+                    ->label('Durum')
+                    ->options(['new' => 'Yeni', 'read' => 'Okundu', 'replied' => 'Yanıtlandı', 'spam' => 'Spam']),
                 SelectFilter::make('directory_id')
                     ->label('Rehber')
                     ->options(fn (): array => Directory::query()->orderBy('name')->pluck('name', 'id')->all()),

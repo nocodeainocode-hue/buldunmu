@@ -26,7 +26,7 @@ class ContactMessageDirectoryTest extends TestCase
             'status' => 'active',
         ]);
 
-        $this->withSession(['captcha_result' => 7])
+        $this
             ->withServerVariables(['HTTP_HOST' => $source->domain])
             ->from('http://kaynak.test/iletisim')
             ->post('http://kaynak.test/iletisim', [
@@ -34,6 +34,7 @@ class ContactMessageDirectoryTest extends TestCase
                 'email' => 'test@example.com',
                 'message' => 'Test mesajı',
                 'captcha' => 7,
+                'captcha_token' => ContactFormGuardTest::token(7),
             ])
             ->assertRedirect('http://kaynak.test/iletisim');
 

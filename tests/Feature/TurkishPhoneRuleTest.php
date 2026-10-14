@@ -135,13 +135,11 @@ class TurkishPhoneRuleTest extends TestCase
         [$directory] = $this->fixture();
 
         $this->withServerVariables(['HTTP_HOST' => $directory->domain])
-            ->withSession(['captcha_result' => 4])
-            ->post('http://buldunmu.test/iletisim', ['name' => 'Ali', 'message' => 'Merhaba', 'phone' => 'abc', 'captcha' => '4'])
+            ->post('http://buldunmu.test/iletisim', ['name' => 'Ali', 'message' => 'Merhaba', 'phone' => 'abc', 'captcha' => '4', 'captcha_token' => ContactFormGuardTest::token(4)])
             ->assertSessionHasErrors('phone');
 
         $this->withServerVariables(['HTTP_HOST' => $directory->domain])
-            ->withSession(['captcha_result' => 4])
-            ->post('http://buldunmu.test/iletisim', ['name' => 'Ali', 'message' => 'Merhaba', 'captcha' => '4'])
+            ->post('http://buldunmu.test/iletisim', ['name' => 'Ali', 'message' => 'Merhaba', 'captcha' => '4', 'captcha_token' => ContactFormGuardTest::token(4)])
             ->assertSessionHasNoErrors();
     }
 
