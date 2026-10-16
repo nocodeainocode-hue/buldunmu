@@ -2,11 +2,21 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.19.2',
-    'name' => 'Panelde Rehbere Göre Kategori Durumu',
-    'released_at' => '2026-10-15',
+    'number' => '1.20.0',
+    'name' => 'Kartvizitlik Teması',
+    'released_at' => '2026-10-16',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.20.0',
+            'name' => 'Kartvizitlik Teması',
+            'released_at' => '2026-10-16',
+            'changes' => [
+                'Yeni tema: Kartvizitlik · Kart Dosyası (kartvizitlik). Her firma sabit düzenli bir kartvizit: kim, ne, nerede ve en iri yazıyla sol altta telefon (şeridin tamamı arama bağlantısı) + WhatsApp. Kraft masa hero, çizgili "Arama fişi" arama formu, masaüstünde yelpaze kartlar, "Masadaki kartlar" rafı, şu an açık firmalar için hızlı arama listesi, kategori çekmeceleri, şehir kutuları ve "Kartını bırak" boş kartı.',
+                'Sayılar yalnızca gerçek ve yeterince büyükse gösterilir; boş rehberde boş kart durumları; mobilde alt sabit "Kart ara / Kartını bırak" şeridi; 360 px genişlikte yatay kaydırma yok; erişilebilirlik (kontrast, odak, dokunma alanları, azaltılmış hareket).',
+                'Kayıt sayfası, boş karttan gelen firma adını formda önceden doldurur. Paylaşılan mobil menü düğmesi aria-expanded durumunu günceller.',
+            ],
+        ],
         [
             'number' => '1.19.2',
             'name' => 'Panelde Rehbere Göre Kategori Durumu',

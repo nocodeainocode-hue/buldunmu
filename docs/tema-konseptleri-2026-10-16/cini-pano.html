@@ -1,0 +1,818 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kayseri Rehberi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500;1,600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#1f3f8f; --primary-hover:#16306e; --primary-light:#e4ebf6;
+  --turq:#2fa4a9; --turq-d:#17777b; --turq-l:#9fdfe1;
+  --coral:#c8402e; --zumrut:#3f7d4e;
+  --bg:#f3f4ef; --card:#fffefa; --glaze:#fbfaf5; --ink:#12204a; --muted:#4f5b78;
+  --border:#d3dae6; --grout:#cfd6e4;
+  --kartus:polygon(22px 0,calc(100% - 22px) 0,100% 50%,calc(100% - 22px) 100%,22px 100%,0 50%);
+  --cn-r:clamp(20px,7vw,34px);
+  --ros-kobalt:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'><circle r='46' transform='rotate(7.5)' fill='none' stroke='%23c8402e' stroke-width='4.4' stroke-linecap='round' stroke-dasharray='0 12.043'/><circle r='35.6' fill='none' stroke='%232fa4a9' stroke-width='6.8'/><g fill='%231f3f8f' transform='rotate(22.5)'><circle r='25'/><circle cx='23' r='9'/><circle cx='23' r='9' transform='rotate(45)'/><circle cx='23' r='9' transform='rotate(90)'/><circle cx='23' r='9' transform='rotate(135)'/><circle cx='23' r='9' transform='rotate(180)'/><circle cx='23' r='9' transform='rotate(225)'/><circle cx='23' r='9' transform='rotate(270)'/><circle cx='23' r='9' transform='rotate(315)'/><circle r='23' fill='none' stroke='%23fffefa' stroke-width='3.4' stroke-linecap='round' stroke-dasharray='0 18.064'/></g><circle r='13.5' fill='none' stroke='%23fffefa' stroke-width='1.6'/><circle r='6.5' fill='%232fa4a9' stroke='%23fffefa' stroke-width='2'/></svg>");
+  --ros-turkuaz:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'><circle r='46' transform='rotate(7.5)' fill='none' stroke='%23c8402e' stroke-width='4.4' stroke-linecap='round' stroke-dasharray='0 12.043'/><circle r='35.6' fill='none' stroke='%231f3f8f' stroke-width='6.8'/><g fill='%232fa4a9' transform='rotate(22.5)'><circle r='25'/><circle cx='23' r='9'/><circle cx='23' r='9' transform='rotate(45)'/><circle cx='23' r='9' transform='rotate(90)'/><circle cx='23' r='9' transform='rotate(135)'/><circle cx='23' r='9' transform='rotate(180)'/><circle cx='23' r='9' transform='rotate(225)'/><circle cx='23' r='9' transform='rotate(270)'/><circle cx='23' r='9' transform='rotate(315)'/><circle r='23' fill='none' stroke='%23fffefa' stroke-width='3.4' stroke-linecap='round' stroke-dasharray='0 18.064'/></g><circle r='13.5' fill='none' stroke='%23fffefa' stroke-width='1.6'/><circle r='6.5' fill='%231f3f8f' stroke='%23fffefa' stroke-width='2'/></svg>");
+  --ros-mercan:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'><circle r='46' transform='rotate(7.5)' fill='none' stroke='%232fa4a9' stroke-width='4.4' stroke-linecap='round' stroke-dasharray='0 12.043'/><circle r='35.6' fill='none' stroke='%231f3f8f' stroke-width='6.8'/><g fill='%23c8402e' transform='rotate(22.5)'><circle r='25'/><circle cx='23' r='9'/><circle cx='23' r='9' transform='rotate(45)'/><circle cx='23' r='9' transform='rotate(90)'/><circle cx='23' r='9' transform='rotate(135)'/><circle cx='23' r='9' transform='rotate(180)'/><circle cx='23' r='9' transform='rotate(225)'/><circle cx='23' r='9' transform='rotate(270)'/><circle cx='23' r='9' transform='rotate(315)'/><circle r='23' fill='none' stroke='%23fffefa' stroke-width='3.4' stroke-linecap='round' stroke-dasharray='0 18.064'/></g><circle r='13.5' fill='none' stroke='%23fffefa' stroke-width='1.6'/><circle r='6.5' fill='%232fa4a9' stroke='%23fffefa' stroke-width='2'/></svg>");
+  --ros-zumrut:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'><circle r='46' transform='rotate(7.5)' fill='none' stroke='%23c8402e' stroke-width='4.4' stroke-linecap='round' stroke-dasharray='0 12.043'/><circle r='35.6' fill='none' stroke='%232fa4a9' stroke-width='6.8'/><g fill='%233f7d4e' transform='rotate(22.5)'><circle r='25'/><circle cx='23' r='9'/><circle cx='23' r='9' transform='rotate(45)'/><circle cx='23' r='9' transform='rotate(90)'/><circle cx='23' r='9' transform='rotate(135)'/><circle cx='23' r='9' transform='rotate(180)'/><circle cx='23' r='9' transform='rotate(225)'/><circle cx='23' r='9' transform='rotate(270)'/><circle cx='23' r='9' transform='rotate(315)'/><circle r='23' fill='none' stroke='%23fffefa' stroke-width='3.4' stroke-linecap='round' stroke-dasharray='0 18.064'/></g><circle r='13.5' fill='none' stroke='%23fffefa' stroke-width='1.6'/><circle r='6.5' fill='%232fa4a9' stroke='%23fffefa' stroke-width='2'/></svg>");
+  --chev:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path d='M1 1.5l5 5 5-5' fill='none' stroke='%231f3f8f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 Nunito,system-ui,sans-serif;overflow-x:clip}
+a{color:inherit}
+img,svg{display:block}
+h1,h2,h3,h4{font-family:Alegreya,Georgia,serif;margin:0}
+.cn-home{overflow-x:clip}
+.cn-wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+.cn-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ===== ortak süsler ===== */
+.cn-loz{display:inline-block;width:6px;height:6px;background:var(--turq);transform:rotate(45deg);flex:none}
+.cn-star{display:inline-block;position:relative;width:9px;height:9px;flex:none;color:var(--turq)}
+.cn-star::before,.cn-star::after{content:"";position:absolute;inset:0;background:currentColor}
+.cn-star::after{transform:rotate(45deg)}
+.cn-btn-coral{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:6px;
+  background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,0) 55%),var(--coral);color:#fff;text-decoration:none;
+  font:800 15px/1 Nunito,sans-serif;white-space:nowrap;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -2px 0 rgba(0,0,0,.14),0 8px 16px -10px rgba(200,64,46,.9)}
+.cn-btn-coral:hover{filter:brightness(1.05)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
+.cn-more{display:inline-flex;align-items:center;gap:9px;font:800 16px/1 Nunito,sans-serif;color:var(--primary);text-decoration:none;min-height:44px}
+.cn-more .cn-loz{width:7px;height:7px}
+.cn-more:hover span:first-child{text-decoration:underline;text-decoration-color:var(--turq);text-underline-offset:4px}
+
+/* ===== header ===== */
+.cn-header{position:sticky;top:0;z-index:50;background:rgba(251,250,245,.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.cn-header::after{content:"";display:block;height:10px;
+  background:linear-gradient(var(--primary),var(--primary)) 0 0/100% 6px no-repeat,
+             radial-gradient(circle at 6px 2px,var(--turq) 0 2px,transparent 2.6px) 0 6px/12px 4px repeat-x}
+.cn-header-in{height:72px;display:flex;align-items:center;gap:26px}
+.cn-brand{display:flex;align-items:center;gap:11px;text-decoration:none;min-width:0}
+.cn-mark{width:40px;height:40px;flex:none;border-radius:5px;
+  background:radial-gradient(circle,var(--turq) 0 4.5px,#fffefa 5px 6.5px,rgba(31,63,143,.35) 7px 7.8px,transparent 8.3px),
+    var(--ros-kobalt) -15px -15px/30px 30px no-repeat,var(--ros-kobalt) calc(100% + 15px) -15px/30px 30px no-repeat,
+    var(--ros-kobalt) -15px calc(100% + 15px)/30px 30px no-repeat,var(--ros-kobalt) calc(100% + 15px) calc(100% + 15px)/30px 30px no-repeat,var(--glaze);
+  box-shadow:inset 0 0 0 1px rgba(31,63,143,.28),0 1px 0 #fff,0 2px 5px rgba(18,32,74,.18)}
+.cn-brand-name{font:800 22px/1 Alegreya,serif;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cn-nav{display:flex;align-items:center;gap:26px;margin-left:auto}
+.cn-nav a{position:relative;font:700 16px/1 Nunito,sans-serif;text-decoration:none;color:var(--ink);padding:12px 0}
+.cn-nav a::after{content:"";position:absolute;left:50%;bottom:0;width:6px;height:6px;margin-left:-3px;background:var(--coral);transform:rotate(45deg) scale(.4);opacity:0;transition:.2s}
+.cn-nav a:hover::after,.cn-nav a:focus-visible::after{opacity:1;transform:rotate(45deg) scale(1)}
+.cn-short{display:none}
+.cn-menu{display:none;width:44px;height:44px;flex:none;border:1px solid var(--border);border-radius:6px;background:var(--card);color:var(--primary);align-items:center;justify-content:center;cursor:pointer;padding:0}
+
+/* ===== hero: çini duvar + şemse ===== */
+.cn-hero{--t:72px;--q:8.5px;--qr:6.5px;position:relative;padding:72px 24px 64px;background-color:var(--primary);
+  background-image:
+    radial-gradient(ellipse 80% 75% at 50% 46%,rgba(22,48,110,0) 52%,rgba(22,48,110,.92) 100%),
+    radial-gradient(circle,#fff 0 4px,rgba(255,255,255,0) 4.6px),
+    radial-gradient(circle,#fff 0 2px,rgba(255,255,255,0) 2.6px),
+    radial-gradient(circle at 50% calc(50% - var(--q)),var(--turq) 0 var(--qr),rgba(47,164,169,0) calc(var(--qr) + .6px)),
+    radial-gradient(circle at 50% calc(50% + var(--q)),var(--turq) 0 var(--qr),rgba(47,164,169,0) calc(var(--qr) + .6px)),
+    radial-gradient(circle at calc(50% - var(--q)) 50%,var(--turq) 0 var(--qr),rgba(47,164,169,0) calc(var(--qr) + .6px)),
+    radial-gradient(circle at calc(50% + var(--q)) 50%,var(--turq) 0 var(--qr),rgba(47,164,169,0) calc(var(--qr) + .6px)),
+    radial-gradient(circle,rgba(255,255,255,0) 0 calc(var(--t)*.3),rgba(255,255,255,.13) calc(var(--t)*.3 + .5px) calc(var(--t)*.3 + 1.6px),rgba(255,255,255,0) calc(var(--t)*.3 + 2.2px)),
+    linear-gradient(rgba(255,255,255,.14) 2px,rgba(255,255,255,0) 2px),
+    linear-gradient(90deg,rgba(255,255,255,.14) 2px,rgba(255,255,255,0) 2px);
+  background-size:100% 100%,var(--t) var(--t),var(--t) var(--t),var(--t) var(--t),var(--t) var(--t),var(--t) var(--t),var(--t) var(--t),var(--t) var(--t),var(--t) var(--t),var(--t) var(--t);
+  background-position:0 0,calc(var(--t)/-2) calc(var(--t)/-2),0 0,0 0,0 0,0 0,0 0,0 0,-1px -1px,-1px -1px}
+.cn-semse-wrap{position:relative;max-width:940px;margin:0 auto}
+.cn-semse{position:relative;min-height:520px;border-radius:50%;padding:84px 15%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  background:radial-gradient(55% 45% at 22% 14%,#fff 0,rgba(255,255,255,0) 70%),radial-gradient(ellipse at 50% 50%,#fffefa 58%,#f3f2ea 100%);
+  box-shadow:inset 0 0 0 10px #fffefa,inset 0 0 0 11.5px rgba(47,164,169,.5),inset 0 0 30px 10px rgba(31,63,143,.05),
+    0 0 0 6px var(--coral),0 0 0 11px #fffdf8,0 0 0 15px var(--turq),0 0 0 19px #fffdf8,0 30px 60px rgba(8,18,52,.45)}
+.cn-salbek{position:absolute;display:flex;align-items:center;pointer-events:none}
+.cn-salbek--a{right:calc(100% + 19px);top:50%;transform:translateY(-50%);flex-direction:row-reverse}
+.cn-salbek--b{left:calc(100% + 19px);top:50%;transform:translateY(-50%)}
+.cn-salbek-stem{width:30px;height:2px;background:#fffdf8}
+.cn-salbek-bead{width:9px;height:9px;border-radius:50%;background:var(--turq);box-shadow:0 0 0 2px #fffdf8}
+.cn-salbek-stem--2{width:6px}
+.cn-salbek-loz{position:relative;width:34px;height:34px}
+.cn-salbek-loz::before{content:"";position:absolute;inset:5px;transform:rotate(45deg);border-radius:2px;
+  background:linear-gradient(135deg,rgba(255,255,255,.35),rgba(255,255,255,0) 50%),var(--coral);box-shadow:0 0 0 2px #fffdf8,0 4px 10px rgba(8,18,52,.35)}
+.cn-salbek-loz::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 39%,#fff 0 2.3px,rgba(255,255,255,0) 2.8px),radial-gradient(circle at 41% 57%,#fff 0 2.3px,rgba(255,255,255,0) 2.8px),radial-gradient(circle at 59% 57%,#fff 0 2.3px,rgba(255,255,255,0) 2.8px)}
+.cn-dirline{display:flex;align-items:center;gap:12px;margin:0;font:italic 600 18px/1.3 Alegreya,serif;color:var(--turq-d)}
+.cn-dirline .cn-star{width:8px;height:8px;color:var(--coral)}
+.cn-hero h1{margin:10px 0 12px;font:800 clamp(34px,5.2vw,62px)/1.08 Alegreya,serif;color:var(--ink);letter-spacing:-.01em;text-wrap:balance}
+.cn-lead{margin:0;max-width:52ch;font-size:18px;line-height:1.55;color:var(--muted)}
+.cn-search-wrap{width:100%;max-width:680px;margin-top:26px;filter:drop-shadow(0 10px 14px rgba(18,32,74,.16))}
+.cn-search-rim{padding:2px;background:var(--primary);clip-path:var(--kartus)}
+.cn-search{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) 116px;height:60px;background:var(--card);
+  clip-path:polygon(21px 0,calc(100% - 21px) 0,100% 50%,calc(100% - 21px) 100%,21px 100%,0 50%)}
+.cn-field{position:relative;display:flex;flex-direction:column;justify-content:center;gap:1px;padding:0 14px 0 18px;text-align:left;min-width:0;cursor:text}
+.cn-field--q{padding-left:34px}
+.cn-field--city{cursor:pointer}
+.cn-field--city::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:1px;background:var(--border)}
+.cn-field span{font:700 12px/1.2 Nunito,sans-serif;color:var(--muted)}
+.cn-field input,.cn-field select{width:100%;border:0;background:transparent;padding:0;margin:0;font:600 16px/1.4 Nunito,sans-serif;color:var(--ink);outline:none;min-width:0}
+.cn-field input::placeholder{color:#7d87a0}
+.cn-field select{appearance:none;-webkit-appearance:none;padding-right:20px;background:var(--chev) right 0 center/12px 8px no-repeat;cursor:pointer}
+.cn-field:focus-within{outline:3px solid var(--coral);outline-offset:-3px}
+.cn-search-btn{border:0;margin:0;padding:0 26px 0 6px;cursor:pointer;color:#fff;font:800 18px/1 Nunito,sans-serif;
+  background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,0) 55%),var(--coral);box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.cn-search-btn:focus-visible{outline:3px solid #fff;outline-offset:-6px}
+.cn-sik{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 10px;margin:16px 0 0;font:600 15px/1.4 Nunito,sans-serif;color:var(--muted)}
+.cn-sik a{font:italic 600 18px/1.3 Alegreya,serif;color:var(--primary);text-decoration:underline;text-decoration-color:rgba(47,164,169,.6);text-underline-offset:3px}
+.cn-kitabe{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 16px;width:fit-content;max-width:100%;margin:50px auto 0;padding:10px 30px;
+  font:italic 600 20px/1.35 Alegreya,serif;color:#fff;background:rgba(18,38,92,.55);border:1px solid var(--turq);outline:1px solid rgba(47,164,169,.45);outline-offset:4px}
+.cn-kitabe b{font-weight:600;font-size:23px;color:#fff}
+.cn-kitabe .cn-star{color:var(--turq-l);width:8px;height:8px}
+
+/* ===== bölüm başlıkları (kartuş) ===== */
+.cn-sec{padding:84px 0}
+.cn-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;margin-bottom:30px}
+.cn-head--center{flex-direction:column;justify-content:center;text-align:center}
+.cn-head-sub{margin:0;color:var(--muted);font-size:17px}
+.cn-kartus-wrap{display:inline-flex;max-width:100%;filter:drop-shadow(0 8px 10px rgba(18,32,74,.2))}
+.cn-kartus{position:relative;isolation:isolate;background:var(--primary);color:#fff;font:700 30px/1.15 Alegreya,serif;padding:14px 42px;clip-path:var(--kartus)}
+.cn-kartus::before{content:"";position:absolute;inset:5px;z-index:-1;background:var(--turq);clip-path:polygon(19px 0,calc(100% - 19px) 0,100% 50%,calc(100% - 19px) 100%,19px 100%,0 50%)}
+.cn-kartus::after{content:"";position:absolute;inset:6.5px;z-index:-1;background:var(--primary);clip-path:polygon(18px 0,calc(100% - 18px) 0,100% 50%,calc(100% - 18px) 100%,18px 100%,0 50%)}
+.cn-kartus--outline{background:var(--turq)}
+.cn-kartus--outline::before{inset:2px;background:var(--primary);clip-path:polygon(21px 0,calc(100% - 21px) 0,100% 50%,calc(100% - 21px) 100%,21px 100%,0 50%)}
+.cn-kartus--outline::after{display:none}
+
+/* ===== hizmet karoları ===== */
+.cn-pano{--fw:16px;--cw:28px;--dr:2.3px;position:relative;max-width:1120px;margin:0 auto;padding:var(--fw);background:var(--primary);border-radius:3px;
+  box-shadow:0 26px 40px -26px rgba(18,32,74,.6)}
+.cn-pano::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+   radial-gradient(circle at 50% 30%,var(--coral) 0 var(--dr),rgba(200,64,46,0) calc(var(--dr) + .5px)) 0 0/var(--cw) var(--fw) repeat-x,
+   radial-gradient(circle at 36% 70%,var(--coral) 0 var(--dr),rgba(200,64,46,0) calc(var(--dr) + .5px)) 0 0/var(--cw) var(--fw) repeat-x,
+   radial-gradient(circle at 64% 70%,var(--coral) 0 var(--dr),rgba(200,64,46,0) calc(var(--dr) + .5px)) 0 0/var(--cw) var(--fw) repeat-x,
+   radial-gradient(circle at 50% 70%,var(--coral) 0 var(--dr),rgba(200,64,46,0) calc(var(--dr) + .5px)) 0 100%/var(--cw) var(--fw) repeat-x,
+   radial-gradient(circle at 36% 30%,var(--coral) 0 var(--dr),rgba(200,64,46,0) calc(var(--dr) + .5px)) 0 100%/var(--cw) var(--fw) repeat-x,
+   radial-gradient(circle at 64% 30%,var(--coral) 0 var(--dr),rgba(200,64,46,0) calc(var(--dr) + .5px)) 0 100%/var(--cw) var(--fw) repeat-x,
+   radial-gradient(circle at 30% 50%,var(--coral) 0 var(--dr),rgba(200,64,46,0) calc(var(--dr) + .5px)) 0 0/var(--fw) var(--cw) repeat-y,
+   radial-gradient(circle at 70% 36%,var(--coral) 0 var(--dr),rgba(200,64,46,0) calc(var(--dr) + .5px)) 0 0/var(--fw) var(--cw) repeat-y,
+   radial-gradient(circle at 70% 64%,var(--coral) 0 var(--dr),rgba(200,64,46,0) calc(var(--dr) + .5px)) 0 0/var(--fw) var(--cw) repeat-y,
+   radial-gradient(circle at 70% 50%,var(--coral) 0 var(--dr),rgba(200,64,46,0) calc(var(--dr) + .5px)) 100% 0/var(--fw) var(--cw) repeat-y,
+   radial-gradient(circle at 30% 36%,var(--coral) 0 var(--dr),rgba(200,64,46,0) calc(var(--dr) + .5px)) 100% 0/var(--fw) var(--cw) repeat-y,
+   radial-gradient(circle at 30% 64%,var(--coral) 0 var(--dr),rgba(200,64,46,0) calc(var(--dr) + .5px)) 100% 0/var(--fw) var(--cw) repeat-y}
+.cn-pano-in{position:relative;z-index:1;padding:3px;background:var(--turq)}
+.cn-karolar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;background:var(--grout)}
+.cn-karo{--R:calc(var(--cn-r)*1.5);--S:calc(var(--cn-r)*3);--d:9px;--ros:var(--ros-kobalt);
+  position:relative;overflow:hidden;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;text-decoration:none;color:var(--ink);padding:12px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.6),rgba(255,255,255,0) 36%),
+    radial-gradient(ellipse closest-side,rgba(47,164,169,0) 0 74%,rgba(47,164,169,.42) 74.6% 75.8%,rgba(47,164,169,0) 76.4% 79%,rgba(47,164,169,.25) 79.5% 80.2%,rgba(47,164,169,0) 80.8%),
+    radial-gradient(circle at 50% 0,var(--coral) 0 2.4px,var(--turq) 2.9px var(--d),rgba(47,164,169,0) calc(var(--d) + .5px)),
+    radial-gradient(circle at 50% 100%,var(--coral) 0 2.4px,var(--turq) 2.9px var(--d),rgba(47,164,169,0) calc(var(--d) + .5px)),
+    radial-gradient(circle at 0 50%,var(--coral) 0 2.4px,var(--turq) 2.9px var(--d),rgba(47,164,169,0) calc(var(--d) + .5px)),
+    radial-gradient(circle at 100% 50%,var(--coral) 0 2.4px,var(--turq) 2.9px var(--d),rgba(47,164,169,0) calc(var(--d) + .5px)),
+    var(--ros) calc(var(--R)*-1) calc(var(--R)*-1)/var(--S) var(--S) no-repeat,
+    var(--ros) calc(100% + var(--R)) calc(var(--R)*-1)/var(--S) var(--S) no-repeat,
+    var(--ros) calc(var(--R)*-1) calc(100% + var(--R))/var(--S) var(--S) no-repeat,
+    var(--ros) calc(100% + var(--R)) calc(100% + var(--R))/var(--S) var(--S) no-repeat,
+    var(--glaze)}
+.cn-karo::after,.cn-kart-head::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(115deg,rgba(255,255,255,0) 40%,rgba(255,255,255,.55) 50%,rgba(255,255,255,0) 60%);transform:translateX(-120%);transition:transform .6s ease}
+.cn-karo:hover::after,.cn-karo:focus-visible::after{transform:translateX(120%)}
+.cn-karo:focus-visible{outline:3px solid var(--coral);outline-offset:-3px}
+.cn-karo-ad{position:relative;font:700 20px/1.15 Alegreya,serif;text-shadow:0 0 8px var(--glaze),0 0 2px var(--glaze)}
+.cn-karo-n{position:relative;margin-top:5px;font:800 13px/1 Nunito,sans-serif;color:var(--turq-d)}
+.cn-karo:hover .cn-karo-ad{color:var(--primary)}
+.cn-dolgu{display:none}
+.cn-quiet{margin:22px 0 0;text-align:center;color:var(--muted);font-size:16px}
+.cn-quiet a{color:var(--primary);font-weight:800;text-decoration:underline;text-decoration-color:rgba(200,64,46,.55);text-underline-offset:4px}
+
+/* ===== firma plaketleri ===== */
+.cn-kartlar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.cn-kart{position:relative;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;
+  box-shadow:inset 0 1px 0 #fff,0 1px 0 var(--border),0 14px 30px -18px rgba(18,32,74,.35);transition:transform .25s ease,box-shadow .25s ease}
+.cn-kart::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background:radial-gradient(120% 70% at 15% 0%,rgba(255,255,255,.75),rgba(255,255,255,0) 55%);mix-blend-mode:soft-light}
+.cn-kart:hover,.cn-kart:focus-within{transform:translateY(-2px);box-shadow:inset 0 1px 0 #fff,0 1px 0 var(--border),0 22px 34px -18px rgba(18,32,74,.42)}
+.cn-kart:hover .cn-kart-head::after,.cn-kart:focus-within .cn-kart-head::after{transform:translateX(120%)}
+.cn-kart-head{position:relative;display:block;height:128px;overflow:hidden;text-decoration:none;background:var(--glaze)}
+.cn-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;height:100%;background:var(--grout)}
+.cn-strip i{--R:26px;--S:52px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.55),rgba(255,255,255,0) 40%),
+    var(--ros2) center/60px 60px no-repeat,
+    radial-gradient(circle at 50% 0,var(--turq) 0 7px,rgba(47,164,169,0) 7.5px),
+    radial-gradient(circle at 50% 100%,var(--turq) 0 7px,rgba(47,164,169,0) 7.5px),
+    radial-gradient(circle at 0 50%,var(--coral) 0 2px,var(--turq) 2.5px 7px,rgba(47,164,169,0) 7.5px),
+    radial-gradient(circle at 100% 50%,var(--coral) 0 2px,var(--turq) 2.5px 7px,rgba(47,164,169,0) 7.5px),
+    var(--ros) calc(var(--R)*-1) calc(var(--R)*-1)/var(--S) var(--S) no-repeat,
+    var(--ros) calc(100% + var(--R)) calc(var(--R)*-1)/var(--S) var(--S) no-repeat,
+    var(--ros) calc(var(--R)*-1) calc(100% + var(--R))/var(--S) var(--S) no-repeat,
+    var(--ros) calc(100% + var(--R)) calc(100% + var(--R))/var(--S) var(--S) no-repeat,
+    var(--glaze)}
+.cn-strip--kobalt{--ros:var(--ros-kobalt);--ros2:var(--ros-turkuaz)}
+.cn-strip--turkuaz{--ros:var(--ros-turkuaz);--ros2:var(--ros-kobalt)}
+.cn-strip--mercan{--ros:var(--ros-mercan);--ros2:var(--ros-kobalt)}
+.cn-strip--zumrut{--ros:var(--ros-zumrut);--ros2:var(--ros-turkuaz)}
+.cn-logo{--R:30px;--S:60px;display:grid;place-items:center;height:100%;
+  background:var(--ros-kobalt) calc(var(--R)*-1) calc(var(--R)*-1)/var(--S) var(--S) no-repeat,var(--ros-kobalt) calc(100% + var(--R)) calc(var(--R)*-1)/var(--S) var(--S) no-repeat,
+   var(--ros-kobalt) calc(var(--R)*-1) calc(100% + var(--R))/var(--S) var(--S) no-repeat,var(--ros-kobalt) calc(100% + var(--R)) calc(100% + var(--R))/var(--S) var(--S) no-repeat,
+   radial-gradient(70% 90% at 50% 50%,#fff,var(--glaze))}
+.cn-cover{position:relative;height:100%;border:5px solid var(--turq);overflow:hidden;background:linear-gradient(180deg,#86b4dc 0%,#c9dfee 58%,#eef2ec 100%)}
+.cn-cover-m{position:absolute;left:-4%;right:-4%;bottom:22px;height:92%;
+  background:linear-gradient(180deg,#fff 0 20%,#dfe4ee 25%,#a4adc4 38%,#6d7a98 70%,#5b6786);
+  clip-path:polygon(0 100%,14% 74%,26% 58%,36% 36%,44% 14%,50% 2%,55% 12%,60% 9%,66% 30%,76% 52%,88% 70%,100% 84%,100% 100%)}
+.cn-cover-h{position:absolute;left:0;right:0;bottom:22px;height:44%;background:linear-gradient(180deg,#8f9ab4,#7d88a4);
+  clip-path:polygon(0 60%,18% 30%,30% 50%,44% 20%,58% 46%,72% 26%,86% 52%,100% 34%,100% 100%,0 100%);opacity:.55}
+.cn-cover-b{position:absolute;left:0;right:0;bottom:0;height:46px;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,0) 0 7px,rgba(31,63,143,.22) 7px 10px),repeating-linear-gradient(90deg,#efe9dd 0 24px,#d4ccbc 24px 26px,#e4dccd 26px 52px,#c9c0ae 52px 54px);
+  clip-path:polygon(0 46%,9% 46%,9% 14%,19% 14%,19% 34%,27% 34%,27% 0,37% 0,37% 44%,47% 44%,47% 20%,59% 20%,59% 38%,69% 38%,69% 6%,79% 6%,79% 32%,89% 32%,89% 22%,100% 22%,100% 100%,0 100%)}
+.cn-seal{position:absolute;top:10px;right:12px;z-index:3;width:46px;height:46px;display:grid;place-items:center;filter:drop-shadow(0 4px 6px rgba(18,32,74,.35))}
+.cn-seal::before,.cn-seal::after{content:"";position:absolute;inset:7px;border-radius:2px;background:linear-gradient(135deg,rgba(255,255,255,.25),rgba(255,255,255,0) 55%),var(--coral)}
+.cn-seal::after{transform:rotate(45deg)}
+.cn-seal b{position:relative;z-index:1;font:800 10px/1 Nunito,sans-serif;color:#fff;letter-spacing:.01em}
+.cn-kart-body{position:relative;z-index:1;flex:1;padding:0 20px}
+.cn-kat-wrap{display:flex;margin-top:-16px;filter:drop-shadow(0 3px 4px rgba(18,32,74,.18))}
+.cn-kat-rim{padding:1px;background:#bfe3e4;clip-path:polygon(13px 0,calc(100% - 13px) 0,100% 50%,calc(100% - 13px) 100%,13px 100%,0 50%)}
+.cn-kat{display:block;padding:4px 22px 5px;background:#fff;font:italic 600 15px/1.3 Alegreya,serif;color:var(--turq-d);text-decoration:none;
+  clip-path:polygon(12.5px 0,calc(100% - 12.5px) 0,100% 50%,calc(100% - 12.5px) 100%,12.5px 100%,0 50%)}
+.cn-kart h3{margin:12px 0 6px;font:700 22px/1.2 Alegreya,serif}
+.cn-kart h3 a{text-decoration:none}
+.cn-kart h3 a:hover{color:var(--primary)}
+.cn-desc{margin:0;font-size:15.5px;line-height:1.55;color:var(--muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.cn-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:14px 0 0;font:600 14px/1.3 Nunito,sans-serif;color:var(--muted)}
+.cn-chip{display:inline-block;padding:5px 8px 4px;border-radius:3px;font:800 11.5px/1 Nunito,sans-serif;letter-spacing:.05em}
+.cn-chip--acik{background:var(--zumrut);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 1px 0 rgba(18,32,74,.15)}
+.cn-chip--kapali{background:var(--primary-light);color:var(--muted);box-shadow:inset 0 1px 0 #fff,0 0 0 1px #d3dae6}
+.cn-rate{color:var(--ink)}
+.cn-rate em{font-style:normal;color:var(--muted)}
+.cn-place{display:inline-flex;align-items:center;gap:8px}
+.cn-actions{display:grid;grid-template-columns:auto minmax(0,1fr) 46px;gap:8px;padding:18px 20px 20px;position:relative;z-index:3}
+.cn-actions--2{grid-template-columns:auto minmax(0,1fr)}
+.cn-actions a{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;border-radius:6px;text-decoration:none;font:800 15px/1 Nunito,sans-serif}
+.cn-btn-incele{padding:0 20px;color:#fff;background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,0) 55%),var(--primary);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -2px 0 rgba(0,0,0,.18)}
+.cn-btn-incele:hover{background-color:var(--primary-hover)}
+.cn-btn-ara{color:var(--ink);background:var(--card);box-shadow:inset 0 0 0 2px var(--turq)}
+.cn-btn-ara svg{color:var(--turq-d)}
+.cn-btn-ara:hover{background:#eef8f8}
+.cn-btn-wa{color:#fff;background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,0) 55%),var(--zumrut);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -2px 0 rgba(0,0,0,.18)}
+.cn-cintemani{display:block;height:6px;margin-top:auto;background:radial-gradient(circle at 5px 3px,var(--coral) 0 1.4px,rgba(200,64,46,0) 1.9px) 0 0/10px 6px repeat-x,var(--primary)}
+
+/* ===== ilçe kitabesi ===== */
+.cn-kitabe-band{position:relative;padding:76px 0 72px;color:#fff;
+  background:radial-gradient(circle,rgba(255,255,255,.14) 0 3px,rgba(255,255,255,0) 3.5px) -36px -36px/72px 72px,
+    linear-gradient(rgba(255,255,255,.08) 2px,rgba(255,255,255,0) 2px) -1px -1px/72px 72px,
+    linear-gradient(90deg,rgba(255,255,255,.08) 2px,rgba(255,255,255,0) 2px) -1px -1px/72px 72px,var(--primary)}
+.cn-kitabe-band::before,.cn-kitabe-band::after{content:"";position:absolute;left:0;right:0;height:12px}
+.cn-kitabe-band::before{top:0;background:conic-gradient(from -33.7deg at 50% 100%,var(--coral) 0 67.4deg,rgba(200,64,46,0) 0) 0 0/16px 12px repeat-x,#fffdf8}
+.cn-kitabe-band::after{bottom:0;background:conic-gradient(from 146.3deg at 50% 0,var(--coral) 0 67.4deg,rgba(200,64,46,0) 0) 0 0/16px 12px repeat-x,#fffdf8}
+.cn-kitabe-band .cn-head{margin-bottom:26px}
+.cn-cities{max-width:1000px;margin:0 auto;text-align:center;font:italic 600 24px/1.75 Alegreya,serif}
+.cn-cities a{color:#fff;text-decoration:none;white-space:nowrap}
+.cn-cities a:hover{text-decoration:underline;text-decoration-color:var(--turq);text-underline-offset:5px}
+.cn-cities a.cn-top{font-size:34px}
+.cn-cities sup{margin-left:3px;font:700 13px/1 Nunito,sans-serif;font-style:normal;color:var(--turq-l);vertical-align:.9em}
+.cn-cities .cn-star{margin:0 16px;vertical-align:.18em;color:var(--turq)}
+
+/* ===== kemer nişleri ===== */
+.cn-nisler{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+.cn-nis{position:relative;padding:70px 32px 34px;text-align:center;border-radius:50% 50% 6px 6px/34% 34% 6px 6px;
+  background:radial-gradient(120% 60% at 18% 0%,#fff,rgba(255,255,255,0) 60%),var(--card);
+  box-shadow:inset 0 1px 0 #fff,0 0 0 1px var(--border),0 18px 30px -20px rgba(18,32,74,.4)}
+.cn-nis::before{content:"";position:absolute;inset:9px;border:2px solid var(--turq);border-radius:50% 50% 4px 4px/33% 33% 4px 4px;pointer-events:none}
+.cn-nis .cn-lale{width:52px;height:78px;margin:0 auto 14px;fill:currentColor}
+.cn-nis h3{font:700 24px/1.2 Alegreya,serif;margin-bottom:8px}
+.cn-nis p{margin:0;color:var(--muted)}
+.cn-c-kobalt{color:var(--primary)} .cn-c-turkuaz{color:var(--turq)} .cn-c-mercan{color:var(--coral)}
+
+/* ===== okuma köşesi ===== */
+.cn-yazilar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.cn-yazi{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;text-decoration:none;
+  box-shadow:inset 0 1px 0 #fff,0 14px 30px -20px rgba(18,32,74,.35)}
+.cn-yazi-band{height:88px;display:grid;place-items:center;color:#fff;
+  background:radial-gradient(circle,rgba(255,255,255,.3) 0 2.5px,rgba(255,255,255,0) 3px) -14px -14px/28px 28px,
+    linear-gradient(rgba(255,255,255,.12) 1px,rgba(255,255,255,0) 1px) -0.5px -0.5px/28px 28px,
+    linear-gradient(90deg,rgba(255,255,255,.12) 1px,rgba(255,255,255,0) 1px) -0.5px -0.5px/28px 28px,
+    linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,0) 50%),var(--band)}
+.cn-yazi-band .cn-lale{width:38px;height:58px;fill:#fff;filter:drop-shadow(0 2px 2px rgba(0,0,0,.2))}
+.cn-yazi-body{padding:20px 22px 22px;display:flex;flex-direction:column;flex:1}
+.cn-yazi h3{font:700 22px/1.2 Alegreya,serif;margin-bottom:8px}
+.cn-yazi p{margin:0 0 14px;color:var(--muted);font-size:15.5px}
+.cn-oku{margin-top:auto;display:inline-flex;align-items:center;gap:9px;font-weight:800;color:var(--primary)}
+
+/* ===== iş ilanları ===== */
+.cn-ilanlar{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.cn-ilan{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:6px 18px;padding:15px 20px;background:var(--card);border:1px solid var(--border);
+  border-left:5px solid var(--turq);border-radius:6px;text-decoration:none;box-shadow:inset 0 1px 0 #fff}
+.cn-ilan h3{font:700 20px/1.25 Alegreya,serif}
+.cn-ilan p{margin:2px 0 0;color:var(--muted);font-size:15px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px}
+.cn-ilan-git{display:inline-flex;align-items:center;gap:8px;font-weight:800;color:var(--primary);white-space:nowrap}
+
+/* ===== eksik karo CTA ===== */
+.cn-eksik{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:56px;align-items:center;padding:44px;border-radius:8px;border:1px solid var(--border);
+  background:radial-gradient(90% 70% at 10% 0%,#fff,rgba(255,255,255,0) 60%),var(--card);box-shadow:inset 0 1px 0 #fff,0 24px 44px -28px rgba(18,32,74,.45)}
+.cn-pano--mini{--fw:12px;--cw:22px;--dr:1.8px;max-width:420px;width:100%;margin:0 auto}
+.cn-mozaik{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;background:var(--grout)}
+.cn-mozaik i{--R:30px;--S:60px;aspect-ratio:1/1;
+  background:linear-gradient(135deg,rgba(255,255,255,.55),rgba(255,255,255,0) 40%),
+    var(--ros-turkuaz) center/58% 58% no-repeat,
+    radial-gradient(circle at 50% 0,var(--turq) 0 7px,rgba(47,164,169,0) 7.5px),radial-gradient(circle at 50% 100%,var(--turq) 0 7px,rgba(47,164,169,0) 7.5px),
+    radial-gradient(circle at 0 50%,var(--turq) 0 7px,rgba(47,164,169,0) 7.5px),radial-gradient(circle at 100% 50%,var(--turq) 0 7px,rgba(47,164,169,0) 7.5px),
+    var(--ros-kobalt) calc(var(--R)*-1) calc(var(--R)*-1)/var(--S) var(--S) no-repeat,var(--ros-kobalt) calc(100% + var(--R)) calc(var(--R)*-1)/var(--S) var(--S) no-repeat,
+    var(--ros-kobalt) calc(var(--R)*-1) calc(100% + var(--R))/var(--S) var(--S) no-repeat,var(--ros-kobalt) calc(100% + var(--R)) calc(100% + var(--R))/var(--S) var(--S) no-repeat,var(--glaze)}
+.cn-mozaik .cn-soket{position:relative;display:grid;place-items:center;background:#e6eaf0;box-shadow:inset 0 3px 8px rgba(18,32,74,.22),inset 0 -1px 0 #fff}
+.cn-soket::before{content:"";position:absolute;inset:9px;border:2px dashed var(--coral);border-radius:3px}
+.cn-soket b{font:800 40px/1 Nunito,sans-serif;color:var(--coral);animation:cn-nabiz 2s ease-in-out infinite}
+@keyframes cn-nabiz{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.18);opacity:.7}}
+.cn-eksik h2{font:800 clamp(30px,3.4vw,42px)/1.1 Alegreya,serif;margin-bottom:14px;text-wrap:balance}
+.cn-eksik-p{margin:0 0 24px;font-size:18px;color:var(--muted);max-width:46ch}
+.cn-eksik .cn-btn-coral{min-height:54px;padding:0 26px;font-size:17px}
+.cn-eksik-links{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;margin-top:18px}
+.cn-eksik-links a{display:inline-flex;align-items:center;gap:9px;min-height:44px;font-weight:800;color:var(--primary);text-decoration:none}
+.cn-eksik-links a:hover{text-decoration:underline;text-decoration-color:var(--turq);text-underline-offset:4px}
+
+/* ===== footer (paylaşılan footer, yeniden boyanmış) ===== */
+.cn-footer{background:#0d1a3d;color:#c4cde2;font-size:15px}
+.cn-footer::before{content:"";display:block;height:12px;
+  background:linear-gradient(var(--primary),var(--primary)) 0 0/100% 6px no-repeat,radial-gradient(circle at 6px 3px,var(--turq) 0 2px,rgba(47,164,169,0) 2.6px) 0 6px/12px 6px repeat-x}
+.cn-foot-grid{display:grid;grid-template-columns:minmax(0,1.6fr) repeat(3,minmax(0,1fr));gap:36px;padding-top:52px;padding-bottom:40px}
+.cn-footer .cn-brand-name{color:#fff}
+.cn-footer p{margin:14px 0 0;max-width:42ch;line-height:1.65}
+.cn-footer h4{font:700 18px/1.2 Alegreya,serif;color:#fff;margin-bottom:12px}
+.cn-footer ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.cn-footer ul a{color:#cfe9ea;text-decoration:none}
+.cn-footer ul a:hover{color:#fff;text-decoration:underline;text-decoration-color:var(--turq)}
+.cn-footer a:focus-visible{outline-color:var(--coral)}
+.cn-foot-bottom{border-top:1px solid rgba(207,233,234,.14);padding-top:18px;padding-bottom:26px;font-size:14px;color:#8f9bbb;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}
+
+/* ===== duyarlı ===== */
+@media (max-width:1023px){
+  .cn-kartlar{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:959px){
+  .cn-karolar{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:899px){
+  .cn-nav{display:none}
+  .cn-menu{display:inline-flex}
+  .cn-header-in{height:64px;gap:10px}
+  .cn-brand{margin-right:auto}
+  .cn-hero{--t:56px;--q:6.5px;--qr:5px;padding:100px 16px 64px}
+  .cn-semse-wrap{width:calc(100% - 28px)}
+  .cn-semse{min-height:0;border-radius:50%/14%;padding:70px 22px 60px;
+    box-shadow:inset 0 0 0 7px #fffefa,inset 0 0 0 8.5px rgba(47,164,169,.5),inset 0 0 24px 8px rgba(31,63,143,.05),
+      0 0 0 4px var(--coral),0 0 0 7px #fffdf8,0 0 0 10px var(--turq),0 0 0 13px #fffdf8,0 24px 44px rgba(8,18,52,.45)}
+  .cn-salbek--a{right:auto;left:50%;top:auto;bottom:calc(100% + 13px);transform:translateX(-50%);flex-direction:column-reverse}
+  .cn-salbek--b{left:50%;top:calc(100% + 13px);transform:translateX(-50%);flex-direction:column}
+  .cn-salbek-stem{width:2px;height:20px}
+  .cn-salbek-stem--2{height:5px}
+  .cn-kitabe{margin-top:96px}
+  .cn-hero h1{font-size:clamp(32px,7.4vw,48px)}
+  .cn-search-wrap{filter:drop-shadow(0 8px 12px rgba(18,32,74,.14))}
+  .cn-search-rim{clip-path:none;border-radius:12px;padding:1.5px}
+  .cn-search{clip-path:none;border-radius:10.5px;overflow:hidden;grid-template-columns:minmax(0,1fr);height:auto}
+  .cn-field,.cn-field--q{height:52px;padding:0 16px}
+  .cn-field--city::before{left:0;right:0;top:0;bottom:auto;width:auto;height:1px}
+  .cn-search-btn{height:52px;padding:0}
+  .cn-eksik{grid-template-columns:minmax(0,1fr);gap:32px;padding:32px}
+}
+@media (max-width:639px){
+  :root{--cn-r:clamp(18px,6vw,26px)}
+  .cn-wrap{padding:0 16px}
+  .cn-sec{padding:56px 0}
+  .cn-head{margin-bottom:22px}
+  .cn-kartus{font-size:24px;padding:12px 34px}
+  .cn-pano{--fw:10px;--cw:20px;--dr:1.6px}
+  .cn-karolar{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cn-karo{aspect-ratio:5/4;--d:7px;padding:8px}
+  .cn-karo-ad{font-size:17px}
+  .cn-karo-n{font-size:12.5px}
+  .cn-kartlar{grid-template-columns:minmax(0,1fr);gap:20px}
+  .cn-kart-head{height:140px}
+  .cn-cities{font-size:19px;line-height:1.9}
+  .cn-cities a.cn-top{font-size:24px}
+  .cn-cities .cn-star{margin:0 10px}
+  .cn-nisler,.cn-yazilar{grid-template-columns:minmax(0,1fr)}
+  .cn-nisler{gap:20px}
+  .cn-nis{border-radius:50% 50% 6px 6px/22% 22% 6px 6px;padding:58px 26px 30px}
+  .cn-nis::before{border-radius:50% 50% 4px 4px/21% 21% 4px 4px}
+  .cn-ilan{grid-template-columns:minmax(0,1fr)}
+  .cn-eksik{padding:22px 18px 26px}
+  .cn-eksik .cn-btn-coral{width:100%}
+  .cn-foot-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 20px}
+  .cn-foot-grid > div:first-child{grid-column:1/-1}
+  .cn-kitabe{font-size:18px;padding:10px 18px}
+  .cn-kitabe b{font-size:20px}
+  .cn-lead{font-size:17px}
+}
+@media (max-width:479px){
+  .cn-long{display:none}
+  .cn-short{display:inline}
+  .cn-brand-name{font-size:20px}
+  .cn-header .cn-btn-coral{padding:0 14px}
+}
+@media (prefers-reduced-motion:reduce){
+  .cn-karo::after,.cn-kart-head::after{transition:none;display:none}
+  .cn-kart{transition:none}
+  .cn-soket b{animation:none}
+}
+</style>
+</head>
+<body class="theme-cini-pano">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="cn-lale" viewBox="0 0 64 96">
+    <path d="M32 50C31.4 64 33 78 32 94" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    <path d="M32 85C21 81 11 71 8 56c11 4 19 12 24 22z"/>
+    <path d="M32 75c11-4 21-14 24-29-11 4-19 12-24 22z"/>
+    <path d="M32 5c7 9 9 24 0 44-9-20-7-35 0-44z"/>
+    <path d="M30.5 49C19 48 11 39 11 22c6 8 12 11 17 16z"/>
+    <path d="M33.5 49C45 48 53 39 53 22c-6 8-12 11-17 16z"/>
+  </symbol>
+</svg>
+
+<header class="cn-header">
+  <div class="cn-wrap cn-header-in">
+    <a class="cn-brand" href="#"><span class="cn-mark" aria-hidden="true"></span><span class="cn-brand-name">Kayseri Rehberi</span></a>
+    <nav class="cn-nav" aria-label="Ana menü">
+      <a href="#firmalar">Firmalar</a>
+      <a href="#karolar">Hizmetler</a>
+      <a href="#sehirler">İlçeler</a>
+      <a href="#blog">Blog</a>
+      <a href="#">Firma Paneli</a>
+    </nav>
+    <a class="cn-btn-coral" href="#kayit"><span class="cn-long">Firmanızı ekleyin</span><span class="cn-short">Ekle</span></a>
+    <button id="mobile-menu-btn" class="cn-menu" type="button" aria-label="Menüyü aç">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="cn-home">
+
+  <!-- 2. Hero: şemse madalyon -->
+  <section class="cn-hero" id="ara" aria-labelledby="cn-h1">
+    <div class="cn-semse-wrap">
+      <div class="cn-semse">
+        <span class="cn-salbek cn-salbek--a" aria-hidden="true"><i class="cn-salbek-stem"></i><i class="cn-salbek-bead"></i><i class="cn-salbek-stem cn-salbek-stem--2"></i><i class="cn-salbek-loz"></i></span>
+        <span class="cn-salbek cn-salbek--b" aria-hidden="true"><i class="cn-salbek-stem"></i><i class="cn-salbek-bead"></i><i class="cn-salbek-stem cn-salbek-stem--2"></i><i class="cn-salbek-loz"></i></span>
+
+        <p class="cn-dirline"><i class="cn-star" aria-hidden="true"></i>Kayseri Rehberi<i class="cn-star" aria-hidden="true"></i></p>
+        <h1 id="cn-h1">Kayseri'deki işletmeler, tek bakışta</h1>
+        <p class="cn-lead">Kuaförden tesisatçıya, Melikgazi'den Talas'a: aradığınız işletmeyi bulun, telefonla ya da WhatsApp'tan doğrudan ulaşın.</p>
+
+        <div class="cn-search-wrap">
+          <div class="cn-search-rim">
+            <form class="cn-search" role="search" action="#" method="get">
+              <label class="cn-field cn-field--q"><span>Ne arıyorsunuz?</span><input type="text" name="q" placeholder="Örn. kuaför, tesisatçı, avukat"></label>
+              <label class="cn-field cn-field--city"><span>İlçe</span>
+                <select name="city">
+                  <option>Tüm ilçeler</option><option>Melikgazi</option><option>Kocasinan</option><option>Talas</option><option>Develi</option>
+                  <option>Hacılar</option><option>İncesu</option><option>Bünyan</option><option>Yahyalı</option><option>Tomarza</option><option>Pınarbaşı</option>
+                </select>
+              </label>
+              <button class="cn-search-btn" type="submit">Bul</button>
+            </form>
+          </div>
+        </div>
+
+        <p class="cn-sik"><span>Sık bakılan:</span>
+          <a href="#">Kuaför</a><i class="cn-loz" aria-hidden="true"></i>
+          <a href="#">Restoran</a><i class="cn-loz" aria-hidden="true"></i>
+          <a href="#">Oto Servis</a><i class="cn-loz" aria-hidden="true"></i>
+          <a href="#">Emlak</a>
+        </p>
+      </div>
+    </div>
+
+    <p class="cn-kitabe">
+      <span><b>1.240</b> aktif firma</span><i class="cn-star" aria-hidden="true"></i>
+      <span><b>12</b> hizmet alanı</span><i class="cn-star" aria-hidden="true"></i>
+      <span><b>10</b> ilçe</span>
+    </p>
+  </section>
+
+  <!-- 3. Hizmet karoları -->
+  <section class="cn-sec" id="karolar">
+    <div class="cn-wrap">
+      <div class="cn-head cn-head--center">
+        <div class="cn-kartus-wrap"><h2 class="cn-kartus">Hizmet karoları</h2></div>
+        <p class="cn-head-sub">Bir karoya dokunun, o alandaki işletmeler açılsın.</p>
+      </div>
+      <div class="cn-pano">
+        <div class="cn-pano-in">
+          <div class="cn-karolar">
+            <a class="cn-karo" href="#" aria-label="Kuaför, 214 firma"><span class="cn-karo-ad">Kuaför</span><span class="cn-karo-n">214 firma</span></a>
+            <a class="cn-karo" href="#" aria-label="Restoran, 188 firma"><span class="cn-karo-ad">Restoran</span><span class="cn-karo-n">188 firma</span></a>
+            <a class="cn-karo" href="#" aria-label="Oto Servis, 168 firma"><span class="cn-karo-ad">Oto Servis</span><span class="cn-karo-n">168 firma</span></a>
+            <a class="cn-karo" href="#" aria-label="Emlak, 131 firma"><span class="cn-karo-ad">Emlak</span><span class="cn-karo-n">131 firma</span></a>
+            <a class="cn-karo" href="#" aria-label="Tesisat, 96 firma"><span class="cn-karo-ad">Tesisat</span><span class="cn-karo-n">96 firma</span></a>
+            <a class="cn-karo" href="#" aria-label="Mobilya, 84 firma"><span class="cn-karo-ad">Mobilya</span><span class="cn-karo-n">84 firma</span></a>
+            <a class="cn-karo" href="#" aria-label="Avukat, 72 firma"><span class="cn-karo-ad">Avukat</span><span class="cn-karo-n">72 firma</span></a>
+            <a class="cn-karo" href="#" aria-label="Eczane, 61 firma"><span class="cn-karo-ad">Eczane</span><span class="cn-karo-n">61 firma</span></a>
+            <a class="cn-karo" href="#" aria-label="Diş Kliniği, 57 firma"><span class="cn-karo-ad">Diş Kliniği</span><span class="cn-karo-n">57 firma</span></a>
+            <a class="cn-karo" href="#" aria-label="Halı Yıkama, 43 firma"><span class="cn-karo-ad">Halı Yıkama</span><span class="cn-karo-n">43 firma</span></a>
+            <a class="cn-karo" href="#" aria-label="Nakliyat, 39 firma"><span class="cn-karo-ad">Nakliyat</span><span class="cn-karo-n">39 firma</span></a>
+            <a class="cn-karo" href="#" aria-label="Düğün Salonu, 27 firma"><span class="cn-karo-ad">Düğün Salonu</span><span class="cn-karo-n">27 firma</span></a>
+          </div>
+        </div>
+      </div>
+      <p class="cn-quiet">Hizmetiniz listede yok mu? <a href="#kayit">Firmanızı ekleyin →</a></p>
+    </div>
+  </section>
+
+  <!-- 4. Panodaki işletmeler -->
+  <section class="cn-sec" id="firmalar" style="padding-top:0">
+    <div class="cn-wrap">
+      <div class="cn-head">
+        <div class="cn-kartus-wrap"><h2 class="cn-kartus">Panodaki işletmeler</h2></div>
+        <a class="cn-more" href="#"><span>Tüm firmalar</span><i class="cn-loz" aria-hidden="true"></i><span aria-hidden="true">→</span></a>
+      </div>
+
+      <div class="cn-kartlar">
+
+        <article class="cn-kart">
+          <a class="cn-kart-head" href="#" tabindex="-1" aria-hidden="true">
+            <span class="cn-logo">
+              <svg width="186" height="66" viewBox="0 0 186 66" aria-hidden="true">
+                <circle cx="33" cy="33" r="28" fill="#fff" stroke="#2a2a2e" stroke-width="2"/>
+                <circle cx="33" cy="33" r="23" fill="none" stroke="#b08a3e" stroke-width="1.2"/>
+                <g fill="none" stroke="#2a2a2e" stroke-width="2.2" stroke-linecap="round"><circle cx="25.5" cy="42" r="5"/><circle cx="40.5" cy="42" r="5"/><path d="M28.6 38.2 41.5 19.5M37.4 38.2 24.5 19.5"/></g>
+                <text x="70" y="36" font-family="Alegreya, serif" font-style="italic" font-weight="600" font-size="31" fill="#2a2a2e">Özgün</text>
+                <text x="72" y="53" font-family="Nunito, sans-serif" font-weight="800" font-size="10" letter-spacing="3.2" fill="#b08a3e">KUAFÖR · 1998</text>
+              </svg>
+            </span>
+          </a>
+          <span class="cn-seal" title="Seçkin işletme"><b>Seçkin</b></span>
+          <div class="cn-kart-body">
+            <div class="cn-kat-wrap"><span class="cn-kat-rim"><a class="cn-kat" href="#">Kuaför</a></span></div>
+            <h3><a href="#">Özgün Kuaför</a></h3>
+            <p class="cn-desc">Kadın ve erkek saç kesimi, boya, fön ve gelin başı. Randevulu çalışır, hafta içi 21.00'e kadar açık.</p>
+            <div class="cn-meta">
+              <span class="cn-chip cn-chip--acik">AÇIK</span>
+              <span class="cn-rate">4,8 ★ <em>· 37 yorum</em></span>
+              <span class="cn-place"><i class="cn-loz" aria-hidden="true"></i>Melikgazi / Kayseri</span>
+            </div>
+          </div>
+          <div class="cn-actions">
+            <a class="cn-btn-incele" href="#">İncele</a>
+            <a class="cn-btn-ara" href="tel:03522221437" title="0352 222 14 37"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>Ara</a>
+            <a class="cn-btn-wa" href="https://wa.me/905324182763" aria-label="Özgün Kuaför WhatsApp"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2a9.7 9.7 0 0 0-8.4 14.6L2.3 21.8l5.1-1.3A9.7 9.7 0 1 0 12 2.2zm0 1.8a7.9 7.9 0 1 1-4.1 14.7l-.3-.2-3 .8.8-2.9-.2-.3A7.9 7.9 0 0 1 12 4z"/><path d="M8.9 7.4c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-.9.9-.9 2.2s1 2.6 1.1 2.8c.1.2 1.9 3 4.7 4.1 2.3.9 2.8.7 3.3.7.5-.1 1.6-.7 1.8-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3l-1.9-.9c-.3-.1-.5-.1-.7.2l-.8 1c-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.4.1-.6l.4-.5.3-.5c.1-.2 0-.4 0-.5l-.9-2.1z"/></svg></a>
+          </div>
+          <i class="cn-cintemani" aria-hidden="true"></i>
+        </article>
+
+        <article class="cn-kart">
+          <a class="cn-kart-head" href="#" tabindex="-1" aria-hidden="true"><span class="cn-strip cn-strip--kobalt"><i></i><i></i><i></i></span></a>
+          <div class="cn-kart-body">
+            <div class="cn-kat-wrap"><span class="cn-kat-rim"><a class="cn-kat" href="#">Oto Servis</a></span></div>
+            <h3><a href="#">Erciyes Oto Servis</a></h3>
+            <p class="cn-desc">Periyodik bakım, fren, triger ve elektrik arızası. Kocasinan sanayi sitesinde, aynı gün teslim seçeneğiyle.</p>
+            <div class="cn-meta">
+              <span class="cn-chip cn-chip--acik">AÇIK</span>
+              <span class="cn-rate">4,6 ★ <em>· 21 yorum</em></span>
+              <span class="cn-place"><i class="cn-loz" aria-hidden="true"></i>Kocasinan / Kayseri</span>
+            </div>
+          </div>
+          <div class="cn-actions cn-actions--2">
+            <a class="cn-btn-incele" href="#">İncele</a>
+            <a class="cn-btn-ara" href="tel:03522314890" title="0352 231 48 90"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>Ara</a>
+          </div>
+          <i class="cn-cintemani" aria-hidden="true"></i>
+        </article>
+
+        <article class="cn-kart">
+          <a class="cn-kart-head" href="#" tabindex="-1" aria-hidden="true"><span class="cn-strip cn-strip--turkuaz"><i></i><i></i><i></i></span></a>
+          <span class="cn-seal" title="Seçkin işletme"><b>Seçkin</b></span>
+          <div class="cn-kart-body">
+            <div class="cn-kat-wrap"><span class="cn-kat-rim"><a class="cn-kat" href="#">Diş Kliniği</a></span></div>
+            <h3><a href="#">Talas Diş Kliniği</a></h3>
+            <p class="cn-desc">İmplant, ortodonti, kanal tedavisi ve çocuk diş hekimliği. Talas Mevlana Mahallesi'nde, otoparklı bina.</p>
+            <div class="cn-meta">
+              <span class="cn-chip cn-chip--kapali">KAPALI</span>
+              <span class="cn-rate">4,9 ★ <em>· 58 yorum</em></span>
+              <span class="cn-place"><i class="cn-loz" aria-hidden="true"></i>Talas / Kayseri</span>
+            </div>
+          </div>
+          <div class="cn-actions">
+            <a class="cn-btn-incele" href="#">İncele</a>
+            <a class="cn-btn-ara" href="tel:03524376215" title="0352 437 62 15"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>Ara</a>
+            <a class="cn-btn-wa" href="https://wa.me/905057316244" aria-label="Talas Diş Kliniği WhatsApp"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2a9.7 9.7 0 0 0-8.4 14.6L2.3 21.8l5.1-1.3A9.7 9.7 0 1 0 12 2.2zm0 1.8a7.9 7.9 0 1 1-4.1 14.7l-.3-.2-3 .8.8-2.9-.2-.3A7.9 7.9 0 0 1 12 4z"/><path d="M8.9 7.4c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-.9.9-.9 2.2s1 2.6 1.1 2.8c.1.2 1.9 3 4.7 4.1 2.3.9 2.8.7 3.3.7.5-.1 1.6-.7 1.8-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3l-1.9-.9c-.3-.1-.5-.1-.7.2l-.8 1c-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.4.1-.6l.4-.5.3-.5c.1-.2 0-.4 0-.5l-.9-2.1z"/></svg></a>
+          </div>
+          <i class="cn-cintemani" aria-hidden="true"></i>
+        </article>
+
+        <article class="cn-kart">
+          <a class="cn-kart-head" href="#" tabindex="-1" aria-hidden="true"><span class="cn-strip cn-strip--mercan"><i></i><i></i><i></i></span></a>
+          <div class="cn-kart-body">
+            <div class="cn-kat-wrap"><span class="cn-kat-rim"><a class="cn-kat" href="#">Halı Yıkama</a></span></div>
+            <h3><a href="#">Melikgazi Halı Yıkama</a></h3>
+            <p class="cn-desc">Halı, koltuk ve yorgan yıkama. Adresten ücretsiz alım, üç günde kuru ve paketli teslim.</p>
+            <div class="cn-meta">
+              <span class="cn-chip cn-chip--acik">AÇIK</span>
+              <span class="cn-rate">4,4 ★ <em>· 12 yorum</em></span>
+              <span class="cn-place"><i class="cn-loz" aria-hidden="true"></i>Melikgazi / Kayseri</span>
+            </div>
+          </div>
+          <div class="cn-actions">
+            <a class="cn-btn-incele" href="#">İncele</a>
+            <a class="cn-btn-ara" href="tel:05324182763" title="0532 418 27 63"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>Ara</a>
+            <a class="cn-btn-wa" href="https://wa.me/905324182763" aria-label="Melikgazi Halı Yıkama WhatsApp"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2a9.7 9.7 0 0 0-8.4 14.6L2.3 21.8l5.1-1.3A9.7 9.7 0 1 0 12 2.2zm0 1.8a7.9 7.9 0 1 1-4.1 14.7l-.3-.2-3 .8.8-2.9-.2-.3A7.9 7.9 0 0 1 12 4z"/><path d="M8.9 7.4c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-.9.9-.9 2.2s1 2.6 1.1 2.8c.1.2 1.9 3 4.7 4.1 2.3.9 2.8.7 3.3.7.5-.1 1.6-.7 1.8-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3l-1.9-.9c-.3-.1-.5-.1-.7.2l-.8 1c-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.4.1-.6l.4-.5.3-.5c.1-.2 0-.4 0-.5l-.9-2.1z"/></svg></a>
+          </div>
+          <i class="cn-cintemani" aria-hidden="true"></i>
+        </article>
+
+        <article class="cn-kart">
+          <a class="cn-kart-head" href="#" tabindex="-1" aria-hidden="true"><span class="cn-strip cn-strip--zumrut"><i></i><i></i><i></i></span></a>
+          <div class="cn-kart-body">
+            <div class="cn-kat-wrap"><span class="cn-kat-rim"><a class="cn-kat" href="#">Tesisat</a></span></div>
+            <h3><a href="#">Kocasinan Tesisat</a></h3>
+            <p class="cn-desc">Su kaçağı tespiti, kombi ve petek temizliği, banyo tadilatı. Acil çağrılara gece de dönüş yapılır.</p>
+            <div class="cn-meta">
+              <span class="cn-rate">4,7 ★ <em>· 19 yorum</em></span>
+              <span class="cn-place"><i class="cn-loz" aria-hidden="true"></i>Kocasinan / Kayseri</span>
+            </div>
+          </div>
+          <div class="cn-actions">
+            <a class="cn-btn-incele" href="#">İncele</a>
+            <a class="cn-btn-ara" href="tel:03523367108" title="0352 336 71 08"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>Ara</a>
+            <a class="cn-btn-wa" href="https://wa.me/905423367108" aria-label="Kocasinan Tesisat WhatsApp"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2a9.7 9.7 0 0 0-8.4 14.6L2.3 21.8l5.1-1.3A9.7 9.7 0 1 0 12 2.2zm0 1.8a7.9 7.9 0 1 1-4.1 14.7l-.3-.2-3 .8.8-2.9-.2-.3A7.9 7.9 0 0 1 12 4z"/><path d="M8.9 7.4c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-.9.9-.9 2.2s1 2.6 1.1 2.8c.1.2 1.9 3 4.7 4.1 2.3.9 2.8.7 3.3.7.5-.1 1.6-.7 1.8-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3l-1.9-.9c-.3-.1-.5-.1-.7.2l-.8 1c-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.4.1-.6l.4-.5.3-.5c.1-.2 0-.4 0-.5l-.9-2.1z"/></svg></a>
+          </div>
+          <i class="cn-cintemani" aria-hidden="true"></i>
+        </article>
+
+        <article class="cn-kart">
+          <a class="cn-kart-head" href="#" tabindex="-1" aria-hidden="true">
+            <span class="cn-cover"><span class="cn-cover-m"></span><span class="cn-cover-h"></span><span class="cn-cover-b"></span></span>
+          </a>
+          <div class="cn-kart-body">
+            <div class="cn-kat-wrap"><span class="cn-kat-rim"><a class="cn-kat" href="#">Emlak</a></span></div>
+            <h3><a href="#">Hunat Emlak</a></h3>
+            <p class="cn-desc">Melikgazi ve Talas'ta satılık, kiralık daire ve arsa. Tapu ve kredi süreçlerinde danışmanlık verir.</p>
+            <div class="cn-meta">
+              <span class="cn-chip cn-chip--kapali">KAPALI</span>
+              <span class="cn-rate">4,5 ★ <em>· 9 yorum</em></span>
+              <span class="cn-place"><i class="cn-loz" aria-hidden="true"></i>Melikgazi / Kayseri</span>
+            </div>
+          </div>
+          <div class="cn-actions cn-actions--2">
+            <a class="cn-btn-incele" href="#">İncele</a>
+            <a class="cn-btn-ara" href="tel:03526211944" title="0352 621 19 44"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>Ara</a>
+          </div>
+          <i class="cn-cintemani" aria-hidden="true"></i>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. İlçe kitabesi -->
+  <section class="cn-kitabe-band" id="sehirler">
+    <div class="cn-wrap">
+      <div class="cn-head cn-head--center">
+        <div class="cn-kartus-wrap"><h2 class="cn-kartus cn-kartus--outline">İlçe ilçe</h2></div>
+      </div>
+      <p class="cn-cities">
+        <a class="cn-top" href="#">Melikgazi<sup>412</sup></a><i class="cn-star" aria-hidden="true"></i>
+        <a class="cn-top" href="#">Kocasinan<sup>368</sup></a><i class="cn-star" aria-hidden="true"></i>
+        <a class="cn-top" href="#">Talas<sup>196</sup></a><i class="cn-star" aria-hidden="true"></i>
+        <a href="#">Develi<sup>61</sup></a><i class="cn-star" aria-hidden="true"></i>
+        <a href="#">Hacılar<sup>44</sup></a><i class="cn-star" aria-hidden="true"></i>
+        <a href="#">İncesu<sup>38</sup></a><i class="cn-star" aria-hidden="true"></i>
+        <a href="#">Bünyan<sup>32</sup></a><i class="cn-star" aria-hidden="true"></i>
+        <a href="#">Yahyalı<sup>27</sup></a><i class="cn-star" aria-hidden="true"></i>
+        <a href="#">Tomarza<sup>21</sup></a><i class="cn-star" aria-hidden="true"></i>
+        <a href="#">Pınarbaşı<sup>19</sup></a><i class="cn-star" aria-hidden="true"></i>
+        <a href="#">Diğer İller<sup>22</sup></a>
+      </p>
+    </div>
+  </section>
+
+  <!-- 6. Kemer nişleri -->
+  <section class="cn-sec">
+    <div class="cn-wrap">
+      <div class="cn-head cn-head--center">
+        <div class="cn-kartus-wrap"><h2 class="cn-kartus">Neden burada aramalı?</h2></div>
+      </div>
+      <div class="cn-nisler">
+        <div class="cn-nis">
+          <svg class="cn-lale cn-c-kobalt" viewBox="0 0 64 96" aria-hidden="true"><use href="#cn-lale"/></svg>
+          <h3>Doğrudan iletişim</h3>
+          <p>Telefon ve WhatsApp numarası firma profilinde. Arada aracı yok, işletmeyle doğrudan konuşursunuz.</p>
+        </div>
+        <div class="cn-nis">
+          <svg class="cn-lale cn-c-turkuaz" viewBox="0 0 64 96" aria-hidden="true"><use href="#cn-lale"/></svg>
+          <h3>Güncel bilgi</h3>
+          <p>Çalışma saatleri, adres ve hizmetler işletme sahibinin elinden güncellenir; kimin şu an açık olduğu görünür.</p>
+        </div>
+        <div class="cn-nis">
+          <svg class="cn-lale cn-c-mercan" viewBox="0 0 64 96" aria-hidden="true"><use href="#cn-lale"/></svg>
+          <h3>Ücretsiz kayıt</h3>
+          <p>İşletmenizi birkaç dakikada ücretsiz ekleyin; müşteriler sizi hizmet ve ilçe sayfalarından bulsun.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Okuma köşesi -->
+  <section class="cn-sec" id="blog" style="padding-top:0">
+    <div class="cn-wrap">
+      <div class="cn-head">
+        <div class="cn-kartus-wrap"><h2 class="cn-kartus">Okuma köşesi</h2></div>
+        <a class="cn-more" href="#"><span>Tüm yazılar</span><i class="cn-loz" aria-hidden="true"></i><span aria-hidden="true">→</span></a>
+      </div>
+      <div class="cn-yazilar">
+        <a class="cn-yazi" href="#">
+          <span class="cn-yazi-band" style="--band:#1f3f8f"><svg class="cn-lale" viewBox="0 0 64 96" aria-hidden="true"><use href="#cn-lale"/></svg></span>
+          <span class="cn-yazi-body">
+            <h3>Kış gelmeden kombi bakımı: Kayseri'de ne zaman yaptırmalı?</h3>
+            <p>Erciyes'ten esen soğuk erken gelir. Petek temizliği, basınç ayarı ve servis seçerken sorulacak soruları tek yazıda topladık.</p>
+            <span class="cn-oku">Oku <i class="cn-loz" aria-hidden="true"></i></span>
+          </span>
+        </a>
+        <a class="cn-yazi" href="#">
+          <span class="cn-yazi-band" style="--band:#2fa4a9"><svg class="cn-lale" viewBox="0 0 64 96" aria-hidden="true"><use href="#cn-lale"/></svg></span>
+          <span class="cn-yazi-body">
+            <h3>Halı yıkamacı seçerken sorulacak 6 soru</h3>
+            <p>Kurutma nasıl yapılıyor, teslim kaç gün sürüyor, leke garantisi var mı? Fiyattan önce sorulması gerekenler.</p>
+            <span class="cn-oku">Oku <i class="cn-loz" aria-hidden="true"></i></span>
+          </span>
+        </a>
+        <a class="cn-yazi" href="#">
+          <span class="cn-yazi-band" style="--band:#3f7d4e"><svg class="cn-lale" viewBox="0 0 64 96" aria-hidden="true"><use href="#cn-lale"/></svg></span>
+          <span class="cn-yazi-body">
+            <h3>Talas ve Melikgazi'de diş kliniği seçerken nelere bakılır?</h3>
+            <p>Randevu süresi, sterilizasyon, otopark ve acil durumda ulaşılabilirlik: ilk ziyaretten önce kontrol listesi.</p>
+            <span class="cn-oku">Oku <i class="cn-loz" aria-hidden="true"></i></span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. İş ilanları -->
+  <section class="cn-sec" style="padding-top:0">
+    <div class="cn-wrap">
+      <div class="cn-head">
+        <div class="cn-kartus-wrap"><h2 class="cn-kartus">İş ilanları</h2></div>
+        <a class="cn-more" href="#"><span>Tüm ilanlar</span><i class="cn-loz" aria-hidden="true"></i><span aria-hidden="true">→</span></a>
+      </div>
+      <div class="cn-ilanlar">
+        <a class="cn-ilan" href="#">
+          <span><h3>Kalfa kuaför (bayan)</h3><p>Özgün Kuaför <i class="cn-loz" aria-hidden="true"></i> Melikgazi / Kayseri</p></span>
+          <span class="cn-ilan-git">İlana bak <i class="cn-loz" aria-hidden="true"></i></span>
+        </a>
+        <a class="cn-ilan" href="#">
+          <span><h3>Oto elektrik ustası</h3><p>Erciyes Oto Servis <i class="cn-loz" aria-hidden="true"></i> Kocasinan / Kayseri</p></span>
+          <span class="cn-ilan-git">İlana bak <i class="cn-loz" aria-hidden="true"></i></span>
+        </a>
+        <a class="cn-ilan" href="#">
+          <span><h3>Diş hekimi asistanı</h3><p>Talas Diş Kliniği <i class="cn-loz" aria-hidden="true"></i> Talas / Kayseri</p></span>
+          <span class="cn-ilan-git">İlana bak <i class="cn-loz" aria-hidden="true"></i></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Eksik karo CTA -->
+  <section class="cn-sec" id="kayit" style="padding-top:0">
+    <div class="cn-wrap">
+      <div class="cn-eksik">
+        <div class="cn-pano cn-pano--mini" aria-hidden="true">
+          <div class="cn-pano-in">
+            <div class="cn-mozaik"><i></i><i></i><i></i><i></i><i class="cn-soket"><b>+</b></i><i></i></div>
+          </div>
+        </div>
+        <div>
+          <h2>Panoda sizin karonuz eksik</h2>
+          <p class="cn-eksik-p">İşletmenizi ücretsiz ekleyin; müşteriler telefonla ya da WhatsApp üzerinden size doğrudan ulaşsın.</p>
+          <a class="cn-btn-coral" href="#">Firmanızı ücretsiz ekleyin</a>
+          <div class="cn-eksik-links">
+            <a href="#"><i class="cn-loz" aria-hidden="true"></i>Firma paneli</a>
+            <a href="#"><i class="cn-loz" aria-hidden="true"></i>Öne çıkma seçenekleri</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="cn-footer">
+  <div class="cn-wrap cn-foot-grid">
+    <div>
+      <a class="cn-brand" href="#"><span class="cn-mark" aria-hidden="true"></span><span class="cn-brand-name">Kayseri Rehberi</span></a>
+      <p>Kayseri Rehberi; Melikgazi, Kocasinan, Talas ve çevre ilçelerdeki işletmeleri telefon, WhatsApp ve adres bilgileriyle bir araya getirir.</p>
+    </div>
+    <div>
+      <h4>Rehber</h4>
+      <ul><li><a href="#">Firmalar</a></li><li><a href="#">Hizmetler</a></li><li><a href="#">İlçeler</a></li><li><a href="#">Blog</a></li></ul>
+    </div>
+    <div>
+      <h4>İşletmeler</h4>
+      <ul><li><a href="#">Firmanızı ekleyin</a></li><li><a href="#">Firma paneli</a></li><li><a href="#">Öne çıkma seçenekleri</a></li></ul>
+    </div>
+    <div>
+      <h4>Kurumsal</h4>
+      <ul><li><a href="#">Hakkımızda</a></li><li><a href="#">İletişim</a></li><li><a href="#">Gizlilik</a></li><li><a href="#">KVKK</a></li></ul>
+    </div>
+  </div>
+  <div class="cn-wrap cn-foot-bottom"><span>© 2026 Kayseri Rehberi</span><span>Kayseri'nin işletme rehberi</span></div>
+</footer>
+
+</body>
+</html>

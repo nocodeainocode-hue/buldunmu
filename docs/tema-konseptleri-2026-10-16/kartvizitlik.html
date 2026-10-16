@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kayseri Rehberi · Kartvizitlik taslağı</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --kv-ink:#2a2520;--kv-ink-hover:#120f0c;--kv-ink-light:#efe4cf;
+  --kv-brown:#7a5a2e;--kv-red:#b3261e;
+  --kv-page:#efe6d3;--kv-cream:#fbf7ee;--kv-text:#1f1b17;--kv-muted:#6b5d4c;--kv-border:#d9c9ab;
+  --kv-kraft:#c9a979;--kv-wa:#1f9d55;--kv-open:#2f9e5b;--kv-open-text:#1e7a43;
+  --kv-head:'Zilla Slab',Rockwell,serif;--kv-body:Archivo,system-ui,sans-serif;
+  --kv-paper:inset 0 1px 0 rgba(255,255,255,.6),0 2px 0 rgba(40,25,5,.06),0 14px 22px -14px rgba(40,25,5,.55);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--kv-page);color:var(--kv-text);font:400 16px/1.55 var(--kv-body)}
+a{color:inherit}
+svg{display:block}
+h1,h2,h3,h4,p{margin:0}
+.kv-wrap{max-width:1248px;margin:0 auto;padding:0 24px}
+.kv-num{font-variant-numeric:tabular-nums lining-nums}
+.kv-kraft{
+  background-color:#c9a979;
+  background-image:
+    radial-gradient(120% 80% at 50% 0,rgba(255,240,210,.35),transparent 60%),
+    repeating-linear-gradient(17deg,rgba(60,38,10,.035) 0 1px,transparent 1px 3px),
+    repeating-linear-gradient(-23deg,rgba(255,255,255,.04) 0 1px,transparent 1px 4px);
+}
+/* tab colours */
+.t-manila{--tab:#e8d5a6}.t-sage{--tab:#cfdcc4}.t-blush{--tab:#ecc9bd}.t-sky{--tab:#c9d8e4}
+
+/* ---------- buttons ---------- */
+.kv-btn-red,.kv-btn-ink,.kv-btn-outline{display:inline-flex;align-items:center;justify-content:center;gap:10px;border-radius:6px;font:600 15px/1 var(--kv-body);text-decoration:none;white-space:nowrap;cursor:pointer;border:0}
+.kv-btn-red{height:40px;padding:0 16px;background:var(--kv-red);color:#fbf7ee}
+.kv-btn-red:hover{background:#951d16}
+.kv-btn-ink{height:52px;padding:0 26px;background:var(--kv-ink);color:#fbf7ee;font-size:16px}
+.kv-btn-ink:hover{background:var(--kv-ink-hover)}
+.kv-btn-outline{height:48px;padding:0 24px;gap:6px;border:1.5px solid var(--kv-ink);color:var(--kv-ink);background:transparent}
+.kv-btn-outline:hover{background:var(--kv-ink);color:#fbf7ee}
+.kv-btn-red .sm{display:none}
+
+/* ---------- header ---------- */
+.kv-header{position:sticky;top:0;z-index:60;background:#fbf7ee;border-bottom:1px solid #d9c9ab}
+.kv-header::after{content:"";position:absolute;left:0;right:0;top:100%;height:3px;background:rgba(201,169,121,.55)}
+.kv-header-in{height:64px;display:flex;align-items:center;gap:24px}
+.kv-brand{display:flex;align-items:center;gap:12px;text-decoration:none;min-width:0}
+.kv-mark{position:relative;width:32px;height:26px;flex:none}
+.kv-mark i{position:absolute;width:22px;height:14px;border-radius:2px}
+.kv-mark i:first-child{left:1px;top:3px;background:var(--kv-ink);transform:rotate(-6deg)}
+.kv-mark i:last-child{left:9px;top:9px;background:#dcc59c;border:1px solid #7a5a2e;transform:rotate(4deg);box-shadow:0 2px 3px rgba(40,25,5,.25)}
+.kv-brand-name{font:600 20px/1.1 var(--kv-head);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--kv-ink)}
+.kv-nav{flex:1;display:flex;justify-content:center;gap:30px}
+.kv-nav a{font:500 15px/1 var(--kv-body);text-decoration:none;padding:8px 0 6px;border-bottom:2px solid transparent;color:var(--kv-ink)}
+.kv-nav a:hover,.kv-nav a[aria-current]{border-bottom-color:var(--kv-ink)}
+.kv-head-right{display:flex;align-items:center;gap:18px;margin-left:auto;flex:none}
+.kv-head-phone{display:flex;align-items:baseline;gap:7px;text-decoration:none;font:500 13px var(--kv-body);color:var(--kv-muted)}
+.kv-head-phone b{font:600 17px var(--kv-head);color:var(--kv-ink)}
+.kv-burger{display:none;width:40px;height:40px;border:1.5px solid var(--kv-ink);border-radius:4px;background:transparent;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:0;cursor:pointer}
+.kv-burger span{display:block;width:18px;height:2px;background:var(--kv-ink)}
+
+/* ---------- hero: masa ---------- */
+.kv-masa{padding:56px 0 72px;overflow-x:clip;position:relative}
+.kv-masa-grid{display:grid;grid-template-columns:minmax(0,640px) minmax(0,1fr)}
+.kv-masa-main{position:relative;z-index:4;min-width:0}
+.kv-label{display:inline-flex;flex-wrap:wrap;align-items:center;column-gap:7px;row-gap:1px;padding:7px 28px;background:#fbf7ee;border:1px solid var(--kv-ink);border-radius:3px;font:500 13.5px/1.4 var(--kv-body);color:#3b3128;position:relative;box-shadow:0 1px 0 rgba(255,255,255,.35),0 8px 12px -10px rgba(40,25,5,.7)}
+.kv-label::before,.kv-label::after{content:"";position:absolute;top:50%;width:7px;height:7px;margin-top:-3.5px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#e6dccb,#6f6250 75%);box-shadow:0 0 0 1px rgba(42,37,32,.45)}
+.kv-label::before{left:10px}.kv-label::after{right:10px}
+.kv-label strong{font-weight:700;color:var(--kv-text)}
+.kv-label .sep{color:#a08a68}
+.kv-h1{font:700 clamp(34px,5vw,58px)/1.03 var(--kv-head);color:var(--kv-ink);max-width:16ch;margin:22px 0 14px;letter-spacing:-.01em}
+.kv-sub{font:400 18px/1.5 var(--kv-body);color:#3b3128;max-width:44ch}
+
+/* arama fişi */
+.kv-fis{position:relative;max-width:640px;margin-top:30px;background:#fffaf0;border-radius:4px;padding:0 28px 22px;transform:rotate(-.6deg);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 2px 0 rgba(40,25,5,.06),0 20px 30px -16px rgba(40,25,5,.6)}
+.kv-fis-head{height:34px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:0 28px 6px;margin:0 -28px;border-bottom:2px solid var(--kv-red)}
+.kv-fis-title{font:600 15px/1 var(--kv-head);color:var(--kv-ink)}
+.kv-fis-meta{font:500 12px/1 var(--kv-body);color:#8a7a63}
+.kv-fis-row{display:grid;grid-template-columns:136px minmax(0,1fr);align-items:end;height:44px;margin:0 -28px;padding:0 28px;border-bottom:1px solid #c8d5e5}
+.kv-fis-row label{font:600 13px/1 var(--kv-body);color:var(--kv-muted);padding-bottom:12px}
+.kv-fis-row input,.kv-fis-row select{width:100%;height:38px;border:0;border-bottom:2px solid transparent;border-radius:0;background:transparent;font:500 18px/1 var(--kv-body);color:var(--kv-text);padding:0 0 4px;outline:0}
+.kv-fis-row input::placeholder{color:#a3957f}
+.kv-fis-row input:focus,.kv-fis-row select:focus{border-bottom-color:var(--kv-ink)}
+.kv-fis-row select{appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:26px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpath d='M3 5l4 4 4-4' fill='none' stroke='%232a2520' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 2px center}
+.kv-fis-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:18px}
+.kv-fis-hint{font:400 13px/1.4 var(--kv-body);color:var(--kv-muted)}
+.kv-fis-hint b{font-weight:600;color:var(--kv-ink)}
+
+/* quick divider links */
+.kv-quick{display:flex;align-items:flex-end;gap:14px;margin-top:28px;min-width:0}
+.kv-quick-label{font:600 14px/1 var(--kv-body);color:var(--kv-ink);padding-bottom:9px;white-space:nowrap}
+.kv-quick-tabs{display:flex;gap:6px;align-items:flex-end;border-bottom:1.5px solid var(--kv-ink);padding:6px 6px 0;overflow-x:auto;scrollbar-width:none;min-width:0}
+.kv-quick-tabs::-webkit-scrollbar{display:none}
+.kv-tab{flex:none;display:inline-block;padding:8px 22px 6px;font:600 15px/1.15 var(--kv-head);color:var(--kv-text);text-decoration:none;background:var(--tab);clip-path:polygon(8% 0,92% 0,100% 100%,0 100%);transition:transform .15s}
+.kv-tab:hover{transform:translateY(-3px)}
+
+/* fan */
+.kv-fan{position:relative;margin-left:-112px;min-height:540px}
+.kv-fan>.kv-card{position:absolute;width:392px;transition:transform .38s cubic-bezier(.2,.7,.2,1)}
+.kv-fan>.kv-card:nth-child(1){z-index:3;top:40px;left:178px;transform:rotate(-5deg)}
+.kv-fan>.kv-card:nth-child(2){z-index:2;top:126px;left:100px;transform:rotate(2deg)}
+.kv-fan>.kv-card:nth-child(3){z-index:1;top:212px;left:34px;transform:rotate(8deg)}
+.kv-fan:hover>.kv-card:nth-child(1),.kv-fan:focus-within>.kv-card:nth-child(1){transform:translate(60px,-40px) rotate(-1.5deg)}
+.kv-fan:hover>.kv-card:nth-child(2),.kv-fan:focus-within>.kv-card:nth-child(2){transform:translate(70px,60px) rotate(.5deg)}
+.kv-fan:hover>.kv-card:nth-child(3),.kv-fan:focus-within>.kv-card:nth-child(3){transform:translate(90px,170px) rotate(2deg)}
+.kv-fan-note{display:none}
+
+/* ---------- business card ---------- */
+.kv-card{--kv-tilt:0deg;--stock:#fbf7ee;position:relative;display:flex;flex-direction:column;min-width:0;aspect-ratio:85/55;border-radius:6px;padding:18px 20px 0;background:var(--stock);color:var(--kv-text);border:1px solid rgba(60,40,10,.12);box-shadow:var(--kv-paper);transform:rotate(var(--kv-tilt));transition:transform .16s ease;text-decoration:none}
+.kv-rack .kv-card:hover,.kv-rack .kv-card:focus-within{transform:rotate(0) translateY(-3px)}
+.s-cream{--stock:#fbf7ee}.s-white{--stock:#ffffff}.s-kraft{--stock:#dcc59c}.s-sage{--stock:#e2e8dc}
+.kv-card-top{display:flex;align-items:flex-start;gap:12px;min-width:0}
+.kv-logo{flex:none;width:36px;height:36px;border-radius:4px;display:grid;place-items:center;overflow:hidden}
+.kv-name{font:600 21px/1.15 var(--kv-head);min-width:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-shadow:0 1px 0 rgba(255,255,255,.75),0 -1px 0 rgba(0,0,0,.08)}
+.kv-name a{text-decoration:none}
+.kv-name a:hover{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.kv-card--seal .kv-name{padding-right:34px}
+.kv-unvan{display:flex;align-items:center;gap:8px;margin-top:8px;font:600 13px/1.3 var(--kv-body);color:#7a5a2e}
+.kv-unvan::before{content:"";width:18px;height:1px;background:currentColor;flex:none}
+.kv-desc{margin-top:6px;font-size:13.5px;line-height:1.45;color:var(--kv-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kv-place{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:2px 12px;margin-top:auto;padding:10px 0 11px;font:500 13px/1.45 var(--kv-body);color:#4c4236}
+.kv-loc{display:inline-flex;align-items:center;gap:5px;min-width:0;white-space:nowrap}
+.kv-loc svg{width:13px;height:13px;flex:none;color:#7a5a2e}
+.kv-meta{display:inline-flex;align-items:center;gap:10px;white-space:nowrap}
+.kv-rate b{color:#b7791f;font-weight:700}
+.kv-open{color:var(--kv-open-text);font-weight:600}
+.kv-closed{color:#8a7a63}
+.kv-card--open::before{content:"";position:absolute;left:-1px;top:18px;width:4px;height:30px;background:var(--kv-open);border-radius:0 2px 2px 0}
+.kv-strip{margin:0 -20px;min-height:52px;display:flex;align-items:center;border-top:1px solid rgba(60,40,10,.14)}
+.kv-tel{flex:1;align-self:stretch;display:flex;align-items:center;gap:9px;padding:0 10px 0 20px;text-decoration:none;color:var(--kv-ink);min-width:0}
+.kv-tel small{font:700 10px/1 var(--kv-body);letter-spacing:.06em;color:#7a5a2e}
+.kv-tel span{font:600 20px/1 var(--kv-head);font-variant-numeric:tabular-nums lining-nums;min-width:9.4ch;white-space:nowrap}
+.kv-tel:hover span{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+.kv-wa{flex:none;width:40px;height:40px;border-radius:6px;background:var(--kv-wa);color:#fff;display:grid;place-items:center;margin-right:6px}
+.kv-wa svg{width:22px;height:22px}
+.kv-more{flex:none;align-self:stretch;width:40px;display:grid;place-items:center;border-left:1px solid rgba(60,40,10,.12);text-decoration:none;font:500 26px/1 var(--kv-head);color:#8a7a63}
+.kv-more:hover{color:var(--kv-ink)}
+/* premium: black stock */
+.kv-card--premium{--stock:#211e1b;color:#f3ead8;border-color:#0e0c0a}
+.kv-card--premium .kv-name{text-shadow:none}
+.kv-card--premium .kv-name a{background:linear-gradient(100deg,#b8913a,#f1dc9a 45%,#c9a24a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.kv-card--premium .kv-unvan{color:#d9b77a}
+.kv-card--premium .kv-desc{color:#b9ad97}
+.kv-card--premium .kv-place{color:#d7ccb7}
+.kv-card--premium .kv-loc svg{color:#d9b77a}
+.kv-card--premium .kv-open{color:#5fcf8b}
+.kv-card--premium .kv-strip{border-top-color:rgba(255,255,255,.13)}
+.kv-card--premium .kv-tel{color:#f3ead8}
+.kv-card--premium .kv-tel small{color:#d9b77a}
+.kv-card--premium .kv-more{border-left-color:rgba(255,255,255,.12);color:#b9ad97}
+/* ONAYLI rubber stamp */
+.kv-seal{position:absolute;top:-10px;right:-12px;width:68px;height:68px;color:var(--kv-red);transform:rotate(-12deg);opacity:.82;mix-blend-mode:multiply;pointer-events:none;
+  -webkit-mask-image:repeating-radial-gradient(circle at 31% 63%,#000 0 1.1px,rgba(0,0,0,.62) 1.5px 2.3px);
+          mask-image:repeating-radial-gradient(circle at 31% 63%,#000 0 1.1px,rgba(0,0,0,.62) 1.5px 2.3px)}
+.kv-seal svg{width:100%;height:100%}
+/* blank card */
+.kv-card--blank{background:rgba(251,247,238,.42);border:2px dashed #7a5a2e;box-shadow:none;color:var(--kv-text)}
+.kv-yer{position:absolute;top:14px;right:14px;border:1.5px solid var(--kv-red);color:var(--kv-red);font:700 11px/1 var(--kv-body);letter-spacing:.07em;padding:5px 8px 4px;border-radius:3px;transform:rotate(-4deg);background:rgba(255,250,240,.6)}
+.kv-ghost{display:block;border-bottom:2px dotted rgba(122,90,46,.45);color:#9a8566}
+.kv-ghost--name{font:600 21px/1.15 var(--kv-head);width:62%;padding-bottom:3px}
+.kv-ghost--unvan{font:600 13px/1.3 var(--kv-body);width:48%;margin-top:12px;padding-bottom:3px}
+.kv-ghost--place{width:38%;margin-top:14px;height:10px}
+.kv-ghost-copy{margin-top:12px;font:500 13.5px/1.4 var(--kv-body);color:#5a4a35}
+.kv-strip--ghost{border-top:1px dashed rgba(122,90,46,.5)}
+.kv-strip--ghost .kv-tel span{color:#a08a68}
+.kv-blank-cta{flex:none;margin-right:12px;height:36px;padding:0 12px;border-radius:6px;background:var(--kv-red);color:#fbf7ee;font:600 13.5px/36px var(--kv-body);white-space:nowrap}
+a.kv-card--blank:hover{background:rgba(251,247,238,.75)}
+
+/* ---------- section heads ---------- */
+.kv-sec{padding:76px 0}
+.kv-sec-head{display:flex;align-items:flex-end;gap:16px;border-bottom:1px solid var(--kv-ink);margin-bottom:18px}
+.kv-sec-tab{flex:none;align-self:flex-end;padding:7px 20px 5px;font:600 14px/1.1 var(--kv-head);background:var(--tab);clip-path:polygon(8% 0,92% 0,100% 100%,0 100%);color:var(--kv-text)}
+.kv-sec-head h2{font:700 clamp(28px,3.4vw,40px)/1.05 var(--kv-head);color:var(--kv-ink);padding-bottom:8px;letter-spacing:-.005em}
+.kv-sec-link{margin-left:auto;padding-bottom:11px;font:600 14.5px/1 var(--kv-body);text-decoration:none;white-space:nowrap}
+.kv-sec-link:hover{text-decoration:underline;text-underline-offset:3px}
+.kv-sec-lead{color:var(--kv-muted);font-size:15.5px;margin:0 0 30px;max-width:62ch}
+
+/* legend */
+.kv-legend{display:flex;flex-wrap:wrap;align-items:center;gap:8px 22px;font:500 13.5px/1.3 var(--kv-body);color:var(--kv-muted);margin:0 0 34px}
+.kv-legend b{font-weight:700;color:var(--kv-ink);font-family:var(--kv-head);font-size:15px}
+.kv-legend span{display:inline-flex;align-items:center;gap:8px}
+.kv-sw{position:relative;flex:none;width:26px;height:17px;border-radius:2px}
+.kv-sw--black{background:#211e1b;box-shadow:0 2px 3px -1px rgba(0,0,0,.4)}
+.kv-sw--black::after{content:"";position:absolute;left:4px;top:4px;width:12px;height:2px;background:linear-gradient(90deg,#b8913a,#f1dc9a)}
+.kv-sw--seal{width:19px;height:19px;border-radius:50%;border:2px solid var(--kv-red);opacity:.85;transform:rotate(-12deg)}
+.kv-sw--seal::after{content:"";position:absolute;inset:3px;border-radius:50%;border:1px dashed var(--kv-red)}
+.kv-sw--notch{background:#fbf7ee;border:1px solid #d9c9ab}
+.kv-sw--notch::before{content:"";position:absolute;left:-1px;top:3px;width:3px;height:9px;background:var(--kv-open)}
+.kv-sw--blank{border:1.5px dashed #7a5a2e}
+
+/* rack */
+.kv-rack{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+.kv-rack-more{display:flex;justify-content:center;margin-top:44px}
+
+/* ---------- hızlı arama fişi ---------- */
+.kv-band{padding:76px 0}
+.kv-callcard{max-width:820px;margin:0 auto;background:#fffaf0;border-radius:4px;padding:0 32px 22px;transform:rotate(-.4deg);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 2px 0 rgba(40,25,5,.06),0 24px 34px -18px rgba(40,25,5,.6)}
+.kv-callcard-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding:22px 32px 12px;margin:0 -32px;border-bottom:2px solid var(--kv-red)}
+.kv-callcard-head h2{font:700 28px/1.1 var(--kv-head);color:var(--kv-ink);display:flex;align-items:center;gap:12px}
+.kv-callcard-head h2 i{width:11px;height:11px;border-radius:50%;background:var(--kv-open);box-shadow:0 0 0 4px rgba(47,158,91,.18)}
+.kv-callcard-head p{font:400 13.5px/1.3 var(--kv-body);color:var(--kv-muted);padding-bottom:3px;text-align:right}
+.kv-callrow{display:grid;grid-template-columns:10px minmax(0,1fr) auto 32px;grid-template-areas:"dot name tel wa";align-items:center;column-gap:14px;min-height:44px;margin:0 -32px;padding:0 32px;border-bottom:1px solid #c8d5e5}
+.kv-callrow:hover{background:rgba(201,169,121,.09)}
+.kv-dot{grid-area:dot;width:9px;height:9px;border-radius:50%;background:var(--kv-open)}
+.kv-callname{grid-area:name;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kv-callname a{font:600 17.5px/1 var(--kv-head);text-decoration:none;color:var(--kv-ink)}
+.kv-callname a:hover{text-decoration:underline;text-underline-offset:3px}
+.kv-callname small{font:400 13px/1 var(--kv-body);color:var(--kv-muted);margin-left:10px}
+.kv-calltel{grid-area:tel;display:flex;align-items:center;justify-content:flex-end;gap:8px;text-decoration:none;color:var(--kv-ink);min-width:166px}
+.kv-calltel small{display:none;font:700 10px/1 var(--kv-body);letter-spacing:.06em;color:#7a5a2e}
+.kv-calltel span{font:600 19px/1 var(--kv-head);font-variant-numeric:tabular-nums lining-nums;text-align:right;white-space:nowrap}
+.kv-calltel:hover span{text-decoration:underline;text-underline-offset:4px}
+.kv-wa-sq{grid-area:wa;width:32px;height:32px;border-radius:5px;background:var(--kv-wa);color:#fff;display:grid;place-items:center}
+.kv-wa-sq svg{width:19px;height:19px}
+.kv-wa-none{grid-area:wa;width:32px}
+.kv-callfoot{display:flex;justify-content:space-between;gap:12px;margin-top:16px;font:400 13px/1.4 var(--kv-body);color:var(--kv-muted)}
+.kv-callfoot a{font-weight:600;color:var(--kv-ink);text-decoration:none;white-space:nowrap}
+
+/* ---------- çekmeceler ---------- */
+.kv-drawers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:56px 22px;padding-top:34px}
+.kv-drawer{position:relative;display:flex;flex-direction:column;gap:12px;background:#fbf7ee;border:1px solid #d9c9ab;border-top:4px solid var(--tab);border-radius:0 0 6px 6px;padding:18px 20px 16px;text-decoration:none;color:var(--kv-text);box-shadow:0 3px 0 -1px #f4ecdc,0 3px 0 0 #dccdb1,0 6px 0 -1px #f8f2e6,0 6px 0 0 #dccdb1,0 18px 22px -18px rgba(40,25,5,.55);transition:transform .16s}
+.kv-drawer:hover{transform:translateY(-3px)}
+.kv-drawer-tab{position:absolute;bottom:100%;left:-1px;width:64%;height:34px;display:flex;align-items:center;justify-content:center;padding:2px 16px 0;background:var(--tab);clip-path:polygon(8% 0,92% 0,100% 100%,0 100%);font:600 16px/1 var(--kv-head);color:var(--kv-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kv-drawer:nth-child(3n+2) .kv-drawer-tab{left:18%}
+.kv-drawer:nth-child(3n+3) .kv-drawer-tab{left:auto;right:-1px}
+.kv-drawer-count{display:flex;align-items:baseline;gap:8px;font:500 15px/1 var(--kv-body);color:var(--kv-muted)}
+.kv-drawer-count b{font:700 44px/1 var(--kv-head);color:var(--kv-ink);font-variant-numeric:lining-nums}
+.kv-drawer-open{display:flex;align-items:center;justify-content:space-between;border-top:1px solid #e6dac3;padding-top:11px;font:600 14px/1 var(--kv-body);color:var(--kv-ink)}
+.kv-drawer-open i{font-style:normal;transition:transform .15s}
+.kv-drawer:hover .kv-drawer-open i{transform:translateX(3px)}
+
+/* ---------- şehir kutuları ---------- */
+.kv-boxes{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:30px 18px}
+.kv-box{position:relative;display:block;padding-top:14px;text-decoration:none;color:var(--kv-text);transition:transform .16s}
+.kv-box:hover{transform:translateY(-3px)}
+.kv-box::before{content:"";position:absolute;left:12px;right:12px;top:14px;height:8px;background:#fff;border-radius:2px 2px 0 0;
+  box-shadow:0 -4px 0 #fbf7ee,0 -5px 0 rgba(90,60,20,.22),0 -8px 0 #efe4cf,0 -9px 0 rgba(90,60,20,.22),0 -12px 0 #ffffff,0 -13px 0 rgba(90,60,20,.24)}
+.kv-box-lid{display:block;position:relative;z-index:1;height:15px;margin:0 -3px;background:#a6814d;border-radius:3px 3px 1px 1px;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 -2px 0 rgba(0,0,0,.14),0 2px 3px -1px rgba(40,25,5,.4)}
+.kv-box-front{display:block;position:relative;z-index:1;padding:14px 12px 14px;border-radius:0 0 4px 4px;background-color:#d6bb8b;
+  background-image:repeating-linear-gradient(17deg,rgba(60,38,10,.04) 0 1px,transparent 1px 3px),repeating-linear-gradient(-23deg,rgba(255,255,255,.06) 0 1px,transparent 1px 4px);
+  box-shadow:inset 0 0 0 1px rgba(90,60,20,.12),0 14px 18px -12px rgba(40,25,5,.55)}
+.kv-box-label{display:block;background:#fbf7ee;border:1px solid rgba(60,40,10,.25);border-radius:2px;padding:7px 8px 6px;text-align:center;font:600 17px/1.15 var(--kv-head);color:var(--kv-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kv-box-count{display:block;margin-top:8px;text-align:center;font:600 13px/1 var(--kv-body);color:#4a3a24;font-variant-numeric:tabular-nums}
+
+/* ---------- notlar ---------- */
+.kv-notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+.kv-note{display:flex;flex-direction:column;background:#fffaf0;border-radius:4px;padding:0 24px;box-shadow:var(--kv-paper);text-decoration:none;color:var(--kv-text);transition:transform .16s}
+.kv-note:hover{transform:translateY(-3px)}
+.kv-note-head{height:34px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px 6px;margin:0 -24px;border-bottom:2px solid var(--kv-red);font:500 12.5px/1 var(--kv-body);color:#8a7a63}
+.kv-note-body{flex:1;margin:0 -24px;padding:0 24px 28px;background:repeating-linear-gradient(to bottom,transparent 0 27px,#d4dfeb 27px 28px)}
+.kv-note h3{font:600 20px/28px var(--kv-head);color:var(--kv-ink)}
+.kv-note p{font:400 14.5px/28px var(--kv-body);color:var(--kv-muted)}
+.kv-note-link{display:block;font:600 14px/28px var(--kv-body);color:var(--kv-ink)}
+
+/* ---------- boş kart CTA ---------- */
+.kv-blank-grid{display:grid;grid-template-columns:minmax(0,560px) minmax(0,1fr);gap:64px;align-items:center}
+.kv-bigcard{position:relative;display:flex;flex-direction:column;aspect-ratio:85/55;border:2px dashed #7a5a2e;border-radius:8px;background:rgba(251,247,238,.55);padding:30px 32px 0;box-shadow:0 18px 30px -22px rgba(40,25,5,.6)}
+.kv-bigcard .kv-yer{top:22px;right:22px;font-size:12.5px;padding:6px 10px 5px}
+.kv-prev-name{display:block;font:600 32px/1.1 var(--kv-head);color:#9a8566;border-bottom:2px dotted rgba(122,90,46,.5);padding-bottom:6px;max-width:72%;min-height:43px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kv-prev-name.is-filled{color:var(--kv-text);text-shadow:0 1px 0 rgba(255,255,255,.75)}
+.kv-prev-unvan{display:flex;align-items:center;gap:10px;margin-top:14px;font:600 15px/1.3 var(--kv-body);color:#9a8566}
+.kv-prev-unvan::before{content:"";width:22px;height:1px;background:#7a5a2e}
+.kv-prev-place{display:block;width:44%;height:12px;margin-top:16px;border-bottom:2px dotted rgba(122,90,46,.45)}
+.kv-bigstrip{margin:auto -32px 0;height:66px;display:flex;align-items:center;gap:12px;padding:0 18px 0 32px;border-top:1px dashed rgba(122,90,46,.55)}
+.kv-bigstrip small{font:700 11px/1 var(--kv-body);letter-spacing:.06em;color:#7a5a2e}
+.kv-bigstrip span{flex:1;font:600 24px/1 var(--kv-head);color:#a08a68;letter-spacing:.02em;white-space:nowrap}
+.kv-bigstrip i{flex:none;width:44px;height:44px;border-radius:6px;border:2px dashed rgba(31,157,85,.65);display:grid;place-items:center;color:rgba(31,157,85,.8)}
+.kv-bigstrip i svg{width:22px;height:22px}
+.kv-blank-copy h2{font:700 clamp(30px,3.6vw,44px)/1.06 var(--kv-head);color:var(--kv-ink);max-width:16ch}
+.kv-blank-copy>p{margin-top:14px;font-size:17px;line-height:1.55;color:#3b3128;max-width:46ch}
+.kv-blank-form{display:flex;align-items:flex-end;gap:14px;margin-top:24px;max-width:540px;background:#fffaf0;border-radius:4px;padding:14px 16px 16px;box-shadow:var(--kv-paper)}
+.kv-blank-field{flex:1;min-width:0}
+.kv-blank-field label{display:block;font:600 12.5px/1 var(--kv-body);color:var(--kv-muted);margin-bottom:6px}
+.kv-blank-field input{width:100%;height:40px;border:0;border-bottom:1px solid #c8d5e5;border-radius:0;background:transparent;font:500 18px/1 var(--kv-body);color:var(--kv-text);outline:0;padding:0 0 4px}
+.kv-blank-field input:focus{border-bottom:2px solid var(--kv-ink)}
+.kv-blank-field input::placeholder{color:#a3957f}
+.kv-blank-form .kv-btn-red{height:52px;padding:0 22px;font-size:16px}
+.kv-facts{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:10px}
+.kv-facts li{display:flex;align-items:center;gap:11px;font:500 15.5px/1.35 var(--kv-body);color:var(--kv-text)}
+.kv-facts li::before{content:"";flex:none;width:20px;height:20px;border-radius:50%;background:var(--kv-ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath d='M6 10.4l2.6 2.6L14 7.6' fill='none' stroke='%23fbf7ee' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/20px no-repeat}
+
+/* ---------- sticky bar (mobile) ---------- */
+.kv-sticky{display:none}
+
+/* ---------- jobs (layout appended) ---------- */
+.kv-jobs{padding:0 0 76px}
+.kv-jobs-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.kv-job{display:block;background:#fffaf0;border-radius:4px;padding:0 22px 18px;box-shadow:var(--kv-paper);text-decoration:none;color:var(--kv-text)}
+.kv-job-head{height:30px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 22px 5px;margin:0 -22px 12px;border-bottom:2px solid var(--kv-red);font:600 12px/1 var(--kv-body);color:#8a7a63}
+.kv-job-head em{font-style:normal;color:var(--kv-red)}
+.kv-job h3{font:600 19px/1.2 var(--kv-head);color:var(--kv-ink)}
+.kv-job p{margin-top:6px;font-size:14px;color:var(--kv-muted)}
+.kv-job p b{font-weight:600;color:#4c4236}
+
+/* ---------- footer ---------- */
+.kv-footer{background:#24201b;color:#d9ccb5;border-top:6px solid #c9a979;padding:56px 0 0;font-size:14.5px}
+.kv-foot-grid{display:grid;grid-template-columns:minmax(0,1.6fr) repeat(3,minmax(0,1fr));gap:36px}
+.kv-foot-brand{display:flex;align-items:center;gap:12px;font:600 21px/1 var(--kv-head);color:#f1e4c8;margin-bottom:14px}
+.kv-foot-brand .kv-mark i:first-child{background:#f1e4c8}
+.kv-footer p{line-height:1.65;max-width:46ch}
+.kv-footer h4{font:600 16px/1 var(--kv-head);color:#f1e4c8;margin-bottom:14px}
+.kv-footer nav a{display:block;color:#f1e4c8;text-decoration:none;padding:5px 0;opacity:.9}
+.kv-footer nav a:hover{opacity:1;text-decoration:underline;text-underline-offset:3px}
+.kv-foot-bottom{margin-top:44px;padding:18px 24px;border-top:1px solid rgba(217,204,181,.16);font-size:13px;color:#a99c86;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+/* ---------- tablet ---------- */
+@media (max-width:1023px){
+  .kv-nav,.kv-head-phone{display:none}
+  .kv-burger{display:inline-flex}
+  .kv-masa-grid{grid-template-columns:minmax(0,1fr)}
+  .kv-fan{margin:26px -24px 0;min-height:0;display:grid;grid-auto-flow:column;grid-auto-columns:46%;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 24px;padding:16px 24px 20px;scrollbar-width:none}
+  .kv-fan::-webkit-scrollbar{display:none}
+  .kv-fan>.kv-card,.kv-fan>.kv-card:nth-child(n){position:relative;top:auto;left:auto;width:auto;transform:none!important;scroll-snap-align:start}
+  .kv-fan-note{display:block;margin-top:2px;font:500 13px/1 var(--kv-body);color:#3b3128}
+  .kv-rack,.kv-notes,.kv-jobs-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kv-drawers{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .kv-boxes{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .kv-blank-grid{grid-template-columns:minmax(0,1fr);gap:36px}
+  .kv-bigcard{max-width:560px}
+  .kv-foot-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+/* ---------- phone ---------- */
+@media (max-width:639px){
+  .kv-wrap{padding:0 16px}
+  .kv-header-in{height:56px;gap:10px}
+  .kv-brand{gap:9px;flex:1}
+  .kv-brand-name{font-size:18px}
+  .kv-head-right{gap:8px}
+  .kv-header .kv-btn-red{height:38px;padding:0 12px;font-size:14px}
+  .kv-masa{padding:24px 0 40px}
+  .kv-label{font-size:12.5px;padding:6px 24px}
+  .kv-h1{font-size:34px;margin:18px 0 10px}
+  .kv-sub{font-size:16px}
+  .kv-fis{transform:none;margin-top:22px;padding:0 16px 18px}
+  .kv-fis-head{margin:0 -16px;padding:0 16px 6px}
+  .kv-fis-row{grid-template-columns:minmax(0,1fr);height:auto;min-height:56px;margin:0 -16px;padding:7px 16px 0;align-content:end}
+  .kv-fis-row label{font-size:12px;padding-bottom:0}
+  .kv-fis-row input,.kv-fis-row select{height:36px;font-size:17px}
+  .kv-fis-foot{flex-direction:column;align-items:stretch;margin-top:16px}
+  .kv-fis-hint{display:none}
+  .kv-fis .kv-btn-ink{width:100%}
+  .kv-quick{flex-direction:column;align-items:stretch;gap:10px;margin-top:22px}
+  .kv-quick-label{padding-bottom:0}
+  .kv-quick-tabs{margin-right:-16px;padding-right:16px}
+  .kv-fan{margin:22px -16px 0;grid-auto-columns:84%;gap:14px;padding:14px 16px 18px;scroll-padding:0 16px}
+  .kv-card,.kv-fan>.kv-card{aspect-ratio:auto;min-height:196px;transform:none!important}
+  .kv-strip{min-height:56px}
+  .kv-seal{right:-4px;width:62px;height:62px}
+  .kv-jobs .kv-sec-head{margin-top:52px!important}
+  .kv-wa{width:44px;height:44px}
+  .kv-sec{padding:56px 0}
+  .kv-sec-head{flex-wrap:wrap;column-gap:12px}
+  .kv-sec-link{display:none}
+  .kv-legend{gap:8px 16px;font-size:13px;margin-bottom:26px}
+  .kv-rack,.kv-notes,.kv-jobs-grid{grid-template-columns:minmax(0,1fr)}
+  .kv-rack{gap:22px}
+  .kv-band{padding:52px 0}
+  .kv-callcard{transform:none;padding:0 16px 16px}
+  .kv-callcard-head{margin:0 -16px;padding:18px 16px 10px;flex-direction:column;align-items:flex-start;gap:4px}
+  .kv-callcard-head h2{font-size:24px}
+  .kv-callcard-head p{text-align:left}
+  .kv-callrow{grid-template-columns:10px minmax(0,1fr) 40px;grid-template-areas:"dot name name" "tel tel wa";row-gap:2px;margin:0 -16px;padding:10px 16px 4px}
+  .kv-callname a{font-size:17px}
+  .kv-calltel{justify-content:flex-start;min-height:48px;min-width:0;gap:10px}
+  .kv-calltel small{display:inline}
+  .kv-calltel span{font-size:21px;text-align:left}
+  .kv-wa-sq{width:40px;height:40px}
+  .kv-wa-sq svg{width:22px;height:22px}
+  .kv-wa-none{width:40px}
+  .kv-callfoot{flex-direction:column}
+  .kv-drawers{grid-template-columns:repeat(2,minmax(0,1fr));gap:52px 14px}
+  .kv-drawer{padding:16px 14px 14px}
+  .kv-drawer-tab,.kv-drawer:nth-child(n) .kv-drawer-tab{width:82%;left:-1px;right:auto;font-size:15px;padding:2px 10px 0}
+  .kv-drawer:nth-child(2n) .kv-drawer-tab{left:auto;right:-1px}
+  .kv-drawer-count b{font-size:38px}
+  .kv-drawer-open{font-size:13px}
+  .kv-boxes{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 14px}
+  .kv-bigcard{aspect-ratio:auto;min-height:220px;padding:24px 20px 0}
+  .kv-bigcard .kv-yer{top:16px;right:14px;font-size:11px}
+  .kv-prev-name{font-size:25px;min-height:34px;max-width:64%}
+  .kv-bigstrip{margin:auto -20px 0;padding:0 14px 0 20px;height:60px}
+  .kv-bigstrip span{font-size:20px}
+  .kv-blank-form{flex-direction:column;align-items:stretch}
+  .kv-blank-form .kv-btn-red{width:100%}
+  .kv-sticky{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;position:sticky;bottom:0;z-index:50;min-height:60px;padding:8px 16px calc(8px + env(safe-area-inset-bottom));background:#fbf7ee;border-top:1px solid #d9c9ab;box-shadow:0 -8px 18px -12px rgba(40,25,5,.35)}
+  .kv-sticky a{height:44px;font-size:15px}
+  .kv-jobs{padding-bottom:56px}
+  .kv-foot-grid{grid-template-columns:minmax(0,1fr);gap:28px}
+  .kv-foot-bottom{padding:16px}
+}
+@media (max-width:379px){
+  .kv-header .kv-btn-red .lg{display:none}
+  .kv-header .kv-btn-red .sm{display:inline}
+}
+@media (min-width:640px) and (max-width:1023px){
+  .kv-card{aspect-ratio:85/55}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important;animation:none!important}
+  .kv-card,.kv-note,.kv-fis,.kv-callcard{transform:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body class="theme-kartvizitlik">
+
+<!-- shared symbols: pin, whatsapp, ONAYLI stamp -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="kv-pin" viewBox="0 0 16 16"><path fill="currentColor" d="M8 1.2a4.7 4.7 0 0 0-4.7 4.7c0 3.6 4.7 8.9 4.7 8.9s4.7-5.3 4.7-8.9A4.7 4.7 0 0 0 8 1.2zm0 6.5a1.8 1.8 0 1 1 0-3.6 1.8 1.8 0 0 1 0 3.6z"/></symbol>
+    <symbol id="kv-wa" viewBox="0 0 24 24"><path d="M12 2.6a9.4 9.4 0 0 0-8.1 14.2L2.6 21.4l4.7-1.2A9.4 9.4 0 1 0 12 2.6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path fill="currentColor" d="M8.7 7.3c.2-.4.4-.4.7-.4h.5c.2 0 .4 0 .6.4l.7 1.7c.1.2 0 .4-.1.6l-.5.6c-.1.1-.2.3 0 .5.4.7 1 1.4 1.6 1.9.6.5 1.1.7 1.5.9.2.1.3 0 .5-.1l.6-.7c.2-.2.3-.2.5-.1l1.6.8c.2.1.4.2.4.4 0 .5-.2 1.1-.6 1.5-.5.4-1.2.6-1.9.4-.9-.3-2.1-.8-3.3-1.8-1.3-1.1-2.1-2.4-2.5-3.4-.3-.8-.2-1.6.2-2.1z"/></symbol>
+    <symbol id="kv-stamp" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="4.5"/>
+      <circle cx="50" cy="50" r="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-dasharray="3.2 2.6"/>
+      <path id="kv-stamp-arc" d="M50 50 m-33.5 0 a33.5 33.5 0 1 1 67 0 a33.5 33.5 0 1 1 -67 0" fill="none"/>
+      <text fill="currentColor" font-family="Archivo, sans-serif" font-weight="700" font-size="11.5"><textPath href="#kv-stamp-arc" textLength="206" lengthAdjust="spacing">ONAYLI ✦ ONAYLI ✦ ONAYLI ✦</textPath></text>
+      <path d="M38 50.5l8.5 8.5L63 41.5" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="kv-header">
+  <div class="kv-wrap kv-header-in">
+    <a class="kv-brand" href="#">
+      <span class="kv-mark" aria-hidden="true"><i></i><i></i></span>
+      <span class="kv-brand-name">Kayseri Rehberi</span>
+    </a>
+    <nav class="kv-nav" aria-label="Ana menü">
+      <a href="#">Firmalar</a><a href="#">Blog</a><a href="#">Hakkımızda</a><a href="#">İletişim</a>
+    </nav>
+    <div class="kv-head-right">
+      <a class="kv-head-phone" href="tel:03522074040">Ara <b class="kv-num">0352 207 40 40</b></a>
+      <a class="kv-btn-red" href="#kv-bos-kart"><span class="lg">Kartını bırak</span><span class="sm">Kart ekle</span></a>
+      <button class="kv-burger" id="mobile-menu-btn" type="button" aria-label="Menüyü aç"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="kv-home">
+
+  <!-- 2. MASA (hero) -->
+  <section class="kv-masa kv-kraft">
+    <div class="kv-wrap kv-masa-grid">
+      <div class="kv-masa-main">
+        <div class="kv-label">
+          <strong>Kayseri Rehberi</strong><span>· kart dosyası</span>
+          <span class="sep">·</span><span class="kv-num">1.240 firma kartı</span>
+          <span class="sep">·</span><span>18 çekmece</span>
+          <span class="sep">·</span><span>12 şehir kutusu</span>
+        </div>
+        <h1 class="kv-h1">Aradığın firmanın kartı burada</h1>
+        <p class="kv-sub">Hizmeti yaz, şehrini seç; firmanın kartından doğrudan ara ya da WhatsApp'tan yaz.</p>
+
+        <form class="kv-fis" id="kv-ara" action="#" method="get" role="search">
+          <div class="kv-fis-head"><span class="kv-fis-title">Arama fişi</span><span class="kv-fis-meta">Kayseri · 1.240 kart</span></div>
+          <div class="kv-fis-row">
+            <label for="kv-q">Ne arıyorsun?</label>
+            <input id="kv-q" name="q" type="search" placeholder="kuaför, tesisatçı, firma adı" autocomplete="off">
+          </div>
+          <div class="kv-fis-row">
+            <label for="kv-city">Hangi şehirde?</label>
+            <select id="kv-city" name="city">
+              <option value="">Tüm şehirler</option>
+              <option>Melikgazi</option><option>Kocasinan</option><option>Talas</option><option>Develi</option>
+              <option>Hacılar</option><option>İncesu</option><option>Bünyan</option><option>Yahyalı</option>
+              <option>Pınarbaşı</option><option>Tomarza</option><option>Sarıoğlan</option>
+            </select>
+          </div>
+          <div class="kv-fis-foot">
+            <span class="kv-fis-hint">Firma adını yazarsan <b>doğrudan kartı</b> gelir.</span>
+            <button class="kv-btn-ink" type="submit">
+              <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 13l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              Kartları getir
+            </button>
+          </div>
+        </form>
+
+        <div class="kv-quick">
+          <span class="kv-quick-label">Sık açılan çekmeceler:</span>
+          <div class="kv-quick-tabs">
+            <a class="kv-tab t-manila" href="#">Kuaför</a>
+            <a class="kv-tab t-sage" href="#">Oto Servis</a>
+            <a class="kv-tab t-blush" href="#">Emlak</a>
+            <a class="kv-tab t-sky" href="#">Tesisat</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- fan: top 3 cards tucked under the fiş -->
+      <div class="kv-fan" aria-label="Öne çıkan kartlar">
+        <article class="kv-card kv-card--premium kv-card--open">
+          <div class="kv-card-top">
+            <span class="kv-logo" style="background:#3a3024"><svg width="30" height="30" viewBox="0 0 36 36" aria-hidden="true"><path d="M3 29 13.5 12l4 5.6L22.5 8 33 29z" fill="#e7c77c"/><path d="M19.8 12.6 22.5 8l3 5.4-2.1-1-1.6 1.7z" fill="#fff8e6"/><path d="M3 29h30" stroke="#e7c77c" stroke-width="1.6"/></svg></span>
+            <h3 class="kv-name"><a href="#">Erciyes Oto Servis</a></h3>
+          </div>
+          <div class="kv-unvan">Oto Servis</div>
+          <p class="kv-desc">Periyodik bakım, mekanik onarım ve orijinal yedek parça.</p>
+          <div class="kv-place"><span class="kv-loc"><svg aria-hidden="true"><use href="#kv-pin"/></svg>Kocasinan / Kayseri</span><span class="kv-meta"><span class="kv-rate"><b>★</b> 4,8 · 63 yorum</span><span class="kv-open">Şu an açık</span></span></div>
+          <div class="kv-strip">
+            <a class="kv-tel" href="tel:03523365210"><small>ARA</small><span>0352 336 52 10</span></a>
+            <a class="kv-wa" href="#" aria-label="Erciyes Oto Servis WhatsApp"><svg aria-hidden="true"><use href="#kv-wa"/></svg></a>
+            <a class="kv-more" href="#" aria-label="Kartın tamamı">›</a>
+          </div>
+        </article>
+        <article class="kv-card s-white kv-card--open kv-card--seal">
+          <span class="kv-seal" aria-label="Onaylı"><svg><use href="#kv-stamp"/></svg></span>
+          <div class="kv-card-top">
+            <span class="kv-logo" style="background:#e3eef3"><svg width="26" height="26" viewBox="0 0 36 36" aria-hidden="true"><path d="M11 6c-4 0-6 3.2-5.3 7.2.5 2.9 1.8 4.8 2.4 8.5.5 4 1.3 8.3 3.4 8.3 1.9 0 2.1-3.4 2.9-6.1.5-1.6 1.2-2.4 1.9-2.4s1.3.8 1.9 2.4c.8 2.7 1 6.1 2.9 6.1 2.1 0 2.9-4.3 3.4-8.3.6-3.7 1.9-5.6 2.4-8.5.7-4-1.3-7.2-5.3-7.2-2.7 0-3.5 1.4-5.3 1.4S13.7 6 11 6z" fill="#fff" stroke="#2c5d73" stroke-width="2" stroke-linejoin="round"/></svg></span>
+            <h3 class="kv-name"><a href="#">Talas Diş Kliniği</a></h3>
+          </div>
+          <div class="kv-unvan">Diş Kliniği</div>
+          <p class="kv-desc">İmplant, ortodonti ve çocuk diş hekimliği.</p>
+          <div class="kv-place"><span class="kv-loc"><svg aria-hidden="true"><use href="#kv-pin"/></svg>Talas / Kayseri</span><span class="kv-meta"><span class="kv-rate"><b>★</b> 4,9 · 86 yorum</span><span class="kv-open">Şu an açık</span></span></div>
+          <div class="kv-strip">
+            <a class="kv-tel" href="tel:03524372846"><small>ARA</small><span>0352 437 28 46</span></a>
+            <a class="kv-wa" href="#" aria-label="Talas Diş Kliniği WhatsApp"><svg aria-hidden="true"><use href="#kv-wa"/></svg></a>
+            <a class="kv-more" href="#" aria-label="Kartın tamamı">›</a>
+          </div>
+        </article>
+        <article class="kv-card s-cream kv-card--open">
+          <div class="kv-card-top">
+            <h3 class="kv-name"><a href="#">Özgün Kuaför</a></h3>
+          </div>
+          <div class="kv-unvan">Kuaför</div>
+          <p class="kv-desc">Saç kesimi, boya ve gelin başı; randevulu çalışır.</p>
+          <div class="kv-place"><span class="kv-loc"><svg aria-hidden="true"><use href="#kv-pin"/></svg>Melikgazi / Kayseri</span><span class="kv-meta"><span class="kv-rate"><b>★</b> 4,7 · 129 yorum</span><span class="kv-open">Şu an açık</span></span></div>
+          <div class="kv-strip">
+            <a class="kv-tel" href="tel:03522221437"><small>ARA</small><span>0352 222 14 37</span></a>
+            <a class="kv-wa" href="#" aria-label="Özgün Kuaför WhatsApp"><svg aria-hidden="true"><use href="#kv-wa"/></svg></a>
+            <a class="kv-more" href="#" aria-label="Kartın tamamı">›</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. MASADAKİ KARTLAR (rack) -->
+  <section class="kv-sec">
+    <div class="kv-wrap">
+      <div class="kv-sec-head">
+        <span class="kv-sec-tab t-manila">Kart rafı</span>
+        <h2>Masadaki kartlar</h2>
+        <a class="kv-sec-link" href="#">Tüm kartlar →</a>
+      </div>
+      <div class="kv-legend">
+        <b>Kart dili:</b>
+        <span><i class="kv-sw kv-sw--black"></i>öne çıkan</span>
+        <span><i class="kv-sw kv-sw--seal"></i>onaylı</span>
+        <span><i class="kv-sw kv-sw--notch"></i>şu an açık</span>
+        <span><i class="kv-sw kv-sw--blank"></i>senin yerin</span>
+      </div>
+
+      <div class="kv-rack">
+        <!-- 1 -->
+        <article class="kv-card kv-card--premium kv-card--open" style="--kv-tilt:-.6deg">
+          <div class="kv-card-top"><h3 class="kv-name"><a href="#">Argıncık Oto Ekspertiz</a></h3></div>
+          <div class="kv-unvan">Oto Ekspertiz</div>
+          <p class="kv-desc">Boya, kaporta ve motor ekspertizi; aynı gün raporlu teslim.</p>
+          <div class="kv-place"><span class="kv-loc"><svg aria-hidden="true"><use href="#kv-pin"/></svg>Kocasinan / Kayseri</span><span class="kv-meta"><span class="kv-rate"><b>★</b> 4,7 · 41 yorum</span><span class="kv-open">Şu an açık</span></span></div>
+          <div class="kv-strip">
+            <a class="kv-tel" href="tel:03522459018"><small>ARA</small><span>0352 245 90 18</span></a>
+            <a class="kv-wa" href="#" aria-label="WhatsApp"><svg aria-hidden="true"><use href="#kv-wa"/></svg></a>
+            <a class="kv-more" href="#" aria-label="Kartın tamamı">›</a>
+          </div>
+        </article>
+        <!-- 2 -->
+        <article class="kv-card s-kraft kv-card--open kv-card--seal" style="--kv-tilt:1.1deg">
+          <span class="kv-seal" aria-label="Onaylı"><svg><use href="#kv-stamp"/></svg></span>
+          <div class="kv-card-top"><h3 class="kv-name"><a href="#">Melikgazi Halı Yıkama</a></h3></div>
+          <div class="kv-unvan">Halı Yıkama</div>
+          <p class="kv-desc">Ücretsiz servisle alıp üç günde kurutulmuş teslim.</p>
+          <div class="kv-place"><span class="kv-loc"><svg aria-hidden="true"><use href="#kv-pin"/></svg>Melikgazi / Kayseri</span><span class="kv-meta"><span class="kv-rate"><b>★</b> 4,6 · 38 yorum</span><span class="kv-open">Şu an açık</span></span></div>
+          <div class="kv-strip">
+            <a class="kv-tel" href="tel:05324182763"><small>ARA</small><span>0532 418 27 63</span></a>
+            <a class="kv-wa" href="#" aria-label="WhatsApp"><svg aria-hidden="true"><use href="#kv-wa"/></svg></a>
+            <a class="kv-more" href="#" aria-label="Kartın tamamı">›</a>
+          </div>
+        </article>
+        <!-- 3 -->
+        <article class="kv-card s-white kv-card--open" style="--kv-tilt:-1.2deg">
+          <div class="kv-card-top"><h3 class="kv-name"><a href="#">Yıldız Tesisat</a></h3></div>
+          <div class="kv-unvan">Tesisat</div>
+          <p class="kv-desc">Kombi montajı, kaçak tespiti ve acil su tesisatı.</p>
+          <div class="kv-place"><span class="kv-loc"><svg aria-hidden="true"><use href="#kv-pin"/></svg>Kocasinan / Kayseri</span><span class="kv-meta"><span class="kv-rate"><b>★</b> 4,9 · 112 yorum</span><span class="kv-open">Şu an açık</span></span></div>
+          <div class="kv-strip">
+            <a class="kv-tel" href="tel:05447123905"><small>ARA</small><span>0544 712 39 05</span></a>
+            <a class="kv-wa" href="#" aria-label="WhatsApp"><svg aria-hidden="true"><use href="#kv-wa"/></svg></a>
+            <a class="kv-more" href="#" aria-label="Kartın tamamı">›</a>
+          </div>
+        </article>
+        <!-- 4: blank card, always slot 4 -->
+        <a class="kv-card kv-card--blank" href="#kv-bos-kart" style="--kv-tilt:.5deg">
+          <span class="kv-yer">SENİN YERİN</span>
+          <span class="kv-ghost kv-ghost--name">Firma adın</span>
+          <span class="kv-ghost kv-ghost--unvan">Hizmetin · Şehrin</span>
+          <span class="kv-ghost-copy">Müşterin seni bu kartla arasın.</span>
+          <span class="kv-strip kv-strip--ghost">
+            <span class="kv-tel"><small>ARA</small><span>0 5__ ___ __ __</span></span>
+            <span class="kv-blank-cta">Kartını bırak</span>
+          </span>
+        </a>
+        <!-- 5 -->
+        <article class="kv-card s-sage" style="--kv-tilt:0deg">
+          <div class="kv-card-top">
+            <span class="kv-logo" style="background:#f6efe0;border:1px solid #d9c9ab"><svg width="26" height="26" viewBox="0 0 36 36" aria-hidden="true"><path d="M7 31V13h4v3.5h3.5V13h7v3.5H25V13h4v18z" fill="#7a5a2e"/><path d="M15.5 31v-6a2.5 2.5 0 0 1 5 0v6z" fill="#f6efe0"/><path d="M18 4v7" stroke="#b3261e" stroke-width="1.6"/><path d="M18 4.5l5 1.8-5 1.8z" fill="#b3261e"/></svg></span>
+            <h3 class="kv-name"><a href="#">Kale Emlak</a></h3>
+          </div>
+          <div class="kv-unvan">Emlak</div>
+          <p class="kv-desc">Talas ve Kocasinan'da satılık, kiralık daire ve arsa.</p>
+          <div class="kv-place"><span class="kv-loc"><svg aria-hidden="true"><use href="#kv-pin"/></svg>Talas / Kayseri</span><span class="kv-meta"><span class="kv-rate"><b>★</b> 4,3 · 17 yorum</span><span class="kv-closed">Kapalı</span></span></div>
+          <div class="kv-strip">
+            <a class="kv-tel" href="tel:03522316074"><small>ARA</small><span>0352 231 60 74</span></a>
+            <a class="kv-more" href="#" aria-label="Kartın tamamı">›</a>
+          </div>
+        </article>
+        <!-- 6 -->
+        <article class="kv-card s-cream kv-card--open kv-card--seal" style="--kv-tilt:-.6deg">
+          <span class="kv-seal" aria-label="Onaylı"><svg><use href="#kv-stamp"/></svg></span>
+          <div class="kv-card-top">
+            <span class="kv-logo" style="background:#f3d9d0"><svg width="26" height="26" viewBox="0 0 36 36" aria-hidden="true"><path d="M7 30V19.5c0-1.4 1.1-2.5 2.5-2.5h17c1.4 0 2.5 1.1 2.5 2.5V30z" fill="#8a3b2b"/><path d="M7 22.5c2 1.8 4 1.8 5.5 0 1.5 1.8 3.5 1.8 5.5 0 2 1.8 4 1.8 5.5 0 1.5 1.8 3.5 1.8 5.5 0" fill="none" stroke="#fbf7ee" stroke-width="2"/><rect x="16.8" y="9" width="2.4" height="8" rx="1" fill="#2a2520"/><path d="M18 4.5c1.6 1.8 1.6 3.3 0 4.2-1.6-.9-1.6-2.4 0-4.2z" fill="#d9a12b"/><path d="M5 30h26" stroke="#2a2520" stroke-width="2" stroke-linecap="round"/></svg></span>
+            <h3 class="kv-name"><a href="#">Gesi Pastanesi</a></h3>
+          </div>
+          <div class="kv-unvan">Pastane</div>
+          <p class="kv-desc">Yaş pasta, kuru pasta ve siparişe özel doğum günü pastası.</p>
+          <div class="kv-place"><span class="kv-loc"><svg aria-hidden="true"><use href="#kv-pin"/></svg>Talas / Kayseri</span><span class="kv-meta"><span class="kv-rate"><b>★</b> 4,5 · 27 yorum</span><span class="kv-open">Şu an açık</span></span></div>
+          <div class="kv-strip">
+            <a class="kv-tel" href="tel:03524381592"><small>ARA</small><span>0352 438 15 92</span></a>
+            <a class="kv-wa" href="#" aria-label="WhatsApp"><svg aria-hidden="true"><use href="#kv-wa"/></svg></a>
+            <a class="kv-more" href="#" aria-label="Kartın tamamı">›</a>
+          </div>
+        </article>
+        <!-- 7 -->
+        <article class="kv-card s-white" style="--kv-tilt:1.1deg">
+          <div class="kv-card-top"><h3 class="kv-name"><a href="#">Sahabiye Elektrik</a></h3></div>
+          <div class="kv-unvan">Elektrikçi</div>
+          <p class="kv-desc">Ev ve iş yeri elektrik tesisatı, pano ve aydınlatma.</p>
+          <div class="kv-place"><span class="kv-loc"><svg aria-hidden="true"><use href="#kv-pin"/></svg>Melikgazi / Kayseri</span></div>
+          <div class="kv-strip">
+            <a class="kv-tel" href="tel:05336048127"><small>ARA</small><span>0533 604 81 27</span></a>
+            <a class="kv-wa" href="#" aria-label="WhatsApp"><svg aria-hidden="true"><use href="#kv-wa"/></svg></a>
+            <a class="kv-more" href="#" aria-label="Kartın tamamı">›</a>
+          </div>
+        </article>
+        <!-- 8 -->
+        <article class="kv-card s-kraft" style="--kv-tilt:.5deg">
+          <div class="kv-card-top"><h3 class="kv-name"><a href="#">Hunat Çiçekçilik</a></h3></div>
+          <div class="kv-unvan">Çiçekçi</div>
+          <p class="kv-desc">Aynı gün çiçek teslimatı, açılış ve düğün çelenkleri.</p>
+          <div class="kv-place"><span class="kv-loc"><svg aria-hidden="true"><use href="#kv-pin"/></svg>Melikgazi / Kayseri</span><span class="kv-meta"><span class="kv-rate"><b>★</b> 4,4 · 9 yorum</span><span class="kv-closed">Kapalı</span></span></div>
+          <div class="kv-strip">
+            <a class="kv-tel" href="tel:03522228704"><small>ARA</small><span>0352 222 87 04</span></a>
+            <a class="kv-wa" href="#" aria-label="WhatsApp"><svg aria-hidden="true"><use href="#kv-wa"/></svg></a>
+            <a class="kv-more" href="#" aria-label="Kartın tamamı">›</a>
+          </div>
+        </article>
+        <!-- 9 -->
+        <article class="kv-card s-cream kv-card--open kv-card--seal" style="--kv-tilt:-1.2deg">
+          <span class="kv-seal" aria-label="Onaylı"><svg><use href="#kv-stamp"/></svg></span>
+          <div class="kv-card-top"><h3 class="kv-name"><a href="#">Seyrani Veteriner Kliniği</a></h3></div>
+          <div class="kv-unvan">Veteriner</div>
+          <p class="kv-desc">Aşı takibi, kısırlaştırma ve gece acil muayene.</p>
+          <div class="kv-place"><span class="kv-loc"><svg aria-hidden="true"><use href="#kv-pin"/></svg>Melikgazi / Kayseri</span><span class="kv-meta"><span class="kv-rate"><b>★</b> 4,8 · 54 yorum</span><span class="kv-open">Şu an açık</span></span></div>
+          <div class="kv-strip">
+            <a class="kv-tel" href="tel:03523204619"><small>ARA</small><span>0352 320 46 19</span></a>
+            <a class="kv-wa" href="#" aria-label="WhatsApp"><svg aria-hidden="true"><use href="#kv-wa"/></svg></a>
+            <a class="kv-more" href="#" aria-label="Kartın tamamı">›</a>
+          </div>
+        </article>
+      </div>
+      <div class="kv-rack-more"><a class="kv-btn-outline" href="#">Tüm kartları gör <span class="kv-num">(1.240 kart)</span></a></div>
+    </div>
+  </section>
+
+  <!-- 4. HIZLI ARAMA FİŞİ -->
+  <section class="kv-band kv-kraft">
+    <div class="kv-wrap">
+      <div class="kv-callcard">
+        <div class="kv-callcard-head">
+          <h2><i aria-hidden="true"></i>Şu an açık, hemen ara</h2>
+          <p>Numaraya dokun, doğrudan ara.</p>
+        </div>
+        <div class="kv-callrow"><i class="kv-dot"></i><div class="kv-callname"><a href="#">Erciyes Oto Servis</a><small>Oto Servis</small></div><a class="kv-calltel" href="tel:03523365210"><small>ARA</small><span>0352 336 52 10</span></a><a class="kv-wa-sq" href="#" aria-label="WhatsApp"><svg aria-hidden="true"><use href="#kv-wa"/></svg></a></div>
+        <div class="kv-callrow"><i class="kv-dot"></i><div class="kv-callname"><a href="#">Talas Diş Kliniği</a><small>Diş Kliniği</small></div><a class="kv-calltel" href="tel:03524372846"><small>ARA</small><span>0352 437 28 46</span></a><a class="kv-wa-sq" href="#" aria-label="WhatsApp"><svg aria-hidden="true"><use href="#kv-wa"/></svg></a></div>
+        <div class="kv-callrow"><i class="kv-dot"></i><div class="kv-callname"><a href="#">Özgün Kuaför</a><small>Kuaför</small></div><a class="kv-calltel" href="tel:03522221437"><small>ARA</small><span>0352 222 14 37</span></a><a class="kv-wa-sq" href="#" aria-label="WhatsApp"><svg aria-hidden="true"><use href="#kv-wa"/></svg></a></div>
+        <div class="kv-callrow"><i class="kv-dot"></i><div class="kv-callname"><a href="#">Melikgazi Halı Yıkama</a><small>Halı Yıkama</small></div><a class="kv-calltel" href="tel:05324182763"><small>ARA</small><span>0532 418 27 63</span></a><a class="kv-wa-sq" href="#" aria-label="WhatsApp"><svg aria-hidden="true"><use href="#kv-wa"/></svg></a></div>
+        <div class="kv-callrow"><i class="kv-dot"></i><div class="kv-callname"><a href="#">Yıldız Tesisat</a><small>Tesisat</small></div><a class="kv-calltel" href="tel:05447123905"><small>ARA</small><span>0544 712 39 05</span></a><a class="kv-wa-sq" href="#" aria-label="WhatsApp"><svg aria-hidden="true"><use href="#kv-wa"/></svg></a></div>
+        <div class="kv-callrow"><i class="kv-dot"></i><div class="kv-callname"><a href="#">Argıncık Oto Ekspertiz</a><small>Oto Ekspertiz</small></div><a class="kv-calltel" href="tel:03522459018"><small>ARA</small><span>0352 245 90 18</span></a><span class="kv-wa-none"></span></div>
+        <div class="kv-callrow"><i class="kv-dot"></i><div class="kv-callname"><a href="#">Gesi Pastanesi</a><small>Pastane</small></div><a class="kv-calltel" href="tel:03524381592"><small>ARA</small><span>0352 438 15 92</span></a><a class="kv-wa-sq" href="#" aria-label="WhatsApp"><svg aria-hidden="true"><use href="#kv-wa"/></svg></a></div>
+        <div class="kv-callrow"><i class="kv-dot"></i><div class="kv-callname"><a href="#">Seyrani Veteriner Kliniği</a><small>Veteriner</small></div><a class="kv-calltel" href="tel:03523204619"><small>ARA</small><span>0352 320 46 19</span></a><a class="kv-wa-sq" href="#" aria-label="WhatsApp"><svg aria-hidden="true"><use href="#kv-wa"/></svg></a></div>
+        <div class="kv-callfoot"><span>Numaralar firmaların kartlarından gelir; aradığında doğrudan firmaya bağlanırsın.</span><a href="#">Tüm açık firmalar →</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. ÇEKMECELER -->
+  <section class="kv-sec">
+    <div class="kv-wrap">
+      <div class="kv-sec-head">
+        <span class="kv-sec-tab t-sage">Hizmetler</span>
+        <h2>Çekmeceler</h2>
+        <a class="kv-sec-link" href="#">Tüm çekmeceler (18) →</a>
+      </div>
+      <p class="kv-sec-lead">Her hizmetin kendi çekmecesi var. Çekmeceyi aç, o işi yapan firmaların kartlarını yan yana gör.</p>
+      <div class="kv-drawers">
+        <a class="kv-drawer t-manila" href="#"><span class="kv-drawer-tab">Kuaför</span><span class="kv-drawer-count"><b>214</b> kart</span><span class="kv-drawer-open">Çekmeceyi aç <i>→</i></span></a>
+        <a class="kv-drawer t-sage" href="#"><span class="kv-drawer-tab">Oto Servis</span><span class="kv-drawer-count"><b>168</b> kart</span><span class="kv-drawer-open">Çekmeceyi aç <i>→</i></span></a>
+        <a class="kv-drawer t-blush" href="#"><span class="kv-drawer-tab">Emlak</span><span class="kv-drawer-count"><b>131</b> kart</span><span class="kv-drawer-open">Çekmeceyi aç <i>→</i></span></a>
+        <a class="kv-drawer t-sky" href="#"><span class="kv-drawer-tab">Tesisat</span><span class="kv-drawer-count"><b>96</b> kart</span><span class="kv-drawer-open">Çekmeceyi aç <i>→</i></span></a>
+        <a class="kv-drawer t-manila" href="#"><span class="kv-drawer-tab">Mobilya</span><span class="kv-drawer-count"><b>88</b> kart</span><span class="kv-drawer-open">Çekmeceyi aç <i>→</i></span></a>
+        <a class="kv-drawer t-sage" href="#"><span class="kv-drawer-tab">Elektrikçi</span><span class="kv-drawer-count"><b>74</b> kart</span><span class="kv-drawer-open">Çekmeceyi aç <i>→</i></span></a>
+        <a class="kv-drawer t-blush" href="#"><span class="kv-drawer-tab">Pastane</span><span class="kv-drawer-count"><b>61</b> kart</span><span class="kv-drawer-open">Çekmeceyi aç <i>→</i></span></a>
+        <a class="kv-drawer t-sky" href="#"><span class="kv-drawer-tab">Diş Kliniği</span><span class="kv-drawer-count"><b>57</b> kart</span><span class="kv-drawer-open">Çekmeceyi aç <i>→</i></span></a>
+        <a class="kv-drawer t-manila" href="#"><span class="kv-drawer-tab">Halı Yıkama</span><span class="kv-drawer-count"><b>43</b> kart</span><span class="kv-drawer-open">Çekmeceyi aç <i>→</i></span></a>
+        <a class="kv-drawer t-sage" href="#"><span class="kv-drawer-tab">Nakliyat</span><span class="kv-drawer-count"><b>38</b> kart</span><span class="kv-drawer-open">Çekmeceyi aç <i>→</i></span></a>
+        <a class="kv-drawer t-blush" href="#"><span class="kv-drawer-tab">Çiçekçi</span><span class="kv-drawer-count"><b>29</b> kart</span><span class="kv-drawer-open">Çekmeceyi aç <i>→</i></span></a>
+        <a class="kv-drawer t-sky" href="#"><span class="kv-drawer-tab">Veteriner</span><span class="kv-drawer-count"><b>22</b> kart</span><span class="kv-drawer-open">Çekmeceyi aç <i>→</i></span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. ŞEHİR KUTULARI -->
+  <section class="kv-sec" style="padding-top:8px">
+    <div class="kv-wrap">
+      <div class="kv-sec-head">
+        <span class="kv-sec-tab t-blush">İlçeler</span>
+        <h2>Şehir kutuları</h2>
+      </div>
+      <p class="kv-sec-lead">Kayseri'nin ilçeleri ayrı kutularda. Kutunu seç, yakınındaki firmaların kartlarına bak.</p>
+      <div class="kv-boxes">
+        <a class="kv-box" href="#"><span class="kv-box-lid"></span><span class="kv-box-front"><span class="kv-box-label">Melikgazi</span><span class="kv-box-count">512 kart</span></span></a>
+        <a class="kv-box" href="#"><span class="kv-box-lid"></span><span class="kv-box-front"><span class="kv-box-label">Kocasinan</span><span class="kv-box-count">438 kart</span></span></a>
+        <a class="kv-box" href="#"><span class="kv-box-lid"></span><span class="kv-box-front"><span class="kv-box-label">Talas</span><span class="kv-box-count">176 kart</span></span></a>
+        <a class="kv-box" href="#"><span class="kv-box-lid"></span><span class="kv-box-front"><span class="kv-box-label">Develi</span><span class="kv-box-count">31 kart</span></span></a>
+        <a class="kv-box" href="#"><span class="kv-box-lid"></span><span class="kv-box-front"><span class="kv-box-label">Hacılar</span><span class="kv-box-count">18 kart</span></span></a>
+        <a class="kv-box" href="#"><span class="kv-box-lid"></span><span class="kv-box-front"><span class="kv-box-label">İncesu</span><span class="kv-box-count">14 kart</span></span></a>
+        <a class="kv-box" href="#"><span class="kv-box-lid"></span><span class="kv-box-front"><span class="kv-box-label">Bünyan</span><span class="kv-box-count">12 kart</span></span></a>
+        <a class="kv-box" href="#"><span class="kv-box-lid"></span><span class="kv-box-front"><span class="kv-box-label">Yahyalı</span><span class="kv-box-count">11 kart</span></span></a>
+        <a class="kv-box" href="#"><span class="kv-box-lid"></span><span class="kv-box-front"><span class="kv-box-label">Pınarbaşı</span><span class="kv-box-count">8 kart</span></span></a>
+        <a class="kv-box" href="#"><span class="kv-box-lid"></span><span class="kv-box-front"><span class="kv-box-label">Tomarza</span><span class="kv-box-count">7 kart</span></span></a>
+        <a class="kv-box" href="#"><span class="kv-box-lid"></span><span class="kv-box-front"><span class="kv-box-label">Sarıoğlan</span><span class="kv-box-count">4 kart</span></span></a>
+        <a class="kv-box" href="#"><span class="kv-box-lid"></span><span class="kv-box-front"><span class="kv-box-label">Diğer İller</span><span class="kv-box-count">9 kart</span></span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. MASADAKİ NOTLAR -->
+  <section class="kv-sec" style="padding-top:8px">
+    <div class="kv-wrap">
+      <div class="kv-sec-head">
+        <span class="kv-sec-tab t-sky">Blog</span>
+        <h2>Masadaki notlar</h2>
+        <a class="kv-sec-link" href="#">Tüm notlar →</a>
+      </div>
+      <p class="kv-sec-lead">Usta seçerken, hizmet alırken işe yarayan kısa notlar.</p>
+      <div class="kv-notes">
+        <a class="kv-note" href="#">
+          <span class="kv-note-head"><span>12 Ekim 2026</span><span>Tesisat</span></span>
+          <div class="kv-note-body">
+            <h3>Kayseri kışından önce kombi bakımı ne zaman yapılmalı?</h3>
+            <p>Erciyes'ten soğuk inmeden petek temizliği ve brülör ayarı yaptırmak, hem faturayı hem arıza riskini düşürür. Ustaya sorulacaklar…</p>
+            <span class="kv-note-link">Notu oku →</span>
+          </div>
+        </a>
+        <a class="kv-note" href="#">
+          <span class="kv-note-head"><span>3 Ekim 2026</span><span>Halı Yıkama</span></span>
+          <div class="kv-note-body">
+            <h3>Halıyı yıkamaya vermeden önce sorulacaklar</h3>
+            <p>Teslim süresi, kurutma yöntemi ve servis bölgesi: halı yıkamacıyı ararken bunları kartında görmek işini kolaylaştırır…</p>
+            <span class="kv-note-link">Notu oku →</span>
+          </div>
+        </a>
+        <a class="kv-note" href="#">
+          <span class="kv-note-head"><span>21 Eylül 2026</span><span>Oto Servis</span></span>
+          <div class="kv-note-body">
+            <h3>İkinci el araçta ekspertiz raporu nasıl okunur?</h3>
+            <p>Boyalı, değişen ve lokal boyalı parçalar ne demek? Ekspertiz yaptırmadan önce raporda bakman gereken satırlar…</p>
+            <span class="kv-note-link">Notu oku →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. BOŞ KART (final CTA) -->
+  <section class="kv-band kv-kraft" id="kv-bos-kart">
+    <div class="kv-wrap kv-blank-grid">
+      <div class="kv-bigcard" aria-hidden="true">
+        <span class="kv-yer">SENİN YERİN</span>
+        <span class="kv-prev-name" id="kv-prev-name">Firma adın</span>
+        <span class="kv-prev-unvan">Hizmetin · Şehrin</span>
+        <span class="kv-prev-place"></span>
+        <span class="kv-bigstrip">
+          <small>ARA</small><span class="kv-num">0 5__ ___ __ __</span>
+          <i><svg><use href="#kv-wa"/></svg></i>
+        </span>
+      </div>
+      <div class="kv-blank-copy">
+        <h2>Bu masada senin kartın eksik</h2>
+        <p>Kayseri'de seni arayan müşteri kartını burada bulsun. Başvuru ücretsiz; ekibimiz WhatsApp'tan sana döner.</p>
+        <form class="kv-blank-form" action="#" method="get">
+          <div class="kv-blank-field">
+            <label for="kv-company">Firma adın</label>
+            <input id="kv-company" name="company_name" placeholder="ör. Hunat Kebap Salonu" autocomplete="organization">
+          </div>
+          <button class="kv-btn-red" type="submit">Kartını bırak</button>
+        </form>
+        <ul class="kv-facts">
+          <li>Kayıt ücretsiz</li>
+          <li>Telefon ve WhatsApp butonu kartında</li>
+          <li>Müşterin seni kartından arar</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="kv-sticky">
+    <a class="kv-btn-ink" href="#kv-ara">Kart ara</a>
+    <a class="kv-btn-red" href="#kv-bos-kart">Kartını bırak</a>
+  </div>
+</div>
+
+<!-- 9. İŞ İLANLARI (appended by the layout, restyled) -->
+<section class="kv-jobs">
+  <div class="kv-wrap">
+    <div class="kv-sec-head" style="margin-top:72px">
+      <span class="kv-sec-tab t-manila">İlanlar</span>
+      <h2>İş ilanları</h2>
+      <a class="kv-sec-link" href="#">Tüm ilanlar →</a>
+    </div>
+    <div class="kv-jobs-grid" style="margin-top:28px">
+      <a class="kv-job" href="#"><span class="kv-job-head"><em>Eleman aranıyor</em><span>Tam zamanlı</span></span><h3>Kalfa kuaför</h3><p><b>Özgün Kuaför</b> · Melikgazi</p></a>
+      <a class="kv-job" href="#"><span class="kv-job-head"><em>Eleman aranıyor</em><span>Tam zamanlı</span></span><h3>Oto elektrik ustası</h3><p><b>Erciyes Oto Servis</b> · Kocasinan</p></a>
+      <a class="kv-job" href="#"><span class="kv-job-head"><em>Eleman aranıyor</em><span>Yarı zamanlı</span></span><h3>Diş hekimi asistanı</h3><p><b>Talas Diş Kliniği</b> · Talas</p></a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="kv-footer">
+  <div class="kv-wrap kv-foot-grid">
+    <div>
+      <div class="kv-foot-brand"><span class="kv-mark" aria-hidden="true"><i></i><i></i></span>Kayseri Rehberi</div>
+      <p>Kayseri Rehberi; Melikgazi, Kocasinan, Talas ve ilçelerdeki esnafı, ustaları ve hizmet firmalarını tek kart dosyasında toplar. Aradığın firmayı bul, kartından doğrudan ara.</p>
+    </div>
+    <nav aria-label="Rehber"><h4>Rehber</h4><a href="#">Firmalar</a><a href="#">Blog</a><a href="#">İş ilanları</a></nav>
+    <nav aria-label="Kurumsal"><h4>Kurumsal</h4><a href="#">Hakkımızda</a><a href="#">İletişim</a><a href="#">Gizlilik</a></nav>
+    <nav aria-label="Firma sahipleri"><h4>Firma sahipleri</h4><a href="#">Kartını bırak</a><a href="#">Firma paneli</a><a href="#">Paketler</a></nav>
+  </div>
+  <div class="kv-wrap"><div class="kv-foot-bottom"><span>© 2026 Kayseri Rehberi</span><span>Kayseri'nin kart dosyası</span></div></div>
+</footer>
+
+<script>
+// Boş kart: canlı önizleme
+var kvIn=document.getElementById('kv-company'),kvOut=document.getElementById('kv-prev-name');
+kvIn.addEventListener('input',function(){var v=kvIn.value.trim();kvOut.textContent=v||'Firma adın';kvOut.classList.toggle('is-filled',!!v);});
+</script>
+</body>
+</html>

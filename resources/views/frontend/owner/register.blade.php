@@ -40,7 +40,7 @@
 
                 <div class="grid gap-4 sm:grid-cols-2">
                     <label class="block text-sm font-bold sm:col-span-2" style="color:var(--text);">Firma adı *
-                        <input name="company_name" value="{{ old('company_name') }}" required autocomplete="organization" placeholder="Örn. Lotus Su Arıtma" class="mt-1.5 w-full rounded-lg border px-4 py-3" style="border-color:var(--border);background:var(--bg);">
+                        <input name="company_name" value="{{ old('company_name', is_string(request()->query('company_name')) ? mb_substr(request()->query('company_name'), 0, 120) : '') }}" required autocomplete="organization" placeholder="Örn. Lotus Su Arıtma" class="mt-1.5 w-full rounded-lg border px-4 py-3" style="border-color:var(--border);background:var(--bg);">
                         @error('company_name')<span class="mt-1 block text-xs text-red-600">{{ $message }}</span>@enderror
                     </label>
 

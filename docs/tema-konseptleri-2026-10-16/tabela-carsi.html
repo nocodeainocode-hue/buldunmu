@@ -1,0 +1,942 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kayseri Rehberi · Tabela Çarşısı</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Nunito:wght@400;600;700;800&family=Zilla+Slab:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#5c2346;--primary-hover:#45192f;--primary-light:#f4e7ee;
+  --secondary:#d9a12b;--accent:#17877f;
+  --bg:#f3efe7;--card:#fffdf9;--text:#1d1a17;--muted:#645d53;--border:#ddd5c7;
+  --cream:#f8ecd0;--navy:#1f3566;--led:#2fbf71;--terra:#b4532a;--glass:#1f2422;--gold:#e2b75a;
+  --zinc-a:#b7bcbe;--zinc-b:#959b9e;--zinc-c:#868d90;
+  --f-sign:'Alfa Slab One',Georgia,serif;
+  --f-head:'Zilla Slab',Georgia,serif;
+  --f-body:Nunito,system-ui,sans-serif;
+  --bolt:#f1e4c4;--bolt-ring:rgba(0,0,0,.38);
+  --gut:24px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:400 16px/1.55 var(--f-body)}
+a{color:inherit}
+button,input,select{font:inherit;color:inherit}
+.tc-home{overflow-x:clip}
+.tc-wrap{width:100%;max-width:1248px;margin:0 auto;padding:0 var(--gut)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+:focus-visible{outline:3px solid var(--secondary);outline-offset:2px}
+
+/* ---------- shared pieces ---------- */
+.tc-bolts{
+  background-image:
+    radial-gradient(circle at 10px 10px,var(--bolt) 0 2px,var(--bolt-ring) 2.5px 3.1px,transparent 3.6px),
+    radial-gradient(circle at calc(100% - 10px) 10px,var(--bolt) 0 2px,var(--bolt-ring) 2.5px 3.1px,transparent 3.6px),
+    radial-gradient(circle at 10px calc(100% - 10px),var(--bolt) 0 2px,var(--bolt-ring) 2.5px 3.1px,transparent 3.6px),
+    radial-gradient(circle at calc(100% - 10px) calc(100% - 10px),var(--bolt) 0 2px,var(--bolt-ring) 2.5px 3.1px,transparent 3.6px);
+}
+.tc-paint{font-family:var(--f-sign);font-weight:400;color:var(--cream);
+  text-shadow:1px 1px 0 var(--secondary),2px 2px 0 var(--secondary),3px 3px 0 var(--secondary),4px 4px 4px rgba(0,0,0,.25)}
+/* scalloped striped tente */
+.tc-tente{--s:16px;--ta:var(--primary);--tb:var(--cream);height:var(--s);
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.14),rgba(0,0,0,.10)),
+    repeating-linear-gradient(90deg,var(--ta) 0 var(--s),var(--tb) var(--s) calc(var(--s)*2));
+  -webkit-mask:linear-gradient(#000 0 0) top/100% calc(100% - var(--s)/2) no-repeat,
+               radial-gradient(circle calc(var(--s)/2) at 50% 0,#000 96%,transparent 100%) 0 100%/var(--s) calc(var(--s)/2) repeat-x;
+          mask:linear-gradient(#000 0 0) top/100% calc(100% - var(--s)/2) no-repeat,
+               radial-gradient(circle calc(var(--s)/2) at 50% 0,#000 96%,transparent 100%) 0 100%/var(--s) calc(var(--s)/2) repeat-x}
+.tc-awn{filter:drop-shadow(0 4px 3px rgba(29,26,23,.22))}
+/* navy enamel plate */
+.tc-enamel{display:inline-flex;align-items:center;justify-content:center;gap:6px;color:#fff;font:800 .82rem/1.2 var(--f-body);
+  padding:5px 22px;border:2px solid #fff;border-radius:8px;
+  background:
+    radial-gradient(circle at 9px 50%,#e9eef6 0 1.8px,#0b1733 2.3px 2.8px,transparent 3.2px),
+    radial-gradient(circle at calc(100% - 9px) 50%,#e9eef6 0 1.8px,#0b1733 2.3px 2.8px,transparent 3.2px),
+    linear-gradient(180deg,rgba(255,255,255,.14),transparent 45%,rgba(0,0,0,.14)),
+    var(--navy);
+  box-shadow:0 0 0 2px var(--navy),0 6px 12px -8px rgba(0,0,0,.55)}
+/* kepenk ribs */
+.tc-kepenk{position:absolute;left:0;right:0;top:0;height:var(--k,30%);overflow:hidden;z-index:2;
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.22),transparent 28%,transparent 72%,rgba(0,0,0,.10)),
+    repeating-linear-gradient(180deg,var(--zinc-a) 0 5px,var(--zinc-b) 5px 7px);
+  border-bottom:4px solid #6f7679;box-shadow:0 6px 10px -6px rgba(0,0,0,.45);
+  transition:height .4s ease}
+.tc-kepenk::after{content:"";position:absolute;left:50%;bottom:3px;width:22px;height:5px;margin-left:-11px;border-radius:2px;background:#4d5356}
+.tc-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:6px;
+  font:800 .95rem/1 var(--f-body);text-decoration:none;cursor:pointer;border:2px solid transparent;transition:background .2s,color .2s,border-color .2s}
+.tc-btn svg{width:18px;height:18px;flex:none}
+.tc-btn--plum{background:var(--primary);color:#fff}
+.tc-btn--plum:hover{background:var(--primary-hover)}
+.tc-btn--mustard{background:var(--secondary);color:var(--text)}
+.tc-btn--mustard:hover{background:#c58f1f}
+.tc-btn--turq{border-color:var(--accent);color:#0f6660;background:transparent}
+.tc-btn--turq:hover{background:var(--accent);color:#fff}
+.tc-more{font-weight:800;text-decoration:underline;text-decoration-color:var(--secondary);text-decoration-thickness:2px;text-underline-offset:5px;white-space:nowrap}
+.tc-more:hover{color:var(--primary)}
+.tc-h2{font:700 clamp(1.65rem,3vw,2.3rem)/1.1 var(--f-head);margin:0;text-shadow:2px 2px 0 #ecd9a8}
+.tc-lead{margin:6px 0 0;color:var(--muted)}
+.tc-sec{padding:72px 0 0}
+.tc-sec__head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px 24px;flex-wrap:wrap;margin-bottom:26px}
+
+/* tones */
+.tc-c0{--tone:#5c2346;--tone-ink:#f8ecd0;--tone-shade:#d9a12b;--wash:#e4d6e4}
+.tc-c1{--tone:#17877f;--tone-ink:#f8ecd0;--tone-shade:#d9a12b;--wash:#d6e3e6}
+.tc-c2{--tone:#d9a12b;--tone-ink:#1d1a17;--tone-shade:#f8ecd0;--wash:#f3e2b3}
+.tc-c3{--tone:#b4532a;--tone-ink:#f8ecd0;--tone-shade:#d9a12b;--wash:#f1d9c9}
+.tc-c4{--tone:#5d6a2b;--tone-ink:#f8ecd0;--tone-shade:#d9a12b;--wash:#dfe7d3}
+.tc-c5{--tone:#1f3566;--tone-ink:#f8ecd0;--tone-shade:#d9a12b;--wash:#e9dccd}
+
+/* ---------- header ---------- */
+.tc-header{position:sticky;top:0;z-index:50}
+.tc-header__board{--bolt:#e9c46a;--bolt-ring:rgba(0,0,0,.5);background-color:var(--primary);height:72px;position:relative;z-index:1}
+.tc-header__in{height:100%;display:flex;align-items:center;gap:20px}
+.tc-brand{font-size:1.55rem;line-height:1;text-decoration:none;white-space:nowrap;letter-spacing:.005em}
+.tc-nav{display:flex;gap:28px;margin:0 auto}
+.tc-nav a{color:rgba(248,236,208,.85);font-weight:700;text-decoration:none;padding:6px 0;border-bottom:2px solid transparent}
+.tc-nav a:hover,.tc-nav a:focus-visible{color:var(--cream);border-bottom-color:var(--secondary)}
+.tc-head-actions{display:flex;align-items:center;gap:10px;margin-left:auto}
+.tc-nav + .tc-head-actions{margin-left:0}
+.tc-ghost{color:var(--cream);text-decoration:none;font-weight:700;padding:9px 14px;border-radius:6px;border:1.5px solid rgba(248,236,208,.4)}
+.tc-ghost:hover{border-color:var(--secondary)}
+.tc-header .tc-btn--mustard{min-height:42px}
+#mobile-menu-btn{display:none;width:44px;height:44px;border-radius:6px;border:1.5px solid rgba(248,236,208,.35);background:transparent;place-items:center;cursor:pointer;flex:none}
+#mobile-menu-btn span{display:block;width:20px;height:2px;background:var(--cream);border-radius:2px;box-shadow:0 -6px 0 var(--cream),0 6px 0 var(--cream)}
+.tc-header .tc-awn{position:relative;z-index:0}
+
+/* ---------- hero ---------- */
+.tc-hero{position:relative;text-align:center;padding:22px 0 0;
+  background:
+    radial-gradient(55% 60% at 18% 8%,rgba(255,255,255,.55),transparent 70%),
+    radial-gradient(45% 50% at 86% 24%,rgba(217,161,43,.07),transparent 70%),
+    var(--bg)}
+.tc-hero h1{font:700 clamp(2.1rem,5.2vw,4.3rem)/1.04 var(--f-head);letter-spacing:-.012em;margin:12px auto 8px;
+  text-shadow:3px 3px 0 #ecd9a8;text-wrap:balance}
+.tc-sub{font-size:1.125rem;color:var(--muted);margin:0 auto;max-width:40rem;text-wrap:balance}
+
+/* hanging signboard */
+.tc-hang{position:relative;max-width:760px;margin:18px auto 0;padding-top:36px;text-align:left}
+.tc-hang__rail{position:absolute;top:0;left:14px;right:14px;height:4px;border-radius:3px;background:#3b332c;box-shadow:0 2px 0 rgba(255,255,255,.6)}
+.tc-hang__rail::before,.tc-hang__rail::after{content:"";position:absolute;top:-3px;width:10px;height:10px;border-radius:50%;background:#3b332c}
+.tc-hang__rail::before{left:-6px}.tc-hang__rail::after{right:-6px}
+.tc-board{--bolt:#b3a791;--bolt-ring:rgba(29,26,23,.45);position:relative;background-color:var(--card);border:2px solid var(--text);border-radius:6px;
+  transform-origin:50% -36px;animation:tc-sway 1.4s ease-out .25s both;
+  box-shadow:0 22px 34px -24px rgba(29,26,23,.6)}
+.tc-board::before,.tc-board::after{content:"";position:absolute;top:-36px;width:7px;height:44px;z-index:3;
+  background:
+    radial-gradient(3.5px 4px at 50% 4px,transparent 48%,var(--text) 56% 92%,transparent 100%) 0 0/7px 12px repeat-y,
+    linear-gradient(180deg,transparent 0 7px,var(--text) 7px 12px) 50% 0/2px 12px repeat-y}
+.tc-board::before{left:37px}.tc-board::after{right:37px}
+.tc-board__strip{position:relative;display:flex;align-items:center;justify-content:center;gap:10px;height:40px;
+  background:
+    radial-gradient(circle at 40px 9px,transparent 0 2px,#3b332c 2.4px 4px,transparent 4.4px),
+    radial-gradient(circle at calc(100% - 40px) 9px,transparent 0 2px,#3b332c 2.4px 4px,transparent 4.4px),
+    linear-gradient(180deg,rgba(255,255,255,.18),rgba(0,0,0,.06)),var(--secondary);
+  border-bottom:2px solid var(--text);border-radius:4px 4px 0 0;
+  font:400 1.12rem/1 var(--f-sign);color:var(--text);text-shadow:1px 1px 0 var(--cream),2px 2px 0 rgba(248,236,208,.6)}
+.tc-board__fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,210px) auto;gap:10px;padding:16px 18px 18px}
+.tc-field{position:relative}
+.tc-field svg{position:absolute;left:14px;top:50%;width:20px;height:20px;margin-top:-10px;color:var(--muted);pointer-events:none}
+.tc-input,.tc-select{width:100%;height:48px;border:1.5px solid #cfc6b6;border-radius:6px;background:#fff;font-weight:600;font-size:1rem;padding:0 14px}
+.tc-input{padding-left:44px}
+.tc-input::placeholder{color:#8a8276;font-weight:600}
+.tc-select{appearance:none;-webkit-appearance:none;padding-right:38px;cursor:pointer;
+  background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235c2346' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center/18px}
+.tc-input:focus,.tc-select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(92,35,70,.18)}
+.tc-bul{height:48px;padding:0 30px;border:0;border-radius:6px;background:var(--primary);color:#fff;font:800 1.05rem/1 var(--f-body);cursor:pointer}
+.tc-bul:hover{background:var(--primary-hover)}
+.tc-asked{margin:14px 0 0;color:var(--muted);font-size:.98rem}
+.tc-asked a{white-space:nowrap;color:var(--text);font-weight:700;text-decoration:underline;text-decoration-color:var(--secondary);text-decoration-thickness:2px;text-underline-offset:4px}
+.tc-asked a:hover{color:var(--primary)}
+.tc-asked i{font-style:normal;margin:0 6px;color:#a99f90}
+@keyframes tc-sway{0%{transform:rotate(0)}30%{transform:rotate(1.2deg)}65%{transform:rotate(-.7deg)}100%{transform:rotate(0)}}
+
+/* street skyline */
+.tc-street-wrap{margin-top:20px;position:relative}
+.tc-street{display:flex;align-items:flex-end;overflow-x:auto;scrollbar-width:none;padding:0}
+.tc-street::-webkit-scrollbar{display:none}
+.tc-front{position:relative;flex:1 1 0;min-width:150px;display:flex;flex-direction:column;justify-content:flex-end;text-decoration:none;color:var(--text);
+  background-color:var(--wall);
+  background-image:
+    radial-gradient(120% 70% at 22% 12%,rgba(255,255,255,.38),transparent 60%),
+    radial-gradient(90% 60% at 80% 88%,rgba(90,60,30,.06),transparent 65%);
+  box-shadow:inset 2px 0 0 rgba(255,255,255,.45),inset -2px 0 0 rgba(29,26,23,.08)}
+.tc-front__upper{display:none;height:74px;position:relative;padding-top:14px}
+.tc-front:nth-child(3n+1) .tc-front__upper{display:flex;justify-content:center;gap:26px}
+.tc-front__upper::before{content:"";position:absolute;left:-2px;right:-2px;top:0;height:9px;background:rgba(29,26,23,.14);box-shadow:0 2px 0 rgba(255,255,255,.5),0 5px 6px -3px rgba(29,26,23,.25)}
+.tc-win{width:30px;height:46px;border:3px solid #fbf6ea;border-radius:14px 14px 2px 2px;position:relative;
+  background:linear-gradient(135deg,rgba(255,255,255,.28) 0 18%,transparent 18% 32%,rgba(255,255,255,.12) 32% 38%,transparent 38%),linear-gradient(180deg,#56656d,#2f3b41);
+  box-shadow:0 5px 0 -1px rgba(29,26,23,.16)}
+.tc-win::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;margin-left:-1px;background:#fbf6ea}
+.tc-front__parapet{height:20px;position:relative}
+.tc-front__parapet::before{content:"";position:absolute;left:-2px;right:-2px;top:0;height:7px;background:rgba(29,26,23,.13);box-shadow:0 2px 0 rgba(255,255,255,.5)}
+.tc-front:nth-child(3n) .tc-front__parapet{height:34px}
+.tc-front:nth-child(3n) .tc-front__parapet::after{content:"";position:absolute;left:24%;right:24%;top:-14px;height:16px;background:var(--wall);border-radius:4px 4px 0 0;box-shadow:inset 0 5px 0 rgba(29,26,23,.13)}
+.tc-front:nth-child(3n) .tc-front__parapet::before{top:0}
+.tc-fsign{--bolt:#f3e6c6;margin:0 10px;height:46px;display:grid;place-items:center;padding:0 16px;border-radius:4px;background-color:var(--tone);
+  box-shadow:0 8px 10px -8px rgba(29,26,23,.55);overflow:hidden}
+.tc-fsign span{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:1.06rem;line-height:1.2;padding:2px 3px 3px 0;color:var(--tone-ink);
+  text-shadow:1px 1px 0 var(--tone-shade),2px 2px 0 var(--tone-shade),3px 3px 3px rgba(0,0,0,.25)}
+.tc-front .tc-awn{margin:4px 4px 0}
+.tc-front .tc-tente{--ta:var(--tone)}
+.tc-front__ground{display:flex;align-items:flex-end;justify-content:center;gap:10px;padding:16px 10px 0;position:relative}
+.tc-door{position:relative;width:52%;max-width:96px;height:120px;border:4px solid #3a302a;border-top-width:9px;border-bottom:0;border-radius:3px 3px 0 0;overflow:hidden;
+  background:radial-gradient(70% 60% at 50% 92%,rgba(255,170,64,.62),rgba(255,140,40,.12) 60%,transparent 75%),#2b2622}
+.tc-door::before{content:"";position:absolute;inset:-9px -4px auto;height:9px}
+.tc-door .tc-kepenk{--k:45%;border-bottom-width:3px}
+.tc-door .tc-kepenk::after{width:16px;height:4px;margin-left:-8px}
+.tc-front:hover .tc-door .tc-kepenk,.tc-front:focus-visible .tc-door .tc-kepenk{height:6%}
+.tc-door__gir{position:absolute;left:0;right:0;top:20%;text-align:center;color:var(--secondary);font:800 .95rem/1 var(--f-body)}
+.tc-door__count{position:absolute;left:0;right:0;bottom:12px;text-align:center;color:var(--cream);font:800 .86rem/1.15 var(--f-body);text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.tc-door__count b{display:block;font:400 1.15rem/1 var(--f-sign);color:#ffe2a6;margin-bottom:2px}
+.tc-side{width:32%;max-width:60px;display:flex;flex-direction:column;align-items:center;gap:10px;padding-bottom:22px}
+.tc-side .tc-enamel{padding:2px 8px;font-size:.66rem;border-width:1.5px;border-radius:5px;background:linear-gradient(180deg,rgba(255,255,255,.14),transparent 45%,rgba(0,0,0,.14)),var(--navy);box-shadow:0 0 0 1.5px var(--navy);white-space:nowrap}
+.tc-glass{width:100%;height:62px;border:3px solid #3a302a;border-radius:2px;
+  background:linear-gradient(125deg,transparent 0 30%,rgba(255,255,255,.22) 30% 40%,transparent 40% 48%,rgba(255,255,255,.1) 48% 52%,transparent 52%),
+    radial-gradient(80% 60% at 50% 100%,rgba(255,170,64,.35),transparent 70%),linear-gradient(180deg,#3d4a4f,#262c2e)}
+.tc-front__base{height:12px;background:rgba(29,26,23,.12);box-shadow:inset 0 2px 0 rgba(255,255,255,.3)}
+/* blank shopfront */
+.tc-front.is-blank .tc-fsign{background:rgba(255,253,249,.55);border:2px dashed #a99f90;box-shadow:none}
+.tc-front.is-blank .tc-fsign span{color:#6f675c;text-shadow:none;font-family:var(--f-body);font-weight:800;font-size:.98rem}
+.tc-front.is-blank .tc-tente{--ta:#a7adaf;--tb:#efe9dd}
+.tc-front.is-blank .tc-door .tc-kepenk{--k:100%}
+.tc-front.is-blank:hover .tc-door .tc-kepenk{height:100%}
+.tc-kepenk__note{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%) rotate(-2deg);background:#fffdf6;color:var(--primary);font:800 .7rem/1.15 var(--f-body);padding:6px 6px;text-align:center;width:78%;box-shadow:0 4px 6px -3px rgba(0,0,0,.45)}
+/* sidewalk */
+.tc-walk{position:relative;padding:14px 16px 22px;
+  background:
+    linear-gradient(180deg,rgba(29,26,23,.14),transparent 6px),
+    repeating-linear-gradient(90deg,transparent 0 62px,rgba(29,26,23,.11) 62px 64px),
+    #d9d6cf}
+.tc-walk::after{content:"";position:absolute;left:0;right:0;bottom:0;height:10px;background:#bdb7ab;box-shadow:inset 0 2px 0 rgba(255,255,255,.35),inset 0 -2px 0 rgba(29,26,23,.12)}
+.tc-stats{display:flex;justify-content:center;flex-wrap:wrap;gap:14px 18px;margin:0;padding:0;list-style:none}
+.tc-stats .tc-enamel{font-size:.92rem;padding:7px 26px;font-weight:700}
+.tc-stats .tc-enamel b{font:400 1.1rem/1 var(--f-sign);letter-spacing:.01em;margin-right:2px}
+.tc-swipe{display:none}
+
+/* ---------- kepenkler açık ---------- */
+.tc-led{display:inline-block;width:13px;height:13px;border-radius:50%;background:var(--led);vertical-align:middle;margin:0 12px 6px 0;
+  box-shadow:0 0 0 0 rgba(47,191,113,.55),0 0 8px rgba(47,191,113,.8);animation:tc-pulse 2s infinite}
+@keyframes tc-pulse{0%{box-shadow:0 0 0 0 rgba(47,191,113,.55),0 0 8px rgba(47,191,113,.8)}70%{box-shadow:0 0 0 10px rgba(47,191,113,0),0 0 8px rgba(47,191,113,.8)}100%{box-shadow:0 0 0 0 rgba(47,191,113,0),0 0 8px rgba(47,191,113,.8)}}
+.tc-rail{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 48px)/4);gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 18px;scrollbar-width:thin;scrollbar-color:#cfc6b6 transparent}
+.tc-tile{scroll-snap-align:start;background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;
+  box-shadow:0 1px 0 var(--border),0 14px 24px -20px rgba(29,26,23,.45)}
+.tc-tile__roll{height:12px;background:linear-gradient(180deg,rgba(255,255,255,.25),transparent),repeating-linear-gradient(180deg,var(--zinc-a) 0 5px,var(--zinc-b) 5px 7px);border-bottom:3px solid #6f7679}
+.tc-tile__body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.tc-acik{align-self:flex-start;display:inline-flex;align-items:center;gap:7px;background:var(--text);color:var(--cream);border-radius:4px;padding:4px 9px 4px 8px;font:400 .74rem/1 var(--f-sign);letter-spacing:.08em}
+.tc-acik::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--led);box-shadow:0 0 6px var(--led)}
+.tc-tile h3{font:600 1.22rem/1.2 var(--f-head);margin:4px 0 0}
+.tc-tile h3 a{text-decoration:none}
+.tc-tile p{margin:0;color:var(--muted);font-size:.92rem}
+.tc-tile .tc-btn{margin-top:auto;width:100%;margin-top:10px}
+.tc-tile .tc-btn small{font-weight:700;opacity:.82;font-size:.86rem}
+
+/* ---------- vitrin grid ---------- */
+.tc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.tc-shop{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;
+  box-shadow:0 1px 0 #ddd5c7,0 14px 26px -18px rgba(29,26,23,.45)}
+.tc-shop__sign{--bolt:#f3e6c6;position:relative;display:flex;align-items:center;height:56px;padding:0 24px;background-color:var(--tone);text-decoration:none}
+.tc-shop__sign h3{margin:0;font:700 1.1rem/1.15 var(--f-head);color:var(--tone-ink);text-shadow:1px 1px 0 color-mix(in srgb,var(--tone-shade) 70%,transparent);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tc-shop.is-premium .tc-shop__sign{background-color:var(--primary);--bolt:#e9c46a;box-shadow:inset 0 0 0 3px var(--primary),inset 0 0 0 5px var(--secondary);padding-right:96px}
+.tc-shop.is-premium .tc-shop__sign h3{color:var(--cream);text-shadow:1px 1px 0 var(--secondary)}
+.tc-vitrinde{position:absolute;right:22px;top:50%;transform:translateY(-50%);font:800 .68rem/1 var(--f-body);color:var(--text);padding:5px 8px;border-radius:4px;
+  background:linear-gradient(180deg,#f6d886,#d9a12b 55%,#b98519);border:1px solid #8a6414;box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.tc-shop .tc-tente{--s:14px;--ta:var(--tone)}
+.tc-shop.is-premium .tc-tente{--ta:var(--primary)}
+.tc-shop .tc-awn{margin-top:-1px;position:relative;z-index:3}
+.tc-vitrin{position:relative;display:grid;place-items:center;aspect-ratio:16/10;margin-top:-14px;overflow:hidden;text-decoration:none;
+  background-color:var(--wash);
+  background-image:radial-gradient(110% 80% at 20% 15%,rgba(255,255,255,.45),transparent 60%),radial-gradient(80% 70% at 85% 95%,rgba(90,60,30,.07),transparent 65%)}
+.tc-vitrin::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;background:linear-gradient(120deg,transparent 0 55%,rgba(255,255,255,.22) 55% 63%,transparent 63%)}
+.tc-decal{width:92px;height:92px;border-radius:50%;display:grid;place-items:center;font-size:40px;line-height:1;margin-top:18%;
+  background:rgba(255,255,255,.92);box-shadow:0 0 0 5px rgba(255,255,255,.45),0 8px 16px -10px rgba(29,26,23,.45)}
+.tc-logo{margin-top:16%;width:62%;background:#fff;border-radius:8px;padding:10px 12px;box-shadow:0 10px 18px -12px rgba(29,26,23,.5)}
+.tc-logo svg{width:100%;height:auto}
+.tc-shop:hover .tc-vitrin .tc-kepenk,.tc-shop:focus-within .tc-vitrin .tc-kepenk{height:8%}
+.tc-kepenk.is-open{--k:12%}.tc-kepenk.is-closed{--k:62%}.tc-kepenk.is-null{--k:30%}
+.tc-kapali{position:absolute;left:0;right:0;top:50%;transform:translateY(-58%);text-align:center;font:400 1.5rem/1 var(--f-sign);letter-spacing:.16em;color:rgba(40,38,36,.55);text-shadow:0 1px 0 rgba(255,255,255,.35)}
+.tc-vitrin .tc-acik{position:absolute;top:calc(12% + 12px);right:12px;z-index:3}
+.tc-place{position:absolute;left:12px;bottom:12px;z-index:3;font-size:.74rem;padding:3px 18px}
+.tc-shop__body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.tc-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:.9rem}
+.tc-cat{display:inline-flex;align-items:center;gap:7px;font-weight:800;text-decoration:none}
+.tc-cat::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--tone);box-shadow:0 0 0 2px var(--card),0 0 0 3px color-mix(in srgb,var(--tone) 40%,transparent)}
+.tc-cat:hover{text-decoration:underline;text-decoration-color:var(--secondary)}
+.tc-star{color:var(--muted);font-weight:700}
+.tc-star b{color:#b8841a}
+.tc-ok{display:inline-flex;align-items:center;gap:4px;color:#fff;font:800 .72rem/1 var(--f-body);padding:4px 9px;border:1.5px solid #fff;border-radius:6px;
+  background:linear-gradient(180deg,rgba(255,255,255,.16),transparent 50%,rgba(0,0,0,.1)),var(--accent);box-shadow:0 0 0 1.5px var(--accent)}
+.tc-desc{margin:0;color:var(--muted);font-size:.95rem;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tc-esik{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px 14px;background:#ebe7df;border-top:2px solid #d3ccbe;box-shadow:inset 0 1px 0 rgba(255,255,255,.6)}
+.tc-esik .tc-btn{padding:0 14px}
+.tc-esik .tc-more{margin-left:auto;font-size:.92rem}
+/* empty slot */
+.tc-shop.is-empty{border-style:dashed;border-color:#c6bcab;background:rgba(255,253,249,.7)}
+.tc-shop.is-empty .tc-shop__sign{background:transparent;border-bottom:0;--bolt:#b3a791;--bolt-ring:rgba(29,26,23,.35);margin:10px 10px 0;height:48px;border:2px dashed #a99f90;border-radius:4px;justify-content:center}
+.tc-shop.is-empty .tc-shop__sign h3{font:400 1.12rem/1 var(--f-sign);color:#7a7166;text-shadow:none}
+.tc-shop.is-empty .tc-tente{--ta:#a7adaf;--tb:#efe9dd}
+.tc-shop.is-empty .tc-vitrin{background-color:#e9e4da;margin-top:-14px}
+.tc-shop.is-empty .tc-kepenk{--k:100%}
+.tc-shop.is-empty:hover .tc-kepenk{height:100%}
+.tc-shop.is-empty h4{font:700 1.3rem/1.2 var(--f-head);margin:2px 0 0}
+.tc-shop.is-empty .tc-esik .tc-btn{flex:1}
+
+/* ---------- sign wall ---------- */
+.tc-wall{margin-top:72px;padding:64px 0 70px;
+  background:#efe8dc url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='48'%3E%3Cg fill='%23e7e0d4'%3E%3Crect y='22' width='64' height='2'/%3E%3Crect y='46' width='64' height='2'/%3E%3Crect x='62' width='2' height='22'/%3E%3Crect x='30' y='24' width='2' height='22'/%3E%3C/g%3E%3C/svg%3E");
+  box-shadow:inset 0 10px 18px -14px rgba(29,26,23,.25)}
+.tc-wall .tc-h2{text-shadow:2px 2px 0 #e2cf9c}
+.tc-signs{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.tc-wsign{--bolt:#f3e6c6;display:inline-flex;align-items:center;gap:14px;padding:12px 12px 12px 24px;border-radius:5px;background-color:var(--tone);text-decoration:none;
+  box-shadow:0 10px 14px -10px rgba(29,26,23,.5);transition:transform .2s,box-shadow .2s}
+.tc-wsign:hover,.tc-wsign:focus-visible{transform:translateY(-2px);box-shadow:0 18px 22px -12px rgba(29,26,23,.55)}
+.tc-wsign span{font:400 1.12rem/1.15 var(--f-sign);color:var(--tone-ink);text-shadow:1px 1px 0 var(--tone-shade),2px 2px 0 var(--tone-shade),3px 3px 3px rgba(0,0,0,.22)}
+.tc-wsign.is-big span{font-size:1.4rem}
+.tc-wsign b{font:800 .8rem/1 var(--f-body);color:var(--text);background:var(--cream);border-radius:4px;padding:5px 7px;box-shadow:inset 0 -1px 0 rgba(0,0,0,.12);margin-right:4px}
+
+/* ---------- city plates ---------- */
+.tc-cities{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.tc-cplate{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:14px 28px;text-decoration:none;color:#fff;text-align:center}
+.tc-cplate strong{font:800 1.2rem/1.15 var(--f-body)}
+.tc-cplate small{font:700 .82rem/1.2 var(--f-body);opacity:.82}
+.tc-cplate::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.32) 50%,transparent 65%);transform:translateX(-120%);transition:transform .6s ease}
+.tc-cplate:hover::after,.tc-cplate:focus-visible::after{transform:translateX(120%)}
+.tc-cplate.is-zinc{background:radial-gradient(circle at 9px 50%,#f4f5f5 0 1.8px,#3b4043 2.3px 2.8px,transparent 3.2px),radial-gradient(circle at calc(100% - 9px) 50%,#f4f5f5 0 1.8px,#3b4043 2.3px 2.8px,transparent 3.2px),linear-gradient(180deg,rgba(255,255,255,.18),transparent 45%,rgba(0,0,0,.14)),#868d90;box-shadow:0 0 0 2px #868d90,0 6px 12px -8px rgba(0,0,0,.55)}
+
+/* ---------- jobs window ---------- */
+.tc-window{position:relative;overflow:hidden;border-radius:6px;padding:34px 34px 40px;border:10px solid #3a2d26;
+  background:radial-gradient(70% 90% at 50% 0%,rgba(255,200,120,.10),transparent 60%),var(--glass);box-shadow:inset 0 0 0 2px #5a463b,0 18px 30px -20px rgba(29,26,23,.6)}
+.tc-window::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;
+  background:linear-gradient(135deg,transparent 0 24%,rgba(255,255,255,.07) 24% 33%,transparent 33% 37%,rgba(255,255,255,.045) 37% 40%,transparent 40%)}
+.tc-notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px;position:relative;z-index:1}
+.tc-note{display:block;background:#fffdf6;color:var(--text);text-decoration:none;padding:22px 20px 20px;border-radius:2px;text-align:center;
+  box-shadow:0 18px 22px -14px rgba(0,0,0,.7);background-image:linear-gradient(180deg,rgba(0,0,0,.035),transparent 18%)}
+.tc-note:nth-child(1){transform:rotate(-1.5deg)}.tc-note:nth-child(2){transform:rotate(1deg)}.tc-note:nth-child(3){transform:rotate(-.5deg)}
+.tc-note .tc-note__head{font:400 1.32rem/1.08 var(--f-sign);color:var(--terra);margin:0 0 12px;padding-bottom:12px;border-bottom:2px dashed #e0d6c4}
+.tc-note h3{font:700 1.2rem/1.2 var(--f-head);margin:0 0 6px}
+.tc-note p{margin:0;color:var(--muted);font-size:.92rem;font-weight:600}
+.tc-note span{display:inline-block;margin-top:12px;font-weight:800;font-size:.9rem;color:var(--primary)}
+.tc-note:hover h3{text-decoration:underline;text-decoration-color:var(--secondary)}
+
+/* ---------- blog glass ---------- */
+.tc-posts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.tc-post{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:12px;padding:26px 24px 22px;border-radius:6px;text-decoration:none;
+  background:radial-gradient(90% 70% at 30% 0%,rgba(255,220,150,.07),transparent 60%),var(--glass);box-shadow:inset 0 0 0 1px rgba(226,183,90,.22),0 18px 28px -20px rgba(29,26,23,.7)}
+.tc-post::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,transparent 0 46%,rgba(255,255,255,.06) 46% 56%,transparent 56% 60%,rgba(255,255,255,.035) 60% 63%,transparent 63%)}
+.tc-post h3{margin:0;font:600 1.38rem/1.22 var(--f-head);color:var(--gold);text-shadow:0 1px 0 #7a5a1c}
+.tc-post p{margin:0;color:#e9e3d6;font-size:.95rem;line-height:1.55}
+.tc-post time{margin-top:auto;color:rgba(233,227,214,.6);font-size:.84rem;font-weight:700;padding-top:12px;border-top:1px solid rgba(226,183,90,.18)}
+.tc-post:hover h3{color:#f0cb76}
+
+/* ---------- final CTA ---------- */
+.tc-cta{padding:84px 0 96px}
+.tc-cta .tc-board{animation:none}
+.tc-cta .tc-board__inner{padding:22px 28px 28px;text-align:center}
+.tc-blank{display:grid;place-items:center;height:96px;border:2px dashed #a99f90;border-radius:5px;margin-bottom:22px;
+  background:repeating-linear-gradient(135deg,rgba(29,26,23,.025) 0 10px,transparent 10px 20px)}
+.tc-blank span{font:400 clamp(1.15rem,2.6vw,1.6rem)/1.15 var(--f-sign);color:#8a8174;padding:0 12px}
+.tc-cta h2{font:700 clamp(1.6rem,3.2vw,2.2rem)/1.15 var(--f-head);margin:0}
+.tc-cta p{color:var(--muted);margin:8px 0 20px;font-size:1.06rem}
+.tc-cta__btns{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.tc-cta__btns .tc-btn{min-height:50px;padding:0 26px;font-size:1.02rem}
+
+/* ---------- footer ---------- */
+.tc-footer{background:#2a1220;color:#efe3cc}
+.tc-footer__walk{height:24px;background:repeating-linear-gradient(90deg,transparent 0 62px,rgba(29,26,23,.11) 62px 64px),#d9d6cf}
+.tc-footer__kerb{height:10px;background:#bdb7ab;box-shadow:inset 0 2px 0 rgba(255,255,255,.35),inset 0 -2px 0 rgba(29,26,23,.15)}
+.tc-footer__in{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr));gap:32px;padding-top:48px;padding-bottom:36px}
+.tc-footer h4{margin:0 0 12px;font:700 1.1rem/1.2 var(--f-head);color:var(--cream)}
+.tc-footer p{margin:10px 0 0;color:rgba(239,227,204,.75);font-size:.94rem;max-width:40ch}
+.tc-footer ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.tc-footer a{color:rgba(239,227,204,.85);text-decoration:none;font-weight:600;font-size:.95rem}
+.tc-footer a:hover{color:var(--secondary)}
+.tc-footer .tc-brand{font-size:1.4rem}
+.tc-footer__bottom{border-top:1px solid rgba(239,227,204,.12);padding:16px 0 22px;font-size:.85rem;color:rgba(239,227,204,.6)}
+
+/* ---------- mobile sticky bar ---------- */
+.tc-sticky{display:none}
+
+/* ---------- responsive ---------- */
+@media (max-width:1180px){.tc-nav{gap:20px}}
+@media (max-width:1023px){
+  .tc-nav,.tc-ghost{display:none}
+  #mobile-menu-btn{display:grid}
+  .tc-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tc-rail{grid-auto-columns:calc((100% - 32px)/3)}
+  .tc-cities{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .tc-sticky{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;position:fixed;left:0;right:0;bottom:0;z-index:60;
+    padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(255,253,249,.97);border-top:1px solid var(--border);
+    box-shadow:0 -10px 24px -16px rgba(29,26,23,.5);transform:translateY(110%);visibility:hidden;transition:transform .25s ease,visibility 0s linear .25s}
+  .tc-sticky.is-on{transform:none;visibility:visible;transition:transform .25s ease}
+  .tc-sticky .tc-btn{min-height:48px}
+  .tc-footer{padding-bottom:80px}
+}
+@media (max-width:760px){
+  :root{--gut:16px}
+  .tc-header__board{height:60px}
+  .tc-header__in{gap:10px}
+  .tc-brand{font-size:1.12rem;text-shadow:1px 1px 0 var(--secondary),2px 2px 0 var(--secondary),3px 3px 3px rgba(0,0,0,.25)}
+  .tc-header .tc-btn--mustard{min-height:40px;padding:0 12px;font-size:.86rem}
+  .tc-header .tc-tente{--s:10px}
+  .tc-hero{padding-top:22px}
+  .tc-hero h1{font-size:2.1rem;line-height:1.08;margin-top:14px}
+  .tc-sub{font-size:1.02rem}
+  .tc-hang{padding-top:20px;margin-top:20px}
+  .tc-board{transform-origin:50% -20px}
+  .tc-board::before,.tc-board::after{top:-20px;height:28px}
+  .tc-board::before{left:29px}.tc-board::after{right:29px}
+  .tc-board__strip{background:
+    radial-gradient(circle at 32px 9px,transparent 0 2px,#3b332c 2.4px 4px,transparent 4.4px),
+    radial-gradient(circle at calc(100% - 32px) 9px,transparent 0 2px,#3b332c 2.4px 4px,transparent 4.4px),
+    linear-gradient(180deg,rgba(255,255,255,.18),rgba(0,0,0,.06)),var(--secondary)}
+  .tc-hang__rail{left:8px;right:8px}
+  .tc-board__fields{grid-template-columns:minmax(0,1fr);padding:14px}
+  .tc-bul{width:100%}
+  .tc-asked{line-height:1.9}
+  .tc-street{scroll-snap-type:x mandatory;scroll-padding:0 16px;padding:0 16px;
+    -webkit-mask-image:linear-gradient(90deg,#000 0,#000 78%,transparent 100%);mask-image:linear-gradient(90deg,#000 0,#000 78%,transparent 100%)}
+  .tc-front{flex:0 0 46vw;min-width:150px;max-width:200px;scroll-snap-align:start}
+  .tc-walk{padding:12px 16px 26px}
+  .tc-stats{gap:12px}
+  .tc-stats .tc-enamel{padding:6px 20px;font-size:.86rem}
+  .tc-swipe{display:block;position:absolute;right:16px;bottom:13px;font:400 .78rem/1 var(--f-sign);color:rgba(255,255,255,.85);letter-spacing:.06em;transform:skewX(-8deg);text-shadow:0 1px 0 rgba(29,26,23,.15)}
+  .tc-stats{padding-bottom:6px}
+  .tc-sec{padding-top:56px}
+  .tc-rail{grid-auto-columns:78vw;margin-right:-16px;padding-right:16px}
+  .tc-grid{grid-template-columns:minmax(0,1fr);gap:20px}
+  .tc-esik .tc-btn{flex:1 1 0}
+  .tc-esik .tc-more{flex-basis:100%;text-align:center;margin:4px 0 0;padding:6px 0}
+  .tc-wall{margin-top:56px;padding:48px 0 52px}
+  .tc-signs{gap:10px}
+  .tc-wsign{padding:10px 10px 10px 18px;gap:10px;max-width:100%}
+  .tc-wsign span{font-size:.95rem}
+  .tc-wsign.is-big span{font-size:1.19rem}
+  .tc-cities{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .tc-cplate{padding:12px 20px}
+  .tc-cplate strong{font-size:1.04rem}
+  .tc-window{padding:22px 16px 26px;border-width:8px}
+  .tc-notes{grid-template-columns:minmax(0,1fr);gap:16px}
+  .tc-note{transform:none!important}
+  .tc-posts{grid-template-columns:minmax(0,1fr);gap:16px}
+  .tc-cta{padding:60px 0 64px}
+  .tc-cta .tc-board__inner{padding:18px 16px 20px}
+  .tc-blank{height:84px}
+  .tc-cta__btns .tc-btn{width:100%}
+  .tc-footer__in{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 20px;padding-top:36px}
+  .tc-footer__in > div:first-child{grid-column:1/-1}
+}
+@media (max-width:380px){.tc-brand{font-size:1rem}}
+@media (prefers-reduced-motion:reduce){
+  .tc-board{animation:none}
+  .tc-kepenk,.tc-wsign,.tc-cplate::after{transition:none}
+  .tc-led{animation:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body class="theme-tabela-carsi">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-tel" viewBox="0 0 24 24"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></symbol><symbol id="i-wa" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" d="M3.6 20.4l1.2-4.1A8.6 8.6 0 1 1 8 19.4z"/><path fill="currentColor" d="M9.2 7.6c.3 0 .5 0 .7.5l.7 1.7c.1.2 0 .4-.1.6l-.5.6c-.1.1-.2.3 0 .5.6 1.1 1.5 1.9 2.6 2.4.2.1.4.1.5-.1l.7-.8c.2-.2.3-.2.5-.1l1.6.8c.2.1.4.2.4.4 0 .5-.2 1.2-.7 1.5-.6.4-1.3.5-2.1.3a8.8 8.8 0 0 1-5.4-5.2c-.3-.9-.2-1.8.4-2.5.2-.3.5-.5.7-.6z"/></symbol></svg>
+
+<!-- ================= HEADER ================= -->
+<header class="tc-header">
+  <div class="tc-header__board tc-bolts">
+    <div class="tc-wrap tc-header__in">
+      <a href="#" class="tc-brand tc-paint">Kayseri Rehberi</a>
+      <nav class="tc-nav" aria-label="Ana menü">
+        <a href="#">Firmalar</a>
+        <a href="#tc-sokaklar">Meslekler</a>
+        <a href="#tc-mahalleler">Şehirler</a>
+        <a href="#">Blog</a>
+      </nav>
+      <div class="tc-head-actions">
+        <a href="#tc-ara" class="tc-ghost">Esnafa sor</a>
+        <a href="#" class="tc-btn tc-btn--mustard">Tabelanı as</a>
+        <button id="mobile-menu-btn" type="button" aria-label="Menüyü aç"><span></span></button>
+      </div>
+    </div>
+  </div>
+  <div class="tc-awn"><div class="tc-tente"></div></div>
+</header>
+
+<main class="tc-home">
+
+<!-- ================= 1. ÇARŞI BAŞI ================= -->
+<section class="tc-hero">
+  <div class="tc-wrap">
+    <span class="tc-enamel">Hoş geldiniz</span>
+    <h1>Çarşıdaki her esnaf, tek tabelada</h1>
+    <p class="tc-sub">Mahallendeki ustayı, dükkânı ve hizmeti bul; ara, yaz, kapısını çal.</p>
+
+    <div class="tc-hang">
+      <div class="tc-hang__rail" aria-hidden="true"></div>
+      <form id="tc-ara" class="tc-board tc-bolts" role="search" action="#" method="get">
+        <div class="tc-board__strip">Esnafa sor</div>
+        <div class="tc-board__fields">
+          <label class="tc-field">
+            <span class="sr-only">Ne arıyorsun?</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+            <input class="tc-input" type="search" name="q" placeholder="Ne lazım? ör. tesisatçı, kuaför, ekspertiz">
+          </label>
+          <label>
+            <span class="sr-only">Semt</span>
+            <select class="tc-select" name="city">
+              <option value="">Tüm semtler</option>
+              <option>Melikgazi</option><option>Kocasinan</option><option>Talas</option><option>Hacılar</option><option>İncesu</option><option>Develi</option><option>Yahyalı</option>
+            </select>
+          </label>
+          <button class="tc-bul" type="submit">Bul</button>
+        </div>
+      </form>
+    </div>
+
+    <p class="tc-asked">Bugün çok sorulan:
+      <a href="#">Kuaför</a><i>·</i><a href="#">Oto Servis</a><i>·</i><a href="#">Diş Kliniği</a><i>·</i><a href="#">Halı Yıkama</a>
+    </p>
+  </div>
+
+  <!-- çarşı cephesi -->
+  <div class="tc-street-wrap">
+    <div class="tc-street">
+      <a href="#" class="tc-front tc-c0" style="--wall:#f1d9c9" aria-label="Kuaför, 214 firma">
+        <div class="tc-front__upper" aria-hidden="true"><i class="tc-win"></i><i class="tc-win"></i></div>
+        <div class="tc-front__parapet"></div>
+        <div class="tc-fsign tc-bolts"><span>Kuaför</span></div>
+        <div class="tc-awn"><div class="tc-tente"></div></div>
+        <div class="tc-front__ground">
+          <div class="tc-door"><span class="tc-door__gir">Gir →</span><span class="tc-door__count"><b>214</b>firma</span><span class="tc-kepenk"></span></div>
+          <div class="tc-side"><span class="tc-enamel">No: 1</span><i class="tc-glass"></i></div>
+        </div>
+        <div class="tc-front__base"></div>
+      </a>
+      <a href="#" class="tc-front tc-c5" style="--wall:#dfe7d3" aria-label="Oto Servis, 186 firma">
+        <div class="tc-front__upper" aria-hidden="true"><i class="tc-win"></i><i class="tc-win"></i></div>
+        <div class="tc-front__parapet"></div>
+        <div class="tc-fsign tc-bolts"><span>Oto Servis</span></div>
+        <div class="tc-awn"><div class="tc-tente"></div></div>
+        <div class="tc-front__ground">
+          <div class="tc-side"><span class="tc-enamel">No: 2</span><i class="tc-glass"></i></div>
+          <div class="tc-door"><span class="tc-door__gir">Gir →</span><span class="tc-door__count"><b>186</b>firma</span><span class="tc-kepenk"></span></div>
+        </div>
+        <div class="tc-front__base"></div>
+      </a>
+      <a href="#" class="tc-front tc-c1" style="--wall:#f3e2b3" aria-label="Diş Kliniği, 92 firma">
+        <div class="tc-front__upper" aria-hidden="true"><i class="tc-win"></i><i class="tc-win"></i></div>
+        <div class="tc-front__parapet"></div>
+        <div class="tc-fsign tc-bolts"><span>Diş Kliniği</span></div>
+        <div class="tc-awn"><div class="tc-tente"></div></div>
+        <div class="tc-front__ground">
+          <div class="tc-door"><span class="tc-door__gir">Gir →</span><span class="tc-door__count"><b>92</b>firma</span><span class="tc-kepenk"></span></div>
+          <div class="tc-side"><span class="tc-enamel">No: 3</span><i class="tc-glass"></i></div>
+        </div>
+        <div class="tc-front__base"></div>
+      </a>
+      <a href="#" class="tc-front tc-c2" style="--wall:#d6e3e6" aria-label="Halı Yıkama, 64 firma">
+        <div class="tc-front__upper" aria-hidden="true"><i class="tc-win"></i><i class="tc-win"></i></div>
+        <div class="tc-front__parapet"></div>
+        <div class="tc-fsign tc-bolts"><span>Halı Yıkama</span></div>
+        <div class="tc-awn"><div class="tc-tente"></div></div>
+        <div class="tc-front__ground">
+          <div class="tc-side"><span class="tc-enamel">No: 4</span><i class="tc-glass"></i></div>
+          <div class="tc-door"><span class="tc-door__gir">Gir →</span><span class="tc-door__count"><b>64</b>firma</span><span class="tc-kepenk"></span></div>
+        </div>
+        <div class="tc-front__base"></div>
+      </a>
+      <a href="#" class="tc-front tc-c3" style="--wall:#e9dccd" aria-label="Tesisat, 158 firma">
+        <div class="tc-front__upper" aria-hidden="true"><i class="tc-win"></i><i class="tc-win"></i></div>
+        <div class="tc-front__parapet"></div>
+        <div class="tc-fsign tc-bolts"><span>Tesisat</span></div>
+        <div class="tc-awn"><div class="tc-tente"></div></div>
+        <div class="tc-front__ground">
+          <div class="tc-door"><span class="tc-door__gir">Gir →</span><span class="tc-door__count"><b>158</b>firma</span><span class="tc-kepenk"></span></div>
+          <div class="tc-side"><span class="tc-enamel">No: 5</span><i class="tc-glass"></i></div>
+        </div>
+        <div class="tc-front__base"></div>
+      </a>
+      <a href="#" class="tc-front tc-c4" style="--wall:#e4d6e4" aria-label="Emlak, 131 firma">
+        <div class="tc-front__upper" aria-hidden="true"><i class="tc-win"></i><i class="tc-win"></i></div>
+        <div class="tc-front__parapet"></div>
+        <div class="tc-fsign tc-bolts"><span>Emlak</span></div>
+        <div class="tc-awn"><div class="tc-tente"></div></div>
+        <div class="tc-front__ground">
+          <div class="tc-side"><span class="tc-enamel">No: 6</span><i class="tc-glass"></i></div>
+          <div class="tc-door"><span class="tc-door__gir">Gir →</span><span class="tc-door__count"><b>131</b>firma</span><span class="tc-kepenk"></span></div>
+        </div>
+        <div class="tc-front__base"></div>
+      </a>
+      <a href="#" class="tc-front is-blank" style="--wall:#f1d9c9" aria-label="Tabelanı bekliyor: dükkânını ekle">
+        <div class="tc-front__upper" aria-hidden="true"><i class="tc-win"></i><i class="tc-win"></i></div>
+        <div class="tc-front__parapet"></div>
+        <div class="tc-fsign tc-bolts"><span>Tabelanı bekliyor</span></div>
+        <div class="tc-awn"><div class="tc-tente"></div></div>
+        <div class="tc-front__ground">
+          <div class="tc-door"><span class="tc-kepenk"><span class="tc-kepenk__note">Bu dükkân senin olabilir</span></span></div>
+          <div class="tc-side"><span class="tc-enamel">No: 7</span><i class="tc-glass"></i></div>
+        </div>
+        <div class="tc-front__base"></div>
+      </a>
+    </div>
+    <div class="tc-walk">
+      <ul class="tc-stats">
+        <li class="tc-enamel"><b>1.297</b>&nbsp;esnaf</li>
+        <li class="tc-enamel"><b>14</b>&nbsp;meslek</li>
+        <li class="tc-enamel"><b>8</b>&nbsp;semt</li>
+      </ul>
+      <span class="tc-swipe" aria-hidden="true">kaydır →</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 2. KEPENKLER AÇIK ================= -->
+<section class="tc-sec">
+  <div class="tc-wrap">
+    <div class="tc-sec__head">
+      <div>
+        <h2 class="tc-h2"><span class="tc-led" aria-hidden="true"></span>Şu an kepengi açık olanlar</h2>
+        <p class="tc-lead">Acil bir iş mi var? Bu dükkânlar şu saatte açık, hemen arayabilirsin.</p>
+      </div>
+    </div>
+    <div class="tc-rail">
+      <article class="tc-tile"><div class="tc-tile__roll"></div><div class="tc-tile__body"><span class="tc-acik">AÇIK</span><h3><a href="#">Özgün Kuaför</a></h3><p>Kuaför · Melikgazi</p><a class="tc-btn tc-btn--plum" href="tel:03522221437"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tel"/></svg>Ara <small>0352 222 14 37</small></a></div></article>
+      <article class="tc-tile"><div class="tc-tile__roll"></div><div class="tc-tile__body"><span class="tc-acik">AÇIK</span><h3><a href="#">Erciyes Oto Servis</a></h3><p>Oto Servis · Kocasinan</p><a class="tc-btn tc-btn--plum" href="tel:03523364812"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tel"/></svg>Ara <small>0352 336 48 12</small></a></div></article>
+      <article class="tc-tile"><div class="tc-tile__roll"></div><div class="tc-tile__body"><span class="tc-acik">AÇIK</span><h3><a href="#">Usta Ali Tesisat</a></h3><p>Tesisat · Kocasinan</p><a class="tc-btn tc-btn--plum" href="tel:05324186327"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tel"/></svg>Ara <small>0532 418 63 27</small></a></div></article>
+      <article class="tc-tile"><div class="tc-tile__roll"></div><div class="tc-tile__body"><span class="tc-acik">AÇIK</span><h3><a href="#">Sultan Pastanesi</a></h3><p>Pastane · Kocasinan</p><a class="tc-btn tc-btn--plum" href="tel:03523205518"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tel"/></svg>Ara <small>0352 320 55 18</small></a></div></article>
+      <article class="tc-tile"><div class="tc-tile__roll"></div><div class="tc-tile__body"><span class="tc-acik">AÇIK</span><h3><a href="#">Hacılar Elektrik</a></h3><p>Elektrikçi · Hacılar</p><a class="tc-btn tc-btn--plum" href="tel:03523917402"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tel"/></svg>Ara <small>0352 391 74 02</small></a></div></article>
+      <article class="tc-tile"><div class="tc-tile__roll"></div><div class="tc-tile__body"><span class="tc-acik">AÇIK</span><h3><a href="#">Gesi Çilingir</a></h3><p>Çilingir · Melikgazi</p><a class="tc-btn tc-btn--plum" href="tel:05427316890"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tel"/></svg>Ara <small>0542 731 68 90</small></a></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 3. ÇARŞININ VİTRİNİ ================= -->
+<section class="tc-sec">
+  <div class="tc-wrap">
+    <div class="tc-sec__head">
+      <div>
+        <h2 class="tc-h2">Çarşının vitrini</h2>
+        <p class="tc-lead">Öne çıkan ve yeni açılan dükkânlar. Tabelaya bak, kepenge bak, ara.</p>
+      </div>
+      <a class="tc-more" href="#">Tüm dükkânlar →</a>
+    </div>
+
+    <div class="tc-grid">
+      <!-- 1 premium, open -->
+      <article class="tc-shop tc-c0 is-premium">
+        <a href="#" class="tc-shop__sign tc-bolts"><h3>Özgün Kuaför</h3><span class="tc-vitrinde">Vitrinde</span></a>
+        <div class="tc-awn"><div class="tc-tente"></div></div>
+        <a href="#" class="tc-vitrin" tabindex="-1" aria-hidden="true">
+          <span class="tc-decal">💈</span>
+          <span class="tc-kepenk is-open"></span>
+          <span class="tc-acik">AÇIK</span>
+          <span class="tc-enamel tc-place">Melikgazi / Kayseri</span>
+        </a>
+        <div class="tc-shop__body">
+          <div class="tc-meta"><a class="tc-cat" href="#">Kuaför</a><span class="tc-star"><b>★ 4,8</b> · 37 yorum</span><span class="tc-ok">✓ Onaylı esnaf</span></div>
+          <p class="tc-desc">Erkek ve kadın saç kesimi, fön, boya ve keratin bakımı. Randevusuz da uğrayabilirsiniz.</p>
+        </div>
+        <div class="tc-esik">
+          <a class="tc-btn tc-btn--plum" href="tel:03522221437"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tel"/></svg>Ara</a>
+          <a class="tc-btn tc-btn--turq" href="https://wa.me/903522221437"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
+          <a class="tc-more" href="#">Dükkâna gir →</a>
+        </div>
+      </article>
+
+      <!-- 2 premium, open, logo -->
+      <article class="tc-shop tc-c5 is-premium">
+        <a href="#" class="tc-shop__sign tc-bolts"><h3>Erciyes Oto Servis</h3><span class="tc-vitrinde">Vitrinde</span></a>
+        <div class="tc-awn"><div class="tc-tente"></div></div>
+        <a href="#" class="tc-vitrin" tabindex="-1" aria-hidden="true">
+          <span class="tc-logo"><svg viewBox="0 0 220 64" aria-hidden="true"><path d="M8 54 34 14l10 14 8-10 22 36z" fill="#1f3566"/><path d="M34 14l7 10-4-2-3 4-3-4-4 3z" fill="#fff"/><text x="86" y="34" font-family="Zilla Slab, Georgia, serif" font-weight="700" font-size="25" fill="#1f3566">ERCİYES</text><text x="87" y="53" font-family="Nunito, sans-serif" font-weight="800" font-size="13" fill="#b4532a" letter-spacing="1.5">OTO SERVİS</text></svg></span>
+          <span class="tc-kepenk is-open"></span>
+          <span class="tc-acik">AÇIK</span>
+          <span class="tc-enamel tc-place">Kocasinan / Kayseri</span>
+        </a>
+        <div class="tc-shop__body">
+          <div class="tc-meta"><a class="tc-cat" href="#">Oto Servis</a><span class="tc-star"><b>★ 4,6</b> · 21 yorum</span><span class="tc-ok">✓ Onaylı esnaf</span></div>
+          <p class="tc-desc">Periyodik bakım, fren, debriyaj ve oto elektrik. Tüm marka binek ve hafif ticari araçlara servis.</p>
+        </div>
+        <div class="tc-esik">
+          <a class="tc-btn tc-btn--plum" href="tel:03523364812"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tel"/></svg>Ara</a>
+          <a class="tc-btn tc-btn--turq" href="https://wa.me/905323364812"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
+          <a class="tc-more" href="#">Dükkâna gir →</a>
+        </div>
+      </article>
+
+      <!-- 3 closed -->
+      <article class="tc-shop tc-c1">
+        <a href="#" class="tc-shop__sign tc-bolts"><h3>Talas Diş Kliniği</h3></a>
+        <div class="tc-awn"><div class="tc-tente"></div></div>
+        <a href="#" class="tc-vitrin" tabindex="-1" aria-hidden="true">
+          <span class="tc-decal">🦷</span>
+          <span class="tc-kepenk is-closed"><span class="tc-kapali">KAPALI</span></span>
+          <span class="tc-enamel tc-place">Talas / Kayseri</span>
+        </a>
+        <div class="tc-shop__body">
+          <div class="tc-meta"><a class="tc-cat" href="#">Diş Kliniği</a><span class="tc-star"><b>★ 4,9</b> · 58 yorum</span><span class="tc-ok">✓ Onaylı esnaf</span></div>
+          <p class="tc-desc">İmplant, kanal tedavisi, diş beyazlatma ve çocuk diş hekimliği. Hafta içi randevu ile çalışır.</p>
+        </div>
+        <div class="tc-esik">
+          <a class="tc-btn tc-btn--plum" href="tel:03524372290"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tel"/></svg>Ara</a>
+          <a class="tc-btn tc-btn--turq" href="https://wa.me/905364372290"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
+          <a class="tc-more" href="#">Dükkâna gir →</a>
+        </div>
+      </article>
+
+      <!-- 4 null hours, hardal tone -->
+      <article class="tc-shop tc-c2">
+        <a href="#" class="tc-shop__sign tc-bolts"><h3>Melikgazi Halı Yıkama</h3></a>
+        <div class="tc-awn"><div class="tc-tente"></div></div>
+        <a href="#" class="tc-vitrin" tabindex="-1" aria-hidden="true">
+          <span class="tc-decal">🧺</span>
+          <span class="tc-kepenk is-null"></span>
+          <span class="tc-enamel tc-place">Melikgazi / Kayseri</span>
+        </a>
+        <div class="tc-shop__body">
+          <div class="tc-meta"><a class="tc-cat" href="#">Halı Yıkama</a><span class="tc-star"><b>★ 4,5</b> · 14 yorum</span></div>
+          <p class="tc-desc">Halı, kilim, yorgan ve koltuk yıkama. Servisle adresten alıp kurutulmuş olarak teslim ediyoruz.</p>
+        </div>
+        <div class="tc-esik">
+          <a class="tc-btn tc-btn--plum" href="tel:03522317506"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tel"/></svg>Ara</a>
+          <a class="tc-btn tc-btn--turq" href="https://wa.me/905052317506"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
+          <a class="tc-more" href="#">Dükkâna gir →</a>
+        </div>
+      </article>
+
+      <!-- 5 open, no rating -->
+      <article class="tc-shop tc-c3">
+        <a href="#" class="tc-shop__sign tc-bolts"><h3>Usta Ali Tesisat</h3></a>
+        <div class="tc-awn"><div class="tc-tente"></div></div>
+        <a href="#" class="tc-vitrin" tabindex="-1" aria-hidden="true">
+          <span class="tc-decal">🚰</span>
+          <span class="tc-kepenk is-open"></span>
+          <span class="tc-acik">AÇIK</span>
+          <span class="tc-enamel tc-place">Kocasinan / Kayseri</span>
+        </a>
+        <div class="tc-shop__body">
+          <div class="tc-meta"><a class="tc-cat" href="#">Tesisat</a><span class="tc-ok">✓ Onaylı esnaf</span></div>
+          <p class="tc-desc">Su kaçağı tespiti, kombi ve petek bakımı, acil tesisat arızasına aynı gün ekip.</p>
+        </div>
+        <div class="tc-esik">
+          <a class="tc-btn tc-btn--plum" href="tel:05324186327"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tel"/></svg>Ara</a>
+          <a class="tc-btn tc-btn--turq" href="https://wa.me/905324186327"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
+          <a class="tc-more" href="#">Dükkâna gir →</a>
+        </div>
+      </article>
+
+      <!-- 6 closed, no whatsapp -->
+      <article class="tc-shop tc-c4">
+        <a href="#" class="tc-shop__sign tc-bolts"><h3>Sahabiye Emlak</h3></a>
+        <div class="tc-awn"><div class="tc-tente"></div></div>
+        <a href="#" class="tc-vitrin" tabindex="-1" aria-hidden="true">
+          <span class="tc-decal">🏠</span>
+          <span class="tc-kepenk is-closed"><span class="tc-kapali">KAPALI</span></span>
+          <span class="tc-enamel tc-place">Melikgazi / Kayseri</span>
+        </a>
+        <div class="tc-shop__body">
+          <div class="tc-meta"><a class="tc-cat" href="#">Emlak</a><span class="tc-star"><b>★ 4,3</b> · 9 yorum</span></div>
+          <p class="tc-desc">Satılık ve kiralık daire, dükkân ve arsa. Tapu ve kredi süreçlerinde yanınızdayız.</p>
+        </div>
+        <div class="tc-esik">
+          <a class="tc-btn tc-btn--plum" href="tel:03522229041"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tel"/></svg>Ara</a>
+          <a class="tc-more" href="#">Dükkâna gir →</a>
+        </div>
+      </article>
+
+      <!-- 7 open, logo -->
+      <article class="tc-shop tc-c3">
+        <a href="#" class="tc-shop__sign tc-bolts"><h3>Sultan Pastanesi</h3></a>
+        <div class="tc-awn"><div class="tc-tente"></div></div>
+        <a href="#" class="tc-vitrin" tabindex="-1" aria-hidden="true">
+          <span class="tc-logo"><svg viewBox="0 0 220 64" aria-hidden="true"><ellipse cx="110" cy="32" rx="104" ry="28" fill="none" stroke="#b4532a" stroke-width="2.5"/><ellipse cx="110" cy="32" rx="98" ry="22.5" fill="none" stroke="#d9a12b" stroke-width="1"/><text x="110" y="35" text-anchor="middle" font-family="Zilla Slab, Georgia, serif" font-weight="700" font-size="26" fill="#5c2346">Sultan</text><text x="110" y="50" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="800" font-size="9" fill="#b4532a" letter-spacing="2">PASTANESİ · 1978</text></svg></span>
+          <span class="tc-kepenk is-open"></span>
+          <span class="tc-acik">AÇIK</span>
+          <span class="tc-enamel tc-place">Kocasinan / Kayseri</span>
+        </a>
+        <div class="tc-shop__body">
+          <div class="tc-meta"><a class="tc-cat" href="#">Pastane</a><span class="tc-star"><b>★ 4,7</b> · 112 yorum</span></div>
+          <p class="tc-desc">Kayseri usulü baklava, yaş pasta ve siparişe özel doğum günü pastaları. Gün içinde taze çıkar.</p>
+        </div>
+        <div class="tc-esik">
+          <a class="tc-btn tc-btn--plum" href="tel:03523205518"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tel"/></svg>Ara</a>
+          <a class="tc-btn tc-btn--turq" href="https://wa.me/905433205518"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
+          <a class="tc-more" href="#">Dükkâna gir →</a>
+        </div>
+      </article>
+
+      <!-- 8 null hours, verified -->
+      <article class="tc-shop tc-c1">
+        <a href="#" class="tc-shop__sign tc-bolts"><h3>Develi Veteriner Kliniği</h3></a>
+        <div class="tc-awn"><div class="tc-tente"></div></div>
+        <a href="#" class="tc-vitrin" tabindex="-1" aria-hidden="true">
+          <span class="tc-decal">🐾</span>
+          <span class="tc-kepenk is-null"></span>
+          <span class="tc-enamel tc-place">Develi / Kayseri</span>
+        </a>
+        <div class="tc-shop__body">
+          <div class="tc-meta"><a class="tc-cat" href="#">Veteriner</a><span class="tc-star"><b>★ 4,9</b> · 26 yorum</span><span class="tc-ok">✓ Onaylı esnaf</span></div>
+          <p class="tc-desc">Aşı, kısırlaştırma, check-up ve acil müdahale. Kedi, köpek ve kuş hastalarına bakılır.</p>
+        </div>
+        <div class="tc-esik">
+          <a class="tc-btn tc-btn--plum" href="tel:03526213074"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tel"/></svg>Ara</a>
+          <a class="tc-btn tc-btn--turq" href="https://wa.me/905306213074"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
+          <a class="tc-more" href="#">Dükkâna gir →</a>
+        </div>
+      </article>
+
+      <!-- 9 yer boş -->
+      <article class="tc-shop is-empty">
+        <a href="#" class="tc-shop__sign tc-bolts"><h3>Yer boş</h3></a>
+        <div class="tc-awn"><div class="tc-tente"></div></div>
+        <a href="#" class="tc-vitrin" tabindex="-1" aria-hidden="true"><span class="tc-kepenk"></span></a>
+        <div class="tc-shop__body">
+          <h4>Bu vitrin senin olsun</h4>
+          <p class="tc-desc">Dükkânını ücretsiz ekle; tabelan, telefonun ve kepenk saatlerin burada görünsün.</p>
+        </div>
+        <div class="tc-esik"><a class="tc-btn tc-btn--mustard" href="#">Tabelanı as</a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 4. SOKAKLAR · TABELA DUVARI ================= -->
+<section class="tc-wall" id="tc-sokaklar">
+  <div class="tc-wrap">
+    <div class="tc-sec__head">
+      <div>
+        <h2 class="tc-h2">Sokaklar</h2>
+        <p class="tc-lead">Her meslek bir tabela. Büyük dükkânın tabelası da büyük.</p>
+      </div>
+    </div>
+    <div class="tc-signs">
+      <a href="#" class="tc-wsign tc-bolts tc-c0 is-big"><span>Kuaför</span><b>214</b></a>
+      <a href="#" class="tc-wsign tc-bolts tc-c5 is-big"><span>Oto Servis</span><b>186</b></a>
+      <a href="#" class="tc-wsign tc-bolts tc-c3 is-big"><span>Tesisat</span><b>158</b></a>
+      <a href="#" class="tc-wsign tc-bolts tc-c4"><span>Emlak</span><b>131</b></a>
+      <a href="#" class="tc-wsign tc-bolts tc-c2"><span>Elektrikçi</span><b>97</b></a>
+      <a href="#" class="tc-wsign tc-bolts tc-c1"><span>Diş Kliniği</span><b>92</b></a>
+      <a href="#" class="tc-wsign tc-bolts tc-c5"><span>Avukat</span><b>88</b></a>
+      <a href="#" class="tc-wsign tc-bolts tc-c3"><span>Pastane</span><b>73</b></a>
+      <a href="#" class="tc-wsign tc-bolts tc-c2"><span>Halı Yıkama</span><b>64</b></a>
+      <a href="#" class="tc-wsign tc-bolts tc-c4"><span>Nakliyat</span><b>58</b></a>
+      <a href="#" class="tc-wsign tc-bolts tc-c0"><span>Mobilya</span><b>56</b></a>
+      <a href="#" class="tc-wsign tc-bolts tc-c1"><span>Veteriner</span><b>31</b></a>
+      <a href="#" class="tc-wsign tc-bolts tc-c5"><span>Oto Ekspertiz</span><b>27</b></a>
+      <a href="#" class="tc-wsign tc-bolts tc-c3"><span>Çilingir</span><b>22</b></a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 5. MAHALLELER ================= -->
+<section class="tc-sec" id="tc-mahalleler">
+  <div class="tc-wrap">
+    <div class="tc-sec__head">
+      <div>
+        <h2 class="tc-h2">Mahalleler</h2>
+        <p class="tc-lead">Semtini seç, o sokaktaki esnafı gör.</p>
+      </div>
+    </div>
+    <div class="tc-cities">
+      <a href="#" class="tc-enamel tc-cplate"><strong>Melikgazi</strong><small>412 esnaf</small></a>
+      <a href="#" class="tc-enamel tc-cplate"><strong>Kocasinan</strong><small>388 esnaf</small></a>
+      <a href="#" class="tc-enamel tc-cplate"><strong>Talas</strong><small>196 esnaf</small></a>
+      <a href="#" class="tc-enamel tc-cplate"><strong>Develi</strong><small>83 esnaf</small></a>
+      <a href="#" class="tc-enamel tc-cplate"><strong>Hacılar</strong><small>74 esnaf</small></a>
+      <a href="#" class="tc-enamel tc-cplate"><strong>İncesu</strong><small>61 esnaf</small></a>
+      <a href="#" class="tc-enamel tc-cplate"><strong>Yahyalı</strong><small>47 esnaf</small></a>
+      <a href="#" class="tc-enamel tc-cplate is-zinc"><strong>Diğer İller</strong><small>36 esnaf</small></a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 6. ELEMAN ARANIYOR ================= -->
+<section class="tc-sec">
+  <div class="tc-wrap">
+    <div class="tc-sec__head">
+      <div>
+        <h2 class="tc-h2">Eleman aranıyor</h2>
+        <p class="tc-lead">Çarşının camına asılan son ilanlar.</p>
+      </div>
+      <a class="tc-more" href="#">Tüm ilanlar →</a>
+    </div>
+    <div class="tc-window">
+      <div class="tc-notes">
+        <a href="#" class="tc-note"><p class="tc-note__head">ELEMAN ARANIYOR</p><h3>Kadın kuaför kalfası</h3><p>Özgün Kuaför · Melikgazi</p><span>İlanı oku →</span></a>
+        <a href="#" class="tc-note"><p class="tc-note__head">ELEMAN ARANIYOR</p><h3>Oto elektrik ustası</h3><p>Erciyes Oto Servis · Kocasinan</p><span>İlanı oku →</span></a>
+        <a href="#" class="tc-note"><p class="tc-note__head">ELEMAN ARANIYOR</p><h3>Tezgâhtar (tam zamanlı)</h3><p>Sultan Pastanesi · Kocasinan</p><span>İlanı oku →</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 7. ÇARŞIDAN NOTLAR ================= -->
+<section class="tc-sec">
+  <div class="tc-wrap">
+    <div class="tc-sec__head">
+      <div>
+        <h2 class="tc-h2">Çarşıdan notlar</h2>
+        <p class="tc-lead">Ustalardan kısa, işe yarar bilgiler.</p>
+      </div>
+      <a class="tc-more" href="#">Tüm notlar →</a>
+    </div>
+    <div class="tc-posts">
+      <a href="#" class="tc-post"><h3>Tesisatçı çağırmadan önce bilmeniz gereken 6 şey</h3><p>Su kaçağı mı, tıkanıklık mı? Ustayı aramadan önce vanayı nerede kapatacağınızı ve hangi bilgileri hazır tutacağınızı anlattık.</p><time>12 Ekim 2026</time></a>
+      <a href="#" class="tc-post"><h3>Kışa girerken aracınızda kontrol ettirmeniz gerekenler</h3><p>Antifriz, akü, lastik ve silecekler. Erciyes yoluna çıkmadan önce serviste baktırmanız gereken kısa liste.</p><time>3 Ekim 2026</time></a>
+      <a href="#" class="tc-post"><h3>Halı yıkamada teslim süresini ne belirler?</h3><p>Yıkama yöntemi, kurutma odası ve hava durumu. Halınızın kaç günde döneceğini önceden nasıl öğrenirsiniz?</p><time>27 Eylül 2026</time></a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 8. TABELANI AS ================= -->
+<section class="tc-cta">
+  <div class="tc-wrap">
+    <div class="tc-hang">
+      <div class="tc-hang__rail" aria-hidden="true"></div>
+      <div class="tc-board tc-bolts">
+        <div class="tc-board__strip">Tabelanı as</div>
+        <div class="tc-board__inner">
+          <div class="tc-blank"><span>Senin tabelan burada dursun</span></div>
+          <h2>Dükkânını çarşıya taşı.</h2>
+          <p>Ücretsiz başvur, ekibimiz WhatsApp'tan dönsün.</p>
+          <div class="tc-cta__btns">
+            <a class="tc-btn tc-btn--plum" href="#">Tabelanı as</a>
+            <a class="tc-btn tc-btn--turq" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp'tan sor</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="tc-footer">
+  <div class="tc-footer__walk"></div>
+  <div class="tc-footer__kerb"></div>
+  <div class="tc-wrap tc-footer__in">
+    <div>
+      <a href="#" class="tc-brand tc-paint">Kayseri Rehberi</a>
+      <p>Kayseri'nin ustalarını, dükkânlarını ve hizmetlerini tek yerde bul. Telefonla ya da WhatsApp'tan doğrudan ulaş.</p>
+    </div>
+    <div><h4>Çarşı</h4><ul><li><a href="#">Firmalar</a></li><li><a href="#">Meslekler</a></li><li><a href="#">Semtler</a></li><li><a href="#">İş ilanları</a></li></ul></div>
+    <div><h4>Esnaf için</h4><ul><li><a href="#">Tabelanı as</a></li><li><a href="#">Firma paneli</a></li><li><a href="#">Öne çıkma</a></li></ul></div>
+    <div><h4>Bilgi</h4><ul><li><a href="#">Blog</a></li><li><a href="#">İletişim</a></li><li><a href="#">Gizlilik</a></li></ul></div>
+  </div>
+  <div class="tc-wrap"><div class="tc-footer__bottom">© 2026 Kayseri Rehberi</div></div>
+</footer>
+
+<div class="tc-sticky" aria-hidden="false">
+  <a href="#tc-ara" class="tc-btn tc-btn--plum" data-ara>Esnafa sor</a>
+  <a href="#" class="tc-btn tc-btn--mustard">Tabelanı as</a>
+</div>
+
+<script>
+(function(){var s=document.getElementById('tc-ara'),b=document.querySelector('.tc-sticky');if(!s||!b||!('IntersectionObserver' in window))return;
+new IntersectionObserver(function(e){b.classList.toggle('is-on',!e[0].isIntersecting)}).observe(s);
+b.querySelector('[data-ara]').addEventListener('click',function(ev){ev.preventDefault();s.scrollIntoView({behavior:'smooth',block:'center'});s.querySelector('input').focus({preventScroll:true})});})();
+</script>
+</body>
+</html>

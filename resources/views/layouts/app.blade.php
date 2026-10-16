@@ -121,6 +121,9 @@
     @if($activeLayout === 'sun-listing')
         @include('partials.sun-listing.styles')
     @endif
+    @if($activeLayout === 'kartvizitlik')
+        @include('partials.kartvizitlik.styles')
+    @endif
     @if($activeLayout === 'ilan-board')
         @include('partials.ilan.styles')
     @endif
@@ -138,7 +141,8 @@
 
     {{-- Dynamic Google Fonts per template --}}
     @php $fontsUrl = \App\View\Helpers\ThemeHelper::googleFontsUrl($directory ?? null); @endphp
-    @if($fontsUrl)
+    {{-- kartvizitlik kendi ağırlıklı yazı tipi adresini styles partial'ında yükler. --}}
+    @if($fontsUrl && $activeLayout !== 'kartvizitlik')
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" as="style" href="{{ $fontsUrl }}" onload="this.onload=null;this.rel='stylesheet'">
@@ -231,6 +235,8 @@
         @include('partials.local-ledger.header')
     @elseif($activeLayout === 'sun-listing')
         @include('partials.sun-listing.header')
+    @elseif($activeLayout === 'kartvizitlik')
+        @include('partials.kartvizitlik.header')
     @else
     <header class="sticky top-0 z-50 border-b backdrop-blur" style="background-color:color-mix(in srgb,var(--bg_card) 92%,transparent);border-color:var(--border);box-shadow:var(--card_shadow);">
         <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width:var(--page_width,1280px);">
@@ -347,7 +353,7 @@
             @include('partials.mobile-shell')
         @else
             @yield('content')
-            @if(request()->routeIs('home') && !in_array($activeLayout, [...$mobileShellLayouts, ...\App\View\Helpers\ThemeHelper::PHONE_SHELL, 'classifieds-board', 'acid-poster', 'cinematic-atlas', 'departure-board', 'signal-station', 'design-catalog', 'board-v2', 'split-hero', 'ilan-board']) && isset($homeJobs) && $homeJobs->isNotEmpty())
+            @if(request()->routeIs('home') && !in_array($activeLayout, [...$mobileShellLayouts, ...\App\View\Helpers\ThemeHelper::PHONE_SHELL, 'classifieds-board', 'acid-poster', 'cinematic-atlas', 'departure-board', 'signal-station', 'design-catalog', 'board-v2', 'split-hero', 'ilan-board', 'kartvizitlik']) && isset($homeJobs) && $homeJobs->isNotEmpty())
                 @include('partials.home-jobs')
             @endif
         @endif
@@ -418,12 +424,14 @@
                 menu?.classList.remove('translate-x-[-105%]');
                 backdrop?.classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
+                if (openBtn?.hasAttribute('aria-expanded')) openBtn.setAttribute('aria-expanded', 'true');
             }
 
             window.closeMobileMenu = function() {
                 menu?.classList.add('translate-x-[-105%]');
                 backdrop?.classList.add('hidden');
                 document.body.style.overflow = '';
+                if (openBtn?.hasAttribute('aria-expanded')) openBtn.setAttribute('aria-expanded', 'false');
             };
 
             window.openMobileMenu = openMobileMenu;
