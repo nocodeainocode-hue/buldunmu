@@ -8,8 +8,25 @@
     $kvTotal = (int) ($totalCompanies ?? 0);
     $kvName = $directory->name ?? ($settings->site_name ?? 'Firma Rehberi');
     $kvFirms = $premiumCompanies->concat($latestCompanies)->unique('id')->values();
-    $kvFan = $kvFirms->count() >= 4 ? $kvFirms->first() : null;
-    $kvRack = $kvFirms->take(9);
+    // Yelpaze: öne çıkan + son eklenen ilk üç firma; eksik yuva boş "Kartını bırak" kartıyla dolar.
+    $kvFanFirms = $kvFirms->take(3)->values();
+    $kvFanSlots = $kvFanFirms->all() + [null, null, null];
+    // 6 ve üzeri firmada yelpazedeki kartlar masaüstü rafında tekrar görünmez (raf "--fanned" ile yalnızca mobilde gösterir;
+    // mobilde yelpaze gizli olduğundan öne çıkan firmalar orada kaybolmaz). Hiçbir firma düşürülmez; masaüstündeki son
+    // sıra, bağlantısız süs boş kartlarla ($kvRackPad, yalnızca >=1024px) tamamlanır.
+    $kvFanFull = $kvFirms->count() >= 6;
+    if ($kvFanFull) {
+        $kvRack = $kvFanFirms->concat($kvFirms->slice(3)->take(8))->values();
+    } else {
+        $kvRack = $kvFirms->take(9);
+    }
+    $kvRackFanned = $kvFanFull ? 3 : 0;
+    // Masaüstünde görünen firma sayısı 3'ün katıysa raftaki "Kartını bırak" kartı yalnızca mobilde kalır (son sıra tam,
+    // üst üste boş kart dizilmez); değilse boş kart sırayı tamamlar, gerekirse yanına bir süs boş kart eklenir.
+    $kvRackN = $kvRack->count() - $kvRackFanned;
+    $kvRackBlankDesk = $kvRackN % 3 !== 0;
+    $kvRackPad = $kvRackBlankDesk ? (3 - (($kvRackN + 1) % 3)) % 3 : 0;
+    $kvRackBlankClass = $kvRackBlankDesk ? 'kv-rack__item' : 'kv-rack__item kv-rack__item--mob';
     // Kategori ve şehir listeleri ana sayfada 12 ile sınırlı; etikete yalnızca gerçek firma toplamı yazılır.
     $kvLabelText = implode(' · ', array_filter([
         $kvName.' · kart dosyası',
@@ -93,19 +110,20 @@
                 @endif
             </div>
 
-            <div class="kv-fan">
-                <span class="kv-fan__back kv-fan__back--1" aria-hidden="true"></span>
-                <span class="kv-fan__back kv-fan__back--2" aria-hidden="true"></span>
-                <div class="kv-fan__top">
-                    @if($kvFan)
-                        @include('partials.kartvizitlik.card', ['company' => $kvFan, 'kvNameTag' => 'p'])
-                    @elseif($kvFirms->isNotEmpty())
-                        @include('partials.kartvizitlik.blank-card', ['kvBlankTitle' => 'Senin kartın burada olabilir'])
-                    @else
-                        @include('partials.kartvizitlik.blank-card', ['kvBlankTitle' => 'İlk kart senin olsun'])
-                    @endif
-                </div>
-            </div>
+            {{-- Yelpaze: DOM sırası öndeki karttan arkaya (1 = en önde, en altta); arkadakilerin adı ve dalı üstte görünür. --}}
+            <ul class="kv-fan" role="list" aria-label="Masadaki ilk kartlar">
+                @foreach($kvFanSlots as $kvSlot)
+                    <li class="kv-fan__item kv-fan__item--{{ $loop->iteration }}">
+                        @if($kvSlot)
+                            @include('partials.kartvizitlik.card', ['company' => $kvSlot, 'kvNameTag' => 'p'])
+                        @elseif($loop->index === $kvFanFirms->count())
+                            @include('partials.kartvizitlik.blank-card', ['kvBlankTitle' => $kvFirms->isNotEmpty() ? 'Senin kartın burada olabilir' : 'İlk kart senin olsun'])
+                        @else
+                            @include('partials.kartvizitlik.blank-card', ['kvBlankDecor' => true])
+                        @endif
+                    </li>
+                @endforeach
+            </ul>
         </div>
     </section>
 
@@ -121,14 +139,17 @@
             @if($kvRack->isNotEmpty())
                 <ul class="kv-rack" role="list">
                     @foreach($kvRack as $kvCo)
-                        <li class="kv-rack__item{{ $kvFan && $loop->first ? ' kv-rack__item--fanned' : '' }}">@include('partials.kartvizitlik.card', ['company' => $kvCo])</li>
-                        @if($loop->iteration === ($kvFan ? 4 : 3))
-                            <li class="kv-rack__item">@include('partials.kartvizitlik.blank-card')</li>
+                        <li class="kv-rack__item{{ $loop->index < $kvRackFanned ? ' kv-rack__item--fanned' : '' }}">@include('partials.kartvizitlik.card', ['company' => $kvCo])</li>
+                        @if($loop->iteration === $kvRackFanned + 3)
+                            <li class="{{ $kvRackBlankClass }}">@include('partials.kartvizitlik.blank-card')</li>
                         @endif
                     @endforeach
-                    @if($kvRack->count() < ($kvFan ? 4 : 3))
-                        <li class="kv-rack__item">@include('partials.kartvizitlik.blank-card')</li>
+                    @if($kvRack->count() < $kvRackFanned + 3)
+                        <li class="{{ $kvRackBlankClass }}">@include('partials.kartvizitlik.blank-card')</li>
                     @endif
+                    @for($kvP = 0; $kvP < $kvRackPad; $kvP++)
+                        <li class="kv-rack__item kv-rack__item--pad" aria-hidden="true">@include('partials.kartvizitlik.blank-card', ['kvBlankDecor' => true])</li>
+                    @endfor
                 </ul>
                 <div class="kv-more-row">
                     <a class="kv-btn kv-btn--line" href="{{ route('companies.index') }}">Tüm kartları gör @if($kvTotal >= 25)({{ number_format($kvTotal, 0, ',', '.') }} kart)@endif</a>

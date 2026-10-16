@@ -35,7 +35,7 @@
         <{{ $kvNameTag }} class="kv-card__name"><a href="{{ $kvUrl }}"><span class="kv-card__name-text">{{ $company->name }}</span></a></{{ $kvNameTag }}>
     </div>
     <p class="kv-card__unvan"><span class="kv-card__unvan-rule" aria-hidden="true"></span><span>{{ $company->category->name ?? 'İşletme' }}</span>@if($kvPremium) <span class="kv-card__premium">✦ Öne çıkan</span>@endif</p>
-    <p class="kv-card__desc">{{ $company->short_description ?: 'Ayrıntılar kartın tamamında.' }}</p>
+    @if(filled($company->short_description))<p class="kv-card__desc">{{ $company->short_description }}</p>@endif
     <p class="kv-card__where">
         @if($kvOpen === true)<span class="kv-card__open"><span class="kv-dot" aria-hidden="true"></span>Şu an açık</span>@elseif($kvOpen === false)<span class="kv-card__closed">Kapalı</span>@endif
         @if($kvPlace !== '')<span class="kv-card__place"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>{{ $kvPlace }}</span>@endif

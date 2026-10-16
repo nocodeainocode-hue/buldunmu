@@ -150,9 +150,119 @@ class KartvizitlikThemeTest extends TestCase
         $this->assertCount(1, array_unique($fontUrls[0]));
     }
 
+    /** Yelpaze bölümünün HTML'i ve masaüstünde görünen raf kartlarının (yalnızca mobilde açılan "--fanned" hariç) adları. */
+    private function fanAndRack(): array
+    {
+        $html = (string) $this->open('/')->assertOk()->getContent();
+        preg_match('#<ul class="kv-fan".*?</ul>#s', $html, $fan);
+        preg_match('#<ul class="kv-rack".*?</ul>#s', $html, $rack);
+        $this->assertNotEmpty($fan, 'Yelpaze basılmadı.');
+        preg_match_all('#<li class="kv-rack__item">.*?</li>#s', $rack[0] ?? '', $visible);
+        preg_match_all('#<li class="kv-rack__item kv-rack__item--fanned">.*?</li>#s', $rack[0] ?? '', $fanned);
+        $names = fn (array $items) => collect($items)->map(fn ($li) => preg_match('#kv-card__name-text">([^<]+)<#', $li, $m) ? html_entity_decode($m[1]) : null)->filter()->values()->all();
+
+        return [$fan[0], $names($visible[0]), $names($fanned[0]), $html];
+    }
+
+    public function test_hero_fan_shows_three_real_cards_without_repeating_them_in_the_rack(): void
+    {
+        foreach (['Usta Berber' => '0533 222 33 44', 'Kadıköy Güzellik' => '0216 345 67 89', 'Merkez Salon' => '0532 765 43 21', 'Talas Kuaför' => '0352 437 28 46', 'Melikgazi Saç' => '0352 222 14 37', 'Erciyes Salon' => '0532 418 27 63'] as $name => $phone) {
+            $this->addCompany($name, $phone);
+        }
+
+        [$fan, $rackVisible, $rackFanned] = $this->fanAndRack();
+
+        preg_match_all('#<p class="kv-card__name"><a href="[^"]+"><span class="kv-card__name-text">([^<]+)<#', $fan, $fanNames);
+        $fanNames = array_map('html_entity_decode', $fanNames[1]);
+        $this->assertCount(3, $fanNames);
+        // Öne çıkan firma yelpazenin önünde (ilk sırada).
+        $this->assertSame('Özgün Kuaför', $fanNames[0]);
+        $this->assertStringNotContainsString('kv-card--blank', $fan);
+        $this->assertSame(3, substr_count($fan, 'href="tel:'));
+        $this->assertStringContainsString('https://wa.me/905321234567', $fan);
+        $this->assertStringNotContainsString('<h3', $fan);
+
+        // Masaüstü rafı yelpazedekileri tekrar göstermez; yalnızca mobilde (yelpaze gizliyken) "--fanned" olarak durur.
+        $this->assertSame([], array_values(array_intersect($fanNames, $rackVisible)));
+        $this->assertSame($fanNames, $rackFanned);
+        // Hiçbir firma düşmez: yelpaze + masaüstü rafı tüm firmaları birer kez gösterir; mobil raf da hepsini içerir.
+        $all = ['Özgün Kuaför', 'Usta Berber', 'Kadıköy Güzellik', 'Merkez Salon', 'Talas Kuaför', 'Melikgazi Saç', 'Erciyes Salon'];
+        $this->assertCount(4, $rackVisible);
+        $this->assertEqualsCanonicalizing($all, array_merge($fanNames, $rackVisible));
+        $this->assertEqualsCanonicalizing($all, array_merge($rackFanned, $rackVisible));
+    }
+
+    public function test_rack_last_row_is_completed_without_dropping_firms(): void
+    {
+        foreach (['Usta Berber' => '0533 222 33 44', 'Kadıköy Güzellik' => '0216 345 67 89', 'Merkez Salon' => '0532 765 43 21', 'Talas Kuaför' => '0352 437 28 46', 'Melikgazi Saç' => '0352 222 14 37'] as $name => $phone) {
+            $this->addCompany($name, $phone);
+        }
+
+        // 6 firma: yelpazede 3, masaüstü rafında 3 (tam sıra); "Kartını bırak" kartı yalnızca mobilde, süs yok.
+        [, $rackVisible, , $html] = $this->fanAndRack();
+        preg_match('#<ul class="kv-rack".*?</ul>#s', $html, $rack);
+        $this->assertCount(3, $rackVisible);
+        $this->assertSame(0, substr_count($rack[0], 'kv-rack__item--pad'));
+        $this->assertSame(1, substr_count($rack[0], 'kv-rack__item--mob'));
+
+        // 7 firma: rafta 4 + boş kart + 1 süs boş kart (masaüstünde 2 tam sıra).
+        $this->addCompany('Erciyes Salon', '0532 418 27 63');
+        [, $rackVisible, , $html] = $this->fanAndRack();
+        preg_match('#<ul class="kv-rack".*?</ul>#s', $html, $rack);
+        $this->assertCount(4, $rackVisible);
+        $this->assertSame(1, substr_count($rack[0], 'kv-rack__item--pad'));
+        $this->assertSame(0, substr_count($rack[0], 'kv-rack__item--mob'));
+
+        // 9 firma: rafta 6; boş kart yalnızca mobilde, süs yok.
+        $this->addCompany('Kocasinan Salon', '0532 418 27 64');
+        $this->addCompany('Hisar Salon', '0532 418 27 65');
+        [, $rackVisible, , $html] = $this->fanAndRack();
+        preg_match('#<ul class="kv-rack".*?</ul>#s', $html, $rack);
+        $this->assertCount(6, $rackVisible);
+        $this->assertSame(0, substr_count($rack[0], 'kv-rack__item--pad'));
+        $this->assertSame(1, substr_count($rack[0], 'kv-rack__item--mob'));
+    }
+
+    public function test_hero_fan_fills_missing_slots_with_blank_cards_when_few_firms(): void
+    {
+        $this->addCompany('Usta Berber', '0533 222 33 44');
+
+        [$fan, $rackVisible, $rackFanned] = $this->fanAndRack();
+
+        $this->assertSame(2, substr_count($fan, 'class="kv-card__name-text"'));
+        $this->assertSame(1, substr_count($fan, 'Senin kartın burada olabilir'));
+        // İki firma + üçüncü yuvada tek bağlantılı boş kart.
+        $this->assertSame(1, substr_count($fan, 'aria-label="Kartını bırak: firmanı ücretsiz ekle"'));
+        $this->assertSame(0, substr_count($fan, 'class="kv-card kv-card--blank" aria-hidden="true"'));
+        // Az firmada raf tüm firmaları gösterir.
+        $this->assertEqualsCanonicalizing(['Özgün Kuaför', 'Usta Berber'], $rackVisible);
+        $this->assertSame([], $rackFanned);
+    }
+
+    public function test_card_without_description_shows_no_filler_text(): void
+    {
+        $this->addCompany('Açıklamasız Salon', '0533 222 33 44');
+
+        [, , , $html] = $this->fanAndRack();
+
+        $this->assertStringNotContainsString('Ayrıntılar kartın tamamında', $html);
+        $this->assertStringContainsString('Açıklamasız Salon', $html);
+        // Açıklama yalnızca gerçek veri varsa basılır.
+        $this->assertSame(substr_count($html, 'Saç ve bakım hizmetleri.'), substr_count($html, 'class="kv-card__desc"'));
+    }
+
     public function test_empty_directory_still_renders_with_a_call_to_action(): void
     {
         Company::query()->withoutGlobalScopes()->delete();
+
+        [$fan] = $this->fanAndRack();
+        $this->assertSame(3, substr_count($fan, 'kv-card--blank'));
+        // Yalnızca öndeki boş kart bağlantıdır; arkadaki iki kopya süstür, bağlantı tekrarlanmaz.
+        $this->assertSame(1, substr_count($fan, 'href="'.route('owner.register').'"'));
+        $this->assertSame(2, substr_count($fan, 'class="kv-card kv-card--blank" aria-hidden="true"'));
+        // Süs kopyalarında "Senin yerin" damgası tekrarlanmaz.
+        $this->assertSame(1, substr_count($fan, 'Senin yerin'));
+        $this->assertStringContainsString('aria-label="Masadaki ilk kartlar"', $fan);
 
         $this->open('/')->assertOk()
             ->assertSee('İlk kart senin olsun')

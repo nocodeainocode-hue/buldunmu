@@ -2,11 +2,21 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.20.0',
-    'name' => 'Kartvizitlik Teması',
+    'number' => '1.20.1',
+    'name' => 'Kartvizitlik Yelpazesi',
     'released_at' => '2026-10-16',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.20.1',
+            'name' => 'Kartvizitlik Yelpazesi',
+            'released_at' => '2026-10-16',
+            'changes' => [
+                'Kartvizitlik hero: tek kart + iki boş kâğıt yerine üç gerçek firma kartından yelpaze. Yelpaze sağ sütunu doldurur ve başlık/arama hizasında ortalanır; önde siyah öne çıkan kart, arkada kâğıt renkli kartlar. Fareyle ya da klavyeyle odaklanınca açılır ve üç numara da okunur; dokunmatik geniş ekranda açık durur.',
+                'Kart rafı artık firma düşürmüyor (6-9 firmalı rehberlerde bazı firmalar ana sayfadan kayboluyordu); yelpazedeki firmalar rafta tekrar edilmez.',
+                'Açıklaması olmayan firmada "Ayrıntılar kartın tamamında." dolgu yazısı kaldırıldı.',
+            ],
+        ],
         [
             'number' => '1.20.0',
             'name' => 'Kartvizitlik Teması',

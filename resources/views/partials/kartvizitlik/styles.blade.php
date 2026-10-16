@@ -90,12 +90,54 @@
     .kv-qtab:focus-visible { clip-path: none; }
 
     /* Yelpaze (yalnızca masaüstü) */
-    .kv-fan { display: none; position: relative; z-index: 1; }
-    .kv-fan__back { position: absolute; right: 0; bottom: 0; width: min(360px,100%); height: 230px; border-radius: 6px; background: var(--kv-stock); border: 1px solid rgba(60,40,10,.12); box-shadow: var(--kv-edge); transform-origin: 12% 100%; }
-    .kv-fan__back--1 { transform: rotate(9deg); }
-    .kv-fan__back--2 { transform: rotate(4deg); }
-    .kv-fan__top { position: relative; container-type: inline-size; width: min(360px,100%); margin-left: auto; transform: rotate(-2deg); transition: transform .16s; }
-    .kv-fan__top:hover, .kv-fan__top:focus-within { transform: none; }
+    /* Üç kart basamaklı durur: arkadaki kartın adı ve dalı öndekinin üstünde okunur; üzerine gelince ya da odakta
+       kartlar dikeyde açılır ve üç numara da görünür. --step dinlenme aralığı, --open açık aralık. */
+    .kv-fan { --kv-fan-h: 196px; --kv-fan-step: 84px; --kv-fan-open: calc(var(--kv-fan-h) + 14px); --kv-fan-dx: 22px; --kv-fan-shift: calc(var(--kv-fan-open) - var(--kv-fan-step)); display: none; position: relative; z-index: 1; margin: 0; padding: 0; list-style: none; }
+    .kv-fan__item { position: absolute; left: 0; width: min(372px, calc(100% - 2 * var(--kv-fan-dx))); height: var(--kv-fan-h); container-type: inline-size; list-style: none; transition: transform .32s cubic-bezier(.2,.7,.2,1); }
+    .kv-fan__item > .kv-card { min-height: 0; height: 100%; justify-content: flex-start; }
+    /* Yelpaze kartı sabit yükseklikte: her satır tek satırda kalır, numara şeridi kartın dışına taşmaz. */
+    .kv-fan .kv-card__name-text { -webkit-line-clamp: 1; }
+    .kv-fan .kv-card__logo { width: 28px; height: 28px; }
+    .kv-fan .kv-card__unvan { flex-wrap: nowrap; overflow: hidden; white-space: nowrap; }
+    .kv-fan .kv-card__where { flex-wrap: nowrap; overflow: hidden; white-space: nowrap; }
+    .kv-fan .kv-card__rating { display: none; }
+    .kv-fan .kv-strip { margin-top: auto; }
+    /* Koyu kartlar üst üste binince katmanlar seçilsin. */
+    .kv-fan .kv-card--premium { border-color: rgba(255,255,255,.16); box-shadow: inset 0 1px 0 rgba(255,255,255,.10), 0 10px 24px rgba(20,14,6,.28), var(--kv-edge); }
+    .kv-fan__item--1 > .kv-card { box-shadow: inset 0 1px 0 rgba(255,255,255,.10), 0 18px 40px -12px rgba(20,14,6,.5), var(--kv-edge); }
+    .kv-fan__item--1 > .kv-card--blank { box-shadow: 0 18px 40px -16px rgba(20,14,6,.35); }
+    .kv-fan__item--3 { z-index: 1; top: 0; left: calc(2 * var(--kv-fan-dx)); transform: rotate(3deg); }
+    .kv-fan__item--2 { z-index: 2; top: var(--kv-fan-step); left: 0; transform: rotate(-2.5deg); }
+    .kv-fan__item--1 { z-index: 3; top: calc(2 * var(--kv-fan-step)); left: var(--kv-fan-dx); transform: rotate(1deg); }
+    /* Yalnızca öndeki kart siyah (öne çıkan) kalır; arkadaki öne çıkan kartlar kâğıt rengine döner, altın "Öne çıkan" etiketi kalır.
+       Üç siyah kart üst üste tek bir ağır blok gibi okunuyordu. */
+    .kv-fan__item:not(.kv-fan__item--1) > .kv-card--premium { background: radial-gradient(rgba(35,32,28,.03) 1px,transparent 1px) 0 0/3px 3px, var(--kv-stock); border-color: rgba(60,40,10,.14); color: var(--text); box-shadow: var(--kv-edge); }
+    .kv-fan__item:not(.kv-fan__item--1) > .kv-card--premium :where(.kv-card__name, .kv-card__name-text) { background: none; color: var(--kv-ink); }
+    .kv-fan__item:not(.kv-fan__item--1) > .kv-card--premium .kv-card__unvan { color: var(--kv-umber); }
+    .kv-fan__item:not(.kv-fan__item--1) > .kv-card--premium .kv-card__premium { color: #8a6514; }
+    .kv-fan__item:not(.kv-fan__item--1) > .kv-card--premium :where(.kv-card__desc, .kv-card__where, .kv-call__k) { color: var(--text_muted); }
+    .kv-fan__item:not(.kv-fan__item--1) > .kv-card--premium .kv-strip { background: rgba(35,32,28,.03); border-top-color: rgba(35,32,28,.1); }
+    .kv-fan__item:not(.kv-fan__item--1) > .kv-card--premium .kv-call { color: var(--kv-ink); }
+    .kv-fan__item:not(.kv-fan__item--1) > .kv-card--premium :where(.kv-call--wa, .kv-call--wa .kv-call__k) { color: var(--kv-open); }
+    .kv-fan__item:not(.kv-fan__item--1) > .kv-card--premium :where(.kv-more, .kv-strip__all) { color: var(--kv-ink); border-color: rgba(35,32,28,.2); }
+    .kv-fan__item:not(.kv-fan__item--1) > .kv-card--premium :where(a,button):focus-visible { outline-color: var(--kv-ink); }
+    .kv-fan .kv-card--blank, .kv-fan .kv-card--blank:hover { background: var(--kv-stock); }
+    /* Boş kartta "Senin yerin" etiketi köşeye alınır; başlık ve ghost dal satırı, gerçek kartlarla aynı yükseklikte okunur. */
+    .kv-fan .kv-card--blank .kv-tag { position: absolute; top: -12px; right: 16px; background: var(--kv-stock); }
+    /* Arkadaki kartlarda dinlenirken yalnızca ad ve dal görünür; yarım kesilmiş açıklama satırı kalmaz. */
+    .kv-fan__item:not(.kv-fan__item--1) :where(.kv-card__desc,.kv-card__where,.kv-strip) { opacity: 0; transition: opacity .2s; }
+    .kv-fan:focus-within .kv-fan__item--3 { transform: translateY(calc(-1 * var(--kv-fan-shift))) rotate(.6deg); }
+    .kv-fan:focus-within .kv-fan__item--2 { transform: rotate(-.4deg); }
+    .kv-fan:focus-within .kv-fan__item--1 { transform: translateY(var(--kv-fan-shift)) rotate(-.8deg); }
+    .kv-fan:focus-within .kv-fan__item :where(.kv-card__desc,.kv-card__where,.kv-strip) { opacity: 1; }
+    @media (hover: hover) {
+        .kv-fan:hover .kv-fan__item--3 { transform: translateY(calc(-1 * var(--kv-fan-shift))) rotate(.6deg); }
+        .kv-fan:hover .kv-fan__item--2 { transform: rotate(-.4deg); }
+        .kv-fan:hover .kv-fan__item--1 { transform: translateY(var(--kv-fan-shift)) rotate(-.8deg); }
+        .kv-fan:hover .kv-fan__item :where(.kv-card__desc,.kv-card__where,.kv-strip) { opacity: 1; }
+        /* Fare girince kartlar hemen kaymaz: öndeki karta doğrudan tıklayan ıskalamaz. Çıkışta gecikme yok. */
+        .kv-fan:hover .kv-fan__item { transition-delay: .18s; }
+    }
 
     /* Bölümler */
     .kv-section { padding: 64px 0; content-visibility: auto; contain-intrinsic-size: auto 640px; }
@@ -110,6 +152,7 @@
     /* Kartvizit */
     .kv-rack { display: grid; grid-template-columns: minmax(0,1fr); gap: 20px; margin: 0; padding: 0; list-style: none; }
     .kv-rack > li { container-type: inline-size; min-width: 0; list-style: none; }
+    .kv-rack__item--pad { display: none; }
     .kv-card { position: relative; display: flex; flex-direction: column; gap: 6px; height: 100%; min-width: 0; min-height: 200px; min-height: max(200px, calc(100cqi * 55 / 85)); padding: 18px 20px 0; border: 1px solid rgba(60,40,10,.12); border-radius: 6px; background: radial-gradient(rgba(35,32,28,.03) 1px,transparent 1px) 0 0/3px 3px, var(--kv-stock); box-shadow: var(--kv-edge); color: var(--text); text-decoration: none; transition: transform .16s, box-shadow .16s; }
     .kv-card:not(.kv-card--xl):hover, .kv-card:not(.kv-card--xl):focus-within { transform: translateY(-2px); box-shadow: var(--kv-edge-up); }
     .kv-card--open::before { content: ""; position: absolute; left: -1px; top: 18px; width: 4px; height: 30px; background: var(--kv-notch); border-radius: 0 2px 2px 0; }
@@ -182,7 +225,6 @@
     .kv-empty { display: flex; justify-content: center; }
     .kv-empty__card { justify-content: center; gap: 12px; min-height: 260px; padding-bottom: 22px; }
     .kv-empty__card .kv-tag { position: absolute; top: 16px; right: 16px; }
-    .kv-fan__top .kv-card--blank, .kv-fan__top .kv-card--blank:hover { background: var(--kv-stock); }
     .kv-empty__text { margin: 0; color: var(--text_muted); font-size: 17px; }
     .kv-empty-line { display: flex; flex-wrap: wrap; align-items: center; gap: 0 12px; margin: 0; color: var(--text_muted); font-size: 17px; }
 
@@ -287,15 +329,31 @@
         .kv-notes { grid-template-columns: repeat(2,minmax(0,1fr)); }
     }
     @media (min-width: 1024px) {
-        .kv-hero__grid { grid-template-columns: minmax(0,620px) minmax(0,1fr); }
-        .kv-fan { display: block; align-self: end; margin-left: -48px; padding: 24px 12px 0 0; }
+        .kv-hero__grid { grid-template-columns: minmax(0,1.3fr) minmax(0,1fr); gap: 48px; }
+        /* Yelpaze sağ sütunu doldurur ve başlık + arama fişine göre dikeyde ortalanır. */
+        .kv-fan { display: block; align-self: center; justify-self: end; width: 100%; max-width: 440px; height: calc(var(--kv-fan-h) + 2 * var(--kv-fan-step)); }
+        .kv-hero__main { align-self: center; }
         .kv-rack { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 28px; }
         .kv-rack__item--fanned { display: none; }
+        .kv-rack__item--pad { display: block; }
+        .kv-rack__item--mob { display: none; }
         .kv-drawers { grid-template-columns: repeat(4,minmax(0,1fr)); }
         .kv-boxes { grid-template-columns: repeat(6,minmax(0,1fr)); }
         .kv-notes { grid-template-columns: repeat(3,minmax(0,1fr)); }
         .kv-cta__grid { grid-template-columns: minmax(0,560px) minmax(0,1fr); gap: 48px; }
         .kv-cta__card { margin-inline: 0; }
+    }
+    /* Açılan yelpaze (3 kart + 2 aralık) hero'nun iç boşluğunda kalsın: kısa başlıkta da üst şeride ve sonraki bölüme taşmaz. */
+    @media (min-width: 1024px) and (hover: hover) {
+        .kv-hero__grid { min-height: calc(3 * 196px + 2 * 14px - 40px); }
+    }
+    /* Dokunmatik geniş ekran (tablet yatay): üzerine gelme yok, yelpaze baştan açık durur. */
+    @media (min-width: 1024px) and (hover: none) {
+        .kv-fan { --kv-fan-step: var(--kv-fan-open); --kv-fan-shift: 0px; }
+        .kv-fan__item--3 { transform: rotate(.6deg); }
+        .kv-fan__item--2 { transform: rotate(-.4deg); }
+        .kv-fan__item--1 { transform: rotate(-.8deg); }
+        .kv-fan__item :where(.kv-card__desc,.kv-card__where,.kv-strip) { opacity: 1 !important; }
     }
     @media (min-width: 1024px) and (max-width: 1179.98px) {
         .kv-nav { gap: 18px; }
@@ -351,8 +409,7 @@
     @media (prefers-reduced-motion: reduce) {
         html.theme-kartvizitlik { scroll-behavior: auto; }
         .theme-kartvizitlik #mobile-menu { transition: none; }
-        .kv-card, .kv-job, .kv-drawer__body, .kv-box::before, .kv-fan__top, .kv-dock__bar, .kv-btn { transition: none !important; }
+        .kv-card, .kv-job, .kv-drawer__body, .kv-box::before, .kv-fan__item, .kv-fan__item :where(.kv-card__desc,.kv-card__where,.kv-strip), .kv-dock__bar, .kv-btn { transition: none !important; }
         .kv-card:hover, .kv-card:focus-within, .kv-job:hover, .kv-drawer:hover .kv-drawer__body, .kv-drawer:focus-visible .kv-drawer__body, .kv-box:hover::before, .kv-box:focus-visible::before { transform: none !important; }
-        .kv-fan__top:hover, .kv-fan__top:focus-within { transform: rotate(-2deg); }
     }
 </style>
