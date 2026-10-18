@@ -2,11 +2,21 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.21.1',
-    'name' => 'Toplu Yüklemede Enlem ve Boylam',
-    'released_at' => '2026-10-18',
+    'number' => '1.22.0',
+    'name' => 'Tabela Çarşısı ve Çini Pano Temaları',
+    'released_at' => '2026-10-19',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.22.0',
+            'name' => 'Tabela Çarşısı ve Çini Pano Temaları',
+            'released_at' => '2026-10-19',
+            'changes' => [
+                'Yeni tema: Tabela Çarşısı · Esnaf Sırası (tabela-carsi). CSS ile çizilmiş çarşı sokağı: her kategori tabelalı, tenteli bir dükkân (vitrinde gerçek firma sayısı), zincirle asılı "Esnafa sor" araması, "Çarşının vitrini" firma kartları (büyük Ara ve WhatsApp), meslek sokakları, şehir levhaları ve "Tabelanı as" kayıt çağrısı. Kepenkler saate bağlı değil; mobilde sabit "Esnafa sor / Tabelanı as" çubuğu.',
+                'Yeni tema: Çini Pano · İznik Karosu (cini-pano). Krem sırlı karo zemin, SVG lale, karanfil, saz yaprağı ve hatayi motifleri; sır bandıyla çevrili madalyon içinde arama; köşe motifleri birleşerek rozet oluşturan kategori karoları; büyük Ara düğmeli firma kartları; mercan renk yalnızca kayıt çağrısında.',
+                'Sayılar yalnızca gerçek ve yeterince büyükse gösterilir; boş rehberde boş durum metinleri; 360 px genişlikte yatay taşma yok.',
+            ],
+        ],
         [
             'number' => '1.21.1',
             'name' => 'Toplu Yüklemede Enlem ve Boylam',
