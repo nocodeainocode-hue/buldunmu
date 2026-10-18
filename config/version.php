@@ -2,11 +2,19 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.21.0',
-    'name' => 'İndeksleme Temelleri ve 20 Yeni Makale',
+    'number' => '1.21.1',
+    'name' => 'Toplu Yüklemede Enlem ve Boylam',
     'released_at' => '2026-10-18',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.21.1',
+            'name' => 'Toplu Yüklemede Enlem ve Boylam',
+            'released_at' => '2026-10-18',
+            'changes' => [
+                'Toplu firma şablonuna google_maps sütununun yanına latitude ve longitude sütunları eklendi (Enlem/Boylam, lat/lng başlıkları da tanınır; virgüllü ondalık kabul edilir). Konum içermeyen kısa Google linklerinde haritayı bu değerler çizer; hatalı ya da aralık dışı değer yok sayılır.',
+            ],
+        ],
         [
             'number' => '1.21.0',
             'name' => 'İndeksleme Temelleri ve 20 Yeni Makale',

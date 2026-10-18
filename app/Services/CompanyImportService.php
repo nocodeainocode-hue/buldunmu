@@ -19,7 +19,7 @@ class CompanyImportService
 {
     public const COLUMNS = [
         'external_id', 'directory', 'name', 'category', 'city', 'district',
-        'phone', 'whatsapp', 'email', 'website', 'address', 'google_maps',
+        'phone', 'whatsapp', 'email', 'website', 'address', 'google_maps', 'latitude', 'longitude',
         'opening_hours', 'short_description', 'description', 'logo_url', 'status',
     ];
 
@@ -182,6 +182,9 @@ class CompanyImportService
             'website' => $row['website'] ?? null,
             'address' => $row['address'] ?? null,
             'google_maps_url' => $row['google_maps'] ?? null,
+            // Elle girilen enlem/boylam: Google linkinde konum yoksa (kısa paylaşım linki) haritayı bunlar çizer.
+            'latitude' => $this->coordinate($row['latitude'] ?? null, 90),
+            'longitude' => $this->coordinate($row['longitude'] ?? null, 180),
             'opening_hours' => $row['opening_hours'] ?? null,
             'short_description' => $row['short_description'] ?? null,
             'description' => $row['description'] ?? null,
@@ -298,6 +301,18 @@ class CompanyImportService
         return $slug;
     }
 
+    /** "41,0123" ya da "41.0123" → 41.0123; aralık dışı, 0 ya da sayı olmayan değer yok sayılır. */
+    private function coordinate(mixed $value, int $limit): ?float
+    {
+        $text = str_replace(',', '.', trim((string) $value));
+        if ($text === '' || ! is_numeric($text)) {
+            return null;
+        }
+        $number = round((float) $text, 7);
+
+        return $number !== 0.0 && abs($number) <= $limit ? $number : null;
+    }
+
     private function normalizeHeader(string $header): string
     {
         $key = Str::snake(Str::ascii(trim($header)));
@@ -307,7 +322,8 @@ class CompanyImportService
             'rehber', 'rehberler', 'domain', 'domains', 'target' => 'directory',
             'kategori' => 'category', 'sehir', 'il' => 'city', 'ilce' => 'district',
             'telefon' => 'phone', 'eposta', 'e_posta' => 'email', 'web', 'web_sitesi' => 'website',
-            'adres' => 'address', 'harita', 'maps', 'google_maps_iframe' => 'google_maps',
+            'adres' => 'address', 'harita', 'maps', 'google_maps_iframe', 'google_maps_url', 'google_haritalar' => 'google_maps',
+            'enlem', 'lat', 'latitude' => 'latitude', 'boylam', 'lng', 'lon', 'long', 'longitude' => 'longitude',
             'calisma_saatleri' => 'opening_hours', 'kisa_aciklama' => 'short_description',
             'aciklama' => 'description', 'logo' => 'logo_url', 'durum' => 'status',
             default => $key,

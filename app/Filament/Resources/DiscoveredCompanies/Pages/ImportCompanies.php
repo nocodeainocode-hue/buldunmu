@@ -159,11 +159,11 @@ class ImportCompanies extends Page
             $sheet->fromArray([
                 'FRM-001', 'hizmetyakinda.com.tr', 'Örnek Firma', 'Diş Kliniği', 'İstanbul', 'Kadıköy',
                 '0212 555 00 00', '905325550000', 'info@ornek.com', 'https://ornek.com', 'Örnek Mah. No:1',
-                '', 'Pazartesi: 09:00 - 18:00', 'Kısa firma açıklaması', 'Detaylı firma açıklaması', '', 'pending',
+                '', '40.9903', '29.0291', 'Pazartesi: 09:00 - 18:00', 'Kısa firma açıklaması', 'Detaylı firma açıklaması', '', 'pending',
             ], null, 'A2');
             $sheet->freezePane('A2');
-            $sheet->getStyle('A1:Q1')->getFont()->setBold(true);
-            foreach (range('A', 'Q') as $column) {
+            $sheet->getStyle('A1:S1')->getFont()->setBold(true);
+            foreach (range('A', 'S') as $column) {
                 $sheet->getColumnDimension($column)->setAutoSize(true);
             }
             (new Xlsx($spreadsheet))->save('php://output');
