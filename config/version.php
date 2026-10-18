@@ -2,11 +2,25 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.20.1',
-    'name' => 'Kartvizitlik Yelpazesi',
-    'released_at' => '2026-10-16',
+    'number' => '1.21.0',
+    'name' => 'İndeksleme Temelleri ve 20 Yeni Makale',
+    'released_at' => '2026-10-18',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.21.0',
+            'name' => 'İndeksleme Temelleri ve 20 Yeni Makale',
+            'released_at' => '2026-10-18',
+            'changes' => [
+                'robots.txt artık her rehberde kendi site haritasını gösteriyor: statik public/robots.txt dosyası rehbere özel rotayı gölgeliyordu. Panel, arama, form ve yönlendirme adresleri taramadan çıkarıldı.',
+                'www adresi tek adrese (www\'siz) 301 ile yönlenir; aynı sitenin iki kopyası indekslenmez.',
+                'Site haritası: bölgesel rehberlerde 404 veren şehir adresleri çıkarıldı, "Diğer İller" eklendi; kategori, şehir ve ana sayfaya gerçek lastmod; boş blog ve iş ilanı listeleri çıkarıldı; doğru içerik türü ve 15 dakikalık önbellek.',
+                'Coğrafya modu boş olan rehberde şehir sayfaları 404 veriyordu; boş mod artık ulusal sayılır.',
+                'İç sayfa başlıklarına rehber adı eklenir ("Hakkımızda | Rehber", "Tekirdağ Firmaları | Rehber"); firma başlığı "Ad – Kategori, Şehir". Blog yazı başlıkları değişmez.',
+                'Çalışma saati şeması: Cumartesi artık Cuma, Pazartesi Pazar sayılmıyor; "Pazartesi-Cuma" aralıkları her güne açılıyor.',
+                'Makalesi olmayan 13 rehber ve rastgele 7 rehber için arama niyetli 20 yeni rehber yazısı (Vol7: kombi bakımı, çilingir, oto tamircisi, halı yıkama, çatı aktarma...).',
+            ],
+        ],
         [
             'number' => '1.20.1',
             'name' => 'Kartvizitlik Yelpazesi',

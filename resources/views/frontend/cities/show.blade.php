@@ -6,7 +6,7 @@
     $cardPartial = \App\View\Helpers\ThemeHelper::cardPartial($directory ?? null);
 @endphp
 
-@section('title', $city->meta_title ?: $city->name . ' Firmaları - Firma Rehberi')
+@section('title', $city->meta_title ?: $city->name . ' Firmaları')
 @section('meta_description', $city->meta_description ?: $city->name . ' ilinde faaliyet gösteren tüm firmalar. Kategorilere göre filtreleyin, iletişim bilgilerini ve kullanıcı yorumlarını inceleyin.')
 @section('robots', $hasIndexableCompanies && !request()->hasAny(['district', 'category']) ? 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1' : 'noindex,follow,max-image-preview:large')
 @section('canonical', ($isOtherCities ?? false) ? route('cities.other') : route('cities.show', $city->slug))

@@ -108,8 +108,8 @@ Route::view('/offline', 'frontend.pages.offline')->name('offline');
 
 // SEO
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+// Statik public/robots.txt bilerek yok: nginx önce statik dosyayı sunduğu için bu rota (rehbere özel Sitemap satırı) hiç çalışmıyordu.
 Route::get('/robots.txt', function () {
-    $domain = request()->getHost();
     $sitemapUrl = url('/sitemap.xml');
 
     $lines = [
@@ -118,6 +118,14 @@ Route::get('/robots.txt', function () {
         '',
         'Disallow: /admin/',
         'Disallow: /livewire/',
+        'Disallow: /panel',
+        'Disallow: /ara',
+        'Disallow: /firma-ekle',
+        'Disallow: /firma-kayit/on-basvuru',
+        'Disallow: /s/',
+        'Disallow: /r/',
+        'Disallow: /ad/',
+        'Disallow: /harita/',
         '',
         '# Sitemap',
         'Sitemap: '.$sitemapUrl,

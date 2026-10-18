@@ -34,6 +34,11 @@ class SetCurrentDirectory
             if (! $directory && app()->environment('production')) {
                 abort(404);
             }
+
+            // www ve www'siz adres ayrı ayrı 200 dönüp ikisi de kendini canonical gösteriyordu: tek adrese 301.
+            if ($directory && $request->isMethodSafe() && $host === 'www.'.$directory->domain) {
+                return redirect()->to($request->getScheme().'://'.$directory->domain.$request->getRequestUri(), 301);
+            }
         }
 
         if ($directory) {

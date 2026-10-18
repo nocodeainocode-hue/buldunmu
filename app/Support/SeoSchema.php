@@ -314,11 +314,12 @@ class SeoSchema
             return [];
         }
 
+        // Uzun adlar önce: "cumartesi" içinde "cuma", "pazartesi" içinde "pazar" geçer; kısa ad önce gelirse Cumartesi Cuma sayılıyordu.
         $days = [
-            'pazartesi' => 'Monday', 'salı' => 'Tuesday', 'sali' => 'Tuesday',
+            'cumartesi' => 'Saturday', 'pazartesi' => 'Monday', 'salı' => 'Tuesday', 'sali' => 'Tuesday',
             'çarşamba' => 'Wednesday', 'carsamba' => 'Wednesday',
             'perşembe' => 'Thursday', 'persembe' => 'Thursday', 'cuma' => 'Friday',
-            'cumartesi' => 'Saturday', 'pazar' => 'Sunday',
+            'pazar' => 'Sunday',
         ];
         $text = Str::lower($hours);
 
@@ -330,7 +331,26 @@ class SeoSchema
         }
 
         $specifications = [];
+        $week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        $dayPattern = implode('|', array_map(fn ($d) => preg_quote($d, '/'), array_keys($days)));
         foreach (preg_split('/\R/u', $text) as $line) {
+            // Gün aralığı: "pazartesi-cuma 09:00-18:00" → Pazartesi'den Cuma'ya her gün.
+            if (preg_match('/('.$dayPattern.')\s*[-–]\s*('.$dayPattern.')/u', $line, $range)) {
+                preg_match_all('/\b([01]?\d|2[0-3])[:.]([0-5]\d)\b/', $line, $matches, PREG_SET_ORDER);
+                $from = array_search($days[$range[1]], $week, true);
+                $to = array_search($days[$range[2]], $week, true);
+                if (count($matches) >= 2 && $from !== false && $to !== false && $from <= $to) {
+                    foreach (array_slice($week, $from, $to - $from + 1) as $schemaDay) {
+                        $specifications[] = [
+                            '@type' => 'OpeningHoursSpecification',
+                            'dayOfWeek' => $schemaDay,
+                            'opens' => sprintf('%02d:%02d', $matches[0][1], $matches[0][2]),
+                            'closes' => sprintf('%02d:%02d', $matches[1][1], $matches[1][2]),
+                        ];
+                    }
+                    continue;
+                }
+            }
             foreach ($days as $needle => $schemaDay) {
                 if (!Str::contains($line, $needle)) {
                     continue;

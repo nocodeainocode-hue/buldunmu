@@ -52,7 +52,7 @@
     }
 @endphp
 
-@section('title', $company->meta_title ?: $company->name . ' - ' . $cityName . ' - Firma Rehberi')
+@section('title', $company->meta_title ?: $company->name . ' – ' . trim($categoryName . ', ' . $cityName, ', '))
 @section('meta_description', $company->meta_description ?: ($company->short_description ?: $company->name . ' | Telefon, adres, web sitesi ve kullanıcı yorumlarıyla ' . $cityName . ' ' . $categoryName . ' firması.'))
 @section('canonical', route('companies.show', $company->slug))
 @section('robots', $isSearchIndexable ? 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1' : 'noindex,follow,max-image-preview:large')

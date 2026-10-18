@@ -339,12 +339,16 @@ class ListingRequestDirectoryTest extends TestCase
             'status' => 'active',
         ]);
 
-        $response = $this
+        // www adresi aynı rehbere çözülür ve tek adrese (www'siz) 301 ile yönlendirilir; sorgu dizesi korunur.
+        $this
             ->withServerVariables(['HTTP_HOST' => 'www.www-test.test'])
-            ->get('http://www.www-test.test/firma-kayit');
+            ->get('http://www.www-test.test/firma-kayit?v=reklam')
+            ->assertStatus(301)
+            ->assertRedirect('http://www-test.test/firma-kayit?v=reklam');
 
-        $response->assertOk();
-        $this->assertTrue(app()->bound('currentDirectory'));
-        $this->assertSame($directory->id, app('currentDirectory')->id);
+        // Form gönderimleri yönlendirilmez (POST kaybolmasın).
+        $this->withServerVariables(['HTTP_HOST' => 'www.www-test.test'])
+            ->post('http://www.www-test.test/firma-kayit', [])
+            ->assertStatus(302);
     }
 }

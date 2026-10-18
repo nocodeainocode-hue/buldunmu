@@ -19,7 +19,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{!! $homeSeo ? e($homeSeo['title']) : $__env->yieldContent('title', $settings->site_name ?? 'Firma Rehberi') !!}</title>
+    @php
+        // İç sayfa başlıkları ("Hakkımızda", "Kuaför Firmaları"...) 100 sitede aynıydı: sığıyorsa sona rehber adı eklenir.
+        // Blog yazılarının başlıkları ayrıca 60 karaktere göre yazıldığı için olduğu gibi kalır.
+        $pageTitleHtml = $__env->yieldContent('title', $settings->site_name ?? 'Firma Rehberi');
+        if (! $homeSeo && ! request()->routeIs('blog.show') && ($directory ?? null)) {
+            $plainTitle = html_entity_decode($pageTitleHtml, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $brand = $directory->name;
+            if (! str_contains(mb_strtolower($plainTitle), mb_strtolower($brand)) && mb_strlen($plainTitle.' | '.$brand) <= 65) {
+                $pageTitleHtml .= ' | '.e($brand);
+            }
+        }
+    @endphp
+    <title>{!! $homeSeo ? e($homeSeo['title']) : $pageTitleHtml !!}</title>
     <meta name="description" content="{!! $homeSeo ? e($homeSeo['description']) : $__env->yieldContent('meta_description', $settings->meta_description ?? '') !!}">
     <meta name="robots" content="@yield('robots', 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1')">
     @php

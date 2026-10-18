@@ -15,7 +15,7 @@ class CityController extends Controller
     public function other(Request $request)
     {
         $directory = app()->bound('currentDirectory') ? app('currentDirectory') : null;
-        abort_unless($directory && $directory->geography_mode !== 'national' && $directory->group_other_cities, 404);
+        abort_unless($directory && in_array($directory->geography_mode, ['local', 'custom'], true) && $directory->group_other_cities, 404);
 
         $visibleSlugs = $directory->visibleCitySlugs();
         $outsideVisibleCities = fn ($query) => $query->whereHas(
@@ -71,7 +71,7 @@ class CityController extends Controller
         $city = City::withoutGlobalScope('directory')
             ->whereNull('directory_id')
             ->where('slug', $slug)
-            ->when(app()->bound('currentDirectory') && app('currentDirectory')->geography_mode !== 'national', function ($query) {
+            ->when(app()->bound('currentDirectory') && in_array(app('currentDirectory')->geography_mode, ['local', 'custom'], true), function ($query) {
                 $directory = app('currentDirectory');
                 $visibleSlugs = $directory->visibleCitySlugs();
 
