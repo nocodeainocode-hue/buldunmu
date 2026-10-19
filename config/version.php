@@ -2,11 +2,19 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.22.0',
-    'name' => 'Tabela Çarşısı ve Çini Pano Temaları',
-    'released_at' => '2026-10-19',
+    'number' => '1.23.0',
+    'name' => '83 Yeni Rehber Makalesi',
+    'released_at' => '2026-10-20',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.23.0',
+            'name' => '83 Yeni Rehber Makalesi',
+            'released_at' => '2026-10-20',
+            'changes' => [
+                'Her rehbere birer yeni uzun makale (83 yazı, 700 kelime civarı): ev, işletme, hizmet ve tüketici rehberleri; arama niyetine uygun başlık, açıklama ve iç bağlantılar. Yazılar yalnızca kendi rehberinde yayınlanır ve tekrar çalıştırılabilir.',
+            ],
+        ],
         [
             'number' => '1.22.0',
             'name' => 'Tabela Çarşısı ve Çini Pano Temaları',

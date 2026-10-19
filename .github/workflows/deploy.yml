@@ -30,6 +30,7 @@ jobs:
             php artisan db:seed --class=LongFormMarketingArticlesVol3Seeder --force
             php artisan db:seed --class=LongFormMarketingArticlesVol4Seeder --force
             php artisan db:seed --class=DirectorySeoStoriesSeeder --force
+            php artisan db:seed --class=DirectoryArticlesVol3Seeder --force
             php artisan db:seed --class=YerelixThemeSeeder --force
             php artisan directories:install-branding --apply
             php artisan optimize:clear
