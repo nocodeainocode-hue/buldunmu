@@ -2,11 +2,20 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.23.0',
-    'name' => '83 Yeni Rehber Makalesi',
+    'number' => '1.24.0',
+    'name' => 'Neon Bulvar Teması',
     'released_at' => '2026-10-20',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.24.0',
+            'name' => 'Neon Bulvar Teması',
+            'released_at' => '2026-10-20',
+            'changes' => [
+                'Yeni tema: Neon Bulvar · Gece Vitrini (neon-bulvar). Gece göğü, ay ve yıldızlar; CSS ve satır içi SVG ile çizilmiş üç katmanlı şehir silueti (yanıp sönen pencereler, anten ışıkları, akan yol çizgisi); neon tüp başlık; ışıklı vitrin camı içinde arama. Her kategori kendi neon renginde yanan bir tabela, firmalar büyük Ara ve WhatsApp düğmeli ışıklı vitrin kartları, şehir durakları, "Sönük tabela" kayıt çağrısı (forma odaklanınca yanar). Mobilde sabit Ara / Tabelanı yak çubuğu.',
+                'Animasyonlar hafif ve prefers-reduced-motion ile kapanır; sayılar yalnızca gerçek ve yeterince büyükse gösterilir; boş rehberde boş durum metinleri; 360 px genişlikte yatay taşma yok.',
+            ],
+        ],
         [
             'number' => '1.23.0',
             'name' => '83 Yeni Rehber Makalesi',
