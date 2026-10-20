@@ -2,11 +2,21 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.24.0',
-    'name' => 'Neon Bulvar Teması',
+    'number' => '1.25.0',
+    'name' => 'Beyaz Ofis ve Taş Lobi Temaları',
     'released_at' => '2026-10-20',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.25.0',
+            'name' => 'Beyaz Ofis ve Taş Lobi Temaları',
+            'released_at' => '2026-10-20',
+            'changes' => [
+                'Yeni tema: Beyaz Ofis · Kurumsal Vitrin (beyaz-ofis). Bembeyaz zemin, lacivert ve ince çizgiler; üstte başlık, arama ve numaralı hizmet dizini kartı; firma kartları baş harfli, büyük Ara ve WhatsApp düğmeli; hizmet alanları numaralı satır listesi; lacivert kayıt bandı. Manrope yazı tipi.',
+                'Yeni tema: Taş Lobi · Mermer Kurumsal (tas-lobi). Taş rengi zemin, antrasit metin, bronz çizgiler ve serif başlıklar (Cormorant Garamond); çift çerçeveli arama levhası; çift çerçeveli firma levhaları; noktalı kılavuzlu "Kat planı" hizmet dizini; baklava ayraçlı şehir satırı; forma odaklanınca belirginleşen "Levhanızı asın" kayıt çağrısı.',
+                'Her iki temada sayılar yalnızca gerçek ve yeterince büyükse gösterilir; boş rehberde boş durum metinleri; mobilde sabit Firma ara / Firma ekle çubuğu; 360 px genişlikte yatay taşma yok; animasyonlar prefers-reduced-motion ile kapanır.',
+            ],
+        ],
         [
             'number' => '1.24.0',
             'name' => 'Neon Bulvar Teması',

@@ -145,6 +145,12 @@
     @if($activeLayout === 'neon-bulvar')
         @include('partials.neon-bulvar.styles')
     @endif
+    @if($activeLayout === 'beyaz-ofis')
+        @include('partials.beyaz-ofis.styles')
+    @endif
+    @if($activeLayout === 'tas-lobi')
+        @include('partials.tas-lobi.styles')
+    @endif
     @if($activeLayout === 'ilan-board')
         @include('partials.ilan.styles')
     @endif
@@ -163,7 +169,7 @@
     {{-- Dynamic Google Fonts per template --}}
     @php $fontsUrl = \App\View\Helpers\ThemeHelper::googleFontsUrl($directory ?? null); @endphp
     {{-- kartvizitlik kendi ağırlıklı yazı tipi adresini styles partial'ında yükler. --}}
-    @if($fontsUrl && !in_array($activeLayout, ['kartvizitlik', 'tabela-carsi', 'cini-pano', 'neon-bulvar'], true))
+    @if($fontsUrl && !in_array($activeLayout, ['kartvizitlik', 'tabela-carsi', 'cini-pano', 'neon-bulvar', 'beyaz-ofis', 'tas-lobi'], true))
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" as="style" href="{{ $fontsUrl }}" onload="this.onload=null;this.rel='stylesheet'">
@@ -264,6 +270,10 @@
         @include('partials.tabela-carsi.header')
     @elseif($activeLayout === 'neon-bulvar')
         @include('partials.neon-bulvar.header')
+    @elseif($activeLayout === 'beyaz-ofis')
+        @include('partials.beyaz-ofis.header')
+    @elseif($activeLayout === 'tas-lobi')
+        @include('partials.tas-lobi.header')
     @else
     <header class="sticky top-0 z-50 border-b backdrop-blur" style="background-color:color-mix(in srgb,var(--bg_card) 92%,transparent);border-color:var(--border);box-shadow:var(--card_shadow);">
         <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width:var(--page_width,1280px);">
@@ -380,7 +390,7 @@
             @include('partials.mobile-shell')
         @else
             @yield('content')
-            @if(request()->routeIs('home') && !in_array($activeLayout, [...$mobileShellLayouts, ...\App\View\Helpers\ThemeHelper::PHONE_SHELL, 'classifieds-board', 'acid-poster', 'cinematic-atlas', 'departure-board', 'signal-station', 'design-catalog', 'board-v2', 'split-hero', 'ilan-board', 'kartvizitlik', 'tabela-carsi', 'cini-pano', 'neon-bulvar']) && isset($homeJobs) && $homeJobs->isNotEmpty())
+            @if(request()->routeIs('home') && !in_array($activeLayout, [...$mobileShellLayouts, ...\App\View\Helpers\ThemeHelper::PHONE_SHELL, 'classifieds-board', 'acid-poster', 'cinematic-atlas', 'departure-board', 'signal-station', 'design-catalog', 'board-v2', 'split-hero', 'ilan-board', 'kartvizitlik', 'tabela-carsi', 'cini-pano', 'neon-bulvar', 'beyaz-ofis', 'tas-lobi']) && isset($homeJobs) && $homeJobs->isNotEmpty())
                 @include('partials.home-jobs')
             @endif
         @endif
