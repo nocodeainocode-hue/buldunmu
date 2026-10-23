@@ -2,11 +2,19 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.25.0',
-    'name' => 'Beyaz Ofis ve Taş Lobi Temaları',
-    'released_at' => '2026-10-20',
+    'number' => '1.26.0',
+    'name' => '83 Yeni Rehber Yazısı: Soru ve Adım Rehberleri',
+    'released_at' => '2026-10-23',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.26.0',
+            'name' => '83 Yeni Rehber Yazısı: Soru ve Adım Rehberleri',
+            'released_at' => '2026-10-23',
+            'changes' => [
+                'Her rehbere bir yeni rehber yazısı (83 yazı, 700 kelime civarı): soru biçiminde başlıklar ve "3 adımda", "5 adımda" gibi adım rehberleri, 2026 güncel bilgisi. Yazılar yalnızca kendi rehberinde yayınlanır ve tekrar çalıştırılabilir.',
+            ],
+        ],
         [
             'number' => '1.25.0',
             'name' => 'Beyaz Ofis ve Taş Lobi Temaları',
