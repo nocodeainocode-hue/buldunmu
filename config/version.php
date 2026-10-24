@@ -2,11 +2,20 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.26.0',
-    'name' => '83 Yeni Rehber Yazısı: Soru ve Adım Rehberleri',
-    'released_at' => '2026-10-23',
+    'number' => '1.27.0',
+    'name' => 'Yaprak Takvim Teması',
+    'released_at' => '2026-10-25',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.27.0',
+            'name' => 'Yaprak Takvim Teması',
+            'released_at' => '2026-10-25',
+            'changes' => [
+                'Yeni tema: Yaprak Takvim · Günün Firması (yaprak-takvim). Duvar takvimi metaforu: hero bugünün takvim yaprağı (büyük kırmızı gün rakamı, Türkçe ay ve gün adı, İstanbul saatine göre); "günün sözü" yerine her gün değişen "Günün firması" (büyük Ara ve WhatsApp düğmesi) ve yaprağın üzerinde arama formu.',
+                'Sağda "Koparılan yapraklar": dünün ve önceki günlerin firmaları yırtık yapraklar olarak; "Bu haftanın yaprakları" firma kartları, "Hizmet takvimi" kategorileri, "Şehir almanağı", "Takvim arkası yazıları" blog bölümü ve "Takvimde yerinizi alın" kayıt çağrısı. Sayılar yalnızca gerçek ve yeterince büyükse gösterilir; mobilde sabit Ara / Ekle çubuğu.',
+            ],
+        ],
         [
             'number' => '1.26.0',
             'name' => '83 Yeni Rehber Yazısı: Soru ve Adım Rehberleri',
