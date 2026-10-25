@@ -2,11 +2,20 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.27.0',
-    'name' => 'Yaprak Takvim Teması',
+    'number' => '1.28.0',
+    'name' => 'Posta Pulu Teması',
     'released_at' => '2026-10-25',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.28.0',
+            'name' => 'Posta Pulu Teması',
+            'released_at' => '2026-10-25',
+            'changes' => [
+                'Yeni tema: Posta Pulu · Mektup Kutusu (posta-pulu). Uçak postası şeritli zarf hero: adres bloğu biçiminde arama ("Kime: ne arıyorsunuz?" / "Nereye: şehir"), köşede her gün değişen "Günün pulu" firması ve şehir/tarih damgası (İstanbul saatine göre), yanda "Masadaki pullar".',
+                '"Yeni gelen mektuplar" tırtıklı pul firma kartları (büyük Ara, WhatsApp, gerçekse taahhütlü/onaylı damgası), kategoriler için "Pul tabakası", şehirler için posta damgaları, blog için kartpostallar ve "Burada sizin pulunuz olabilir" kayıt zarfı; mobilde sabit "Firma bul / Pulunu yapıştır" çubuğu. Gerçek bir posta markası kullanılmaz.',
+            ],
+        ],
         [
             'number' => '1.27.0',
             'name' => 'Yaprak Takvim Teması',
