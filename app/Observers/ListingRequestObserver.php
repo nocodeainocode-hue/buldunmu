@@ -2,8 +2,10 @@
 
 namespace App\Observers;
 
+use App\Jobs\SendApplicantWhatsApp;
 use App\Models\ListingRequest;
 use App\Services\TelegramCompanyApplicationNotifier;
+use App\Services\WahaClient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -35,7 +37,25 @@ class ListingRequestObserver
                     'exception' => $e::class,
                 ]);
             }
+
+            // Başvuru sahibine WhatsApp: 1. adımda kalan biri kaydı tamamlayabilsin diye daha uzun beklenir.
+            $this->queueWhatsApp($listing, $listing->is_partial
+                ? (int) config('services.waha.partial_delay_minutes', 15)
+                : (int) config('services.waha.delay_minutes', 2));
         });
+    }
+
+    private function queueWhatsApp(ListingRequest $listing, int $minutes): void
+    {
+        if (! app(WahaClient::class)->configured()) {
+            return;
+        }
+
+        try {
+            SendApplicantWhatsApp::dispatch($listing->id)->delay(now()->addMinutes(max(0, $minutes)));
+        } catch (Throwable $e) {
+            Log::warning('Başvuru WhatsApp işi kuyruğa alınamadı.', ['listing_request_id' => $listing->id, 'exception' => $e::class]);
+        }
     }
 
     /** Yarım kalan başvuru 2. adımla tamamlandığında yöneticiye bir kez daha haber verir. */
@@ -54,6 +74,9 @@ class ListingRequestObserver
                     'exception' => $e::class,
                 ]);
             }
+
+            // Yarım iş henüz çalışmadıysa bu iş önce çalışır ve "başvurunuz alındı" gider; diğeri kilit yüzünden atlanır.
+            $this->queueWhatsApp($listing, (int) config('services.waha.delay_minutes', 2));
         });
     }
 }

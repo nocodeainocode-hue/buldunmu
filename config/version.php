@@ -2,11 +2,21 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.28.0',
-    'name' => 'Posta Pulu Teması',
-    'released_at' => '2026-10-25',
+    'number' => '1.29.0',
+    'name' => 'Başvurulara Otomatik WhatsApp Mesajı',
+    'released_at' => '2026-10-26',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.29.0',
+            'name' => 'Başvurulara Otomatik WhatsApp Mesajı',
+            'released_at' => '2026-10-26',
+            'changes' => [
+                'Firma başvurusu gelince (kayıt, yarım kayıt, profil sahiplenme, firma ekle) başvuru sahibinin cep numarasına, başvurunun geldiği rehberin adı ve alan adıyla WhatsApp mesajı gider (sunucudaki WAHA üzerinden).',
+                'Mesaj gecikmeli ve gönderim anındaki duruma göre seçilir: 1. adımda kalan başvuruya 15 dakika sonra "kaydı tamamlayalım" mesajı; bu arada kayıt tamamlandıysa 2 dakika sonra "başvurunuz alındı" mesajı. Aynı başvuruya bir kez, aynı numaraya 24 saatte bir kez mesaj gider; sabit hatlar ve reddedilen başvurular atlanır; gönderim hatasında yeniden denenir.',
+                'Açık WAHA anahtarı içeren eski mesaj-gonder.php ve setup-waha.php depodan kaldırıldı (anahtar sunucuda yenilendi, WAHA yalnızca 127.0.0.1\'de dinliyor).',
+            ],
+        ],
         [
             'number' => '1.28.0',
             'name' => 'Posta Pulu Teması',

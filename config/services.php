@@ -43,6 +43,16 @@ return [
         'contact' => env('OPENSTREETMAP_CONTACT_EMAIL', env('MAIL_FROM_ADDRESS')),
     ],
 
+    // Başvuru sahibine WhatsApp mesajı (aynı sunucudaki WAHA). Üç değerden biri boşsa gönderim kapalıdır.
+    'waha' => [
+        'url' => env('WAHA_URL'),
+        'session' => env('WAHA_SESSION'),
+        'api_key' => env('WAHA_API_KEY'),
+        // 1. adımda kalan başvuru: kişi kaydı tamamlayabilsin diye daha uzun beklenir.
+        'partial_delay_minutes' => (int) env('WAHA_PARTIAL_DELAY_MINUTES', 15),
+        'delay_minutes' => (int) env('WAHA_DELAY_MINUTES', 2),
+    ],
+
     'telegram' => [
         'bot_token' => env('TELEGRAM_BOT_TOKEN'),
         'chat_id' => env('TELEGRAM_CHAT_ID'),
