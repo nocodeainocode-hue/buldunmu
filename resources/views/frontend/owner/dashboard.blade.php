@@ -63,33 +63,29 @@
 
 @if($showCampaignPopup)
     @php
-        $popupPrice = (float) $campaignSettings->campaign_price;
-        $popupPerDirectory = $popupPrice > 0 ? number_format($popupPrice / 100, 0, ',', '.') : null;
         $popupCompany = $companies->first()?->name;
     @endphp
-    <div id="campaign-offer-popup" class="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-slate-950/75 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="campaign-offer-title" data-popup-backdrop>
+    {{-- Panel açılır açılmaz değil, birkaç saniye sonra açılır (data-popup-delay ms). Fiyat burada değil, kampanya sayfasında. --}}
+    <div id="campaign-offer-popup" hidden data-popup-delay="6000" class="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-slate-950/75 p-4 opacity-0 backdrop-blur-sm transition-opacity duration-500" role="dialog" aria-modal="true" aria-labelledby="campaign-offer-title" data-popup-backdrop>
         <div class="relative my-auto w-full max-w-lg overflow-hidden rounded-3xl bg-white shadow-2xl">
             <div class="p-7 text-white sm:p-9" style="background:linear-gradient(135deg,#7c2d12,#dc2626 55%,#f97316);">
                 <button type="button" data-close-campaign-popup class="absolute right-4 top-4 rounded-full bg-white/15 px-3 py-1.5 text-lg font-bold text-white transition hover:bg-white/25" aria-label="Kapat">×</button>
-                <p class="text-xs font-black uppercase tracking-[.2em] text-white/70">Firma sahiplerine özel fırsat</p>
+                <p class="text-xs font-black uppercase tracking-[.2em] text-white/70">Firma sahiplerine özel</p>
                 <div class="mt-5 flex items-end gap-3">
-                    <strong data-campaign-counter="100" class="text-6xl font-black leading-none sm:text-7xl">0</strong>
-                    <span class="mb-1.5 text-sm font-black uppercase tracking-wider text-white/80">Firma rehberinde<br>yayın fırsatı</span>
+                    <strong data-campaign-counter="100" class="font-black leading-none" style="font-size:clamp(4.5rem,16vw,6rem);">0</strong>
+                    <span class="mb-2 text-base font-black uppercase leading-tight tracking-wider text-white/90">firma rehberinde<br>aynı anda yayın</span>
                 </div>
-                <h2 id="campaign-offer-title" class="mt-4 text-3xl font-black leading-tight sm:text-4xl">Rakiplerinizden sıyrılın.</h2>
-                <p class="mt-3 text-lg font-bold text-white/90">{{ $popupCompany ? $popupCompany.' için ' : '' }}{{ $campaignSettings->campaign_title }}</p>
+                <h2 id="campaign-offer-title" class="mt-5 text-3xl font-black leading-tight sm:text-4xl">Rakiplerinizden sıyrılın.</h2>
+                <p class="mt-3 text-lg font-bold text-white/90">{{ $popupCompany ?: 'Firmanız' }} yalnızca burada değil, şehrinize uygun 100 firma rehberinde görünsün.</p>
             </div>
             <div class="p-7 sm:p-9">
-                <ul class="space-y-2.5 text-sm font-bold" style="color:var(--text);">
-                    <li class="flex gap-2"><span style="color:#16a34a;">✓</span> Firmanızın şehrine uygun 100 rehberde yayın</li>
+                <ul class="space-y-3 text-base font-bold" style="color:var(--text);">
+                    <li class="flex gap-2"><span style="color:#16a34a;">✓</span> Şehrinize uygun 100 firma rehberinde ayrı profil</li>
+                    <li class="flex gap-2"><span style="color:#16a34a;">✓</span> Müşterileriniz sizi aradıkları her yerde bulsun</li>
                     <li class="flex gap-2"><span style="color:#16a34a;">✓</span> 10-15 gün içinde kademeli yayın</li>
-                    <li class="flex gap-2"><span style="color:#16a34a;">✓</span> Ödeme, WhatsApp görüşmesinden sonra</li>
+                    <li class="flex gap-2"><span style="color:#16a34a;">✓</span> Ödeme yalnızca WhatsApp görüşmesinden sonra</li>
                 </ul>
-                <div class="mt-6 flex items-end justify-between gap-3 rounded-2xl p-5" style="background:#fff7ed;">
-                    <div><p class="text-sm font-bold" style="color:#9a3412;">Tek seferlik kampanya</p>@if($popupPerDirectory)<p class="mt-1 text-xs font-bold" style="color:#c2410c;">Rehber başına yaklaşık {{ $popupPerDirectory }} TL</p>@endif</div>
-                    <strong class="text-3xl font-black" style="color:#9a3412;">{{ number_format($popupPrice, 0, ',', '.') }} TL</strong>
-                </div>
-                <a href="{{ route('owner.campaigns', ['from' => 'popup']) }}" class="mt-6 flex w-full items-center justify-center rounded-xl px-5 py-4 text-center font-black text-white transition hover:opacity-90" style="background:linear-gradient(135deg,#ea580c,#dc2626);">Kampanya detaylarını gör</a>
+                <a href="{{ route('owner.campaigns', ['from' => 'popup']) }}" class="mt-7 flex w-full items-center justify-center rounded-xl px-5 py-4 text-center font-black text-white transition hover:opacity-90" style="background:linear-gradient(135deg,#ea580c,#dc2626);">100 rehberde yayını incele</a>
                 <button type="button" data-close-campaign-popup class="mt-4 w-full text-center text-sm font-bold" style="color:var(--text_muted);">Şimdilik istemiyorum</button>
             </div>
         </div>
@@ -98,6 +94,7 @@
         (() => {
             const popup = document.getElementById('campaign-offer-popup');
             if (!popup) return;
+            const delay = Number(popup.dataset.popupDelay || 0);
             const close = () => {
                 if (!document.getElementById('campaign-offer-popup')) return;
                 popup.remove();
@@ -109,22 +106,30 @@
                 }).catch(() => {});
             };
             const onKey = (event) => { if (event.key === 'Escape') close(); };
-            document.addEventListener('keydown', onKey);
             popup.addEventListener('click', (event) => { if (event.target === popup) close(); });
             popup.querySelectorAll('[data-close-campaign-popup]').forEach((button) => button.addEventListener('click', close));
-            popup.querySelector('a[href]')?.focus();
 
-            document.querySelectorAll('[data-campaign-counter]').forEach((counter) => {
-                const target = Number(counter.dataset.campaignCounter);
-                const startedAt = performance.now();
-                const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 1250;
-                const tick = (now) => {
-                    const progress = duration ? Math.min((now - startedAt) / duration, 1) : 1;
-                    counter.textContent = Math.round(target * (1 - Math.pow(1 - progress, 3)));
-                    if (progress < 1) requestAnimationFrame(tick);
-                };
-                requestAnimationFrame(tick);
-            });
+            const show = () => {
+                if (!document.getElementById('campaign-offer-popup')) return;
+                popup.hidden = false;
+                requestAnimationFrame(() => popup.classList.remove('opacity-0'));
+                document.addEventListener('keydown', onKey);
+                popup.querySelector('a[href]')?.focus({ preventScroll: true });
+
+                // Sayaç popup göründüğü anda başlar.
+                popup.querySelectorAll('[data-campaign-counter]').forEach((counter) => {
+                    const target = Number(counter.dataset.campaignCounter);
+                    const startedAt = performance.now();
+                    const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 1400;
+                    const tick = (now) => {
+                        const progress = duration ? Math.min((now - startedAt) / duration, 1) : 1;
+                        counter.textContent = Math.round(target * (1 - Math.pow(1 - progress, 3)));
+                        if (progress < 1) requestAnimationFrame(tick);
+                    };
+                    requestAnimationFrame(tick);
+                });
+            };
+            setTimeout(show, delay);
         })();
     </script>
 @endif

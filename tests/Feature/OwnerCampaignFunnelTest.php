@@ -106,7 +106,11 @@ class OwnerCampaignFunnelTest extends TestCase
             ->assertSee('Rakiplerinizden sıyrılın.')
             ->assertSee('data-campaign-banner', false)
             ->assertSee('Ayşe Diş Kliniği 100 rehberde yayınlansın')
-            ->assertSee('Rehber başına yaklaşık 49 TL');
+            // Popup panel açılır açılmaz değil, gecikmeyle açılır; fiyatı değil 100 rehberi öne çıkarır.
+            ->assertSee('id="campaign-offer-popup" hidden data-popup-delay="6000"', false)
+            ->assertSee('aynı anda yayın', false)
+            ->assertSee('Ayşe Diş Kliniği yalnızca burada değil, şehrinize uygun 100 firma rehberinde görünsün.')
+            ->assertDontSee('Rehber başına yaklaşık');
 
         $this->assertSame(1, OwnerCampaignEvent::where('user_id', $user->id)->where('event', 'popup_shown')->count());
         $this->assertNotNull($user->fresh()->campaign_popup_seen_at);

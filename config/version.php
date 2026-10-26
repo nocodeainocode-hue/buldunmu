@@ -2,11 +2,20 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.29.0',
-    'name' => 'Başvurulara Otomatik WhatsApp Mesajı',
+    'number' => '1.29.1',
+    'name' => 'Kampanya Popup Gecikmesi',
     'released_at' => '2026-10-26',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.29.1',
+            'name' => 'Kampanya Popup Gecikmesi',
+            'released_at' => '2026-10-26',
+            'changes' => [
+                'Firma panelindeki kampanya popup\'ı artık sayfa açılır açılmaz değil, 6 saniye sonra yumuşakça açılır; 100 sayacı popup göründüğü anda başlar.',
+                'Popup fiyatı değil "100 firma rehberinde aynı anda yayın" vaadini öne çıkarır; fiyat ve rehber başına tutar popup\'tan kaldırıldı (kampanya sayfasında duruyor).',
+            ],
+        ],
         [
             'number' => '1.29.0',
             'name' => 'Başvurulara Otomatik WhatsApp Mesajı',
