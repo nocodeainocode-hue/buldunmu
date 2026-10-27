@@ -2,11 +2,21 @@
 
 return [
     // Yeni yayında sürümü ve aşağıdaki geçmişi birlikte güncelleyin.
-    'number' => '1.29.1',
-    'name' => 'Kampanya Popup Gecikmesi',
-    'released_at' => '2026-10-26',
+    'number' => '1.29.2',
+    'name' => 'Firma Sayfası Taşma Düzeltmesi',
+    'released_at' => '2026-10-27',
     'commit' => env('APP_COMMIT'),
     'history' => [
+        [
+            'number' => '1.29.2',
+            'name' => 'Firma Sayfası Taşma Düzeltmesi',
+            'released_at' => '2026-10-27',
+            'changes' => [
+                'Firma detay sayfası mobilde sağa taşmıyor: yan sütundaki uzun firma adları (Yakındaki/Benzer Firmalar) sütunu genişletiyordu; ana ve yan sütun artık ekrana sığar, uzun adlar kesilir.',
+                'Varsayılan üst menü 768-1100 px arasında sağdan taşıyordu: masaüstü menü 1024 px\'ten itibaren görünür (altında mobil menü), arama kutusu 1280 px\'ten itibaren menüde, menü yazıları kırılmaz.',
+                'Kategoriler açılır menüsü butona değil sayfaya ortalanır; sağdan taşıp yatay kaydırma çubuğu oluşturmaz.',
+            ],
+        ],
         [
             'number' => '1.29.1',
             'name' => 'Kampanya Popup Gecikmesi',

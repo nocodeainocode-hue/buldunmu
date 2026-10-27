@@ -212,7 +212,7 @@
     <div class="mx-auto grid gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_340px] lg:px-8" style="max-width:var(--page_width,1280px);">
 
         {{-- ═══ MAIN CONTENT ═══ --}}
-        <main class="space-y-8">
+        <main class="min-w-0 space-y-8">
 
             {{-- SEO Description Block --}}
             <section class="rounded-3xl border bg-white p-6" style="border-color:var(--border);box-shadow:var(--card_shadow);">
@@ -500,7 +500,7 @@
         </main>
 
         {{-- ═══ SIDEBAR ═══ --}}
-        <aside class="space-y-6">
+        <aside class="min-w-0 space-y-6">
             {{-- Contact Card --}}
             <div class="lg:sticky lg:top-24 rounded-3xl border bg-white p-5 shadow-lg" style="border-color:var(--border);box-shadow:var(--card_shadow);">
                 <h3 class="mb-4 text-lg font-black" style="color:var(--text);">📋 Firma Bilgileri</h3>

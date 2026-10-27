@@ -192,10 +192,10 @@
 <body class="min-h-screen flex flex-col" style="background-color:var(--bg);color:var(--text);font-family:var(--font_body);">
 
     {{-- Mobile menu backdrop (outside header so it works for all themes) --}}
-    <div id="mobile-backdrop" class="fixed inset-0 z-40 hidden bg-black/40 backdrop-blur-sm md:hidden" aria-hidden="true"></div>
+    <div id="mobile-backdrop" class="fixed inset-0 z-40 hidden bg-black/40 backdrop-blur-sm lg:hidden" aria-hidden="true"></div>
 
     {{-- Mobile menu panel — slides in from left, full height, scrollable --}}
-    <div id="mobile-menu" class="fixed inset-y-0 left-0 z-50 w-[min(88vw,26rem)] translate-x-[-105%] overflow-hidden border-r shadow-2xl transition-transform duration-300 ease-in-out md:hidden" style="background:var(--bg_card);border-color:var(--border);">
+    <div id="mobile-menu" class="fixed inset-y-0 left-0 z-50 w-[min(88vw,26rem)] translate-x-[-105%] overflow-hidden border-r shadow-2xl transition-transform duration-300 ease-in-out lg:hidden" style="background:var(--bg_card);border-color:var(--border);">
         <div class="flex h-full flex-col">
             {{-- Header row: logo + close --}}
             <div class="flex shrink-0 items-center justify-between border-b px-4 py-3" style="border-color:var(--border);">
@@ -297,17 +297,18 @@
                     @endif
                 </a>
 
-                <nav class="hidden items-center gap-1 md:flex">
-                    <form action="{{ route('search') }}" method="GET" class="relative mr-3">
+                <nav class="hidden items-center gap-1 lg:flex">
+                    <form action="{{ route('search') }}" method="GET" class="relative mr-3 hidden xl:inline-flex">
                         <input type="text" name="q" value="{{ request('q') }}" placeholder="Firma, kategori veya şehir ara..."
-                            class="w-48 lg:w-64 rounded-xl border px-4 py-2 text-sm focus:outline-none focus:ring-2"
+                            class="w-48 rounded-xl border px-4 py-2 text-sm focus:outline-none focus:ring-2"
                             style="border-color:var(--border);background:var(--bg);color:var(--text);">
                         <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 p-1" style="color:var(--text_muted);" aria-label="Ara">
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                         </button>
                     </form>
-                    <a href="{{ route('companies.index') }}" class="rounded-lg px-4 py-2 text-sm font-bold transition hover:opacity-70" style="color:var(--text);">Firmalar</a>
-                    <div class="group relative">
+                    <a href="{{ route('companies.index') }}" class="whitespace-nowrap rounded-lg px-4 py-2 text-sm font-bold transition hover:opacity-70" style="color:var(--text);">Firmalar</a>
+                    {{-- Konum header'a göre: menü butona değil sayfaya ortalanır, sağdan taşmaz. --}}
+                    <div class="group">
                         <button class="flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-bold transition hover:opacity-70" style="color:var(--text);">
                             Kategoriler
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
@@ -345,11 +346,11 @@
                     </div>
                     <a href="{{ route('blog.index') }}" class="rounded-lg px-4 py-2 text-sm font-bold transition hover:opacity-70" style="color:var(--text);">Blog</a>
                     <a href="{{ route('jobs.index') }}" class="hidden rounded-lg px-4 py-2 text-sm font-bold transition hover:opacity-70 xl:inline-flex" style="color:var(--text);">İş İlanları</a>
-                    <a href="{{ route('owner.dashboard') }}" class="rounded-lg px-3 py-2 text-sm font-bold transition hover:opacity-70" style="color:var(--text);">Firma Paneli</a>
-                    <a href="{{ route('owner.register') }}" class="ml-2 rounded-xl px-4 py-2 text-sm font-black text-white shadow-sm transition hover:opacity-90" style="background:var(--primary);">+ Firma Ekle</a>
+                    <a href="{{ route('owner.dashboard') }}" class="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-bold transition hover:opacity-70" style="color:var(--text);">Firma Paneli</a>
+                    <a href="{{ route('owner.register') }}" class="ml-2 whitespace-nowrap rounded-xl px-4 py-2 text-sm font-black text-white shadow-sm transition hover:opacity-90" style="background:var(--primary);">+ Firma Ekle</a>
                 </nav>
 
-                <button id="mobile-menu-btn" class="rounded-lg p-2 md:hidden" style="color:var(--text_muted);" aria-label="Menu">
+                <button id="mobile-menu-btn" class="rounded-lg p-2 lg:hidden" style="color:var(--text_muted);" aria-label="Menu">
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
             </div>
